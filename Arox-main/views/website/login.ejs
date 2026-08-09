@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AROX ERP</title>
+  <link rel="stylesheet" href="/erp-assets/css/erp-theme.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="erp-body erp-login-page" style="background-image: url('/assets/hero/login.png'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;">
+
+  <a href="/" style="position: absolute; top: 24px; left: 24px; display: flex; align-items: center; gap: 8px; color: white; text-decoration: none; font-weight: 500; font-size: 16px; background: rgba(0,0,0,0.4); padding: 8px 16px; border-radius: 8px; backdrop-filter: blur(8px); transition: background 0.3s; z-index: 10;">
+    <i data-lucide="arrow-left" style="width: 20px; height: 20px;"></i>
+    Back to Home
+  </a>
+
+  <div class="erp-login-card">
+    <div style="display: flex; justify-content: center;">
+      <div class="erp-login-logo">
+        <i data-lucide="triangle" style="width: 24px; height: 24px;"></i>
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-bottom: 32px;">
+      <h1 class="erp-h2" style="margin-bottom: 8px;">Welcome back</h1>
+      <p class="erp-p">Enter your credentials to access the ERP</p>
+    </div>
+
+    <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
+      
+      <div>
+        <label class="erp-label">Email</label>
+        <input type="email" name="email" class="erp-input" placeholder="admin@arox.com" required autocomplete="email" value="admin@arox.com">
+      </div>
+
+      <div>
+        <label class="erp-label">Password</label>
+        <div style="position: relative;">
+          <input type="password" name="password" id="password" class="erp-input" placeholder="••••••••" required autocomplete="current-password" value="admin123">
+          <button type="button" id="togglePasswordBtn" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--erp-text-secondary); padding: 4px;">
+            <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; margin-bottom: 8px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: var(--erp-text-secondary);">
+          <input type="checkbox" name="remember" style="accent-color: var(--erp-text-primary);">
+          Remember for 30 days
+        </label>
+        <a href="#" style="font-size: 14px; font-weight: 500; color: var(--erp-text-primary); text-decoration: none;">Forgot password?</a>
+      </div>
+
+      <div id="loginError" style="display: none; background: var(--erp-danger); color: white; padding: 12px; border-radius: 8px; font-size: 14px; text-align: center;"></div>
+
+      <button type="submit" id="loginBtn" class="erp-btn erp-btn-primary" style="width: 100%; padding: 12px;">Sign In</button>
+    </form>
+
+    <div style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--erp-text-secondary);">
+      Don't have an account? <a href="/apply" style="color: var(--erp-text-primary); font-weight: 500; text-decoration: none;">Apply for a Course</a>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    document.getElementById('togglePasswordBtn').addEventListener('click', (e) => {
+      const input = document.getElementById('password');
+      if (input.type === 'password') {
+        input.type = 'text';
+        e.currentTarget.innerHTML = '<i data-lucide="eye-off" style="width: 16px; height: 16px;"></i>';
+      } else {
+        input.type = 'password';
+        e.currentTarget.innerHTML = '<i data-lucide="eye" style="width: 16px; height: 16px;"></i>';
+      }
+      lucide.createIcons();
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const errorDiv = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+
+      errorDiv.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+
+      try {
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (!res.ok) {
+          throw new Error(result.message || 'Login failed. Please check your credentials.');
+        }
+
+        btn.textContent = 'Success';
+        window.location.href = result.redirectUrl || '/';
+
+      } catch (err) {
+        errorDiv.textContent = err.message;
+        errorDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    });
+  </script>
+</body>
+</html>

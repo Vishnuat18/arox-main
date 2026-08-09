@@ -1,0 +1,122 @@
+<div class="space-y-8 animate-fade-in">
+  
+  <div>
+    <h1 class="text-2xl font-bold text-gray-800">Payments & Invoices</h1>
+    <p class="text-sm text-gray-500 mt-1">Review your invoices, download receipts, and track your dues.</p>
+  </div>
+
+  <!-- Financial Summary -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <% 
+      let grandTotal = 0;
+      let grandPaid = 0;
+      let grandPending = 0;
+      if (registrations && registrations.length > 0) {
+        registrations.forEach(r => {
+          grandTotal += r.total_amount;
+          grandPaid += r.paid_amount;
+          grandPending += r.balance_amount;
+        });
+      }
+    %>
+    <div class="card p-6 border-l-4 border-l-indigo-600 bg-indigo-50/20">
+      <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Total Fee Owed</div>
+      <div class="text-2xl font-bold text-indigo-900">₹<%= grandTotal.toLocaleString('en-IN') %></div>
+    </div>
+    <div class="card p-6 border-l-4 border-l-emerald-600 bg-emerald-50/20">
+      <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Total Paid</div>
+      <div class="text-2xl font-bold text-emerald-900">₹<%= grandPaid.toLocaleString('en-IN') %></div>
+    </div>
+    <div class="card p-6 border-l-4 border-l-amber-600 bg-amber-50/20">
+      <div class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Total Outstanding</div>
+      <div class="text-2xl font-bold text-amber-900">₹<%= grandPending.toLocaleString('en-IN') %></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Ledger Table (Left) -->
+    <div class="lg:col-span-2 card p-6">
+      <h2 class="text-lg font-bold text-gray-800 mb-4">Transaction History</h2>
+      
+      <% if (payments && payments.length > 0) { %>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-gray-100 text-sm font-semibold text-gray-400">
+                <th class="pb-3">Transaction ID</th>
+                <th class="pb-3">Course</th>
+                <th class="pb-3">Paid At</th>
+                <th class="pb-3">Method</th>
+                <th class="pb-3 text-right">Amount</th>
+                <th class="pb-3 text-center">Receipt</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-50 text-sm">
+              <% payments.forEach(payment => { %>
+                <tr>
+                  <td class="py-3.5 font-medium text-gray-800">
+                    <div class="font-mono text-xs"><%= payment.transaction_id || payment.payment_id %></div>
+                  </td>
+                  <td class="py-3.5 text-gray-600"><%= payment.course_title %></td>
+                  <td class="py-3.5 text-gray-500">
+                    <%= new Date(payment.paid_at || payment.created_at).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'}) %>
+                  </td>
+                  <td class="py-3.5 text-gray-500 uppercase font-semibold text-xs"><%= payment.payment_method %></td>
+                  <td class="py-3.5 text-right text-emerald-600 font-bold">
+                    ₹<%= payment.amount.toLocaleString('en-IN') %>
+                  </td>
+                  <td class="py-3.5 text-center">
+                    <% if (payment.receipt_path) { %>
+                      <a href="<%= payment.receipt_path %>" target="_blank" class="text-indigo-600 hover:text-indigo-800 font-bold inline-flex items-center gap-1">
+                        <i data-lucide="download" style="width: 14px; height: 14px;"></i> PDF
+                      </a>
+                    <% } else { %>
+                      <span class="text-gray-300">-</span>
+                    <% } %>
+                  </td>
+                </tr>
+              <% }); %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <p class="text-center text-gray-400 py-12">No payments history found.</p>
+      <% } %>
+    </div>
+
+    <!-- Active Program Dues (Right) -->
+    <div class="card p-6 space-y-6 h-fit">
+      <h2 class="text-lg font-bold text-gray-800">Program Breakdown</h2>
+      
+      <% if (registrations && registrations.length > 0) { %>
+        <div class="space-y-4">
+          <% registrations.forEach(reg => { %>
+            <div class="border border-gray-100 rounded-xl p-4 bg-gray-50/50">
+              <h3 class="font-bold text-gray-800 text-sm mb-1 line-clamp-1"><%= reg.course_title %></h3>
+              <p class="text-xs text-gray-400 mb-3">ID: <%= reg.reg_display_id %></p>
+              
+              <div class="space-y-1.5 text-xs text-gray-600">
+                <div class="flex justify-between">
+                  <span>Price:</span>
+                  <span>₹<%= reg.total_amount.toLocaleString('en-IN') %></span>
+                </div>
+                <div class="flex justify-between font-medium text-emerald-600">
+                  <span>Paid:</span>
+                  <span>₹<%= reg.paid_amount.toLocaleString('en-IN') %></span>
+                </div>
+                <div class="flex justify-between font-bold <%= reg.balance_amount > 0 ? 'text-amber-600' : 'text-emerald-600' %>">
+                  <span>Balance:</span>
+                  <span>₹<%= reg.balance_amount.toLocaleString('en-IN') %></span>
+                </div>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } else { %>
+        <p class="text-sm text-gray-400 py-4">No active subscriptions found.</p>
+      <% } %>
+    </div>
+
+  </div>
+</div>

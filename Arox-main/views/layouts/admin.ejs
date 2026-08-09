@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AROX ERP - Admin Dashboard</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Chart.js for Admin Dashboards -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/erp-assets/css/erp-theme.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <%- style %>
+</head>
+<body class="erp-body">
+
+  <div class="erp-layout">
+    <!-- Sidebar -->
+    <aside class="erp-sidebar" id="admin-sidebar">
+      <script>
+        // Inline script to prevent sidebar layout flash
+        if (localStorage.getItem('sidebar-collapsed') === 'true') {
+          document.getElementById('admin-sidebar').classList.add('collapsed');
+        }
+      </script>
+      <div class="erp-sidebar-header">
+        <div class="sidebar-logo-container">
+          <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" class="sidebar-logo-large" style="height: 50px; width: auto; object-fit: contain;">
+        </div>
+        <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" title="Toggle Sidebar">
+          <i id="sidebar-toggle-icon" data-lucide="panel-left-close" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+
+      <nav class="erp-sidebar-nav">
+        <a href="/admin/dashboard" class="erp-nav-item <%= currentPath === '/admin/dashboard' ? 'active' : '' %>">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </a>
+        
+        <div class="erp-nav-section">Operations</div>
+        
+        <a href="/admin/registrations" class="erp-nav-item <%= currentPath.startsWith('/admin/registrations') ? 'active' : '' %>">
+          <i data-lucide="clipboard-list"></i>
+          <span>Registrations</span>
+        </a>
+        <a href="/admin/students" class="erp-nav-item <%= currentPath.startsWith('/admin/students') ? 'active' : '' %>">
+          <i data-lucide="users"></i>
+          <span>Students</span>
+        </a>
+        <a href="/admin/courses" class="erp-nav-item <%= currentPath.startsWith('/admin/courses') ? 'active' : '' %>">
+          <i data-lucide="book-open"></i>
+          <span>Courses</span>
+        </a>
+        <a href="/admin/payments" class="erp-nav-item <%= currentPath.startsWith('/admin/payments') ? 'active' : '' %>">
+          <i data-lucide="wallet"></i>
+          <span>Payments</span>
+        </a>
+
+        <div class="erp-nav-section">Generators</div>
+        
+        <a href="/admin/document-hub" class="erp-nav-item <%= currentPath === '/admin/document-hub' ? 'active' : '' %>">
+          <i data-lucide="file-box"></i>
+          <span>Document Hub</span>
+        </a>
+
+        <div class="erp-nav-section">Templates</div>
+        
+        <a href="/cert" target="_blank" class="erp-nav-item">
+          <i data-lucide="award"></i>
+          <span>Certificates</span>
+        </a>
+        <a href="/attendance" target="_blank" class="erp-nav-item">
+          <i data-lucide="calendar-check"></i>
+          <span>Attendance</span>
+        </a>
+        <a href="/offerletter" target="_blank" class="erp-nav-item">
+          <i data-lucide="file-text"></i>
+          <span>Offer Letters</span>
+        </a>
+        <a href="/project" target="_blank" class="erp-nav-item">
+          <i data-lucide="briefcase"></i>
+          <span>Projects</span>
+        </a>
+
+        <% if (user.role === 'admin') { %>
+          <div class="erp-nav-section">System</div>
+          <a href="/admin/users" class="erp-nav-item <%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">
+            <i data-lucide="user-circle-2"></i>
+            <span>Staff & Users</span>
+          </a>
+          <a href="/admin/settings" class="erp-nav-item <%= currentPath.startsWith('/admin/settings') ? 'active' : '' %>">
+            <i data-lucide="settings"></i>
+            <span>Settings</span>
+          </a>
+        <% } %>
+      </nav>
+
+      <div style="padding: 24px 16px; border-top: var(--erp-border-width) solid rgba(255,255,255,0.1);">
+        <form action="/api/auth/logout" method="POST">
+          <button type="submit" class="erp-nav-item" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left;">
+            <i data-lucide="log-out"></i>
+            <span>Logout</span>
+          </button>
+        </form>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="erp-main">
+      <!-- Topbar -->
+      <header class="erp-topbar">
+        <div class="erp-breadcrumb">
+          <span style="color: var(--erp-text-secondary);">Dashboard</span>
+          <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--erp-text-secondary);"></i>
+          <span class="erp-breadcrumb-active"><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Overview' %></span>
+        </div>
+
+        <div class="erp-topbar-right">
+          <button style="background: transparent; border: none; cursor: pointer; color: var(--erp-text-secondary);">
+            <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
+          </button>
+          
+          <div class="erp-profile">
+            <div style="display: flex; flex-direction: column; text-align: right;">
+              <span style="font-size: 13px; font-weight: 600;"><%= user.first_name %> <%= user.last_name %></span>
+              <span style="font-size: 11px; color: var(--erp-text-secondary); text-transform: capitalize;"><%= user.role %></span>
+            </div>
+            <div class="erp-avatar">
+              <%= user.first_name.charAt(0).toUpperCase() %>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <div class="erp-content">
+        <%- body %>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Initialize all Lucide Icons
+    lucide.createIcons();
+
+    // Sidebar Toggle Controller
+    document.addEventListener('DOMContentLoaded', () => {
+      const sidebar = document.getElementById('admin-sidebar');
+      const toggleBtn = document.getElementById('sidebar-toggle-btn');
+      const toggleIcon = document.getElementById('sidebar-toggle-icon');
+
+      function updateToggleIcon(isCollapsed) {
+        if (toggleIcon) {
+          if (isCollapsed) {
+            toggleIcon.setAttribute('data-lucide', 'panel-left-open');
+          } else {
+            toggleIcon.setAttribute('data-lucide', 'panel-left-close');
+          }
+          if (window.lucide) window.lucide.createIcons();
+        }
+      }
+
+      // Check current state from DOM (which was set by inline script)
+      const currentCollapsed = sidebar.classList.contains('collapsed');
+      updateToggleIcon(currentCollapsed);
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          const collapsed = sidebar.classList.toggle('collapsed');
+          localStorage.setItem('sidebar-collapsed', collapsed ? 'true' : 'false');
+          updateToggleIcon(collapsed);
+        });
+      }
+    });
+  </script>
+
+  <%- script %>
+</body>
+</html>

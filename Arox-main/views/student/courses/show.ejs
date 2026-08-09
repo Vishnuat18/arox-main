@@ -1,0 +1,653 @@
+<div class="space-y-8 animate-fade-in">
+  
+  <!-- Course Header -->
+  <div class="card p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+    <div>
+      <div class="flex items-center gap-3 mb-2">
+        <span class="inline-block px-2.5 py-1 text-xs font-semibold rounded-full uppercase tracking-wide bg-indigo-50 text-indigo-700 border border-indigo-200">
+          <%= registration.category %>
+        </span>
+        <span class="text-sm text-gray-400">Batch: <%= registration.batch_name || 'N/A' %></span>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800"><%= registration.course_title %></h1>
+      <p class="text-sm text-gray-500 mt-1">Instructor: <%= registration.trainer_name || 'Industry Experts' %> (<%= registration.trainer_title || 'AROX Mentor' %>)</p>
+    </div>
+    
+    <div class="flex items-center gap-6 border-l border-gray-100 pl-0 md:pl-6">
+      <div class="text-center">
+        <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-0.5">Attendance</div>
+        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-bold <%= attendancePercent >= 75 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700' %>">
+          <i data-lucide="target" style="width: 14px; height: 14px; margin-right: 4px;"></i> <%= attendancePercent %>%
+        </span>
+      </div>
+      <div class="text-center">
+        <div class="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-0.5">Status</div>
+        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-bold bg-indigo-50 text-indigo-700">
+          <%= registration.status.toUpperCase() %>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="detail-tabs">
+    <button class="detail-tab-btn active" data-tab="curriculum"><i data-lucide="book-open"></i> Curriculum</button>
+    <button class="detail-tab-btn" data-tab="submissions"><i data-lucide="file-text"></i> Submissions</button>
+    <button class="detail-tab-btn" data-tab="attendance"><i data-lucide="calendar"></i> Attendance</button>
+    <button class="detail-tab-btn" data-tab="certificate"><i data-lucide="graduation-cap"></i> Certificate</button>
+  </div>
+
+  <!-- Tab Panels -->
+  <div>
+    
+    <!-- PANEL 1: CURRICULUM -->
+    <div id="curriculum" class="tab-panel space-y-6">
+      <!-- Course Information -->
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">Course Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm mb-4">
+          <div>
+            <span class="text-gray-400 font-medium">Duration:</span>
+            <div class="font-bold text-gray-800 mt-1"><%= registration.course_duration %></div>
+          </div>
+          <div>
+            <span class="text-gray-400 font-medium">Schedule:</span>
+            <div class="font-bold text-gray-800 mt-1">
+              <%= registration.start_date ? new Date(registration.start_date).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'}) : 'TBD' %> to 
+              <%= registration.end_date ? new Date(registration.end_date).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'}) : 'TBD' %>
+            </div>
+          </div>
+          <div>
+            <span class="text-gray-400 font-medium">Mode:</span>
+            <div class="font-bold text-gray-800 mt-1 uppercase"><%= registration.mode || 'Online' %></div>
+          </div>
+        </div>
+        <% if (registration.description) { %>
+          <div class="mt-4 pt-4 border-t border-gray-100">
+            <span class="text-gray-400 font-medium">Description:</span>
+            <p class="text-gray-700 mt-1.5 text-sm leading-relaxed"><%= registration.description %></p>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-gray-800 mb-6">Training Course Curriculum</h2>
+        
+        <% if (curriculum && curriculum.length > 0) { %>
+          <div class="space-y-6">
+            <% curriculum.forEach((module, mIdx) => { %>
+              <div class="border border-gray-100 rounded-xl p-5 bg-gray-50/50">
+                <h3 class="font-bold text-gray-800 mb-3 text-base flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-md bg-indigo-50 text-indigo-600 text-xs font-bold flex items-center justify-center"><%= mIdx + 1 %></span>
+                  <%= module.module %>
+                </h3>
+                <ul class="space-y-2.5">
+                  <% module.lessons.forEach(lesson => { %>
+                    <li class="flex items-center gap-3 text-sm text-gray-600">
+                      <span class="text-xs text-gray-300">●</span>
+                      <%= lesson %>
+                    </li>
+                  <% }); %>
+                </ul>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <p class="text-center text-gray-400 py-8">Curriculum is not available for this course yet.</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- PANEL 2: SUBMISSIONS -->
+    <div id="submissions" class="tab-panel hidden space-y-8">
+      
+      <!-- Assignments Section -->
+      <div class="space-y-6">
+        <h2 class="text-xl font-bold text-gray-800">Course Assignments</h2>
+        
+        <% if (assignments && assignments.length > 0) { %>
+          <div class="grid grid-cols-1 gap-6">
+            <% assignments.forEach(assign => { %>
+              <div class="card p-6 border-l-4 <%= assign.submission_status ? 'border-l-emerald-500' : 'border-l-amber-500' %>">
+                <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
+                  <div>
+                    <h3 class="text-lg font-bold text-gray-800"><%= assign.title %></h3>
+                    <p class="text-sm text-gray-500 mt-1"><%= assign.description %></p>
+                    <% if (assign.due_date) { %>
+                      <p class="text-xs text-rose-500 font-semibold mt-2"><i data-lucide="calendar"></i> Due Date: <%= new Date(assign.due_date).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'}) %></p>
+                    <% } %>
+                  </div>
+                  
+                  <div>
+                    <% if (assign.submission_status) { %>
+                      <span class="inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider
+                        <%= assign.submission_status === 'graded' ? 'bg-indigo-100 text-indigo-800' : 'bg-emerald-100 text-emerald-800' %>">
+                        <%= assign.submission_status %>
+                      </span>
+                    <% } else { %>
+                      <span class="inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800">
+                        Pending
+                      </span>
+                    <% } %>
+                  </div>
+                </div>
+
+                <!-- Marks & Feedback if graded -->
+                <% if (assign.submission_status === 'graded') { %>
+                  <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 my-4">
+                    <div class="flex justify-between text-sm font-bold text-indigo-900 mb-1">
+                      <span>Grade:</span>
+                      <span><%= assign.marks %> / <%= assign.max_marks %></span>
+                    </div>
+                    <% if (assign.feedback) { %>
+                      <p class="text-xs text-indigo-700 font-medium">Feedback: <%= assign.feedback %></p>
+                    <% } %>
+                  </div>
+                <% } %>
+
+                <!-- Submission Form / View -->
+                <div class="border-t border-gray-100 pt-4 mt-4">
+                  <% if (assign.submission_status) { %>
+                    <div class="text-sm space-y-2">
+                      <div class="flex items-center gap-2">
+                        <span class="text-gray-400">Submitted:</span>
+                        <span class="font-medium text-gray-700"><%= new Date(assign.submitted_at).toLocaleDateString('en-IN') %></span>
+                      </div>
+                      <% if (assign.submission_path) { %>
+                        <div class="flex items-center gap-2">
+                          <span class="text-gray-400">File:</span>
+                          <a href="<%= assign.submission_path %>" target="_blank" class="text-indigo-600 hover:underline flex items-center gap-1 font-semibold">
+                            <i data-lucide="folder-open"></i> View Submitted Attachment
+                          </a>
+                        </div>
+                      <% } %>
+                      <% if (assign.submission_text) { %>
+                        <div class="mt-2 text-xs text-gray-600 bg-gray-50 p-3 rounded-lg border border-gray-100 font-mono"><%= assign.submission_text %></div>
+                      <% } %>
+                    </div>
+                  <% } %>
+
+                  <% if (!assign.submission_status || assign.submission_status === 'resubmit') { %>
+                    <form class="assignment-submit-form space-y-4" enctype="multipart/form-data">
+                      <input type="hidden" name="assignment_id" value="<%= assign.id %>">
+                      <div>
+                        <label class="form-label text-xs">Submission Notes / Text</label>
+                        <textarea name="submission_text" rows="2" class="form-input text-sm" placeholder="Paste links, explanations, or answers here..."></textarea>
+                      </div>
+                      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                        <div class="flex-1">
+                          <input type="file" name="submission" class="form-input text-sm p-1.5" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary rounded-xl px-6 py-2.5 text-sm">Submit Assignment</button>
+                      </div>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <div class="card p-8 text-center text-gray-400">No assignments released for this course yet.</div>
+        <% } %>
+      </div>
+
+      <!-- Projects Section -->
+      <div class="space-y-6">
+        <h2 class="text-xl font-bold text-gray-800">Capstone Projects</h2>
+        
+        <% if (projects && projects.length > 0) { %>
+          <div class="grid grid-cols-1 gap-6">
+            <% projects.forEach(project => { %>
+              <div class="card p-6 border-l-4 <%= project.submission_status ? 'border-l-indigo-500' : 'border-l-amber-500' %>">
+                <div class="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
+                  <div>
+                    <h3 class="text-lg font-bold text-gray-800"><%= project.title %></h3>
+                    <p class="text-sm text-gray-500 mt-1"><%= project.description %></p>
+                    <% if (project.requirements) { %>
+                      <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 my-2 text-xs text-gray-600">
+                        <strong class="text-gray-700">Requirements:</strong>
+                        <p class="mt-1"><%= project.requirements %></p>
+                      </div>
+                    <% } %>
+                  </div>
+                  
+                  <div>
+                    <% if (project.submission_status) { %>
+                      <span class="inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider
+                        <%= project.submission_status === 'approved' ? 'bg-emerald-100 text-emerald-800' : 'bg-indigo-100 text-indigo-800' %>">
+                        <%= project.submission_status.replace('_', ' ') %>
+                      </span>
+                    <% } else { %>
+                      <span class="inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800">
+                        Pending
+                      </span>
+                    <% } %>
+                  </div>
+                </div>
+
+                <!-- Marks / Feedback -->
+                <% if (project.submission_status === 'approved') { %>
+                  <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 my-4">
+                    <div class="flex justify-between text-sm font-bold text-emerald-900 mb-1">
+                      <span>Evaluation:</span>
+                      <span><%= project.marks %> / <%= project.max_marks %></span>
+                    </div>
+                    <% if (project.feedback) { %>
+                      <p class="text-xs text-emerald-700 font-medium">Feedback: <%= project.feedback %></p>
+                    <% } %>
+                  </div>
+                <% } %>
+
+                <!-- Submission Details -->
+                <div class="border-t border-gray-100 pt-4 mt-4">
+                  <% if (project.submission_status) { %>
+                    <div class="text-sm space-y-2 mb-4">
+                      <p><span class="text-gray-400">Project Title:</span> <span class="font-semibold text-gray-800"><%= project.submission_title %></span></p>
+                      <div class="flex gap-4 flex-wrap text-xs font-semibold">
+                        <% if (project.github_link) { %>
+                          <a href="<%= project.github_link %>" target="_blank" class="text-indigo-600 hover:underline"><i data-lucide="laptop"></i> GitHub Repository</a>
+                        <% } %>
+                        <% if (project.demo_link) { %>
+                          <a href="<%= project.demo_link %>" target="_blank" class="text-indigo-600 hover:underline">🌐 Live Sandbox Demo</a>
+                        <% } %>
+                        <% if (project.file_path) { %>
+                          <a href="<%= project.file_path %>" target="_blank" class="text-indigo-600 hover:underline"><i data-lucide="folder-open"></i> ZIP/PDF Attachment</a>
+                        <% } %>
+                      </div>
+                    </div>
+                  <% } %>
+
+                  <% if (!project.submission_status || project.submission_status === 'resubmit') { %>
+                    <form class="project-submit-form space-y-4" enctype="multipart/form-data">
+                      <input type="hidden" name="project_id" value="<%= project.id %>">
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label class="form-label text-xs">Submission Title</label>
+                          <input type="text" name="title" class="form-input text-sm" required placeholder="e.g. My E-commerce Web App">
+                        </div>
+                        <div>
+                          <label class="form-label text-xs">ZIP Archive / File Attachment (Optional)</label>
+                          <input type="file" name="submission" class="form-input text-sm p-1.5">
+                        </div>
+                      </div>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label class="form-label text-xs">GitHub Repository Link</label>
+                          <input type="url" name="github_link" class="form-input text-sm" placeholder="https://github.com/...">
+                        </div>
+                        <div>
+                          <label class="form-label text-xs">Live Demo Link</label>
+                          <input type="url" name="demo_link" class="form-input text-sm" placeholder="https://...">
+                        </div>
+                      </div>
+                      <div>
+                        <label class="form-label text-xs">Project Description / Readme</label>
+                        <textarea name="description" rows="3" class="form-input text-sm" placeholder="Outline features, installation guides, tech stacks, and how to verify..."></textarea>
+                      </div>
+                      <button type="submit" class="btn btn-primary rounded-xl px-6 py-2.5 text-sm w-full sm:w-auto">Submit Capstone Project</button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+            <% }); %>
+          </div>
+        <% } else { %>
+          <div class="card p-8 text-center text-gray-400">No projects released for this course yet.</div>
+        <% } %>
+      </div>
+
+    </div>
+
+    <!-- PANEL 3: ATTENDANCE -->
+    <div id="attendance" class="tab-panel hidden space-y-6">
+      <!-- Program Timeline Card -->
+      <div class="bg-gray-50 border border-gray-100 rounded-xl p-5 mb-6">
+        <h3 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+          <i data-lucide="calendar-days" class="text-indigo-600"></i> Program Timeline
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
+          <div>
+            <span class="text-gray-400 font-medium">From (Start Date):</span>
+            <div class="font-semibold text-gray-800 mt-1">
+              <%= registration.start_date ? new Date(registration.start_date).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'}) : 'TBD' %>
+            </div>
+          </div>
+          <div>
+            <span class="text-gray-400 font-medium">To (End Date):</span>
+            <div class="font-semibold text-gray-800 mt-1">
+              <%= registration.end_date ? new Date(registration.end_date).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'}) : 'TBD' %>
+            </div>
+          </div>
+          <div>
+            <span class="text-gray-400 font-medium">Total Duration:</span>
+            <div class="font-semibold text-gray-800 mt-1">
+              <%= registration.course_duration %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Today's Attendance marking card -->
+      <div class="card p-6 mb-6">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">Today's Attendance Marking</h2>
+        <% if (typeof todayAttendance !== 'undefined' && todayAttendance) { %>
+          <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center gap-3">
+            <i data-lucide="check-circle-2" class="text-emerald-600" style="width: 24px; height: 24px;"></i>
+            <div>
+              <div class="font-bold text-emerald-800">Attendance Marked (Present)</div>
+              <div class="text-xs text-emerald-600 mt-0.5">Checked in at: <%= todayAttendance.check_in_time %></div>
+            </div>
+          </div>
+        <% } else { %>
+          <div class="bg-amber-50 border border-amber-100 rounded-xl p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div>
+              <div class="font-bold text-amber-800">Mark Attendance for Today</div>
+              <div class="text-xs text-amber-600 mt-1">Current Date: <%= new Date().toLocaleDateString('en-IN', {day: 'numeric', month: 'long', year: 'numeric'}) %></div>
+            </div>
+            <button onclick="markPresentForToday(<%= registration.course_id %>)" class="btn btn-primary bg-amber-600 border-amber-600 hover:bg-amber-700 text-white rounded-xl px-6 py-2.5 text-sm font-semibold">
+              Mark Present
+            </button>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="card p-6">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">Daily Attendance Records</h2>
+        
+        <% if (attendance && attendance.length > 0) { %>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-gray-100 text-sm font-semibold text-gray-400">
+                  <th class="pb-3">Date</th>
+                  <th class="pb-3">Status</th>
+                  <th class="pb-3">In Time</th>
+                  <th class="pb-3">Out Time</th>
+                  <th class="pb-3">Remarks</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-50 text-sm">
+                <% attendance.forEach(record => { %>
+                  <tr>
+                    <td class="py-3.5 font-medium text-gray-800">
+                      <%= new Date(record.date).toLocaleDateString('en-IN', {day: 'numeric', month: 'short', year: 'numeric'}) %>
+                    </td>
+                    <td class="py-3.5">
+                      <span class="inline-block px-2.5 py-1 rounded-md text-xs font-semibold uppercase
+                        <%= record.status === 'present' ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700' %>">
+                        <%= record.status %>
+                      </span>
+                    </td>
+                    <td class="py-3.5 text-gray-500"><%= record.check_in_time || '--:--' %></td>
+                    <td class="py-3.5 text-gray-500"><%= record.check_out_time || '--:--' %></td>
+                    <td class="py-3.5 text-gray-500"><%= record.remarks || '-' %></td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-center text-gray-400 py-8">No attendance records logs found.</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- PANEL 4: CERTIFICATE -->
+    <div id="certificate" class="tab-panel hidden space-y-6">
+      <div class="card p-8 text-center max-w-4xl mx-auto space-y-6">
+        <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center text-4xl mx-auto">
+          <i data-lucide="graduation-cap"></i>
+        </div>
+        
+        <div>
+          <h2 class="text-xl font-bold text-gray-800">Course Verification & Certifications</h2>
+          <p class="text-sm text-gray-500 mt-2">
+            View and download your official program credentials below. Locked certificates will automatically unlock once fee payments are cleared.
+          </p>
+        </div>
+
+        <div class="bg-gray-50 rounded-xl p-5 border border-gray-100 text-left text-sm space-y-3">
+          <div class="flex justify-between">
+            <span class="text-gray-400">Course Status:</span>
+            <span class="font-semibold text-gray-800 uppercase"><%= registration.status %></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-400">Outstanding Balance:</span>
+            <span class="font-semibold <%= registration.balance_amount === 0 ? 'text-emerald-600' : 'text-amber-600' %>">₹<%= registration.balance_amount %></span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left mt-6">
+          
+          <!-- Offer Letter -->
+          <div class="card p-5 border border-gray-100 flex flex-col justify-between" style="background:#fff;">
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="file-text" style="width: 18px; height: 18px;"></i></span>
+                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Unlocked</span>
+              </div>
+              <h4 class="font-bold text-gray-800">Welcome & Offer Letter</h4>
+              <p class="text-xs text-gray-400 mt-1">Generated automatically upon registration.</p>
+            </div>
+            <button id="btn-offerletter" onclick="downloadStudentDoc('offerletter')" class="btn btn-primary w-full mt-4 text-xs font-semibold py-2">
+              <i data-lucide="download" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Download PDF
+            </button>
+          </div>
+
+          <!-- Completion Certificate -->
+          <div class="card p-5 border border-gray-100 flex flex-col justify-between" style="background:#fff;">
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="badge-check" style="width: 18px; height: 18px;"></i></span>
+                <% if (registration.balance_amount === 0) { %>
+                  <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Unlocked</span>
+                <% } else { %>
+                  <span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><i data-lucide="lock" style="width: 10px;"></i> Fee Locked</span>
+                <% } %>
+              </div>
+              <h4 class="font-bold text-gray-800">Completion Certificate</h4>
+              <p class="text-xs text-gray-400 mt-1">Requires all fee payments cleared and course end date.</p>
+            </div>
+            <button id="btn-certificate" onclick="downloadStudentDoc('certificate')" class="btn <%= registration.balance_amount === 0 ? 'btn-primary' : 'btn-secondary' %> w-full mt-4 text-xs font-semibold py-2" <%= registration.balance_amount === 0 ? '' : 'disabled' %>>
+              <% if (registration.balance_amount === 0) { %>
+                <i data-lucide="download" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Download PDF
+              <% } else { %>
+                <i data-lucide="lock" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Complete Payment to Unlock
+              <% } %>
+            </button>
+          </div>
+
+          <!-- Attendance Certificate -->
+          <div class="card p-5 border border-gray-100 flex flex-col justify-between" style="background:#fff;">
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="calendar-check" style="width: 18px; height: 18px;"></i></span>
+                <% if (registration.balance_amount === 0) { %>
+                  <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Unlocked</span>
+                <% } else { %>
+                  <span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><i data-lucide="lock" style="width: 10px;"></i> Fee Locked</span>
+                <% } %>
+              </div>
+              <h4 class="font-bold text-gray-800">Attendance Certificate</h4>
+              <p class="text-xs text-gray-400 mt-1">Requires minimum 75% attendance and full fee payment.</p>
+            </div>
+            <button id="btn-attendance" onclick="downloadStudentDoc('attendance')" class="btn <%= registration.balance_amount === 0 ? 'btn-primary' : 'btn-secondary' %> w-full mt-4 text-xs font-semibold py-2" <%= registration.balance_amount === 0 ? '' : 'disabled' %>>
+              <% if (registration.balance_amount === 0) { %>
+                <i data-lucide="download" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Download PDF
+              <% } else { %>
+                <i data-lucide="lock" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Complete Payment to Unlock
+              <% } %>
+            </button>
+          </div>
+
+          <!-- Project Certificate -->
+          <div class="card p-5 border border-gray-100 flex flex-col justify-between" style="background:#fff;">
+            <div>
+              <div class="flex justify-between items-start mb-3">
+                <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="folder-git-2" style="width: 18px; height: 18px;"></i></span>
+                <% if (registration.balance_amount === 0) { %>
+                  <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Unlocked</span>
+                <% } else { %>
+                  <span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><i data-lucide="lock" style="width: 10px;"></i> Fee Locked</span>
+                <% } %>
+              </div>
+              <h4 class="font-bold text-gray-800">Project Certificate</h4>
+              <p class="text-xs text-gray-400 mt-1">Requires Capstone project approval and fee clearance.</p>
+            </div>
+            <button id="btn-project" onclick="downloadStudentDoc('project')" class="btn <%= registration.balance_amount === 0 ? 'btn-primary' : 'btn-secondary' %> w-full mt-4 text-xs font-semibold py-2" <%= registration.balance_amount === 0 ? '' : 'disabled' %>>
+              <% if (registration.balance_amount === 0) { %>
+                <i data-lucide="download" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Download PDF
+              <% } else { %>
+                <i data-lucide="lock" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Complete Payment to Unlock
+              <% } %>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- script = `
+<script>
+  async function markPresentForToday(courseId) {
+    try {
+      const res = await fetch('/api/student/attendance/mark', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ course_id: courseId })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert("Attendance marked successfully! Checked in at " + data.time);
+        window.location.reload();
+      } else {
+        alert(data.message || "Failed to mark attendance.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error marking attendance.");
+    }
+  }
+
+  async function downloadStudentDoc(docType) {
+    const balance = ${registration.balance_amount};
+    if (docType !== 'offerletter' && balance > 0) {
+      alert("Please complete your pending payment of ₹" + balance + " to unlock this certificate.");
+      return;
+    }
+
+    // Check if already downloaded
+    const checkRes = await fetch('/api/registrations/check-download', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ student_id: ${student.id}, document_type: docType })
+    });
+    const checkData = await checkRes.json();
+    if (checkData.downloaded) {
+      alert("You have already downloaded this certificate once. Multiple downloads are not permitted.");
+      return;
+    }
+
+    const routeMap = {
+      'offerletter': '/offerletter/index.html',
+      'certificate': '/cert/index.html',
+      'attendance': '/attendance/index.html',
+      'project': '/project/index.html'
+    };
+
+    const route = routeMap[docType];
+    if (!route) return;
+
+    const btn = document.getElementById("btn-" + docType);
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span style="display:inline-block; width:12px; height:12px; border:2px solid #fff; border-radius:50%; border-top-color:transparent; animation:spin 1s linear infinite; margin-right:4px; vertical-align:middle;"></span> Generating...';
+    btn.disabled = true;
+
+    try {
+      const hiddenFrame = document.createElement('iframe');
+      hiddenFrame.style.display = 'none';
+      hiddenFrame.src = route;
+      document.body.appendChild(hiddenFrame);
+
+      await new Promise((resolve) => {
+        hiddenFrame.onload = () => {
+          setTimeout(() => {
+            const studentData = {
+              name: "${student.first_name} ${student.last_name}",
+              id: "${student.student_id}",
+              course: "${registration.course_title}",
+              college: "${student.college || 'N/A'}",
+              dept: "${student.department || 'N/A'}",
+              batch: "${registration.batch_name || 'N/A'}",
+              startText: "${registration.start_date ? new Date(registration.start_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}",
+              endText: "${registration.end_date ? new Date(registration.end_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}",
+              project: "Capstone Project",
+              location: "Chennai",
+              issueDate: new Date().toISOString().split('T')[0]
+            };
+
+            let payload = {};
+            if (docType === 'certificate') {
+              payload = {
+                name: studentData.name, domain: studentData.course, date: studentData.issueDate, certId: studentData.id,
+                desc: "During this internship, he/she was found to be dedicated, enthusiastic and hardworking."
+              };
+            } else if (docType === 'attendance') {
+              payload = {
+                name: studentData.name, college: studentData.college, dept: studentData.dept, year: "Final Year",
+                intern: studentData.course, month: studentData.startText, days: 45
+              };
+            } else if (docType === 'offerletter') {
+              payload = {
+                candidateName: studentData.name, candidateAddress: studentData.college, roleTitle: studentData.course + " Intern",
+                location: studentData.location, startDate: "${registration.start_date}", endDate: "${registration.end_date}",
+                stipendAmount: "₹5,000 – ₹8,000 per month"
+              };
+            } else if (docType === 'project') {
+              payload = {
+                'cert-id-input': studentData.id, 'issue-date-input': studentData.issueDate, 'name-input': studentData.name,
+                'project-input': studentData.project, 'start-date-input': studentData.startText, 'end-date-input': studentData.endText
+              };
+            }
+
+            hiddenFrame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: payload }, '*');
+            if (docType === 'certificate') hiddenFrame.contentWindow.postMessage({ type: 'UPDATE_CERT', data: payload }, '*');
+
+            setTimeout(() => {
+              hiddenFrame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
+              setTimeout(() => {
+                document.body.removeChild(hiddenFrame);
+                resolve();
+              }, 2000);
+            }, 500);
+          }, 1000);
+        };
+      });
+
+      // Log download
+      await fetch('/api/registrations/log-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_id: ${student.id}, document_type: docType })
+      });
+
+      alert("Download triggered successfully!");
+      window.location.reload();
+    } catch (e) {
+      console.error(e);
+      alert("Failed to generate document.");
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }
+  }
+</script>
+<style>
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+` %>

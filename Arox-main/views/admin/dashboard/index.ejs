@@ -1,0 +1,140 @@
+<div class="erp-h1" style="margin-bottom: 32px;">Overview</div>
+
+<div class="erp-grid-4">
+  <!-- Students KPI -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="users"></i>
+      </div>
+      <div class="erp-card-title">Total Students</div>
+    </div>
+    <div class="erp-card-value"><%= typeof stats !== 'undefined' ? stats.students : '1,250' %></div>
+    <div class="erp-p" style="margin-top: 8px; color: var(--erp-success); font-weight: 500;">
+      <i data-lucide="trending-up" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
+      +12% from last month
+    </div>
+  </div>
+
+  <!-- Courses KPI -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="book-open"></i>
+      </div>
+      <div class="erp-card-title">Active Courses</div>
+    </div>
+    <div class="erp-card-value"><%= typeof stats !== 'undefined' ? stats.courses : '24' %></div>
+    <div class="erp-p" style="margin-top: 8px;">Across 5 categories</div>
+  </div>
+
+  <!-- Revenue KPI -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="indian-rupee"></i>
+      </div>
+      <div class="erp-card-title">Monthly Revenue</div>
+    </div>
+    <div class="erp-card-value">₹<%= typeof stats !== 'undefined' ? stats.revenue : '4,50,000' %></div>
+    <div class="erp-p" style="margin-top: 8px; color: var(--erp-success); font-weight: 500;">
+      <i data-lucide="trending-up" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
+      +8% from last month
+    </div>
+  </div>
+
+  <!-- Pending Registrations KPI -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="clipboard-list"></i>
+      </div>
+      <div class="erp-card-title">Pending Registrations</div>
+    </div>
+    <div class="erp-card-value"><%= typeof stats !== 'undefined' ? stats.pendingRegistrations : '18' %></div>
+    <div class="erp-p" style="margin-top: 8px; color: var(--erp-warning); font-weight: 500;">Needs review</div>
+  </div>
+</div>
+
+<div class="erp-grid-2">
+  <!-- Analytics Chart Placeholder -->
+  <div class="erp-card" style="min-height: 400px; display: flex; flex-direction: column;">
+    <h3 class="erp-h3">Enrollment Analytics</h3>
+    <div style="flex: 1; border: var(--erp-border-width) dashed var(--erp-border); border-radius: 8px; margin-top: 16px; display: flex; align-items: center; justify-content: center; color: var(--erp-text-muted);">
+      <div style="text-align: center;">
+        <i data-lucide="line-chart" style="width: 48px; height: 48px; color: var(--erp-border); margin-bottom: 12px;"></i>
+        <p>Analytics Chart (Monochrome)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="erp-card">
+    <h3 class="erp-h3">Quick Actions</h3>
+    
+    <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
+      <a href="/admin/students/add" class="erp-btn erp-btn-secondary" style="justify-content: flex-start;">
+        <i data-lucide="user-plus"></i> Add New Student
+      </a>
+      <a href="/admin/courses/add" class="erp-btn erp-btn-secondary" style="justify-content: flex-start;">
+        <i data-lucide="book-plus"></i> Create Course
+      </a>
+      <a href="/admin/payments/invoice" class="erp-btn erp-btn-secondary" style="justify-content: flex-start;">
+        <i data-lucide="receipt"></i> Generate Invoice
+      </a>
+      <a href="/admin/reports" class="erp-btn erp-btn-secondary" style="justify-content: flex-start;">
+        <i data-lucide="bar-chart-3"></i> View Reports
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Registrations Table -->
+<div class="erp-card" style="margin-top: 40px; padding: 0;">
+  <div style="padding: 24px; border-bottom: var(--erp-border-width) solid var(--erp-border); display: flex; justify-content: space-between; align-items: center;">
+    <h3 class="erp-h3" style="margin: 0;">Recent Registrations</h3>
+    <a href="/admin/registrations" class="erp-btn erp-btn-ghost">View All <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i></a>
+  </div>
+  
+  <div class="erp-table-container" style="border: none; border-radius: 0; margin-bottom: 0;">
+    <table class="erp-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Course</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (typeof recentRegistrations !== 'undefined' && recentRegistrations.length > 0) { %>
+          <% recentRegistrations.forEach(reg => { %>
+            <tr>
+              <td>
+                <div style="font-weight: 500;"><%= reg.first_name %> <%= reg.last_name %></div>
+                <div class="erp-small"><%= reg.email %></div>
+              </td>
+              <td><%= reg.course_title %></td>
+              <td><%= new Date(reg.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
+              <td>
+                <% if (reg.status === 'confirmed' || reg.status === 'active') { %>
+                  <span class="erp-pill erp-pill-success">Active</span>
+                <% } else if (reg.status === 'pending') { %>
+                  <span class="erp-pill erp-pill-warning">Pending</span>
+                <% } else { %>
+                  <span class="erp-pill erp-pill-muted"><%= reg.status %></span>
+                <% } %>
+              </td>
+              <td><a href="/admin/registrations/<%= reg.id %>" class="erp-btn erp-btn-ghost" style="padding: 6px 12px; font-size: 12px;">Review</a></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 24px; color: var(--erp-text-secondary);">No recent registrations.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>

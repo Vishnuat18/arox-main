@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Arox Tech - Course Detail</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation Library CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            DEFAULT: '#5d4cf7', // Main purple
+                            light: '#ecebff',
+                            dark: '#4a3ce0',
+                        },
+                        dark: '#111827',
+                        gray: {
+                            400: '#9ca3af',
+                            500: '#6b7280',
+                            600: '#4b5563',
+                        },
+                        background: '#f8fafc',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                        'card': '0 4px 20px -2px rgba(0,0,0,0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for Specific Interactions */
+        body {
+            background-color: #fcfcfd;
+            overflow-x: hidden;
+        }
+
+        /* Hide scrollbar for carousel */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom Accordion styling */
+        details>summary {
+            list-style: none;
+        }
+
+        details>summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details[open] summary~* {
+            animation: sweep .3s ease-in-out;
+        }
+
+        @keyframes sweep {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px)
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* Floating animation for hero elements */
+        .float-slow {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .float-fast {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        /* Gradient background for CTA */
+        .bg-cta-gradient {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+        }
+    </style>
+</head>
+
+<body class="text-gray-600 antialiased font-sans selection:bg-primary selection:text-white">
+
+    <nav
+        class="fixed w-full top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer">
+                    <div
+                        class="w-8 h-8 bg-primary rounded-tr-xl rounded-bl-xl rounded-tl-sm rounded-br-sm flex items-center justify-center transform rotate-45">
+                        <div class="w-4 h-4 border-2 border-white transform -rotate-45"></div>
+                    </div>
+                    <span class="font-bold text-2xl text-dark tracking-tight">Arox <span
+                            class="font-light text-sm align-top">TECH</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium text-sm">Home</a>
+                    <a href="#" class="text-gray-500 hover:text-primary transition-colors font-medium text-sm">About</a>
+                    <a href="#"
+                        class="text-gray-500 hover:text-primary transition-colors font-medium text-sm">Services</a>
+                    <a href="#"
+                        class="text-gray-500 hover:text-primary transition-colors font-medium text-sm">Training</a>
+                    <a href="#"
+                        class="text-primary font-semibold text-sm relative after:content-[''] after:absolute after:-bottom-7 after:left-0 after:w-full after:h-0.5 after:bg-primary">Internships</a>
+                    <a href="contact.html" class="text-gray-500 hover:text-primary transition-colors font-medium text-sm">Contact</a>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="flex items-center space-x-4">
+                    <div class="hidden sm:flex items-center space-x-3 border border-gray-200 rounded-full p-1 px-3">
+                        <button class="text-gray-400 hover:text-dark transition-colors"><i
+                                class="fa-solid fa-moon text-sm"></i></button>
+                        <div class="w-px h-4 bg-gray-200"></div>
+                        <button class="text-primary"><i class="fa-solid fa-sun text-sm"></i></button>
+                    </div>
+                    <a href="#"
+                        class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark shadow-sm hover:shadow-md transition-all duration-300">
+                        Apply for Internship
+                    </a>
+                    <!-- Mobile menu button -->
+                    <button class="md:hidden text-gray-500 hover:text-dark">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden relative">
+        <!-- Background decorative pattern (abstract representation) -->
+        <div class="absolute top-0 right-0 -z-10 opacity-30 pointer-events-none">
+            <svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="1" />
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" mask="url(#fade)" />
+                <mask id="fade">
+                    <radialGradient id="grad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="white" stop-opacity="1" />
+                        <stop offset="100%" stop-color="white" stop-opacity="0" />
+                    </radialGradient>
+                    <rect width="100%" height="100%" fill="url(#grad)" />
+                </mask>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
+
+                <!-- Left Content -->
+                <div class="lg:col-span-6 mb-12 lg:mb-0" data-aos="fade-right" data-aos-duration="1000">
+                    <div
+                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-light text-primary text-xs font-semibold uppercase tracking-wider mb-6"><i class="fa-solid fa-circle-play"></i> <span id="hero-badge">INDUSTRY INTERNSHIP PROGRAM</span></div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-dark leading-[1.1] mb-6">Become an <br />
+<span class="text-primary">Industry Ready</span><br />
+<span id="hero-title">Full Stack Developer</span>
+</h1>
+
+                    <p id="hero-desc" class="text-lg text-gray-500 mb-8 max-w-lg leading-relaxed">
+                        Work on live projects, get mentored by industry experts and kickstart your career in tech.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-6 mb-10 text-sm font-medium text-dark">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            Live Projects
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            Hands-on Experience
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            Practical Curriculum
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            Mentorship by Experts
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            Placement Guidance
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex-shrink-0 w-5 h-5 rounded-full bg-primary text-white flex items-center justify-center text-[10px]">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            Career Growth
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#"
+                            class="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-primary hover:bg-primary-dark shadow-lg shadow-primary/30 transition-all duration-300 hover:-translate-y-1">
+                            Explore Courses <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#"
+                            class="inline-flex items-center justify-center gap-2 px-8 py-3.5 border-2 border-gray-200 text-base font-semibold rounded-xl text-dark hover:border-primary hover:text-primary transition-all duration-300">
+                            Apply for Internship <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Image / Illustration Area -->
+                <div class="lg:col-span-6 relative z-10" data-aos="fade-left" data-aos-duration="1200">
+                    <!-- Main Character Placeholder (Simulating the 3D illustration) -->
+                    <div class="relative w-full aspect-square max-w-[500px] mx-auto">
+                        <!-- Abstract base for character -->
+                        <div
+                            class="absolute bottom-0 w-full h-[80%] bg-gradient-to-t from-gray-100 to-transparent rounded-full opacity-50 z-0">
+                        </div>
+
+                        <!-- Simulating the main image with placeholders -->
+                        <div class="absolute inset-0 flex items-end justify-center pb-10 z-10">
+                            <img src="https://placehold.co/400x500/f8fafc/111827?text=3D+Student+Illustration\n(image_9a283b.jpg ref)"
+                                alt="Student with laptop"
+                                class="object-contain w-[80%] drop-shadow-2xl rounded-2xl border-4 border-white shadow-soft">
+                        </div>
+
+                        <!-- Floating Elements -->
+                        <div
+                            class="absolute top-[10%] left-[5%] bg-white p-3 rounded-xl shadow-lg border border-gray-100 float-slow z-20 flex items-center gap-2">
+                            <div
+                                class="w-8 h-8 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center">
+                                <i class="fa-solid fa-code"></i></div>
+                            <div class="h-2 w-16 bg-gray-200 rounded-full"></div>
+                        </div>
+
+                        <div
+                            class="absolute top-[20%] right-[-5%] bg-white p-4 rounded-xl shadow-lg border border-gray-100 float-fast z-20">
+                            <span class="text-primary font-bold text-xl">&lt;/&gt;</span>
+                        </div>
+
+                        <div
+                            class="absolute top-[45%] left-[-10%] bg-white p-3 rounded-xl shadow-lg border border-gray-100 float-fast z-20">
+                            <span class="text-primary font-bold text-xl">{ }</span>
+                        </div>
+
+                        <!-- Certificate Placeholder -->
+                        <div
+                            class="absolute top-[30%] right-[5%] bg-white p-4 rounded-xl shadow-soft border border-gray-100 transform rotate-6 float-slow z-0 w-32 h-40 flex flex-col items-center pt-6">
+                            <div class="text-[8px] font-bold text-gray-800 text-center mb-1">INTERNSHIP<br>CERTIFICATE
+                            </div>
+                            <div class="w-20 h-0.5 bg-gray-200 mb-2"></div>
+                            <div class="w-16 h-0.5 bg-gray-200 mb-1"></div>
+                            <div class="w-24 h-0.5 bg-gray-200 mb-4"></div>
+                            <i class="fa-solid fa-award text-yellow-500 text-2xl mt-auto"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="py-12 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-soft p-6 md:p-8" data-aos="fade-up">
+
+                <div class="mb-10 pb-4 border-b border-gray-100">
+                    <h2 class="text-3xl font-extrabold text-dark tracking-tight">What You'll Learn</h2>
+                    <p class="text-sm text-gray-500 mt-2">Master modern tools and comprehensive curricula mapped to industry demands.</p>
+                </div>
+
+                <!-- Syllabus dynamic grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start" id="syllabus-content-area">
+                    <!-- Left: Technology Stack Grid (7 columns) -->
+                    <div class="lg:col-span-7 bg-gray-50/50 rounded-2xl p-6 border border-gray-100/80">
+                        <h3 class="text-lg font-bold text-dark mb-6 flex items-center gap-2">
+                            <span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                            Technology Stack & Tools
+                        </h3>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="tech-stack-container">
+                            <!-- Dynamically generated Devicon logos -->
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Curriculum Modules (5 columns) -->
+                    <div class="lg:col-span-5 bg-gray-50/50 rounded-2xl p-6 border border-gray-100/80">
+                        <h3 class="text-lg font-bold text-dark mb-6 flex items-center gap-2">
+                            <span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                            Program Curriculum
+                        </h3>
+                        <div class="space-y-4" id="curriculum-container">
+                            <!-- Dynamically generated curriculum steps -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 bg-background overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-soft p-6 md:p-8" data-aos="fade-up">
+
+                <h2 class="text-2xl font-bold text-dark mb-8">Real Time Projects You'll Build</h2>
+
+                <!-- Carousel Container -->
+                <div class="relative">
+                    <!-- Nav Buttons -->
+                    <button
+                        class="absolute left-[-15px] top-1/2 -translate-y-1/2 w-8 h-8 bg-primary-light text-primary rounded-md flex items-center justify-center z-10 hover:bg-primary hover:text-white transition-colors cursor-pointer hidden md:flex">
+                        <i class="fa-solid fa-chevron-left text-sm"></i>
+                    </button>
+                    <button
+                        class="absolute right-[-15px] top-1/2 -translate-y-1/2 w-8 h-8 bg-primary-light text-primary rounded-md flex items-center justify-center z-10 hover:bg-primary hover:text-white transition-colors cursor-pointer hidden md:flex">
+                        <i class="fa-solid fa-chevron-right text-sm"></i>
+                    </button>
+
+                    <!-- Projects Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-0">
+
+                        <!-- Project 1 -->
+                        <div
+                            class="group border border-gray-100 rounded-2xl p-4 hover:shadow-card transition-all duration-300 bg-gray-50/50 flex flex-col items-center text-center cursor-pointer">
+                            <div
+                                class="w-full aspect-[4/3] bg-gray-100 rounded-xl mb-4 relative overflow-hidden border border-gray-200/60">
+                                <img src="https://placehold.co/300x200/e2e8f0/94a3b8?text=E-Commerce+App UI"
+                                    alt="Project"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <!-- Floating Icon Badge -->
+                                <div
+                                    class="absolute -bottom-4 right-4 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center border-4 border-white shadow-sm z-10">
+                                    <i class="fa-solid fa-cart-shopping text-sm"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-dark text-sm mt-2">E-Commerce<br><span
+                                    class="font-medium text-gray-500">Web Application</span></h3>
+                        </div>
+
+                        <!-- Project 2 -->
+                        <div
+                            class="group border border-gray-100 rounded-2xl p-4 hover:shadow-card transition-all duration-300 bg-gray-50/50 flex flex-col items-center text-center cursor-pointer">
+                            <div
+                                class="w-full aspect-[4/3] bg-gray-100 rounded-xl mb-4 relative overflow-hidden border border-gray-200/60">
+                                <img src="https://placehold.co/300x200/e2e8f0/94a3b8?text=Chat+App+UI" alt="Project"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div
+                                    class="absolute -bottom-4 right-4 w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center border-4 border-white shadow-sm z-10">
+                                    <i class="fa-solid fa-comment-dots text-sm"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-dark text-sm mt-2">Chat<br><span
+                                    class="font-medium text-gray-500">Application</span></h3>
+                        </div>
+
+                        <!-- Project 3 -->
+                        <div
+                            class="group border border-gray-100 rounded-2xl p-4 hover:shadow-card transition-all duration-300 bg-gray-50/50 flex flex-col items-center text-center cursor-pointer">
+                            <div
+                                class="w-full aspect-[4/3] bg-gray-100 rounded-xl mb-4 relative overflow-hidden border border-gray-200/60">
+                                <img src="https://placehold.co/300x200/e2e8f0/94a3b8?text=Billing+Dashboard UI"
+                                    alt="Project"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div
+                                    class="absolute -bottom-4 right-4 w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center border-4 border-white shadow-sm z-10">
+                                    <i class="fa-solid fa-file-invoice text-sm"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-dark text-sm mt-2">Billing<br><span
+                                    class="font-medium text-gray-500">Dashboard</span></h3>
+                        </div>
+
+                        <!-- Project 4 -->
+                        <div
+                            class="group border border-gray-100 rounded-2xl p-4 hover:shadow-card transition-all duration-300 bg-gray-50/50 flex flex-col items-center text-center cursor-pointer">
+                            <div
+                                class="w-full aspect-[4/3] bg-gray-100 rounded-xl mb-4 relative overflow-hidden border border-gray-200/60">
+                                <img src="https://placehold.co/300x200/e2e8f0/94a3b8?text=Portfolio+UI" alt="Project"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div
+                                    class="absolute -bottom-4 right-4 w-10 h-10 rounded-full bg-orange-400 text-white flex items-center justify-center border-4 border-white shadow-sm z-10">
+                                    <i class="fa-solid fa-user text-sm"></i>
+                                </div>
+                            </div>
+                            <h3 class="font-bold text-dark text-sm mt-2">Portfolio<br><span
+                                    class="font-medium text-gray-500">Website</span></h3>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-center">
+                    <a href="#"
+                        class="inline-flex items-center justify-center gap-2 px-6 py-2 border border-gray-200 text-sm font-semibold rounded-lg text-dark hover:border-primary hover:text-primary transition-all duration-300">
+                        View All Projects <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-soft p-6 md:p-8" data-aos="fade-up">
+
+                <h2 class="text-2xl font-bold text-dark mb-10">What Our Students Say</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8 mb-8 pb-4">
+
+                    <!-- Review 1 -->
+                    <div class="border border-gray-100 rounded-2xl p-6 relative bg-gray-50/30">
+                        <i class="fa-solid fa-quote-left text-primary text-2xl mb-4 block opacity-80"></i>
+                        <p class="text-sm text-gray-600 mb-6 font-medium leading-relaxed">
+                            The AROX Tech internship gave me real-world experience and confidence to build live
+                            applications from scratch.
+                        </p>
+                        <div class="pb-2">
+                            <p class="font-bold text-dark text-sm">— Aravind K.</p>
+                            <p class="text-xs text-gray-500">Full Stack Intern</p>
+                            <div class="flex text-primary text-xs mt-1 gap-0.5">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                    class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                    class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                        <img src="https://placehold.co/100x100/e2e8f0/475569?text=Face" alt="Student"
+                            class="absolute -bottom-4 right-4 w-16 h-16 rounded-full border-4 border-white shadow-sm object-cover bg-gray-200">
+                    </div>
+
+                    <!-- Review 2 -->
+                    <div class="border border-gray-100 rounded-2xl p-6 relative bg-gray-50/30">
+                        <i class="fa-solid fa-quote-left text-primary text-2xl mb-4 block opacity-80"></i>
+                        <p class="text-sm text-gray-600 mb-6 font-medium leading-relaxed">
+                            Mentors here are super supportive and the projects helped me boost my placement skills.
+                        </p>
+                        <div class="pb-2">
+                            <p class="font-bold text-dark text-sm">— Kaviya S.</p>
+                            <p class="text-xs text-gray-500">Frontend Intern</p>
+                            <div class="flex text-primary text-xs mt-1 gap-0.5">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                    class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                    class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                        <img src="https://placehold.co/100x100/e2e8f0/475569?text=Face" alt="Student"
+                            class="absolute -bottom-4 right-4 w-16 h-16 rounded-full border-4 border-white shadow-sm object-cover bg-gray-200">
+                    </div>
+
+                    <!-- Review 3 -->
+                    <div class="border border-gray-100 rounded-2xl p-6 relative bg-gray-50/30">
+                        <i class="fa-solid fa-quote-left text-primary text-2xl mb-4 block opacity-80"></i>
+                        <p class="text-sm text-gray-600 mb-6 font-medium leading-relaxed">
+                            Best internship program I've ever joined. Learned a lot and improved my problem-solving
+                            skills.
+                        </p>
+                        <div class="pb-2">
+                            <p class="font-bold text-dark text-sm">— Vignesh R.</p>
+                            <p class="text-xs text-gray-500">Backend Intern</p>
+                            <div class="flex text-primary text-xs mt-1 gap-0.5">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                    class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                    class="fa-solid fa-star"></i>
+                            </div>
+                        </div>
+                        <img src="https://placehold.co/100x100/e2e8f0/475569?text=Face" alt="Student"
+                            class="absolute -bottom-4 right-4 w-16 h-16 rounded-full border-4 border-white shadow-sm object-cover bg-gray-200">
+                    </div>
+
+                </div>
+
+                <div class="flex justify-center mt-6">
+                    <a href="#"
+                        class="inline-flex items-center justify-center gap-2 px-6 py-2 border border-gray-200 text-sm font-semibold rounded-lg text-dark hover:border-primary hover:text-primary transition-all duration-300">
+                        View All Reviews <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-3xl shadow-soft p-6 md:p-10" data-aos="fade-up">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+                    <!-- Left: Accordion -->
+                    <div>
+                        <h2 class="text-2xl font-bold text-dark mb-8">Frequently Asked Questions</h2>
+
+                        <div class="space-y-3">
+                            <!-- Item 1 -->
+                            <details class="group border-b border-gray-100 pb-3" open>
+                                <summary
+                                    class="flex justify-between items-center font-medium cursor-pointer text-sm text-dark hover:text-primary transition-colors">
+                                    What is the duration of the internship?
+                                    <span
+                                        class="transition group-open:rotate-45 text-primary text-lg font-light leading-none">+</span>
+                                </summary>
+                                <div class="text-gray-500 text-sm mt-3 leading-relaxed animate-fadeIn">
+                                    The internship duration varies based on the specific track chosen, typically ranging
+                                    from 3 to 6 months to ensure comprehensive learning and project completion.
+                                </div>
+                            </details>
+
+                            <!-- Item 2 -->
+                            <details class="group border-b border-gray-100 pb-3">
+                                <summary
+                                    class="flex justify-between items-center font-medium cursor-pointer text-sm text-dark hover:text-primary transition-colors">
+                                    Is this internship completely online?
+                                    <span
+                                        class="transition group-open:rotate-45 text-primary text-lg font-light leading-none">+</span>
+                                </summary>
+                                <div class="text-gray-500 text-sm mt-3 leading-relaxed hidden group-open:block">
+                                    Yes, currently our internship programs are fully remote, allowing you to participate
+                                    from anywhere while maintaining flexible working hours.
+                                </div>
+                            </details>
+
+                            <!-- Item 3 -->
+                            <details class="group border-b border-gray-100 pb-3">
+                                <summary
+                                    class="flex justify-between items-center font-medium cursor-pointer text-sm text-dark hover:text-primary transition-colors">
+                                    Will I get a certificate after completion?
+                                    <span
+                                        class="transition group-open:rotate-45 text-primary text-lg font-light leading-none">+</span>
+                                </summary>
+                                <div class="text-gray-500 text-sm mt-3 leading-relaxed hidden group-open:block">
+                                    Absolutely. Upon successful completion of the internship and assigned projects, you
+                                    will receive an industry-recognized certificate of completion.
+                                </div>
+                            </details>
+
+                            <!-- Item 4 -->
+                            <details class="group border-b border-gray-100 pb-3">
+                                <summary
+                                    class="flex justify-between items-center font-medium cursor-pointer text-sm text-dark hover:text-primary transition-colors">
+                                    Are there any eligibility criteria?
+                                    <span
+                                        class="transition group-open:rotate-45 text-primary text-lg font-light leading-none">+</span>
+                                </summary>
+                                <div class="text-gray-500 text-sm mt-3 leading-relaxed hidden group-open:block">
+                                    Basic knowledge of programming concepts is recommended. The program is ideal for
+                                    college students, fresh graduates, and career changers.
+                                </div>
+                            </details>
+
+                            <!-- Item 5 -->
+                            <details class="group border-b border-gray-100 pb-3">
+                                <summary
+                                    class="flex justify-between items-center font-medium cursor-pointer text-sm text-dark hover:text-primary transition-colors">
+                                    Is there any cost involved?
+                                    <span
+                                        class="transition group-open:rotate-45 text-primary text-lg font-light leading-none">+</span>
+                                </summary>
+                                <div class="text-gray-500 text-sm mt-3 leading-relaxed hidden group-open:block">
+                                    Please refer to our application page for specific details regarding stipends or any
+                                    associated training costs depending on the program tier.
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+
+                    <!-- Right: FAQ Graphic -->
+                    <div class="flex justify-center lg:justify-end relative" data-aos="zoom-in">
+                        <!-- Placeholder mimicking the 3D text bubbles -->
+                        <img src="https://placehold.co/400x300/f8fafc/5d4cf7?text=3D+FAQ+Graphic\n(Bubbles+&+Question+Marks)"
+                            alt="FAQ Illustration"
+                            class="w-full max-w-[350px] object-contain drop-shadow-xl rounded-xl">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pb-16 bg-background">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-cta-gradient rounded-3xl p-8 md:p-12 text-white relative overflow-hidden flex flex-col md:flex-row items-center justify-between shadow-soft"
+                data-aos="fade-up" data-aos-offset="100">
+
+                <!-- Decorative background elements -->
+                <div
+                    class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3">
+                </div>
+                <div
+                    class="absolute bottom-0 left-0 w-40 h-40 bg-white/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2">
+                </div>
+
+                <div class="md:w-3/5 z-10 relative mb-8 md:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-3 leading-tight">
+                        Ready to Build Your Career?<br>
+                        Join AROX Tech Internship 🚀
+                    </h2>
+                    <p class="text-white/80 text-sm md:text-base mb-8 max-w-md">
+                        Gain real-world experience, build awesome projects and become industry ready.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#"
+                            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-primary text-sm font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                            Apply for Internship <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <a href="#"
+                            class="inline-flex items-center justify-center gap-2 px-6 py-3 border border-white/30 text-white text-sm font-semibold rounded-lg hover:bg-white/10 transition-all duration-300">
+                            Explore Courses <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Side Graphic Placeholder -->
+                <div class="md:w-2/5 flex justify-end z-10 relative">
+                    <img src="https://placehold.co/300x300/a29bfe/ffffff?text=3D+Character+Pointing\n(Code+&+Folder+Icons)"
+                        alt="Join Us"
+                        class="w-full max-w-[280px] drop-shadow-2xl translate-y-4 md:translate-y-8 rounded-full border-4 border-white/20">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12 mb-12">
+
+                <!-- Brand Col -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div
+                            class="w-7 h-7 bg-primary rounded-tr-lg rounded-bl-lg rounded-tl-sm rounded-br-sm flex items-center justify-center transform rotate-45">
+                            <div class="w-3 h-3 border-2 border-white transform -rotate-45"></div>
+                        </div>
+                        <span class="font-bold text-xl text-dark tracking-tight">Arox <span
+                                class="font-light text-xs align-top">TECH</span></span>
+                    </div>
+                    <p class="text-xs text-gray-500 mb-6 leading-relaxed max-w-xs">
+                        Empowering the next generation of developers through hands-on learning and real-world projects.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#"
+                            class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"><i
+                                class="fa-brands fa-linkedin-in text-sm"></i></a>
+                        <a href="#"
+                            class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary transition-colors"><i
+                                class="fa-brands fa-x-twitter text-sm"></i></a>
+                        <a href="#"
+                            class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-dark hover:border-dark transition-colors"><i
+                                class="fa-brands fa-github text-sm"></i></a>
+                        <a href="#"
+                            class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-500 transition-colors"><i
+                                class="fa-brands fa-youtube text-sm"></i></a>
+                    </div>
+                </div>
+
+                <!-- Links Cols -->
+                <div>
+                    <h4 class="font-bold text-dark text-sm mb-4">Quick Links</h4>
+                    <ul class="space-y-3 text-xs text-gray-500">
+                        <li><a href="#" class="hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Services</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Training</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Internships</a></li>
+                        <li><a href="contact.html" class="hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-dark text-sm mb-4">Programs</h4>
+                    <ul class="space-y-3 text-xs text-gray-500">
+                        <li><a href="#" class="hover:text-primary transition-colors">Full Stack Development</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Frontend Development</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Backend Development</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">UI/UX Design</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Data Science</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-dark text-sm mb-4">Resources</h4>
+                    <ul class="space-y-3 text-xs text-gray-500">
+                        <li><a href="#" class="hover:text-primary transition-colors">Syllabus</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Projects</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">FAQs</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Student Reviews</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Col -->
+                <div class="lg:col-span-1">
+                    <h4 class="font-bold text-dark text-sm mb-4">Contact Us</h4>
+                    <ul class="space-y-3 text-xs text-gray-500">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-regular fa-envelope mt-0.5 text-primary"></i>
+                            <a href="mailto:hello@aroxtech.com"
+                                class="hover:text-primary transition-colors">hello@aroxtech.com</a>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-phone mt-0.5 text-primary"></i>
+                            <a href="tel:+911234567890" class="hover:text-primary transition-colors">+91 123 45
+                                67890</a>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-location-dot mt-0.5 text-primary"></i>
+                            <span>Salem, Tamil Nadu, India</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div
+                class="border-t border-gray-100 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[11px] text-gray-400">
+                <p>© 2026 AROX Tech. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-gray-600">Privacy Policy</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="#" class="hover:text-gray-600">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Animation Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize Animate On Scroll
+        AOS.init({
+            once: true, // whether animation should happen only once - while scrolling down
+            offset: 50, // offset (in px) from the original trigger point
+            duration: 800, // values from 0 to 3000, with step 50ms
+            easing: 'ease-out-cubic', // default easing for AOS animations
+        });
+
+        // Add smooth appearance to body on load
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+    </script>
+
+    <script>
+        const deviconMap = {
+            'HTML5': 'html5/html5-original.svg',
+            'CSS3': 'css3/css3-original.svg',
+            'JavaScript': 'javascript/javascript-original.svg',
+            'JS': 'javascript/javascript-original.svg',
+            'TypeScript': 'typescript/typescript-original.svg',
+            'TS': 'typescript/typescript-original.svg',
+            'React': 'react/react-original.svg',
+            'Node': 'nodejs/nodejs-original.svg',
+            'Node.js': 'nodejs/nodejs-original.svg',
+            'MongoDB': 'mongodb/mongodb-original.svg',
+            'Git': 'git/git-original.svg',
+            'Figma': 'figma/figma-original.svg',
+            'Sketch': 'sketch/sketch-original.svg',
+            'Adobe XD': 'xd/xd-plain.svg',
+            'Photoshop': 'photoshop/photoshop-original.svg',
+            'Illustrator': 'illustrator/illustrator-plain.svg',
+            'Python': 'python/python-original.svg',
+            'R': 'r/r-original.svg',
+            'SQL': 'mysql/mysql-original.svg',
+            'Pandas': 'pandas/pandas-original.svg',
+            'TensorFlow': 'tensorflow/tensorflow-original.svg',
+            'Kali Linux': 'linux/linux-original.svg',
+            'Wireshark': 'wireshark/wireshark-original.svg',
+            'Metasploit': 'linux/linux-original.svg',
+            'Bash': 'bash/bash-original.svg',
+            'Google Ads': 'google/google-original.svg',
+            'Meta Ads': 'facebook/facebook-original.svg',
+            'Analytics': 'google/google-original.svg',
+            'WordPress': 'wordpress/wordpress-plain.svg',
+            'Mailchimp': 'mailchimp/mailchimp-original.svg',
+            'C/C++': 'cplusplus/cplusplus-original.svg',
+            'Raspberry Pi': 'raspberrypi/raspberrypi-original.svg',
+            'Arduino': 'arduino/arduino-original.svg',
+            'AWS IoT': 'amazonwebservices/amazonwebservices-original.svg',
+            'Docker': 'docker/docker-original.svg',
+            'Kubernetes': 'kubernetes/kubernetes-plain.svg',
+            'Jenkins': 'jenkins/jenkins-original.svg',
+            'AWS': 'amazonwebservices/amazonwebservices-original.svg',
+            'Java': 'java/java-original.svg',
+            'Spring Boot': 'spring/spring-original.svg',
+            'Spring': 'spring/spring-original.svg',
+            'React Native': 'react/react-original.svg',
+            'Flutter': 'flutter/flutter-original.svg',
+            'Swift': 'swift/swift-original.svg',
+            'Android': 'android/android-original.svg',
+            'Firebase': 'firebase/firebase-plain.svg'
+        };
+
+        const coursesData = [
+            {
+                slug: 'full-stack-web-development',
+                title: 'Full Stack Web Development',
+                category: 'Development',
+                desc: 'Engineer modern responsive web platforms using React, Node.js, databases, and version control.',
+                learnItems: ['HTML5, CSS3, & Modern UI Layouts', 'React & Next.js Frameworks', 'Node.js & Express API Backend', 'Database Modeling & Design', 'Git Version Control & Deployment'],
+                techStack: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Node.js', 'MongoDB', 'Git']
+            },
+            {
+                slug: 'ui-ux-designing',
+                title: 'UI & UX Designing',
+                category: 'Creative',
+                desc: 'Master Figma, layout design, visual styling, wireframes, and prototypes.',
+                learnItems: ['Design Systems & Figma Components', 'User Persona & Research', 'Interactive Prototyping & Flow', 'Visual Hierarchy & Layouts', 'Developer Handoff Best Practices'],
+                techStack: ['Figma', 'Sketch', 'Adobe XD', 'Photoshop', 'Illustrator']
+            },
+            {
+                slug: 'data-science-and-ai',
+                title: 'Data Science & AI',
+                category: 'Data',
+                desc: 'Analyze data, train machine learning models, and engineer AI systems with Python.',
+                learnItems: ['Data Analysis with Python & Pandas', 'SQL Querying & Database Management', 'Exploratory Data Visualization', 'Machine Learning Algorithms', 'Deep Learning & AI Integration'],
+                techStack: ['Python', 'R', 'SQL', 'Pandas', 'TensorFlow']
+            },
+            {
+                slug: 'cyber-security',
+                title: 'Cyber Security',
+                category: 'Security',
+                desc: 'Ethically hack, audit networks, secure systems, and design security policies.',
+                learnItems: ['Network Auditing & Wireshark Analysis', 'Pentesting with Kali Linux & Metasploit', 'System & Server Hardening', 'Cryptography Foundations', 'Security Scripting with Python & Bash'],
+                techStack: ['Kali Linux', 'Wireshark', 'Metasploit', 'Python', 'Bash']
+            },
+            {
+                slug: 'digital-marketing',
+                title: 'Digital Marketing',
+                category: 'Marketing',
+                desc: 'Grow audiences, manage paid ads, orchestrate email campaigns, and analyze conversions.',
+                learnItems: ['SEO Optimization & Keyword Analysis', 'Paid Campaigns on Google & Meta Ads', 'Email Marketing & Custom Newsletters', 'Web Analytics & Performance Tracking', 'CMS Systems & WordPress Customization'],
+                techStack: ['Google Ads', 'Meta Ads', 'Analytics', 'WordPress', 'Mailchimp']
+            },
+            {
+                slug: 'embedded-systems-and-iot',
+                title: 'Embedded Systems & IoT',
+                category: 'Hardware',
+                desc: 'Program hardware, integrate sensors, and interface devices with cloud dashboards.',
+                learnItems: ['C/C++ Bare-Metal Programming', 'Raspberry Pi & Single Board Systems', 'Arduino Microcontrollers & Circuits', 'Sensor & Actuator Calibration', 'AWS IoT Cloud Integrations'],
+                techStack: ['C/C++', 'Raspberry Pi', 'Arduino', 'Python', 'AWS IoT']
+            },
+            {
+                slug: 'devops-engineering',
+                title: 'DevOps Engineering',
+                category: 'Operations',
+                desc: 'Deploy scalable containers, configure CI/CD pipelines, and manage cloud clusters.',
+                learnItems: ['Docker Containerization & Packaging', 'Kubernetes Orchestration & Scaling', 'CI/CD Automation with Jenkins', 'AWS Cloud Provisioning & IAM', 'Git Version Control & Branching'],
+                techStack: ['Docker', 'Kubernetes', 'Jenkins', 'AWS', 'Git']
+            },
+            {
+                slug: 'software-development',
+                title: 'Software Development',
+                category: 'Engineering',
+                desc: 'Master core computing, algorithms, object-oriented concepts, and relational databases.',
+                learnItems: ['Core Java, Python, & C++ OOPs', 'Data Structures & Algorithms', 'Relational SQL Databases & Indexing', 'Design Patterns & Best Practices', 'Git Workflows & Team Collaboration'],
+                techStack: ['Java', 'Python', 'C++', 'SQL', 'Git']
+            },
+            {
+                slug: 'app-development',
+                title: 'App Development',
+                category: 'Mobile',
+                desc: 'Build native and cross-platform apps for mobile operating systems.',
+                learnItems: ['React Native & Cross-Platform UI', 'Flutter & Dart Frameworks', 'iOS Swift Native Programming', 'Android Native Development', 'Firebase Database & Authentication'],
+                techStack: ['React Native', 'Flutter', 'Swift', 'Android', 'Firebase']
+            },
+            {
+                slug: 'full-stack-internship',
+                title: 'Full Stack Web Development Internship',
+                category: 'Internship',
+                desc: 'Build real production-ready web platforms using React, Node.js, and databases in a corporate environment.',
+                learnItems: ['Agile Sprints & Workflows', 'REST & GraphQL APIs', 'Git Flow Collaboration', 'CI/CD Deployment', 'SQL & NoSQL Integration'],
+                techStack: ['React', 'Node.js', 'TypeScript', 'MongoDB']
+            },
+            {
+                slug: 'python-backend-internship',
+                title: 'Python Backend Engineering Internship',
+                category: 'Internship',
+                desc: 'Engineer scalable backend microservices, REST APIs, and automated scripting jobs.',
+                learnItems: ['FastAPI Microservices', 'PostgreSQL Schema Design', 'Redis Caching Systems', 'Docker Containerization', 'Unit Testing & Coverage'],
+                techStack: ['Python', 'Django', 'PostgreSQL', 'Docker']
+            },
+            {
+                slug: 'ui-ux-design-internship',
+                title: 'UI/UX Product Design Internship',
+                category: 'Internship',
+                desc: 'Prototype enterprise-grade digital products and master complete product design systems.',
+                learnItems: ['Advanced Figma Auto-Layout', 'Component Variables', 'High-Fidelity Wireframes', 'Usability Audit Reports', 'Developer Handoff Workflows'],
+                techStack: ['Figma', 'HTML5', 'CSS3', 'React']
+            },
+            {
+                slug: 'ai-agent-internship',
+                title: 'AI Agent Engineering Internship',
+                category: 'Internship',
+                desc: 'Orchestrate LLMs, build RAG pipelines, and deploy custom vector search engine applications.',
+                learnItems: ['OpenAI API Orchestration', 'Vector Databases (Pinecone)', 'Semantic Search & RAG', 'Fine-Tuning Techniques', 'LangChain Frameworks'],
+                techStack: ['Python', 'PostgreSQL', 'Docker', 'Git']
+            },
+            {
+                slug: 'cloud-devops-internship',
+                title: 'Cloud & DevOps Engineering Internship',
+                category: 'Internship',
+                desc: 'Deploy serverless architectures and automate secure cloud infrastructure systems.',
+                learnItems: ['AWS Infrastructure (IAM, VPC)', 'Terraform IaC', 'Docker & Kubernetes', 'CI/CD Pipeline Design', 'Monitoring & Alerting'],
+                techStack: ['AWS', 'Docker', 'Python', 'Git']
+            },
+            {
+                slug: 'mobile-app-internship',
+                title: 'Mobile App Engineering Internship',
+                category: 'Internship',
+                desc: 'Build native cross-platform mobile apps for iOS and Android devices.',
+                learnItems: ['React Native & Expo', 'Mobile UI/UX Layouts', 'Navigation Architecture', 'App Store Publishing', 'Local Storage & APIs'],
+                techStack: ['Android', 'React Native', 'TypeScript', 'Git']
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const slug = urlParams.get('course');
+            
+            if (slug) {
+                const course = coursesData.find(c => c.slug === slug);
+                if (course) {
+                    // Update metadata and header fields
+                    document.getElementById('page-title').innerText = `Arox Tech - ${course.title}`;
+                    
+                    const heroTitle = document.getElementById('hero-title');
+                    if (heroTitle) heroTitle.innerText = course.title;
+                    
+                    const heroBadge = document.getElementById('hero-badge');
+                    if (heroBadge) heroBadge.innerText = `${course.category.toUpperCase()} PROGRAM`;
+
+                    const heroDesc = document.getElementById('hero-desc');
+                    if (heroDesc && course.desc) heroDesc.innerText = course.desc;
+                    
+                    // Render Technologies Container
+                    const techContainer = document.getElementById('tech-stack-container');
+                    if (techContainer) {
+                        techContainer.innerHTML = '';
+                        course.techStack.forEach(techName => {
+                            const deviconSlug = deviconMap[techName] || 'chrome/chrome-original.svg';
+                            const badge = document.createElement('div');
+                            badge.className = 'flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-100 hover:border-primary/20 transition-all duration-300 hover:shadow-sm cursor-help';
+                            badge.innerHTML = `
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${deviconSlug}" class="w-6 h-6 object-contain" alt="${techName}" />
+                                <span class="text-sm font-semibold text-dark">${techName}</span>
+                            `;
+                            techContainer.appendChild(badge);
+                        });
+                    }
+
+                    // Render Curriculum Container
+                    const curriculumContainer = document.getElementById('curriculum-container');
+                    if (curriculumContainer) {
+                        curriculumContainer.innerHTML = '';
+                        course.learnItems.forEach((item, index) => {
+                            const stepNum = String(index + 1).padStart(2, '0');
+                            const moduleCard = document.createElement('div');
+                            moduleCard.className = 'flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-100 hover:shadow-sm transition-all duration-300';
+                            moduleCard.innerHTML = `
+                                <div class="w-10 h-10 rounded-lg bg-primary-light text-primary flex items-center justify-center font-extrabold text-sm flex-shrink-0">
+                                    ${stepNum}
+                                </div>
+                                <span class="text-sm font-semibold text-dark leading-snug">${item}</span>
+                            `;
+                            curriculumContainer.appendChild(moduleCard);
+                        });
+                    }
+
+                    // Update all Apply links to point to the dynamic apply page
+                    document.querySelectorAll('a').forEach(a => {
+                        if (a.innerText.includes('Apply')) {
+                            a.href = `apply.html?course=${course.slug}`;
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

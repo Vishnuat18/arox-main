@@ -1,0 +1,78 @@
+<div class="animate-fade-slide-up">
+  
+  <!-- Header Card -->
+  <div class="card" style="margin-bottom: 24px; display: flex; align-items: flex-start; gap: 32px; position: relative;">
+    <a href="/admin/students" style="position: absolute; top: 24px; right: 24px; color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">← Back to List</a>
+    
+    <div style="width: 100px; height: 100px; border-radius: 50%; background: var(--gradient-primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; flex-shrink: 0; box-shadow: var(--shadow-md);">
+      <%= student.first_name.charAt(0) %>
+    </div>
+    
+    <div style="flex: 1;">
+      <h2 style="margin-bottom: 8px; font-size: 1.8rem;"><%= student.first_name %> <%= student.last_name %></h2>
+      <div style="display: flex; gap: 24px; color: var(--text-secondary); margin-bottom: 24px; font-size: 0.9rem; flex-wrap: wrap;">
+        <span style="display: flex; align-items: center; gap: 6px;">📧 <%= student.email %></span>
+        <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="smartphone"></i> <%= student.whatsapp_no %></span>
+        <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="calendar"></i> Joined <%= new Date(student.created_at).toLocaleDateString() %></span>
+      </div>
+
+      <div class="grid-2">
+        <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md);">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Education</div>
+          <div style="font-weight: 600; color: var(--text-primary);"><%= student.degree %></div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary);"><%= student.college_name %> (Year <%= student.year_of_study %>)</div>
+        </div>
+        
+        <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md);">
+          <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Address</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;"><%= student.address %></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registrations History -->
+  <h3 style="margin-bottom: 16px; font-size: 1.2rem;">Enrollment History</h3>
+  
+  <% if (registrations.length > 0) { %>
+    <div class="grid-2">
+      <% registrations.forEach(reg => { %>
+        <div class="card card-hover" style="display: flex; flex-direction: column; height: 100%;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <div>
+              <span class="badge" style="background: var(--primary-50); color: var(--primary); font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block;">
+                <%= reg.course_type === 'internship' ? 'Internship' : 'Training' %>
+              </span>
+              <h4 style="font-size: 1.1rem; line-height: 1.3;"><%= reg.course_title %></h4>
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Batch: <%= reg.batch_name %></div>
+            </div>
+            
+            <% if (reg.status === 'completed') { %>
+              <span class="status-badge status-active">Active</span>
+            <% } else if (reg.status === 'pending_payment') { %>
+              <span class="status-badge status-pending">Pending Payment</span>
+            <% } else if (reg.status === 'rejected') { %>
+              <span class="status-badge status-error">Rejected</span>
+            <% } else { %>
+              <span class="status-badge status-inactive"><%= reg.status %></span>
+            <% } %>
+          </div>
+
+          <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Registration ID</div>
+              <div style="font-family: monospace; font-size: 0.9rem; font-weight: 600;"><%= reg.registration_id %></div>
+            </div>
+            <a href="/admin/registrations/<%= reg.id %>" class="btn btn-ghost" style="padding: 6px 12px; font-size: 0.85rem;">Manage</a>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="card" style="text-align: center; padding: 40px; color: var(--text-muted);">
+      <div style="font-size: 2rem; margin-bottom: 12px;">📭</div>
+      No course enrollments found for this student.
+    </div>
+  <% } %>
+
+</div>

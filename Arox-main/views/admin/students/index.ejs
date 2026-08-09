@@ -1,0 +1,71 @@
+<div class="animate-fade-slide-up">
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+      <div class="search-input-wrapper">
+        <span class="search-icon"><i data-lucide="search"></i></span>
+        <input type="text" class="form-input" placeholder="Search by name, email, or college..." data-table-search="students-table">
+      </div>
+      
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-ghost" title="Export to CSV">⬇️ Export</button>
+      </div>
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table class="data-table" id="students-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Contact</th>
+            <th>Education</th>
+            <th style="text-align: center;">Courses Enrolled</th>
+            <th>Joined</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (students.length > 0) { %>
+            <% students.forEach(s => { %>
+              <tr>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="admin-avatar" style="width: 36px; height: 36px; font-size: 0.9rem;"><%= s.first_name.charAt(0) %></div>
+                    <div>
+                      <div style="font-weight: 600;"><%= s.first_name %> <%= s.last_name %></div>
+                      <div style="font-size: 0.8rem; color: var(--text-muted);"><%= s.email %></div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div style="font-size: 0.85rem;"><%= s.whatsapp_no %></div>
+                </td>
+                <td>
+                  <div style="font-size: 0.85rem; font-weight: 500; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= s.college_name %>"><%= s.college_name %></div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);"><%= s.degree %></div>
+                </td>
+                <td style="text-align: center;">
+                  <span class="badge" style="background: var(--primary-50); color: var(--primary); padding: 4px 12px; border-radius: var(--radius-full); font-weight: 700;">
+                    <%= s.course_count %>
+                  </span>
+                </td>
+                <td style="color: var(--text-muted); font-size: 0.85rem;">
+                  <%= new Date(s.created_at).toLocaleDateString() %>
+                </td>
+                <td style="text-align: right;">
+                  <a href="/admin/students/<%= s.id %>" class="btn btn-ghost" style="padding: 6px 12px; font-size: 0.85rem;">View Profile</a>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <div style="font-size: 2rem; margin-bottom: 8px;"><i data-lucide="graduation-cap"></i></div>
+                No students found.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

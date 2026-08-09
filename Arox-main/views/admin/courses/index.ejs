@@ -1,0 +1,215 @@
+<div class="animate-fade-slide-up">
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+      <div class="search-input-wrapper">
+        <span class="search-icon"><i data-lucide="search"></i></span>
+        <input type="text" class="form-input" placeholder="Search courses..." data-table-search="courses-table">
+      </div>
+      <button class="btn btn-primary" data-modal-target="addCourseModal">+ Add Course</button>
+    </div>
+
+    <div style="overflow-x: auto;">
+      <table class="data-table" id="courses-table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Type</th>
+            <th>Schedule</th>
+            <th>Fee</th>
+            <th style="text-align: center;">Enrollment</th>
+            <th>Status</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (courses.length > 0) { %>
+            <% courses.forEach(c => { %>
+              <tr>
+                <td>
+                  <div style="font-weight: 600; max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= c.title %>"><%= c.title %></div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Batch: <%= c.batch_name %></div>
+                </td>
+                <td>
+                  <span class="badge" style="background: var(--bg-secondary); text-transform: uppercase; font-size: 0.7rem;">
+                    <%= c.type === 'internship' ? 'Internship' : 'Training' %>
+                  </span>
+                </td>
+                <td>
+                  <div style="font-size: 0.85rem;"><%= new Date(c.start_date).toLocaleDateString() %></div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);"><%= c.duration %></div>
+                </td>
+                <td>
+                  <div style="font-weight: 600;">₹<%= c.fee.toLocaleString('en-IN') %></div>
+                </td>
+                <td style="text-align: center;">
+                  <div style="font-weight: 600; color: <%= c.enrolled_count >= c.max_students ? 'var(--danger)' : 'var(--text-primary)' %>">
+                    <%= c.enrolled_count %> / <%= c.max_students %>
+                  </div>
+                  <div style="width: 100%; height: 4px; background: var(--bg-secondary); border-radius: 2px; margin-top: 4px; overflow: hidden;">
+                    <div style="height: 100%; background: <%= c.enrolled_count >= c.max_students ? 'var(--danger)' : 'var(--primary)' %>; width: <%= Math.min(100, (c.enrolled_count / c.max_students) * 100) %>%;"></div>
+                  </div>
+                </td>
+                <td>
+                  <select class="form-select" style="padding: 4px 28px 4px 8px; font-size: 0.75rem; font-weight: 600; height: auto; min-height: unset; border-radius: 12px; background-color: <%= c.status === 'active' ? 'var(--success-bg)' : (c.status === 'completed' ? 'var(--bg-secondary)' : 'var(--warning-bg)') %>; color: <%= c.status === 'active' ? 'var(--success)' : (c.status === 'completed' ? 'var(--text-muted)' : 'var(--warning)') %>; border: none;" onchange="updateCourseStatus(<%= c.id %>, this.value)">
+                    <option value="draft" <%= c.status === 'draft' ? 'selected' : '' %>>Draft</option>
+                    <option value="active" <%= c.status === 'active' ? 'selected' : '' %>>Active</option>
+                    <option value="completed" <%= c.status === 'completed' ? 'selected' : '' %>>Completed</option>
+                  </select>
+                </td>
+                <td style="text-align: right;">
+                  <a href="/course/<%= c.slug %>" target="_blank" class="action-btn" title="View Public Page">👁️</a>
+                  <button class="action-btn" title="Edit Course">✏️</button>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <div style="font-size: 2rem; margin-bottom: 8px;">📚</div>
+                No courses found.
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Course Modal -->
+<div class="modal-overlay" id="addCourseModal">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title">Add New Course / Internship</h3>
+      <button class="modal-close">✖</button>
+    </div>
+    <form id="addCourseForm">
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">Course Title *</label>
+            <input type="text" name="title" class="form-input" placeholder="e.g. Full Stack Web Development" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Program Type *</label>
+            <select name="type" class="form-select" required>
+              <option value="training">Training Program</option>
+              <option value="internship">Internship</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="grid-3">
+          <div class="form-group">
+            <label class="form-label">Batch Name *</label>
+            <input type="text" name="batch_name" class="form-input" placeholder="e.g. Summer 2026" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Duration *</label>
+            <input type="text" name="duration" class="form-input" placeholder="e.g. 12 Weeks" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Course Fee (₹) *</label>
+            <input type="number" name="fee" class="form-input" min="0" required>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="form-group">
+            <label class="form-label">Start Date *</label>
+            <input type="date" name="start_date" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date *</label>
+            <input type="date" name="end_date" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Max Students *</label>
+            <input type="number" name="max_students" class="form-input" min="1" value="50" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Description *</label>
+          <textarea name="description" class="form-textarea" rows="4" placeholder="Course overview and syllabus highlights..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Initial Status</label>
+          <select name="status" class="form-select">
+            <option value="draft">Draft (Hidden from website)</option>
+            <option value="active">Active (Visible and open for enrollment)</option>
+          </select>
+        </div>
+
+        <div id="form-error" style="color: var(--danger); font-size: 0.85rem; margin-top: 10px; display: none;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-ghost" data-modal-close>Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Create Course</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<script>
+  // Handle Add Course Form
+  document.getElementById('addCourseForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const errorDiv = document.getElementById('form-error');
+    const btn = document.getElementById('submitBtn');
+    
+    errorDiv.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Creating...';
+    
+    try {
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      const res = await fetch('/admin/courses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      
+      const result = await res.json();
+      
+      if (!res.ok) throw new Error(result.error || 'Failed to create course');
+      
+      showToast('Course created successfully', 'success');
+      setTimeout(() => window.location.reload(), 1000);
+      
+    } catch (err) {
+      errorDiv.textContent = err.message;
+      errorDiv.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Create Course';
+    }
+  });
+
+  // Handle Status Update
+  async function updateCourseStatus(id, status) {
+    try {
+      const res = await fetch(\`/admin/courses/\${id}/status\`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error);
+      }
+      
+      showToast('Course status updated', 'success');
+      setTimeout(() => window.location.reload(), 1000);
+    } catch (err) {
+      showToast(err.message, 'error');
+      setTimeout(() => window.location.reload(), 1000); // Revert UI
+    }
+  }
+</script>
+

@@ -1,0 +1,650 @@
+/* ============================================
+   AROX ERP - Premium Enterprise Design System
+   Minimal, Monochrome, Linear/Notion Style
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Enterprise Monochrome Palette */
+  --erp-bg: #FFFFFF;
+  --erp-bg-secondary: #FAFAFA;
+  --erp-sidebar: #111111;
+  --erp-text-primary: #111111;
+  --erp-text-secondary: #6B7280;
+  --erp-border: #E5E7EB;
+  --erp-divider: #ECECEC;
+  --erp-hover: #F4F4F5;
+  --erp-active: #000000;
+  
+  /* Status Colors */
+  --erp-success: #16A34A;
+  --erp-warning: #D97706;
+  --erp-danger: #DC2626;
+
+  /* Typography */
+  --erp-font: 'Inter', sans-serif;
+
+  /* Components */
+  --erp-radius: 12px;
+  --erp-border-width: 1px;
+  
+  /* Shadows */
+  --erp-shadow-subtle: 0px 1px 2px rgba(0,0,0,0.04);
+  --erp-shadow-hover: 0px 6px 20px rgba(0,0,0,0.06);
+
+  /* Transitions */
+  --erp-transition: 200ms ease;
+}
+
+body.erp-body {
+  background-color: var(--erp-bg-secondary);
+  color: var(--erp-text-primary);
+  font-family: var(--erp-font);
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+  letter-spacing: -0.015em;
+}
+
+/* Base Typography */
+.erp-h1 { font-size: 32px; font-weight: 700; color: var(--erp-text-primary); margin-bottom: 24px; }
+.erp-h2 { font-size: 22px; font-weight: 600; color: var(--erp-text-primary); margin-bottom: 16px; }
+.erp-h3 { font-size: 18px; font-weight: 500; color: var(--erp-text-primary); margin-bottom: 12px; }
+.erp-p { font-size: 14px; font-weight: 400; color: var(--erp-text-secondary); line-height: 1.5; }
+.erp-small { font-size: 12px; color: var(--erp-text-secondary); }
+
+/* Layout Containers */
+.erp-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.erp-sidebar {
+  width: 280px;
+  background-color: var(--erp-sidebar);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: width;
+}
+
+/* Sidebar Collapsed State */
+.erp-sidebar.collapsed {
+  width: 70px !important;
+}
+
+.erp-sidebar.collapsed .erp-nav-section {
+  display: none !important;
+}
+
+.erp-sidebar.collapsed .erp-nav-item span {
+  display: none !important;
+}
+
+.erp-sidebar.collapsed .erp-nav-item {
+  justify-content: center !important;
+  padding: 10px 0 !important;
+  margin: 4px 8px !important;
+}
+
+.erp-sidebar.collapsed .erp-nav-item i,
+.erp-sidebar.collapsed .erp-nav-item svg {
+  margin-right: 0 !important;
+}
+
+.erp-sidebar.collapsed .sidebar-logo-container {
+  display: none !important;
+}
+
+.erp-sidebar-header {
+  height: 70px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--erp-border-width) solid rgba(255,255,255,0.1);
+  transition: padding 0.3s ease;
+}
+
+.erp-sidebar.collapsed .erp-sidebar-header {
+  padding: 0 !important;
+  justify-content: center !important;
+}
+
+.erp-sidebar-logo {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+/* Sidebar Toggle Button styling like ChatGPT */
+.sidebar-toggle-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.sidebar-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.erp-sidebar-nav {
+  padding: 24px 16px;
+  flex: 1;
+}
+
+.erp-nav-section {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+  margin: 24px 0 8px 12px;
+  letter-spacing: 0.05em;
+}
+
+.erp-nav-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  color: rgba(255,255,255,0.7);
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  transition: background var(--erp-transition), color var(--erp-transition);
+}
+
+.erp-nav-item i, .erp-nav-item svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 12px;
+  stroke-width: 2px;
+}
+
+.erp-nav-item:hover {
+  background-color: rgba(255,255,255,0.1);
+  color: #FFFFFF;
+}
+
+.erp-nav-item.active {
+  background-color: #FFFFFF;
+  color: #111111;
+}
+
+/* Main Content */
+.erp-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--erp-bg-secondary);
+  overflow-x: hidden;
+}
+
+/* Topbar */
+.erp-topbar {
+  height: 70px;
+  background-color: var(--erp-bg);
+  border-bottom: var(--erp-border-width) solid var(--erp-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.erp-breadcrumb {
+  font-size: 14px;
+  color: var(--erp-text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.erp-breadcrumb-active {
+  color: var(--erp-text-primary);
+  font-weight: 500;
+}
+
+.erp-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.erp-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.erp-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--erp-text-primary);
+  color: var(--erp-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Page Content */
+.erp-content {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Cards */
+.erp-card {
+  background-color: var(--erp-bg);
+  border: var(--erp-border-width) solid var(--erp-border);
+  border-radius: var(--erp-radius);
+  padding: 24px;
+  box-shadow: var(--erp-shadow-subtle);
+  transition: box-shadow var(--erp-transition), transform var(--erp-transition);
+}
+
+.erp-card:hover {
+  box-shadow: var(--erp-shadow-hover);
+}
+
+.erp-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.erp-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: var(--erp-border-width) solid var(--erp-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--erp-text-primary);
+}
+
+.erp-card-title {
+  font-size: 14px;
+  color: var(--erp-text-secondary);
+  font-weight: 500;
+}
+
+.erp-card-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--erp-text-primary);
+}
+
+/* Buttons */
+.erp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--erp-transition);
+  text-decoration: none;
+}
+
+.erp-btn-primary {
+  background-color: var(--erp-text-primary);
+  color: var(--erp-bg);
+  border: var(--erp-border-width) solid var(--erp-text-primary);
+}
+
+.erp-btn-primary:hover {
+  background-color: #333333;
+}
+
+.erp-btn-secondary {
+  background-color: var(--erp-bg);
+  color: var(--erp-text-primary);
+  border: var(--erp-border-width) solid var(--erp-border);
+}
+
+.erp-btn-secondary:hover {
+  background-color: var(--erp-hover);
+}
+
+.erp-btn-ghost {
+  background-color: transparent;
+  color: var(--erp-text-primary);
+  border: 1px solid transparent;
+}
+
+.erp-btn-ghost:hover {
+  border-color: var(--erp-border);
+  background-color: var(--erp-hover);
+}
+
+/* Grid System */
+.erp-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.erp-grid-2 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* Tables */
+.erp-table-container {
+  background-color: var(--erp-bg);
+  border: var(--erp-border-width) solid var(--erp-border);
+  border-radius: var(--erp-radius);
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.erp-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.erp-table th {
+  padding: 16px 24px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--erp-text-secondary);
+  font-weight: 600;
+  border-bottom: var(--erp-border-width) solid var(--erp-border);
+  background-color: var(--erp-bg-secondary);
+  position: sticky;
+  top: 0;
+}
+
+.erp-table td {
+  padding: 16px 24px;
+  font-size: 14px;
+  color: var(--erp-text-primary);
+  border-bottom: var(--erp-border-width) solid var(--erp-divider);
+}
+
+.erp-table tr:hover {
+  background-color: var(--erp-hover);
+}
+
+/* Forms */
+.erp-form-group {
+  margin-bottom: 24px;
+}
+
+.erp-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--erp-text-primary);
+  margin-bottom: 8px;
+}
+
+.erp-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: var(--erp-border-width) solid var(--erp-border);
+  border-radius: 8px;
+  background-color: var(--erp-bg);
+  color: var(--erp-text-primary);
+  font-size: 14px;
+  font-family: var(--erp-font);
+  transition: border-color var(--erp-transition), box-shadow var(--erp-transition);
+  outline: none;
+}
+
+.erp-input:focus {
+  border-color: var(--erp-text-primary);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+}
+
+.erp-input::placeholder {
+  color: var(--erp-text-secondary);
+}
+
+/* Pills */
+.erp-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: var(--erp-border-width) solid transparent;
+}
+
+.erp-pill-success {
+  background-color: #F0FDF4;
+  color: var(--erp-success);
+  border-color: #BBF7D0;
+}
+
+.erp-pill-warning {
+  background-color: #FFFBEB;
+  color: var(--erp-warning);
+  border-color: #FEF08A;
+}
+
+.erp-pill-danger {
+  background-color: #FEF2F2;
+  color: var(--erp-danger);
+  border-color: #FECACA;
+}
+
+/* Login Page Specific */
+.erp-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--erp-bg-secondary);
+}
+
+.erp-login-card {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--erp-bg);
+  border: var(--erp-border-width) solid var(--erp-border);
+  border-radius: var(--erp-radius);
+  padding: 40px;
+  box-shadow: var(--erp-shadow-subtle);
+}
+
+.erp-login-logo {
+  width: 48px;
+  height: 48px;
+  border: var(--erp-border-width) solid var(--erp-border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+
+/* ==========================================================
+   Standard Design System Mapping (for sub-page templates)
+   ========================================================== */
+.card {
+  background-color: var(--erp-bg);
+  border: var(--erp-border-width) solid var(--erp-border);
+  border-radius: var(--erp-radius);
+  padding: 24px;
+  box-shadow: var(--erp-shadow-subtle);
+  transition: box-shadow var(--erp-transition), transform var(--erp-transition);
+}
+.card:hover {
+  box-shadow: var(--erp-shadow-hover);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.data-table th {
+  padding: 16px 24px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--erp-text-secondary);
+  font-weight: 600;
+  border-bottom: var(--erp-border-width) solid var(--erp-border);
+  background-color: var(--erp-bg-secondary);
+}
+.data-table td {
+  padding: 16px 24px;
+  font-size: 14px;
+  color: var(--erp-text-primary);
+  border-bottom: var(--erp-border-width) solid var(--erp-divider);
+}
+.data-table tr:hover {
+  background-color: var(--erp-hover);
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border: var(--erp-border-width) solid var(--erp-border);
+  border-radius: 8px;
+  background-color: var(--erp-bg);
+  color: var(--erp-text-primary);
+  font-size: 14px;
+  font-family: var(--erp-font);
+  transition: border-color var(--erp-transition), box-shadow var(--erp-transition);
+  outline: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--erp-text-primary);
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+}
+
+.admin-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--erp-text-primary);
+  color: var(--erp-bg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--erp-transition);
+  text-decoration: none;
+  border: var(--erp-border-width) solid transparent;
+}
+.btn-primary {
+  background-color: var(--erp-text-primary);
+  color: var(--erp-bg);
+  border-color: var(--erp-text-primary);
+}
+.btn-primary:hover {
+  background-color: #333333;
+}
+.btn-secondary {
+  background-color: var(--erp-bg);
+  color: var(--erp-text-primary);
+  border-color: var(--erp-border);
+}
+.btn-secondary:hover {
+  background-color: var(--erp-hover);
+}
+.btn-ghost {
+  background-color: transparent;
+  color: var(--erp-text-primary);
+}
+.btn-ghost:hover {
+  border-color: var(--erp-border);
+  background-color: var(--erp-hover);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: var(--erp-border-width) solid transparent;
+  background-color: var(--erp-hover);
+  color: var(--erp-text-secondary);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  border: var(--erp-border-width) solid transparent;
+}
+.status-active {
+  background-color: #F0FDF4;
+  color: var(--erp-success);
+  border-color: #BBF7D0;
+}
+.status-pending {
+  background-color: #FFFBEB;
+  color: var(--erp-warning);
+  border-color: #FEF08A;
+}
+.status-error {
+  background-color: #FEF2F2;
+  color: var(--erp-danger);
+  border-color: #FECACA;
+}
+.status-inactive {
+  background-color: var(--erp-hover);
+  color: var(--erp-text-secondary);
+  border-color: var(--erp-border);
+}

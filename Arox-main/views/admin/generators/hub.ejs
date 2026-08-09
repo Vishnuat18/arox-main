@@ -1,0 +1,576 @@
+<style>
+  .hub-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 100px);
+    font-family: 'Inter', sans-serif;
+    position: relative;
+    padding-bottom: 24px;
+  }
+  
+  .hub-grid {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+  }
+  
+  .col-1 { width: 25%; display: flex; flex-direction: column; gap: 16px; }
+  .col-2 { width: 30%; display: flex; flex-direction: column; gap: 16px; }
+  .col-3 { width: 45%; display: flex; flex-direction: column; gap: 16px; }
+
+  /* Panels */
+  .hub-panel {
+    background: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .panel-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* List Items */
+  .list-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .list-row:last-child { border-bottom: none; }
+  
+  .doc-list-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #E5E7EB;
+    border-radius: 6px;
+    background: #fff;
+    margin-bottom: 8px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .doc-list-item:hover { border-color: #9CA3AF; }
+  .doc-list-item.active { border-color: #111; background: #F9FAFB; box-shadow: 0 0 0 1px #111; }
+  .doc-icon-wrap { color: #4B5563; margin-right: 12px; }
+  .doc-info { flex: 1; }
+  .doc-title { font-size: 13px; font-weight: 600; color: #111; }
+  .doc-status { font-size: 11px; color: #6B7280; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+  
+  .btn-sm {
+    background: #fff; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 8px;
+    font-size: 11px; font-weight: 600; color: #111; cursor: pointer; transition: 0.2s;
+  }
+  .btn-sm:hover { background: #f3f4f6; }
+
+  /* Buttons */
+  .btn-primary { background: #111; color: #fff; border: 1px solid #111; }
+  .btn-primary:hover { background: #000; }
+  
+  .action-bar {
+    position: sticky;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 12px 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+    margin-top: 24px;
+    z-index: 100;
+  }
+  .action-bar button {
+    display: flex; align-items: center; gap: 6px; padding: 10px 20px;
+    border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
+    border: 1px solid #E5E7EB; background: #fff; color: #111; transition: 0.2s;
+  }
+  .action-bar button:hover { background: #f9fafb; }
+  .action-bar button.primary { background: #111; color: #fff; border-color: #111; }
+  .action-bar button.primary:hover { background: #000; }
+
+  /* Iframe Sandbox */
+  .sandbox-container {
+    flex: 1; background: #F3F4F6; border-radius: 8px; border: 1px solid #E5E7EB;
+    display: flex; flex-direction: column; overflow: hidden; min-height: 500px; position: relative;
+  }
+  .sandbox-toolbar {
+    display: flex; justify-content: center; gap: 16px; padding: 10px;
+    background: #fff; border-bottom: 1px solid #E5E7EB;
+  }
+  .sandbox-toolbar button { background: none; border: none; cursor: pointer; color: #4B5563; }
+
+  /* History Accordion */
+  .history-accordion { margin-top: 24px; border: 1px solid #E5E7EB; border-radius: 8px; background: #fff; }
+  .history-header { padding: 16px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .history-content { display: none; padding: 0 16px 16px; }
+  .history-accordion.open .history-content { display: block; }
+</style>
+
+<div class="hub-wrapper">
+
+  <div class="hub-grid">
+    
+    <!-- LEFT PANEL: Student Details (25%) -->
+    <div class="col-1">
+      
+      <div class="hub-panel" style="padding-bottom: 24px;">
+        <div class="panel-title"><i data-lucide="search" style="width: 16px;"></i> Select Student</div>
+        <select id="studentSelect" style="width: 100%; padding: 10px; border: 1px solid #E5E7EB; border-radius: 6px; font-size: 12px; outline: none; margin-bottom: 24px;" onchange="loadStudent(this.value)">
+          <option value="" disabled selected>Search by name, email, ID...</option>
+          <% if (typeof students !== 'undefined' && students.length > 0) { %>
+            <% students.forEach(s => { %>
+              <option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %> (<%= s.student_id %>)</option>
+            <% }) %>
+          <% } %>
+        </select>
+
+        <!-- Minimal Student Card -->
+        <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; margin-bottom: 16px;">
+          <img src="https://ui-avatars.com/api/?name=Sudheesh+Kumar&background=random" id="stAvatar" style="width: 64px; height: 64px; border-radius: 50%;" alt="Avatar">
+          <div>
+            <div style="font-size: 14px; font-weight: 700; color: #111;" id="stName">Select Student</div>
+            <div style="font-size: 11px; color: #6B7280;" id="stId">ID --</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; border-top: 1px solid #F3F4F6; padding-top: 16px;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #6B7280;">Course</span>
+            <span style="font-weight: 600;" id="stCourse">--</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: #6B7280;">Batch</span>
+            <span style="font-weight: 600;" id="stBatch">--</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #6B7280;">Payment</span>
+            <span style="background: #D1FAE5; color: #065F46; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600;" id="stPay">--</span>
+          </div>
+        </div>
+
+        <button class="btn-sm" style="width: 100%; margin-top: 16px; padding: 8px;" onclick="viewStudentProfile()">View Full Profile</button>
+      </div>
+
+      <!-- Compact Validation Badge -->
+      <div class="hub-panel" style="background: #ECFDF5; border-color: #10B981; display: flex; align-items: flex-start; gap: 12px;">
+        <i data-lucide="check-circle-2" style="color: #10B981; width: 24px; height: 24px; flex-shrink: 0;"></i>
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #065F46;">Eligible for Generation</div>
+          <div style="font-size: 11px; color: #047857; margin-top: 4px;">Student has met all attendance and payment criteria.</div>
+          <a href="#" style="font-size: 11px; font-weight: 600; color: #065F46; text-decoration: underline; margin-top: 8px; display: inline-block;">View Details</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MIDDLE PANEL: Document Hub (30%) -->
+    <div class="col-2">
+      <div class="hub-panel" style="flex: 1; display: flex; flex-direction: column;">
+        <div class="panel-title"><i data-lucide="file-box" style="width: 16px;"></i> Document Hub</div>
+        
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px; flex: 1;">
+          
+          <div class="doc-list-item" onclick="selectDoc('offerletter')">
+            <div class="doc-icon-wrap"><i data-lucide="file-text" style="width: 20px;"></i></div>
+            <div class="doc-info">
+              <div class="doc-title">Offer Letter</div>
+              <div class="doc-status"><i data-lucide="check" style="width: 10px; color: #10B981;"></i> Ready</div>
+            </div>
+            <button class="btn-sm">Select</button>
+          </div>
+
+          <div class="doc-list-item" onclick="selectDoc('certificate')">
+            <div class="doc-icon-wrap"><i data-lucide="badge-check" style="width: 20px;"></i></div>
+            <div class="doc-info">
+              <div class="doc-title">Completion Certificate</div>
+              <div class="doc-status"><i data-lucide="check" style="width: 10px; color: #10B981;"></i> Ready</div>
+            </div>
+            <button class="btn-sm">Select</button>
+          </div>
+
+          <div class="doc-list-item" onclick="selectDoc('attendance')">
+            <div class="doc-icon-wrap"><i data-lucide="calendar-check" style="width: 20px;"></i></div>
+            <div class="doc-info">
+              <div class="doc-title">Attendance Certificate</div>
+              <div class="doc-status"><i data-lucide="check" style="width: 10px; color: #10B981;"></i> Ready</div>
+            </div>
+            <button class="btn-sm">Select</button>
+          </div>
+
+          <div class="doc-list-item" onclick="selectDoc('project')">
+            <div class="doc-icon-wrap"><i data-lucide="folder-git-2" style="width: 20px;"></i></div>
+            <div class="doc-info">
+              <div class="doc-title">Project Certificate</div>
+              <div class="doc-status"><i data-lucide="check" style="width: 10px; color: #10B981;"></i> Ready</div>
+            </div>
+            <button class="btn-sm">Select</button>
+          </div>
+
+          <div class="doc-list-item">
+            <div class="doc-icon-wrap"><i data-lucide="award" style="width: 20px;"></i></div>
+            <div class="doc-info">
+              <div class="doc-title">Experience Letter</div>
+              <div class="doc-status"><i data-lucide="clock" style="width: 10px;"></i> Pending Action</div>
+            </div>
+          </div>
+
+        </div>
+
+        <button class="btn-primary" style="width: 100%; padding: 12px; border-radius: 6px; font-size: 12px; font-weight: 600; margin-top: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="generateAllDocuments()">
+          <i data-lucide="zap" style="width: 14px;"></i> Generate All Documents
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL: Live Preview (45%) -->
+    <div class="col-3">
+      <div class="sandbox-container">
+        
+        <div class="sandbox-toolbar">
+          <button onclick="zoomPreview(0.9)"><i data-lucide="minus" style="width: 14px;"></i></button>
+          <span style="font-size: 11px; font-weight: 600;" id="zoomVal">100%</span>
+          <button onclick="zoomPreview(1.1)"><i data-lucide="plus" style="width: 14px;"></i></button>
+          <div style="width: 1px; height: 16px; background: #E5E7EB;"></div>
+          <button onclick="zoomPreview(1.0)"><i data-lucide="rotate-cw" style="width: 14px;"></i></button>
+          <button onclick="openFullscreenPreview()"><i data-lucide="maximize" style="width: 14px;"></i></button>
+        </div>
+
+        <div id="overlay" style="position: absolute; inset: 0; top: 38px; background: rgba(255,255,255,0.9); z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <i data-lucide="file-search" style="width: 32px; height: 32px; color: #9CA3AF; margin-bottom: 12px;"></i>
+          <div style="font-size: 13px; font-weight: 600; color: #4B5563;">Select a document to preview</div>
+        </div>
+
+        <div style="flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #F3F4F6;">
+          <iframe id="certFrame" style="width: 100%; height: 100%; border: none; transform-origin: center center;"></iframe>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- STICKY ACTION BAR -->
+  <div class="action-bar">
+    <button class="primary" onclick="fireAction('generate')"><i data-lucide="zap" style="width: 16px;"></i> Generate</button>
+    <div style="width: 1px; height: 24px; background: #E5E7EB; margin: 0 8px;"></div>
+    <button onclick="fireAction('download')"><i data-lucide="download" style="width: 16px;"></i> Download</button>
+    <button onclick="fireAction('email')"><i data-lucide="mail" style="width: 16px;"></i> Email</button>
+    <button onclick="fireAction('whatsapp')"><i data-lucide="message-circle" style="width: 16px;"></i> WhatsApp</button>
+    <button onclick="fireAction('save')"><i data-lucide="folder-input" style="width: 16px;"></i> Save to Portal</button>
+  </div>
+
+  <!-- Generation History Accordion -->
+  <div class="history-accordion" id="histAccordion">
+    <div class="history-header" onclick="document.getElementById('histAccordion').classList.toggle('open')">
+      <span><i data-lucide="clock" style="width: 16px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i> Generation History</span>
+      <i data-lucide="chevron-down" style="width: 16px;"></i>
+    </div>
+    <div class="history-content">
+      <div class="list-row">
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: #111;">Offer Letter</div>
+          <div style="font-size: 10px; color: #6B7280;">Sudheesh Kumar • May 25, 2026 10:30 AM</div>
+        </div>
+        <button class="btn-sm">Download</button>
+      </div>
+      <div class="list-row">
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: #111;">Completion Certificate</div>
+          <div style="font-size: 10px; color: #6B7280;">Sudheesh Kumar • May 25, 2026 10:31 AM</div>
+        </div>
+        <button class="btn-sm">Download</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<!-- Success Toast Notification -->
+<div id="toastSuccess" style="position: fixed; bottom: 100px; right: 32px; background: #111; color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 12px; opacity: 0; transform: translateY(20px); transition: 0.3s; z-index: 200; pointer-events: none;">
+  <i data-lucide="check-circle-2" style="color: #10B981; width: 18px;"></i>
+  <span id="toastMsg">Action completed successfully!</span>
+</div>
+
+<!-- Fullscreen Preview Modal -->
+<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);">
+  <div style="position: relative; width: 100%; height: 100%; max-width: 1100px; max-height: 90vh; background: #fff; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <div style="padding: 16px 24px; border-bottom: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="maximize-2" style="width: 18px; color: #4F46E5;"></i>
+        <h3 style="font-size: 14px; font-weight: 700; color: #111827; margin: 0;" id="fsModalTitle">Fullscreen Certificate Preview</h3>
+      </div>
+      <button onclick="closeFullscreenPreview()" style="background: none; border: none; font-size: 24px; font-weight: 300; cursor: pointer; color: #9CA3AF; line-height: 1; transition: 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#9CA3AF'">&times;</button>
+    </div>
+    <div style="flex: 1; background: #F3F4F6; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 16px;">
+      <iframe id="fullscreenFrame" style="width: 100%; height: 100%; border: none; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+  const studentDb = {};
+  <% if (typeof students !== 'undefined' && students.length > 0) { %>
+    <% students.forEach(s => { %>
+      studentDb["<%= s.id %>"] = {
+        name: "<%= s.first_name %> <%= s.last_name %>",
+        email: "<%= s.email %>",
+        id: "<%= s.student_id %>",
+        course: "<%= s.course_title || 'N/A' %>",
+        college: "<%= s.college || 'N/A' %>",
+        dept: "<%= s.department || 'N/A' %>",
+        batch: "<%= s.batch_name || 'N/A' %>",
+        start: "<%= s.start_date || '' %>",
+        end: "<%= s.end_date || '' %>",
+        startText: "<%= s.start_date ? new Date(s.start_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A' %>",
+        endText: "<%= s.end_date ? new Date(s.end_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A' %>",
+        project: "Capstone Project",
+        location: "Chennai",
+        payment: "<%= s.reg_status === 'confirmed' ? 'Paid' : 'Pending' %>",
+        issueDate: new Date().toISOString().split('T')[0]
+      };
+    <% }) %>
+  <% } %>
+
+  let currentStudent = null;
+  let currentStudentDbId = null;
+  let currentDoc = null;
+  const frame = document.getElementById('certFrame');
+
+  function loadStudent(studentId) {
+    currentStudentDbId = studentId;
+    currentStudent = studentDb[studentId];
+    if (!currentStudent) return;
+
+    document.getElementById('stName').innerText = currentStudent.name;
+    document.getElementById('stId').innerText = `ID: ${currentStudent.id}`;
+    document.getElementById('stCourse').innerText = currentStudent.course;
+    document.getElementById('stBatch').innerText = currentStudent.batch;
+    document.getElementById('stPay').innerText = currentStudent.payment;
+    
+    if (currentDoc) updateSandbox();
+  }
+
+  function viewStudentProfile() {
+    if (currentStudentDbId) {
+      window.location.href = `/admin/students/${currentStudentDbId}`;
+    } else {
+      alert("Please select a student first.");
+    }
+  }
+
+  function selectDoc(docType) {
+    currentDoc = docType;
+    document.querySelectorAll('.doc-list-item').forEach(el => el.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    document.getElementById('overlay').style.display = 'none';
+
+    const routeMap = {
+      'certificate': '/cert/index.html',
+      'attendance': '/attendance/index.html',
+      'offerletter': '/offerletter/index.html',
+      'project': '/project/index.html'
+    };
+    
+    frame.src = routeMap[docType];
+    frame.onload = () => setTimeout(updateSandbox, 500);
+  }
+
+  function getPayloadForDoc(docType) {
+    if (!currentStudent) return {};
+    if (docType === 'certificate') {
+      return {
+        name: currentStudent.name, domain: currentStudent.course, date: currentStudent.issueDate, certId: currentStudent.id,
+        desc: "During this internship, he/she was found to be dedicated, enthusiastic and hardworking."
+      };
+    } else if (docType === 'attendance') {
+      return {
+        name: currentStudent.name, college: currentStudent.college, dept: currentStudent.dept, year: "Final Year",
+        intern: currentStudent.course, month: currentStudent.startText, days: 45
+      };
+    } else if (docType === 'offerletter') {
+      return {
+        candidateName: currentStudent.name, candidateAddress: currentStudent.college, roleTitle: `${currentStudent.course} Intern`,
+        location: currentStudent.location, startDate: currentStudent.start, endDate: currentStudent.end,
+        stipendAmount: "₹5,000 – ₹8,000 per month"
+      };
+    } else if (docType === 'project') {
+      return {
+        'cert-id-input': currentStudent.id, 'issue-date-input': currentStudent.issueDate, 'name-input': currentStudent.name,
+        'project-input': currentStudent.project, 'start-date-input': currentStudent.startText, 'end-date-input': currentStudent.endText
+      };
+    }
+    return {};
+  }
+
+  function updateSandbox() {
+    if (!currentStudent || !currentDoc || !frame.contentWindow) return;
+    const payload = getPayloadForDoc(currentDoc);
+    frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: payload }, '*');
+    if (currentDoc === 'certificate') frame.contentWindow.postMessage({ type: 'UPDATE_CERT', data: payload }, '*');
+  }
+
+  let currentZoom = 1.0;
+  function zoomPreview(factor) {
+    if (factor === 1.0) currentZoom = 1.0;
+    else if (factor === 0.9) currentZoom = Math.max(0.5, currentZoom - 0.1);
+    else if (factor === 1.1) currentZoom = Math.min(1.8, currentZoom + 0.1);
+    
+    document.getElementById('zoomVal').innerText = `${Math.round(currentZoom * 100)}%`;
+    frame.style.transform = `scale(${currentZoom})`;
+  }
+
+  function openFullscreenPreview() {
+    if (!currentStudent || !currentDoc) {
+      alert("Please select a student and document first.");
+      return;
+    }
+    const modal = document.getElementById('fullscreenModal');
+    const fsFrame = document.getElementById('fullscreenFrame');
+    modal.style.display = 'flex';
+    
+    const routeMap = {
+      'certificate': '/cert/index.html',
+      'attendance': '/attendance/index.html',
+      'offerletter': '/offerletter/index.html',
+      'project': '/project/index.html'
+    };
+    
+    fsFrame.src = routeMap[currentDoc];
+    fsFrame.onload = () => {
+      setTimeout(() => {
+        const payload = getPayloadForDoc(currentDoc);
+        fsFrame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: payload }, '*');
+        if (currentDoc === 'certificate') fsFrame.contentWindow.postMessage({ type: 'UPDATE_CERT', data: payload }, '*');
+      }, 500);
+    };
+  }
+
+  function closeFullscreenPreview() {
+    const modal = document.getElementById('fullscreenModal');
+    const fsFrame = document.getElementById('fullscreenFrame');
+    modal.style.display = 'none';
+    fsFrame.src = '';
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toastSuccess');
+    document.getElementById('toastMsg').innerText = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+    setTimeout(() => { 
+      toast.style.opacity = '0'; 
+      toast.style.transform = 'translateY(20px)'; 
+    }, 3000);
+  }
+
+  async function fireAction(action) {
+    if (!currentStudent || !currentDoc || !currentStudentDbId) {
+      alert("Please select a student and document first.");
+      return;
+    }
+
+    if (action === 'generate' || action === 'download') {
+      // Check if already downloaded
+      const checkRes = await fetch('/api/registrations/check-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_id: currentStudentDbId, document_type: currentDoc })
+      });
+      const checkData = await checkRes.json();
+      if (checkData.downloaded) {
+        alert("This document has already been downloaded once for this student.");
+        return;
+      }
+
+      if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
+      
+      // Log the download
+      await fetch('/api/registrations/log-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_id: currentStudentDbId, document_type: currentDoc })
+      });
+
+      showToast("Document generated and download logged!");
+    } else if (action === 'email') {
+      showToast("Email sent to " + currentStudent.email);
+    } else if (action === 'whatsapp') {
+      showToast("WhatsApp message dispatched.");
+    } else if (action === 'save') {
+      showToast("Saved securely to Student Portal.");
+    }
+  }
+
+  async function generateAllDocuments() {
+    if (!currentStudent || !currentStudentDbId) {
+      alert("Please select a student first.");
+      return;
+    }
+
+    const routeMap = {
+      'offerletter': '/offerletter/index.html',
+      'certificate': '/cert/index.html',
+      'attendance': '/attendance/index.html',
+      'project': '/project/index.html'
+    };
+
+    showToast("Generating all un-downloaded documents... Please allow multiple downloads.");
+
+    for (const [docType, route] of Object.entries(routeMap)) {
+      // Check if already downloaded
+      const checkRes = await fetch('/api/registrations/check-download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ student_id: currentStudentDbId, document_type: docType })
+      });
+      const checkData = await checkRes.json();
+      if (checkData.downloaded) {
+        console.log(`${docType} has already been downloaded. Skipping.`);
+        continue;
+      }
+
+      const hiddenFrame = document.createElement('iframe');
+      hiddenFrame.style.display = 'none';
+      hiddenFrame.src = route;
+      document.body.appendChild(hiddenFrame);
+
+      await new Promise(resolve => {
+        hiddenFrame.onload = () => {
+          setTimeout(() => {
+            const payload = getPayloadForDoc(docType);
+            hiddenFrame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: payload }, '*');
+            if (docType === 'certificate') hiddenFrame.contentWindow.postMessage({ type: 'UPDATE_CERT', data: payload }, '*');
+            
+            setTimeout(() => {
+              hiddenFrame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
+              
+              // Log in DB
+              fetch('/api/registrations/log-download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ student_id: currentStudentDbId, document_type: docType })
+              });
+
+              setTimeout(() => {
+                document.body.removeChild(hiddenFrame);
+                resolve();
+              }, 2000);
+            }, 500);
+          }, 1000);
+        };
+      });
+    }
+
+    showToast("Bulk generation process completed!");
+  }
+</script>

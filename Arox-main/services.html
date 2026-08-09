@@ -1,0 +1,758 @@
+
+<!DOCTYPE html>
+<html lang="en" class="theme-dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arox - Premium Services</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX -->
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Framer Motion -->
+    <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
+    
+    <!-- Arox Theme Styles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--background);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--body);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        @keyframes moveRightSlow {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        @keyframes moveLeftSlow {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .animate-slow-right {
+            animation: moveRightSlow 28s linear infinite;
+        }
+
+        .animate-slow-left {
+            animation: moveLeftSlow 28s linear infinite;
+        }
+
+        :root:not(.theme-light) .theme-nextjs-logo {
+            filter: invert(1);
+        }
+
+        /* Page Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 4px;
+        }
+
+        /* Hide Scrollbar for native horizontal scroll containers */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay" aria-hidden="true"></div>
+    <header id="site-header">
+      <div class="nav-inner">
+        <div class="nav-left">
+          <a href="#" class="nav-logo">
+            <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
+              onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
+            <span id="nav-logo-text"
+              style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
+          </a>
+          <div class="nav-divider">/</div>
+          <nav class="nav-links" aria-label="Main navigation">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="services.html" class="nav-link active"><span class="nav-link-indicator"></span>Services</a>
+            <a href="courses.html?tab=training" class="nav-link">Training</a>
+            <a href="courses.html?tab=internship" class="nav-link">Internships</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+          </nav>
+        </div>
+        <div class="nav-right">
+          <a href="/login" class="nav-login">Login</a>
+          <button id="theme-toggle-btn" class="nav-theme-btn" aria-label="Toggle theme">
+            <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+          </button>
+          <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
+            <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    <div id="mobile-menu" aria-hidden="true">
+      <nav class="mobile-nav">
+        <a href="index.html" class="mobile-nav-link"><span>Home</span><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg></a>
+        <a href="about.html" class="mobile-nav-link"><span>About</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg></a>
+        <a href="services.html" class="mobile-nav-link active"><span>Services</span><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg></a>
+        <a href="courses.html?tab=training" class="mobile-nav-link"><span>Training</span><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg></a>
+        <a href="courses.html?tab=internship" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg></a>
+        <a href="contact.html" class="mobile-nav-link"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg></a>
+      </nav>
+      <div class="mobile-bottom">
+        <div class="mobile-theme-row">
+          <span>Theme</span>
+          <div class="mobile-theme-buttons">
+            <button class="mobile-theme-btn" data-theme="light">light</button>
+            <button class="mobile-theme-btn active" data-theme="dark">dark</button>
+          </div>
+        </div>
+        <a href="/login" class="mobile-login-btn">Login</a>
+        <a href="#" class="mobile-cta-btn">Get Started</a>
+      </div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useRef, useEffect, useState } = React;
+        const { motion } = window.Motion;
+
+        const ROW_1_IMAGES = [
+            { name: "React", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" },
+            { name: "Next.js", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" },
+            { name: "TypeScript", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" },
+            { name: "JavaScript", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" },
+            { name: "TailwindCSS", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" },
+            { name: "Figma", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" },
+            { name: "Python", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" },
+            { name: "AWS", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original.svg" }
+        ];
+
+        const ROW_2_IMAGES = [
+            { name: "Node.js", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" },
+            { name: "PostgreSQL", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" },
+            { name: "MongoDB", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" },
+            { name: "MySQL", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" },
+            { name: "Java", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" },
+            { name: "C#", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg" },
+            { name: "Elixir", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/elixir/elixir-original.svg" },
+            { name: "React", url: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" }
+        ];
+
+        function CleanIconItem({ item }) {
+            return (
+                <div className="inline-flex items-center gap-3 px-5 py-3 mx-3 shrink-0 rounded-full bg-[var(--surface)] border border-[var(--border)] hover:border-[#FF6B00] hover:shadow-[0_0_15px_rgba(255,107,0,0.15)] transition-all shadow-sm duration-300">
+                    <img 
+                        src={item.url} 
+                        alt={item.name} 
+                        className={`w-8 h-8 object-contain ${item.name === 'Next.js' ? 'theme-nextjs-logo' : ''}`} 
+                    />
+                    <span className="text-sm font-semibold tracking-wide text-[var(--heading)]">{item.name}</span>
+                </div>
+            );
+        }
+
+        // ------------------------------------------------------------
+        // SVGs matching the mockup
+        // ------------------------------------------------------------
+        const ICONS = {
+            "01": (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                </svg>
+            ),
+            "02": (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c1.06 0 1.94-.8 2-1.84.05-.53-.16-1.04-.57-1.42l-.24-.23c-.22-.22-.35-.53-.35-.85 0-.66.54-1.2 1.2-1.2h2.22c3.21 0 5.82-2.61 5.82-5.82C22 7.15 17.52 2 12 2z"></path>
+                    <circle cx="7.5" cy="10.5" r="1.5" fill="#111"></circle>
+                    <circle cx="10.5" cy="6.5" r="1.5" fill="#111"></circle>
+                    <circle cx="14.5" cy="6.5" r="1.5" fill="#111"></circle>
+                    <circle cx="17.5" cy="10.5" r="1.5" fill="#111"></circle>
+                </svg>
+            ),
+            "03": (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2" fill="currentColor"></rect>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="#111"></path>
+                </svg>
+            ),
+            "04": (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                </svg>
+            ),
+            "05": (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="currentColor"></path>
+                    <path d="m9 12 2 2 4-4" stroke="#111"></path>
+                </svg>
+            )
+        };
+
+        // ------------------------------------------------------------
+        // DATA
+        // ------------------------------------------------------------
+        const CATEGORIES = [
+            {
+                id: "01",
+                name: "Development",
+                color: "rgba(59, 130, 246, ", // Blue
+                services: [
+                    { name: "Software Development", img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop" },
+                    { name: "Web Design & Development", img: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&h=400&fit=crop" },
+                    { name: "App Development", img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop" },
+                    { name: "API Integration", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop" }
+                ]
+            },
+            {
+                id: "02",
+                name: "Creative & Experience",
+                color: "rgba(180, 66, 245, ", // Purple
+                services: [
+                    { name: "UI/UX Design", img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop" },
+                    { name: "Graphic Design", img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&h=400&fit=crop" },
+                    { name: "Branding & Visual Identity", img: "https://images.unsplash.com/photo-1509395062183-67c5ad6faff9?w=600&h=400&fit=crop" },
+                    { name: "Motion Graphics", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" }
+                ]
+            },
+            {
+                id: "03",
+                name: "Business Solutions",
+                color: "rgba(224, 139, 38, ", // Orange
+                services: [
+                    { name: "E-Commerce Solutions", img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop" },
+                    { name: "Digital Marketing", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" },
+                    { name: "BPO Services", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop" },
+                    { name: "Strategy Consulting", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop" }
+                ]
+            },
+            {
+                id: "04",
+                name: "Infrastructure",
+                color: "rgba(46, 201, 83, ", // Green
+                services: [
+                    { name: "Cloud & Hosting", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=400&fit=crop" },
+                    { name: "IT Support & AMC", img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=400&fit=crop" },
+                    { name: "Network Security", img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop" }
+                ]
+            },
+            {
+                id: "05",
+                name: "Enterprise Technology",
+                color: "rgba(88, 101, 242, ", // Indigo
+                services: [
+                    { name: "Cyber Security", img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop" },
+                    { name: "Data Analytics", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" },
+                    { name: "IT Consulting", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop" },
+                    { name: "AI Implementations", img: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=400&fit=crop" }
+                ]
+            }
+        ];
+
+        // ------------------------------------------------------------
+        // COMPONENTS
+        // ------------------------------------------------------------
+
+        function ServiceCard({ service, color }) {
+            return (
+                <motion.div 
+                    className="snap-start flex-shrink-0 relative group cursor-pointer overflow-hidden rounded-[20px]"
+                    style={{ 
+                        width: "340px", 
+                        height: "450px", 
+                        backgroundColor: "var(--surface-elevated)", 
+                        border: "1px solid var(--border)"
+                    }}
+                    whileHover="hover"
+                    initial="rest"
+                    animate="rest"
+                    variants={{
+                        rest: { scale: 1 },
+                        hover: { border: `1px solid ${color}0.85)`, boxShadow: `0 20px 45px -10px ${color}0.25)` }
+                    }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                >
+                    {/* Full Height Image */}
+                    <div className="absolute inset-0 w-full h-full">
+                        <motion.img 
+                            src={service.img} 
+                            className="w-full h-full object-cover"
+                            variants={{
+                                rest: { scale: 1, opacity: 0.9 },
+                                hover: { scale: 1.05, opacity: 1 }
+                            }}
+                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        />
+                    </div>
+                    
+                    {/* Dark Bottom Gradient Overlay for High-Contrast Text Legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-300"></div>
+                    
+                    {/* Content Overlay positioned at the bottom */}
+                    <div className="absolute inset-0 w-full h-full p-6 flex flex-col justify-end z-10 pointer-events-none">
+                        <span className="font-bold text-white text-[20px] leading-tight mb-4 drop-shadow-md">{service.name}</span>
+                        
+                        <div className="w-full border border-white/20 rounded-full py-2.5 px-5 flex items-center justify-between backdrop-blur-md bg-white/10 group-hover:bg-white group-hover:border-white transition-all duration-300 pointer-events-auto">
+                            <span className="text-[14px] font-semibold text-white group-hover:text-black transition-colors">Learn More</span>
+                            <motion.span 
+                                className="text-white group-hover:text-black"
+                                variants={{ rest: { x: 0 }, hover: { x: 5 } }}
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </motion.span>
+                        </div>
+                    </div>
+                </motion.div>
+            );
+        }
+
+        function ServiceCarousel({ services, color }) {
+            return (
+                <div className="w-full h-full relative flex items-center justify-center py-12 px-4 md:px-8">
+                    {/* Native Horizontal Scroll Container */}
+                    <div 
+                        className="w-full h-full overflow-x-auto hide-scroll snap-x snap-mandatory flex items-center gap-8 px-4"
+                        style={{ justifyContent: 'safe center' }}
+                    >
+                        {services.map((svc, i) => (
+                            <ServiceCard key={i} service={svc} color={color} />
+                        ))}
+                    </div>
+                    
+                    {/* Optional visual indicator that there is more content */}
+                    {services.length > 3 && (
+                        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[var(--background)] to-transparent pointer-events-none flex items-center justify-end px-8">
+                            <motion.div 
+                                animate={{ x: [0, 5, 0] }} 
+                                transition={{ repeat: Infinity, duration: 2 }}
+                                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 text-white"
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="m9 18 6-6-6-6"></path>
+                                </svg>
+                            </motion.div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function CategoryCard({ cat, index }) {
+            return (
+                <div 
+                    className="category-card absolute w-full left-0"
+                    style={{ 
+                        top: 0,
+                        zIndex: index
+                    }}
+                >
+                    <div
+                        className="category-card-inner w-full flex flex-col md:flex-row overflow-hidden"
+                        style={{ 
+                            height: "100vh",
+                            minHeight: "550px",
+                            backgroundColor: "var(--background)", 
+                            transformOrigin: "top center"
+                        }}
+                    >
+                        {/* Left Side: Info */}
+                        <div className="w-full md:w-[35%] p-12 md:p-20 pt-24 md:pt-32 flex flex-col justify-center relative overflow-hidden">
+                            {/* Huge Background Serial Number */}
+                            <div className="absolute -top-10 -left-6 text-[180px] md:text-[240px] font-black leading-none opacity-[0.03]" style={{ color: `${cat.color}1)` }}>
+                                {cat.id}
+                            </div>
+                            
+                            <div className="relative z-10">
+                                <div className="flex items-end gap-4 mb-8">
+                                    <div className="text-6xl md:text-7xl font-light tracking-tighter" style={{ color: `${cat.color}1)` }}>
+                                        {cat.id}
+                                    </div>
+                                </div>
+                                
+                                <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight text-[var(--heading)]">{cat.name}</h2>
+                                <p className="text-[var(--body)] opacity-70 text-lg leading-relaxed font-light">
+                                    {cat.description || "Empower your business with our tailored solutions designed to drive growth, enhance user experiences, and secure your infrastructure in a rapidly evolving digital world."}
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Right Side: Services Content with Horizontal Scroll */}
+                        <div className="w-full md:w-[65%] flex flex-col relative h-full overflow-hidden bg-[var(--surface)]/30">
+                            <ServiceCarousel services={cat.services} color={cat.color} />
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ------------------------------------------------------------
+        // MAIN APP
+        // ------------------------------------------------------------
+        function App() {
+            const serviceNavRef = useRef(null);
+            const [activeIdx, setActiveIdx] = useState(0);
+
+            useEffect(() => {
+                gsap.registerPlugin(ScrollTrigger);
+                
+                // Initialize nav bars
+                gsap.set(serviceNavRef.current, { yPercent: -100, opacity: 0 });
+
+                const cards = gsap.utils.toArray(".category-card");
+                const inners = gsap.utils.toArray(".category-card-inner");
+
+                // Initialize starting positions:
+                gsap.set(cards, { 
+                    y: (i) => i === 0 ? 0 : window.innerHeight 
+                });
+                gsap.set(inners, { scale: 1, opacity: 1 });
+
+                // Master timeline pinned to the section
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#pinned-section",
+                        start: "top top", 
+                        end: `+=${cards.length * 100}%`, // Scroll duration perfectly matches cards
+                        pin: true,
+                        scrub: 1,
+                        onUpdate: (self) => {
+                            const progress = self.progress;
+                            const step = 1 / cards.length;
+                            const activeIndex = Math.min(cards.length - 1, Math.floor(progress / step));
+                            setActiveIdx(activeIndex);
+                        }
+                    }
+                });
+
+                 // Nav bar toggle logic
+                 ScrollTrigger.create({
+                     trigger: "#pinned-section",
+                     start: "top 5%", 
+                     end: `+=${cards.length * 100}%`,
+                     onEnter: () => {
+                         window.isServicesScrollActive = true;
+                         gsap.to("#site-header", { yPercent: -100, opacity: 0, duration: 0.3, overwrite: true });
+                         gsap.to(serviceNavRef.current, { yPercent: 0, opacity: 1, duration: 0.3, overwrite: true });
+                     },
+                     onLeave: () => {
+                         window.isServicesScrollActive = false;
+                         gsap.to("#site-header", { yPercent: 0, opacity: 1, duration: 0.3, overwrite: true, onComplete: () => gsap.set("#site-header", { clearProps: "all" }) });
+                         gsap.to(serviceNavRef.current, { yPercent: -100, opacity: 0, duration: 0.3, overwrite: true });
+                     },
+                     onEnterBack: () => {
+                         window.isServicesScrollActive = true;
+                         gsap.to("#site-header", { yPercent: -100, opacity: 0, duration: 0.3, overwrite: true });
+                         gsap.to(serviceNavRef.current, { yPercent: 0, opacity: 1, duration: 0.3, overwrite: true });
+                     },
+                     onLeaveBack: () => {
+                         window.isServicesScrollActive = false;
+                         gsap.to("#site-header", { yPercent: 0, opacity: 1, duration: 0.3, overwrite: true, onComplete: () => gsap.set("#site-header", { clearProps: "all" }) });
+                         gsap.to(serviceNavRef.current, { yPercent: -100, opacity: 0, duration: 0.3, overwrite: true });
+                     }
+                 });
+
+                // Sequential timeline steps
+                cards.forEach((card, i) => {
+                    if (i === 0) return; 
+                    
+                    const label = `step${i}`;
+                    tl.addLabel(label);
+
+                    tl.to(card, {
+                        y: 0,
+                        ease: "none",
+                        duration: 1
+                    }, label);
+
+                    for (let j = 0; j < i; j++) {
+                        tl.to(inners[j], {
+                            scale: `-=0.05`,
+                            opacity: `-=0.15`, 
+                            ease: "none",
+                            duration: 1
+                        }, label);
+                    }
+                });
+
+                return () => {
+                    ScrollTrigger.getAll().forEach(t => t.kill());
+                };
+            }, []);
+
+            return (
+                <div className="bg-[var(--background)] text-[var(--body)] min-h-screen">
+                    
+                    {/* Service Cards Navigation Bar */}
+                    <div ref={serviceNavRef} className="fixed top-6 left-0 w-full z-50 flex justify-center pointer-events-none">
+                        <nav className="flex items-center gap-1.5 px-3 py-2.5 bg-[var(--surface)]/90 backdrop-blur-xl border border-[var(--border)] rounded-full shadow-[0_15px_30px_rgba(0,0,0,0.08)] pointer-events-auto">
+                            {CATEGORIES.map((cat, i) => {
+                                const isActive = activeIdx === i;
+                                return (
+                                    <button 
+                                        key={cat.id} 
+                                        className={`px-5 py-2 text-[13px] font-medium rounded-full transition-all tracking-wide ${
+                                            isActive 
+                                            ? 'bg-[var(--primary)] text-[var(--background)] font-bold shadow-sm' 
+                                            : 'text-[var(--body)] opacity-85 hover:opacity-100 hover:bg-[var(--primary)]/5'
+                                        }`}
+                                        onClick={() => {
+                                            const section = document.getElementById('pinned-section');
+                                            if (section) {
+                                                const offsetTop = section.offsetTop;
+                                                window.scrollTo({
+                                                    top: offsetTop + (i * window.innerHeight),
+                                                    behavior: 'smooth'
+                                                });
+                                            }
+                                        }}
+                                    >
+                                        {cat.name}
+                                    </button>
+                                );
+                            })}
+                        </nav>
+                    </div>
+
+                    {/* Minimal Hero Section */}
+                    <div className="h-[60vh] flex flex-col items-center justify-center relative pt-20">
+                        <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-[var(--heading)] mb-4">
+                            Enterprise Services
+                        </h1>
+                        <p className="text-lg text-[var(--body)] opacity-70 tracking-wide font-light">
+                            Discover our premium digital solutions.
+                        </p>
+                    </div>
+
+                    {/* GSAP Pinned Master Container - Now Full Width */}
+                    <div id="pinned-section" className="w-full h-screen overflow-hidden relative">
+                        {/* Full Screen Pages */}
+                        <div className="relative w-full h-full">
+                            {CATEGORIES.map((cat, i) => (
+                                <CategoryCard key={cat.id} cat={cat} index={i} />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Technology Stack Section */}
+                    <div className="py-24 bg-[var(--background)] relative overflow-hidden border-t border-[var(--border)]">
+                        <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center justify-between gap-12 relative z-10">
+                            
+                            {/* Left Info Column (40%) */}
+                            <div className="w-full lg:w-[40%] space-y-6">
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FF6B00]/10 border border-[#FF6B00]/30 text-xs font-bold text-[#FF6B00]">
+                                    <span className="w-2 h-2 rounded-full bg-[#FF6B00] animate-pulse"></span>
+                                    ENTERPRISE TECH STACK
+                                </div>
+                                <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-[var(--heading)] leading-tight">
+                                    Powering Solutions with <br className="hidden md:block"/>
+                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B00] to-[#FFB800]">
+                                        Modern Technology
+                                    </span>
+                                </h3>
+                                <p className="text-[var(--body)] opacity-70 leading-relaxed font-light text-base max-w-md">
+                                    Our development stack leverages high-performance libraries, frameworks, cloud native services and secure databases trusted by world-class systems.
+                                </p>
+                            </div>
+
+                            {/* Right Marquee Column (60%) */}
+                            <div className="w-full lg:w-[60%] flex flex-col gap-6 overflow-hidden relative py-4">
+                                {/* Edge Fade Masks */}
+                                <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[var(--background)] to-transparent z-20 pointer-events-none"></div>
+                                <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[var(--background)] to-transparent z-20 pointer-events-none"></div>
+
+                                {/* Row 1 Marquee */}
+                                <div className="overflow-hidden w-full relative py-2">
+                                    <div className="flex items-center animate-slow-right w-max">
+                                        {[...ROW_1_IMAGES, ...ROW_1_IMAGES, ...ROW_1_IMAGES, ...ROW_1_IMAGES].map((item, idx) => (
+                                            <CleanIconItem key={idx} item={item} />
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Row 2 Marquee */}
+                                <div className="overflow-hidden w-full relative py-2">
+                                    <div className="flex items-center animate-slow-left w-max">
+                                        {[...ROW_2_IMAGES, ...ROW_2_IMAGES, ...ROW_2_IMAGES, ...ROW_2_IMAGES].map((item, idx) => (
+                                            <CleanIconItem key={idx} item={item} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+
+    <!-- PRE-FOOTER CTA SECTION -->
+    <section class="cta-section">
+      <div class="cta-card">
+        <div class="cta-card-borders"></div>
+        <div class="corner-plus top-left">+</div>
+        <div class="corner-plus top-right">+</div>
+        <div class="corner-plus bottom-left">+</div>
+        <div class="corner-plus bottom-right">+</div>
+        
+        <div class="cta-content">
+          <span class="cta-eyebrow">SOLUTIONS</span>
+          <h2 class="cta-heading">Have an Idea? Let’s Make It Real.</h2>
+          <p class="cta-text">From software and AI to cloud and digital experiences, we build solutions designed for real-world impact.</p>
+          <div class="cta-action-row">
+            <a href="contact.html" class="cta-btn-solid">
+              <span>Start Your Project</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <a href="contact.html" class="cta-btn-outline">Talk to an Expert</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-glow-1"></div>
+      <div class="footer-glow-2"></div>
+      <div class="footer-watermark">Arox Tech</div>
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div>
+            <a href="#" style="display:inline-block;margin-bottom:.5rem;">
+              <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech"
+                style="height:3rem;width:auto;"
+                onerror="this.style.display='none';document.getElementById('footer-logo-text').style.display='block'" />
+              <span id="footer-logo-text"
+                style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--heading);">AROX</span>
+            </a>
+            <p class="footer-tagline">We build digital products, AI solutions, and powerful experiences that help
+              businesses grow faster and smarter.</p>
+            <div class="footer-socials">
+              <a href="#" class="footer-social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24">
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                </svg></a>
+              <a href="#" class="footer-social-btn" aria-label="Twitter"><svg viewBox="0 0 24 24">
+                  <path
+                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                </svg></a>
+              <a href="#" class="footer-social-btn" aria-label="GitHub"><svg viewBox="0 0 24 24">
+                  <path
+                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+                </svg></a>
+            </div>
+            <p class="footer-copyright">&copy; <span>AROX Tech <span id="footer-year"></span></span> &bull; All Rights
+              Reserved</p>
+          </div>
+          <div>
+            <h4 class="footer-col-title">Company</h4>
+            <ul class="footer-links">
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="footer-col-title">Services</h4>
+            <ul class="footer-links">
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
+              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="footer-col-title">Contact</h4>
+            <div class="footer-contact-items">
+              <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>Salem, Tamil Nadu, India</div>
+              <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z" />
+                </svg>+91 12345 67890</div>
+              <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>info@aroxtech.com</div>
+            </div>
+            <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+                <path
+                  d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+              </svg><span>Let's Build Something<br />Amazing Together</span></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="js/main.js" defer></script>
+</body>
+</html>

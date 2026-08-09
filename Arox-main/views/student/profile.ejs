@@ -1,0 +1,199 @@
+<div class="space-y-8 animate-fade-in">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-800">Profile Settings</h1>
+    <p class="text-sm text-gray-500 mt-1">Manage your account information, academic details, and security.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Profile Edit Forms (Left & Center) -->
+    <div class="lg:col-span-2 space-y-6">
+      <form id="studentProfileForm" class="space-y-6" enctype="multipart/form-data">
+        
+        <!-- Profile Picture Header -->
+        <div class="card p-6 flex flex-col sm:flex-row items-center gap-6">
+          <div class="w-24 h-24 rounded-full border-4 border-white shadow-md relative bg-indigo-50 flex items-center justify-center text-3xl overflow-hidden flex-shrink-0">
+            <% if (student && student.photo) { %>
+              <img id="avatarPreview" src="<%= student.photo %>" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
+            <% } else { %>
+              <span id="avatarLetter"><%= user.email.charAt(0).toUpperCase() %></span>
+            <% } %>
+          </div>
+          <div class="text-center sm:text-left">
+            <h3 class="font-bold text-gray-800 text-lg">Your Profile Picture</h3>
+            <p class="text-xs text-gray-400 mt-1 mb-3">Allowed file formats: PNG, JPG, JPEG, WEBP. Max size: 2MB.</p>
+            <input type="file" name="photo" id="photoInput" class="hidden" accept="image/*" onchange="previewImage(this)">
+            <button type="button" class="btn btn-outline text-xs px-4 py-2" onclick="document.getElementById('photoInput').click()">
+              Choose Image
+            </button>
+          </div>
+        </div>
+
+        <!-- Personal Info Card -->
+        <div class="card p-6 space-y-4">
+          <h2 class="text-lg font-bold text-gray-800 border-b border-gray-50 pb-3 mb-2">Personal Details</h2>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label text-sm">First Name</label>
+              <input type="text" name="first_name" class="form-input text-sm" required value="<%= student ? student.first_name : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">Last Name</label>
+              <input type="text" name="last_name" class="form-input text-sm" required value="<%= student ? student.last_name : '' %>">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="form-group">
+              <label class="form-label text-sm">Email Address</label>
+              <input type="email" class="form-input text-sm bg-gray-50 text-gray-400" readonly value="<%= user.email %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">Phone Number</label>
+              <input type="text" name="phone" class="form-input text-sm" required value="<%= student ? student.phone : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">Gender</label>
+              <select name="gender" class="form-input text-sm">
+                <option value="">Select Gender</option>
+                <option value="male" <%= student && student.gender === 'male' ? 'selected' : '' %>>Male</option>
+                <option value="female" <%= student && student.gender === 'female' ? 'selected' : '' %>>Female</option>
+                <option value="other" <%= student && student.gender === 'other' ? 'selected' : '' %>>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label text-sm">Date of Birth</label>
+              <input type="date" name="dob" class="form-input text-sm" value="<%= student && student.dob ? student.dob : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">Address / Street</label>
+              <input type="text" name="address" class="form-input text-sm" value="<%= student ? student.address : '' %>">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="form-group">
+              <label class="form-label text-sm">City</label>
+              <input type="text" name="city" class="form-input text-sm" value="<%= student ? student.city : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">State</label>
+              <input type="text" name="state" class="form-input text-sm" value="<%= student ? student.state : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">Pincode</label>
+              <input type="text" name="pincode" class="form-input text-sm" value="<%= student ? student.pincode : '' %>">
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic Info Card -->
+        <div class="card p-6 space-y-4">
+          <h2 class="text-lg font-bold text-gray-800 border-b border-gray-50 pb-3 mb-2">College & Academic Details</h2>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="form-group">
+              <label class="form-label text-sm">College Name</label>
+              <input type="text" name="college" class="form-input text-sm" value="<%= student ? student.college : '' %>" placeholder="e.g. SRM University">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">University Affiliation</label>
+              <input type="text" name="university" class="form-input text-sm" value="<%= student ? student.university : '' %>">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="form-group">
+              <label class="form-label text-sm">Degree</label>
+              <input type="text" name="degree" class="form-input text-sm" value="<%= student ? student.degree : '' %>" placeholder="e.g. B.Tech">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">Department / Major</label>
+              <input type="text" name="department" class="form-input text-sm" value="<%= student ? student.department : '' %>" placeholder="e.g. CSE">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">Year of Study</label>
+              <select name="year_of_study" class="form-input text-sm">
+                <option value="">Select Year</option>
+                <option value="1" <%= student && student.year_of_study === '1' ? 'selected' : '' %>>1st Year</option>
+                <option value="2" <%= student && student.year_of_study === '2' ? 'selected' : '' %>>2nd Year</option>
+                <option value="3" <%= student && student.year_of_study === '3' ? 'selected' : '' %>>3rd Year</option>
+                <option value="4" <%= student && student.year_of_study === '4' ? 'selected' : '' %>>4th Year</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="form-group">
+              <label class="form-label text-sm">Graduation Year</label>
+              <input type="text" name="graduation_year" class="form-input text-sm" value="<%= student ? student.graduation_year : '' %>" placeholder="e.g. 2027">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">College Roll / Reg Number</label>
+              <input type="text" name="roll_number" class="form-input text-sm" value="<%= student ? student.roll_number : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label text-sm">AROX Student ID</label>
+              <input type="text" class="form-input text-sm bg-gray-50 text-gray-400" readonly value="<%= student ? student.student_id : 'Generating...' %>">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="saveProfileBtn" class="btn btn-primary w-full py-3 rounded-xl font-semibold shadow-lg">
+          Save Settings & Update Info
+        </button>
+      </form>
+    </div>
+
+    <!-- Security & Password (Right) -->
+    <div class="space-y-6">
+      <div class="card p-6 space-y-4 h-fit">
+        <h2 class="text-lg font-bold text-gray-800 border-b border-gray-50 pb-3 mb-2">Security Settings</h2>
+        
+        <form id="studentPasswordForm" class="space-y-4">
+          <div class="form-group">
+            <label class="form-label text-xs font-semibold">Current Password</label>
+            <input type="password" id="current_password" class="form-input text-sm" required autocomplete="current-password">
+          </div>
+          <div class="form-group">
+            <label class="form-label text-xs font-semibold">New Password</label>
+            <input type="password" id="new_password" class="form-input text-sm" required autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label class="form-label text-xs font-semibold">Confirm New Password</label>
+            <input type="password" id="confirm_password" class="form-input text-sm" required autocomplete="new-password">
+          </div>
+
+          <button type="submit" id="changePassBtn" class="btn btn-outline w-full py-2.5 rounded-xl text-sm font-semibold mt-4">
+            Update Password
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function previewImage(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('avatarPreview');
+        const letter = document.getElementById('avatarLetter');
+        if (preview) {
+          preview.src = e.target.result;
+        } else if (letter) {
+          // Replace text letter with img element
+          const parent = letter.parentElement;
+          parent.innerHTML = `<img id="avatarPreview" src="${e.target.result}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">`;
+        }
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+</script>

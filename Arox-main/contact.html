@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+
+<html lang="en" data-theme="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Contact | AROX TECH</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-secondary-container": "#6b4b00",
+                "on-secondary": "#412d00",
+                "on-primary": "#561f00",
+                "secondary-fixed": "#ffdea8",
+                "surface-variant": "#353534",
+                "on-tertiary-fixed": "#001550",
+                "surface-container": "#201f1f",
+                "text-muted": "#808080",
+                "surface-tint": "#ffb693",
+                "on-secondary-fixed-variant": "#5e4200",
+                "primary-fixed": "#ffdbcc",
+                "on-primary-fixed": "#351000",
+                "text-light": "#A7A7A7",
+                "secondary": "#ffdb9d",
+                "inverse-primary": "#a04100",
+                "outline-variant": "#5a4136",
+                "surface-dim": "#131313",
+                "border-glass": "rgba(255, 255, 255, 0.08)",
+                "surface": "#111111",
+                "error-container": "#93000a",
+                "tertiary-fixed": "#dce1ff",
+                "on-primary-container": "#572000",
+                "surface-bright": "#3a3939",
+                "secondary-fixed-dim": "#ffba20",
+                "on-primary-fixed-variant": "#7a3000",
+                "on-error-container": "#ffdad6",
+                "deep-navy": "#0B1F4D",
+                "surface-container-highest": "#353534",
+                "background": "#131313",
+                "on-error": "#690005",
+                "on-tertiary-fixed-variant": "#003ab2",
+                "secondary-container": "#feb700",
+                "on-tertiary": "#00277f",
+                "outline": "#a98a7d",
+                "on-background": "#e5e2e1",
+                "tertiary-fixed-dim": "#b6c4ff",
+                "surface-container-lowest": "#0e0e0e",
+                "surface-container-low": "#1c1b1b",
+                "card": "#151515",
+                "primary": "#ffb693",
+                "on-surface-variant": "#e2bfb0",
+                "inverse-surface": "#e5e2e1",
+                "background-alt": "#0A0A0A",
+                "tertiary-container": "#7593ff",
+                "on-tertiary-container": "#002881",
+                "divider-glass": "rgba(255, 255, 255, 0.05)",
+                "primary-container": "#00ED64",
+                "inverse-on-surface": "#313030",
+                "tertiary": "#b6c4ff",
+                "on-surface": "#e5e2e1"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "content-width": "1280px",
+                "container-max": "1440px",
+                "nav-height": "90px",
+                "gutter": "40px",
+                "section-padding": "120px",
+                "card-gap": "24px"
+            },
+            "fontFamily": {
+                "headline-section": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
+                "body-lg": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
+                "display-hero": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
+                "body-sm": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
+                "label-caps": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
+                "display-hero-mobile": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
+                "headline-card": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
+                "numeric-display": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"]
+            },
+            "fontSize": {
+                "headline-section": ["48px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                "display-hero": ["80px", {"lineHeight": "1.05", "fontWeight": "500"}],
+                "body-sm": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                "label-caps": ["13px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                "display-hero-mobile": ["48px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                "headline-card": ["28px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                "numeric-display": ["64px", {"lineHeight": "1.0", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: var(--background);
+            color: var(--body);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Dark mode map inversion styling */
+        .theme-dark .map-container iframe {
+            filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(90%);
+        }
+        
+        /* Outline input focus styling */
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--heading) !important;
+            box-shadow: 0 0 0 1px var(--heading);
+        }
+    </style>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-[var(--background)] text-[var(--body)]">
+  <div class="noise-overlay" aria-hidden="true"></div>
+  <header id="site-header">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="#" class="nav-logo">
+          <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
+            onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
+          <span id="nav-logo-text"
+            style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
+        </a>
+        <div class="nav-divider">/</div>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html" class="nav-link"><span class="nav-link-indicator"></span>Home</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="services.html" class="nav-link">Services</a>
+          <a href="courses.html?tab=training" class="nav-link">Training</a>
+          <a href="courses.html?tab=internship" class="nav-link">Internships</a>
+          <a href="contact.html" class="nav-link active"><span class="nav-link-indicator"></span>Contact</a>
+        </nav>
+      </div>
+      <div class="nav-right">
+        <a href="/login" class="nav-login">Login</a>
+        <button id="theme-toggle-btn" class="nav-theme-btn" aria-label="Toggle theme">
+          <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+        </button>
+        <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
+          <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <div id="mobile-menu" aria-hidden="true">
+    <nav class="mobile-nav">
+      <a href="index.html" class="mobile-nav-link"><span>Home</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="about.html" class="mobile-nav-link"><span>About</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="services.html" class="mobile-nav-link"><span>Services</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="courses.html?tab=training" class="mobile-nav-link"><span>Training</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="courses.html?tab=internship" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="contact.html" class="mobile-nav-link active"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+    </nav>
+    <div class="mobile-bottom">
+      <div class="mobile-theme-row">
+        <span>Theme</span>
+        <div class="mobile-theme-buttons">
+          <button class="mobile-theme-btn" data-theme="light">light</button>
+          <button class="mobile-theme-btn active" data-theme="dark">dark</button>
+        </div>
+      </div>
+      <a href="/login" class="mobile-login-btn">Login</a>
+      <a href="#" class="mobile-cta-btn">Get Started</a>
+    </div>
+  </div>
+
+
+<main class="pt-[90px] bg-[var(--background)] text-[var(--body)] relative overflow-hidden">
+  <div class="ambient-layer">
+    <div class="ambient-glow-orange" style="top: -10%; left: -10%;"></div>
+    <div class="ambient-glow-blue" style="top: 40%; right: -10%;"></div>
+    <div class="ambient-glow-gold" style="bottom: -20%; left: 30%;"></div>
+    <div class="ambient-noise"></div>
+  </div>
+
+  <!-- Geometric decorative background shapes from the mockup -->
+  <div class="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
+    <!-- Top-left 3x4 dot grid matrix -->
+    <div class="absolute left-10 top-32 opacity-20">
+      <div class="grid grid-cols-3 gap-2">
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+      </div>
+    </div>
+    
+    <!-- Top-right circle arc and dot visual -->
+    <div class="absolute right-12 top-24 opacity-30">
+      <svg width="180" height="180" viewBox="0 0 100 100" fill="none" stroke="var(--heading)" stroke-width="0.75">
+        <path d="M 0,100 C 60,100 100,60 100,0" />
+        <line x1="50" y1="50" x2="100" y2="0" />
+        <line x1="75" y1="100" x2="100" y2="75" />
+        <circle cx="100" cy="0" r="3" fill="var(--heading)" />
+      </svg>
+    </div>
+
+    <!-- Hero diagonal corner stripe in bottom-left -->
+    <div class="absolute left-0 top-[400px] w-36 h-8 bg-[var(--heading)] opacity-10 transform -rotate-45 -translate-x-12 origin-top-left"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+    
+    <!-- Hero Section -->
+    <div class="text-center pt-16 pb-16">
+      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--muted)] relative inline-block pb-2">
+        GET IN TOUCH
+        <span class="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-[var(--border)]"></span>
+      </span>
+      <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-[var(--heading)] mt-6 mb-4 font-display leading-[1.1]">
+        Let's Build Something<br/>Amazing Together
+      </h1>
+      <p class="text-sm md:text-base text-[var(--muted)] max-w-lg mx-auto leading-relaxed">
+        Have a project in mind or want to know more about our services?<br class="hidden md:block"/>
+        We're here to help you bring your ideas to life.
+      </p>
+    </div>
+
+    <!-- Main Content Form & Contact Info Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 py-12 border-t border-[var(--border)]">
+      
+      <!-- Left Column: Send us a Message -->
+      <div class="lg:col-span-7">
+        <h2 class="text-2xl font-bold text-[var(--heading)] tracking-tight">Send us a Message</h2>
+        <div class="w-12 h-[2px] bg-[var(--heading)] mt-2 mb-8"></div>
+        
+        <form class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Name Input -->
+            <div class="relative flex items-center">
+              <span class="absolute left-4 text-[var(--muted)]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </span>
+              <input type="text" placeholder="Your Name" class="w-full pl-12 pr-4 py-3.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--body)] placeholder-[var(--muted)] focus:border-[var(--heading)] focus:ring-1 focus:ring-[var(--heading)] outline-none transition-all font-sans text-sm" />
+            </div>
+            
+            <!-- Email Input -->
+            <div class="relative flex items-center">
+              <span class="absolute left-4 text-[var(--muted)]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </span>
+              <input type="email" placeholder="Your Email" class="w-full pl-12 pr-4 py-3.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--body)] placeholder-[var(--muted)] focus:border-[var(--heading)] focus:ring-1 focus:ring-[var(--heading)] outline-none transition-all font-sans text-sm" />
+            </div>
+          </div>
+
+          <!-- Subject Input -->
+          <div class="relative flex items-center">
+            <span class="absolute left-4 text-[var(--muted)]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+            </span>
+            <input type="text" placeholder="Subject" class="w-full pl-12 pr-4 py-3.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--body)] placeholder-[var(--muted)] focus:border-[var(--heading)] focus:ring-1 focus:ring-[var(--heading)] outline-none transition-all font-sans text-sm" />
+          </div>
+
+          <!-- Message Textarea -->
+          <div class="relative flex items-start">
+            <span class="absolute left-4 top-4 text-[var(--muted)]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"></path>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+              </svg>
+            </span>
+            <textarea placeholder="Your Message" rows="6" class="w-full pl-12 pr-4 py-3.5 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--body)] placeholder-[var(--muted)] focus:border-[var(--heading)] focus:ring-1 focus:ring-[var(--heading)] outline-none transition-all font-sans text-sm resize-none"></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="cta-btn-solid flex items-center justify-center gap-2 mt-4 hover:opacity-90 transition-all font-sans px-6 py-3.5 rounded-lg bg-[var(--heading)] text-[var(--background)] font-bold text-sm">
+            <span>Send Message</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Column: Contact Information -->
+      <div class="lg:col-span-5">
+        <h2 class="text-2xl font-bold text-[var(--heading)] tracking-tight">Contact Information</h2>
+        <div class="w-12 h-[2px] bg-[var(--heading)] mt-2 mb-8"></div>
+        
+        <div class="space-y-8">
+          <!-- Row 1: Location -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-[var(--heading)] text-[var(--background)] flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <div>
+              <div class="text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.1em]">Our Location</div>
+              <div class="text-sm font-semibold text-[var(--heading)] mt-1">Salem, Tamil Nadu, India</div>
+            </div>
+          </div>
+
+          <!-- Row 2: Phone -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-[var(--heading)] text-[var(--background)] flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.1em]">Phone Number</div>
+              <div class="text-sm font-semibold text-[var(--heading)] mt-1">+91 12345 67890</div>
+            </div>
+          </div>
+
+          <!-- Row 3: Email -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-[var(--heading)] text-[var(--background)] flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div class="text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.1em]">Email Address</div>
+              <div class="text-sm font-semibold text-[var(--heading)] mt-1">info@aroxtech.com</div>
+            </div>
+          </div>
+
+          <!-- Row 4: Working Hours -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-[var(--heading)] text-[var(--background)] flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div>
+              <div class="text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.1em]">Working Hours</div>
+              <div class="text-sm font-semibold text-[var(--heading)] mt-1">Mon - Sat: 9:00 AM - 6:00 PM</div>
+            </div>
+          </div>
+
+          <!-- Row 5: Follow Us -->
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-[var(--heading)] text-[var(--background)] flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </div>
+            <div class="w-full">
+              <div class="text-[10px] font-bold text-[var(--muted)] uppercase tracking-[0.1em]">Follow Us</div>
+              <div class="flex items-center gap-5 mt-3">
+                <a href="#" class="text-[var(--muted)] hover:text-[var(--heading)] transition-colors" aria-label="LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                    <rect x="2" y="9" width="4" height="12"></rect>
+                    <circle cx="4" cy="4" r="2"></circle>
+                  </svg>
+                </a>
+                <a href="#" class="text-[var(--muted)] hover:text-[var(--heading)] transition-colors" aria-label="Facebook">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                  </svg>
+                </a>
+                <a href="#" class="text-[var(--muted)] hover:text-[var(--heading)] transition-colors" aria-label="Twitter">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                  </svg>
+                </a>
+                <a href="#" class="text-[var(--muted)] hover:text-[var(--heading)] transition-colors" aria-label="Instagram">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Map Banner Container -->
+    <div class="py-8 w-full z-10">
+      <div class="w-full h-80 rounded-2xl overflow-hidden border border-[var(--border)] map-container relative">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m4!1m2!1d78.115!2d11.575!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf0c5a2c4e207%3A0xc3c94cf9787c8d9a!2sSalem%2C%20Tamil%20Nadu%2C%20India!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+          width="100%" 
+          height="100%" 
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+  <!-- PRE-FOOTER CTA SECTION -->
+  <section class="cta-section">
+    <div class="cta-card">
+      <div class="cta-card-borders"></div>
+      <div class="corner-plus top-left">+</div>
+      <div class="corner-plus top-right">+</div>
+      <div class="corner-plus bottom-left">+</div>
+      <div class="corner-plus bottom-right">+</div>
+      
+      <div class="cta-content">
+        <span class="cta-eyebrow">GET IN TOUCH</span>
+        <h2 class="cta-heading">Let’s Start a Conversation.</h2>
+        <p class="cta-text">Have a project, idea, or question? Tell us what you're working on and let’s explore what we can build together.</p>
+        <div class="cta-action-row">
+          <a href="#" class="cta-btn-solid">
+            <span>Send a Message</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#" class="cta-btn-outline">Schedule a Meeting</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-glow-1"></div>
+    <div class="footer-glow-2"></div>
+    <div class="footer-watermark">Arox Tech</div>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <a href="#" style="display:inline-block;margin-bottom:.5rem;">
+            <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech"
+              style="height:3rem;width:auto;"
+              onerror="this.style.display='none';document.getElementById('footer-logo-text').style.display='block'" />
+            <span id="footer-logo-text"
+              style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--heading);">AROX</span>
+          </a>
+          <p class="footer-tagline">We build digital products, AI solutions, and powerful experiences that help
+            businesses grow faster and smarter.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg></a>
+            <a href="#" class="footer-social-btn" aria-label="Twitter"><svg viewBox="0 0 24 24">
+                <path
+                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+              </svg></a>
+            <a href="#" class="footer-social-btn" aria-label="GitHub"><svg viewBox="0 0 24 24">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg></a>
+          </div>
+          <p class="footer-copyright">&copy; <span>AROX Tech <span id="footer-year"></span></span> &bull; All Rights
+            Reserved</p>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Company</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Services</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Contact</h4>
+          <div class="footer-contact-items">
+            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>Salem, Tamil Nadu, India</div>
+            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z" />
+              </svg>+91 12345 67890</div>
+            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>info@aroxtech.com</div>
+          </div>
+          <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+              <path
+                d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+            </svg><span>Let's Build Something<br />Amazing Together</span></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="js/main.js" defer></script>
+</body></html>

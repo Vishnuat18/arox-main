@@ -1,0 +1,140 @@
+<div class="erp-h1" style="margin-bottom: 24px;">Student Overview</div>
+
+<% if (typeof latestRegistration !== 'undefined' && latestRegistration) { %>
+  <div style="background: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius); padding: 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h2 style="font-size: 20px; font-weight: 700; color: var(--success); margin-bottom: 8px;">
+        Welcome to AROX Tech, <%= student.first_name %>! <i data-lucide="party-popper"></i>
+      </h2>
+      <p style="color: var(--text-secondary); font-size: 14px;">
+        Your offer letter is ready. Please download it below and save it for your records.
+      </p>
+    </div>
+    <div>
+      <a href="/api/registrations/<%= latestRegistration.registration_id %>/offer-letter" target="_blank" class="erp-btn erp-btn-primary" style="background: var(--success); border-color: var(--success);">
+        <i data-lucide="download"></i> Download Offer Letter
+      </a>
+    </div>
+  </div>
+<% } %>
+<div class="erp-grid-4">
+  <!-- Enrolled Courses -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="book-open"></i>
+      </div>
+      <div class="erp-card-title">Enrolled Courses</div>
+    </div>
+    <div class="erp-card-value"><%= (typeof enrollments !== 'undefined') ? enrollments.length : '1' %></div>
+    <div class="erp-p" style="margin-top: 8px;">Active programs</div>
+  </div>
+
+  <!-- Overall Progress -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="activity"></i>
+      </div>
+      <div class="erp-card-title">Overall Progress</div>
+    </div>
+    <div class="erp-card-value">45%</div>
+    <div style="width: 100%; height: 6px; background-color: var(--erp-border); border-radius: 99px; margin-top: 12px; overflow: hidden;">
+      <div style="width: 45%; height: 100%; background-color: var(--erp-text-primary);"></div>
+    </div>
+  </div>
+
+  <!-- Assignments -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="clipboard-list"></i>
+      </div>
+      <div class="erp-card-title">Assignments Due</div>
+    </div>
+    <div class="erp-card-value">2</div>
+    <div class="erp-p" style="margin-top: 8px; color: var(--erp-warning); font-weight: 500;">Next due in 3 days</div>
+  </div>
+
+  <!-- Payment Status -->
+  <div class="erp-card">
+    <div class="erp-card-header">
+      <div class="erp-card-icon">
+        <i data-lucide="wallet"></i>
+      </div>
+      <div class="erp-card-title">Payment Status</div>
+    </div>
+    <div class="erp-card-value">Clear</div>
+    <div class="erp-p" style="margin-top: 8px; color: var(--erp-success); font-weight: 500;">
+      <i data-lucide="check-circle-2" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
+      All dues paid
+    </div>
+  </div>
+</div>
+
+<div class="erp-grid-2">
+  <!-- My Courses -->
+  <div class="erp-card" style="padding: 0;">
+    <div style="padding: 24px; border-bottom: var(--erp-border-width) solid var(--erp-border); display: flex; justify-content: space-between; align-items: center;">
+      <h3 class="erp-h3" style="margin: 0;">My Courses</h3>
+      <a href="/student/courses" class="erp-btn erp-btn-ghost" style="padding: 6px 12px; font-size: 12px;">View All</a>
+    </div>
+    
+    <div style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+      <% if (typeof enrollments !== 'undefined' && enrollments.length > 0) { %>
+        <% enrollments.forEach(enr => { %>
+          <div style="padding: 16px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;"><%= enr.course_title %></div>
+              <div class="erp-small">Batch: <%= enr.batch_name || 'TBD' %> • Status: <%= enr.status %></div>
+            </div>
+            <a href="/student/courses/<%= enr.id %>" class="erp-btn erp-btn-secondary">Go to Course</a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div style="padding: 16px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;">Full Stack Web Development</div>
+            <div class="erp-small">Batch: B2026 • Status: In Progress</div>
+          </div>
+          <a href="/student/courses" class="erp-btn erp-btn-secondary">Go to Course</a>
+        </div>
+      <% } %>
+    </div>
+  </div>
+
+  <!-- Upcoming Schedule -->
+  <div class="erp-card" style="padding: 0;">
+    <div style="padding: 24px; border-bottom: var(--erp-border-width) solid var(--erp-border);">
+      <h3 class="erp-h3" style="margin: 0;">Upcoming Classes</h3>
+    </div>
+    
+    <div style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="display: flex; gap: 16px;">
+        <div style="width: 56px; height: 56px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--erp-bg-secondary);">
+          <span style="font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); text-transform: uppercase;">Oct</span>
+          <span style="font-size: 18px; font-weight: 700; color: var(--erp-text-primary);">28</span>
+        </div>
+        <div>
+          <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;">React Fundamentals</div>
+          <div class="erp-small" style="display: flex; align-items: center; gap: 4px;">
+            <i data-lucide="clock" style="width: 12px; height: 12px;"></i> 10:00 AM - 12:00 PM
+          </div>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 16px;">
+        <div style="width: 56px; height: 56px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--erp-bg-secondary);">
+          <span style="font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); text-transform: uppercase;">Oct</span>
+          <span style="font-size: 18px; font-weight: 700; color: var(--erp-text-primary);">30</span>
+        </div>
+        <div>
+          <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;">Node.js API Development</div>
+          <div class="erp-small" style="display: flex; align-items: center; gap: 4px;">
+            <i data-lucide="clock" style="width: 12px; height: 12px;"></i> 02:00 PM - 04:00 PM
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

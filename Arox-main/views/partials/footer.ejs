@@ -1,0 +1,51 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>AROX Tech</h3>
+        <p>Premier internship and training platform for aspiring tech professionals. Build your career with industry-recognized programs.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+          <a href="#" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+          <a href="#" aria-label="YouTube"><i data-lucide="youtube"></i></a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Programs</h4>
+        <ul class="footer-links">
+          <li><a href="/internships">Internships</a></li>
+          <li><a href="/training">Training</a></li>
+          <li><a href="/course/full-stack-web-development">Web Development</a></li>
+          <li><a href="/course/python-ai-machine-learning">AI & ML</a></li>
+          <li><a href="/course/mobile-app-development">Mobile Dev</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-links">
+          <li><a href="mailto:<%= org.email %>"><%= org.email %></a></li>
+          <li><a href="tel:<%= org.phone %>"><%= org.phone %></a></li>
+          <li><a href="#"><%= org.address %></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <%= year %> <%= org.name %>. All rights reserved. Built with <i data-lucide="heart" style="width: 12px; height: 12px; display: inline-block; fill: #ef4444; color: #ef4444; vertical-align: middle;"></i> for the future of tech education.</p>
+    </div>
+  </div>
+</footer>

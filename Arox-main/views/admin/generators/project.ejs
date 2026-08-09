@@ -1,0 +1,72 @@
+<div class="erp-h1">Project Letter Generator</div>
+
+<div class="erp-grid-2">
+  
+  <!-- Left Side: Control Panel -->
+  <div class="erp-card" style="height: fit-content;">
+    <h3 class="erp-h3">Project Details</h3>
+    
+    <div id="erpFormFields">
+      <div class="erp-form-group">
+        <label class="erp-label">Certificate ID</label>
+        <input type="text" id="cert-id-input" class="erp-input" value="ATX-PC-2026-0001">
+      </div>
+      <div class="erp-form-group">
+        <label class="erp-label">Date of Issue</label>
+        <input type="text" id="issue-date-input" class="erp-input" value="04 August 2026">
+      </div>
+      <div class="erp-form-group">
+        <label class="erp-label">Student Name</label>
+        <input type="text" id="name-input" class="erp-input" value="S. Kavin">
+      </div>
+      <div class="erp-form-group">
+        <label class="erp-label">Project Title</label>
+        <input type="text" id="project-input" class="erp-input" value="AI Driven Healthcare Analytics">
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="erp-form-group">
+          <label class="erp-label">Start Date</label>
+          <input type="text" id="start-date-input" class="erp-input" value="January 2026">
+        </div>
+        <div class="erp-form-group">
+          <label class="erp-label">End Date</label>
+          <input type="text" id="end-date-input" class="erp-input" value="June 2026">
+        </div>
+      </div>
+    </div>
+
+    <button id="btnExportPDF" class="erp-btn erp-btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
+      <i data-lucide="download"></i> Generate PDF
+    </button>
+  </div>
+
+  <!-- Right Side: Preview -->
+  <div class="erp-card" style="padding: 0; overflow: hidden; background: #E2E8F0; display: flex; align-items: center; justify-content: center;">
+    <iframe id="certFrame" src="/project/index.html" style="width: 100%; height: 800px; border: none;"></iframe>
+  </div>
+</div>
+
+<script>
+  const frame = document.getElementById('certFrame');
+  
+  function updatePreview() {
+    if (!frame.contentWindow) return;
+    
+    const data = {};
+    document.querySelectorAll('#erpFormFields input').forEach(el => {
+      data[el.id] = el.value;
+    });
+    
+    frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data }, '*');
+  }
+
+  document.getElementById('erpFormFields').addEventListener('input', updatePreview);
+  
+  document.getElementById('btnExportPDF').addEventListener('click', () => {
+    frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
+  });
+
+  frame.onload = () => {
+    setTimeout(updatePreview, 500);
+  };
+</script>

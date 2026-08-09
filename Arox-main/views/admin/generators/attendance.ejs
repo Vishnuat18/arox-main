@@ -1,0 +1,92 @@
+<div class="erp-h1">Attendance Generator</div>
+
+<div class="erp-grid-2">
+  
+  <!-- Left Side: Control Panel (Monochrome ERP Theme) -->
+  <div class="erp-card" style="height: fit-content;">
+    <h3 class="erp-h3">Attendance Details</h3>
+    
+    <div class="erp-form-group">
+      <label class="erp-label">Candidate Name</label>
+      <input type="text" id="inputName" class="erp-input" placeholder="e.g., John Doe" value="John Doe">
+    </div>
+
+    <div class="erp-form-group">
+      <label class="erp-label">College Name</label>
+      <input type="text" id="inputCollege" class="erp-input" placeholder="e.g., ABC Institute of Technology" value="ABC Institute of Technology">
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="erp-form-group">
+        <label class="erp-label">Department</label>
+        <input type="text" id="inputDept" class="erp-input" placeholder="e.g., IT" value="IT">
+      </div>
+      <div class="erp-form-group">
+        <label class="erp-label">Year</label>
+        <input type="text" id="inputYear" class="erp-input" placeholder="e.g., III Year" value="III Year">
+      </div>
+    </div>
+
+    <div class="erp-form-group">
+      <label class="erp-label">Internship / Course</label>
+      <input type="text" id="inputIntern" class="erp-input" placeholder="e.g., Full Stack Web Development" value="Full Stack Web Development">
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="erp-form-group">
+        <label class="erp-label">Month</label>
+        <input type="text" id="inputMonth" class="erp-input" placeholder="e.g., August 2026" value="August 2026">
+      </div>
+      <div class="erp-form-group">
+        <label class="erp-label">Total Days</label>
+        <input type="number" id="inputDays" class="erp-input" value="30" min="1" max="365">
+      </div>
+    </div>
+
+    <button id="btnExportPDF" class="erp-btn erp-btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
+      <i data-lucide="download"></i> Generate PDF
+    </button>
+  </div>
+
+  <!-- Right Side: Certificate Preview -->
+  <div class="erp-card" style="padding: 0; overflow: hidden; background: #E2E8F0; display: flex; align-items: center; justify-content: center;">
+    <iframe id="certFrame" src="/attendance/index.html" style="width: 100%; height: 800px; border: none;"></iframe>
+  </div>
+</div>
+
+<script>
+  // Setup communication with iframe
+  const frame = document.getElementById('certFrame');
+  
+  function updatePreview() {
+    if (!frame.contentWindow) return;
+    
+    const name = document.getElementById('inputName').value;
+    const college = document.getElementById('inputCollege').value;
+    const dept = document.getElementById('inputDept').value;
+    const year = document.getElementById('inputYear').value;
+    const intern = document.getElementById('inputIntern').value;
+    const month = document.getElementById('inputMonth').value;
+    const days = document.getElementById('inputDays').value;
+    
+    frame.contentWindow.postMessage({
+      type: 'UPDATE_DATA',
+      data: { name, college, dept, year, intern, month, days }
+    }, '*');
+  }
+
+  // Add listeners
+  ['inputName', 'inputCollege', 'inputDept', 'inputYear', 'inputIntern', 'inputMonth', 'inputDays'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updatePreview);
+  });
+  
+  // Trigger export
+  document.getElementById('btnExportPDF').addEventListener('click', () => {
+    frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
+  });
+
+  // Initial load
+  frame.onload = () => {
+    setTimeout(updatePreview, 500); // Give the iframe time to load JS
+  };
+</script>

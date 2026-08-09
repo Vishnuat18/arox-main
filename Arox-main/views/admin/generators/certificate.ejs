@@ -1,0 +1,101 @@
+<div class="erp-h1">Certificate Generator</div>
+
+<div class="erp-grid-2">
+  
+  <!-- Left Side: Control Panel (Monochrome ERP Theme) -->
+  <div class="erp-card" style="height: fit-content;">
+    <h3 class="erp-h3">Student Details</h3>
+    
+    <div class="erp-form-group">
+      <label class="erp-label">Student Name</label>
+      <input type="text" id="inputName" class="erp-input" placeholder="e.g., John Doe" value="John Doe">
+    </div>
+
+    <div class="erp-form-group">
+      <label class="erp-label">Domain</label>
+      <select id="inputDomainSelect" class="erp-input" onchange="document.getElementById('inputDomain').value = this.value; updatePreview();">
+        <option value="Full Stack Web Development">Full Stack Web Development</option>
+        <option value="UI & UX Design">UI & UX Design</option>
+        <option value="Data Science & AI">Data Science & AI</option>
+        <option value="Cyber Security">Cyber Security</option>
+        <option value="Digital Marketing">Digital Marketing</option>
+        <option value="Embedded Systems & IoT">Embedded Systems & IoT</option>
+        <option value="DevOps Engineering">DevOps Engineering</option>
+        <option value="Software Development">Software Development</option>
+        <option value="App Development">App Development</option>
+      </select>
+      <input type="hidden" id="inputDomain" value="Full Stack Web Development">
+    </div>
+
+    <div class="erp-form-group">
+      <label class="erp-label">Date of Issue</label>
+      <input type="date" id="inputIssueDate" class="erp-input">
+    </div>
+
+    <div class="erp-form-group">
+      <label class="erp-label">Certificate ID</label>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <span style="font-weight: 600;">AT/INT/</span>
+        <input type="text" id="inputCertYear" class="erp-input" value="2026" style="width: 80px; text-align: center;">
+        <span style="font-weight: 600;">/</span>
+        <input type="text" id="inputCertNum" class="erp-input" value="0101" style="flex: 1; text-align: center;">
+      </div>
+      <input type="hidden" id="inputCertId" value="AT/INT/2026/0101">
+    </div>
+
+    <div class="erp-form-group">
+      <label class="erp-label">Appreciation Text</label>
+      <textarea id="inputDescription" class="erp-input" rows="3">During this internship, he/she was found to be dedicated, enthusiastic and hardworking. We wish him/her all the best for future endeavors.</textarea>
+    </div>
+
+    <button id="btnExportPDF" class="erp-btn erp-btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
+      <i data-lucide="download"></i> Generate PDF
+    </button>
+  </div>
+
+  <!-- Right Side: Certificate Preview -->
+  <div class="erp-card" style="padding: 0; overflow: hidden; background: #E2E8F0; display: flex; align-items: center; justify-content: center;">
+    
+    <!-- We inject the standalone original HTML into an iframe so the complex rendering CSS doesn't break our ERP CSS -->
+    <!-- BUT we need them to talk to each other! -->
+    
+    <iframe id="certFrame" src="/cert/index.html" style="width: 100%; height: 800px; border: none;"></iframe>
+    
+  </div>
+</div>
+
+<script>
+  // Setup communication with iframe
+  const frame = document.getElementById('certFrame');
+  
+  function updatePreview() {
+    if (!frame.contentWindow) return;
+    
+    const name = document.getElementById('inputName').value;
+    const domain = document.getElementById('inputDomain').value;
+    const date = document.getElementById('inputIssueDate').value;
+    
+    const year = document.getElementById('inputCertYear').value;
+    const num = document.getElementById('inputCertNum').value;
+    const certId = `AT/INT/${year}/${num}`;
+    document.getElementById('inputCertId').value = certId;
+    
+    const desc = document.getElementById('inputDescription').value;
+    
+    // We postMessage to the iframe to update its DOM
+    frame.contentWindow.postMessage({
+      type: 'UPDATE_CERT',
+      data: { name, domain, date, certId, desc }
+    }, '*');
+  }
+
+  // Add listeners
+  ['inputName', 'inputIssueDate', 'inputCertYear', 'inputCertNum', 'inputDescription'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updatePreview);
+  });
+  
+  // Trigger export
+  document.getElementById('btnExportPDF').addEventListener('click', () => {
+    frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
+  });
+</script>

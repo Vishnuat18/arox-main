@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="AROX Tech - Premier Internship & Training Platform. Learn Full Stack Web Development, AI/ML, Mobile App Development with industry-recognized certificates.">
+  <meta name="keywords"
+    content="internship, training, web development, AI, machine learning, mobile app, certificates, AROX Tech">
+  <meta name="author" content="AROX Tech Pvt. Ltd.">
+  <title>
+    <%= typeof title !=='undefined' ? title : 'AROX Tech' %>
+  </title>
+
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { inter: ['Inter', 'sans-serif'] },
+          colors: {
+            primary: { DEFAULT: '#4F46E5', light: '#6366F1', dark: '#4338CA', 50: '#EEF2FF', 100: '#E0E7FF', 200: '#C7D2FE' },
+            secondary: { DEFAULT: '#7C3AED', light: '#8B5CF6' },
+            accent: { DEFAULT: '#06B6D4', light: '#22D3EE' },
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/erp-assets/css/style.css">
+  <link rel="stylesheet" href="/erp-assets/css/animations.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+  <%- style %>
+</head>
+
+<body class="page-transition">
+  <%- include('../partials/navbar') %>
+
+    <main>
+      <%- body %>
+    </main>
+
+    <%- include('../partials/footer') %>
+
+      <!-- Theme Toggle -->
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-moon"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
+
+      <!-- Back to Top -->
+      <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Overlay -->
+      <div class="mobile-overlay"></div>
+
+      <!-- Core JS -->
+      <script src="/erp-assets/js/app.js"></script>
+
+      <%- script %>
+</body>
+
+</html>

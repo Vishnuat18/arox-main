@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arox Tech — Attendance Sheet Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  :root{
+    --navy:#0c1f3f;
+    --navy-2:#132a54;
+    --orange:#f2801e;
+    --orange-2:#f7a04a;
+    --paper:#fbfaf7;
+    --line:#d7dbe2;
+    --row-alt:#f4f6f9;
+    --ink:#1b2436;
+    --muted:#5b6478;
+    --seal:#3d3592;
+    --sidebar-bg: #fff;
+    --bg-main: #e7e9ee;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Arial, sans-serif;
+    color:var(--ink);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--bg-main);
+  }
+
+  /* ---------------- SIDEBAR CONTROLS ---------------- */
+  #controls {
+    width: 380px;
+    background: var(--sidebar-bg);
+    box-shadow: 2px 0 15px rgba(12,31,63,.08);
+    padding: 30px 25px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  #controls h1{
+    font-size:20px;
+    margin:0 0 5px;
+    color:var(--navy);
+    letter-spacing:.3px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #controls h1 img {
+    height: 32px;
+  }
+  #controls p.sub{
+    margin:0 0 25px;
+    color:var(--muted);
+    font-size:13px;
+  }
+  .grid{
+    display:flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .field{display:flex; flex-direction:column; gap:5px;}
+  .field label{font-size:12px; font-weight:600; color:var(--navy); text-transform:uppercase; letter-spacing:.4px;}
+  .field input, .field select{
+    padding:10px 12px;
+    border:1px solid #cfd4dd;
+    border-radius:6px;
+    font-size:14px;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--orange); outline-offset:1px; border-color:var(--orange);}
+  
+  .form-row {
+    display: flex;
+    gap: 15px;
+  }
+  .form-row .field { flex: 1; }
+
+  .checks{
+    display:flex; flex-direction: column; gap:12px; margin-top:20px;
+  }
+  .checks label{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--ink); cursor:pointer;}
+  .checks input{width:16px; height:16px; accent-color:var(--orange);}
+  
+  .actions{
+    display:flex; flex-direction: column; gap:12px; margin-top:25px;
+  }
+  button{
+    border:none; border-radius:7px; padding:12px 20px; font-size:14px; font-weight:600;
+    cursor:pointer; letter-spacing:.2px; transition:transform .08s, box-shadow .08s; width: 100%;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+  }
+  button:active{transform:translateY(1px);}
+  #genBtn{background:var(--navy); color:#fff;}
+  #genBtn:hover{background:var(--navy-2);}
+  .btn-outline{background:#fff; color:var(--navy); border:1.5px solid var(--navy);}
+  .btn-outline:hover{background:#f0f3f8;}
+  .btn-orange{background:var(--orange); color:#fff;}
+  .btn-orange:hover{background:#dd7010;}
+  #status{font-size:12.5px; color:var(--muted); margin-top:15px; text-align: center; min-height:16px;}
+
+  /* ---------------- RIGHT PANEL (SHEET AREA) ---------------- */
+  #sheetWrap{
+    flex: 1;
+    overflow-y: auto;
+    padding:40px 20px 80px;
+    display:flex;
+    justify-content:center;
+  }
+  #scaleContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 35px;
+    transform-origin: center top;
+  }
+  .page{
+    position:relative;
+    width:794px;      /* A4 @ 96dpi */
+    min-height:1123px;
+    background:var(--paper);
+    box-shadow:0 8px 30px rgba(12,31,63,.15);
+    padding:46px 50px 40px;
+    overflow:hidden;
+    flex-shrink: 0;
+  }
+  
+  /* corner ornaments */
+  .corner{position:absolute; width:0; height:0; z-index:0;}
+  .tl-line{position:absolute; top:0; left:0; width:130px; height:130px; z-index:1; overflow:hidden;}
+  .tl-line::before{content:"";position:absolute; top:26px; left:-26px; width:180px; height:3px; background:var(--orange); transform:rotate(-38deg);}
+  .tr-line{position:absolute; top:0; right:0; width:130px; height:130px; z-index:1; overflow:hidden;}
+  .tr-line::before{content:"";position:absolute; top:26px; right:-26px; width:180px; height:3px; background:var(--orange); transform:rotate(38deg);}
+  .corner-strip{position:absolute; top:0; left:0; right:0; height:8px; background:var(--navy); z-index:0;}
+  .footer-strip{position:absolute; bottom:0; left:0; right:0; height:12px; background:var(--navy); z-index:0;}
+  .footer-strip::after{content:"";position:absolute; right:0; bottom:0; width:0; height:0; border-style:solid; border-width:0 0 60px 90px; border-color:transparent transparent var(--orange) transparent;}
+  
+  .content{position:relative; z-index:2;}
+
+  /* header */
+  .brand{display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:10px;}
+  .brand img { height: 60px; object-fit: contain; }
+  
+  .brand-text{display:flex; flex-direction:column; line-height:1;}
+  .brand-text .arox{font-size:42px; font-weight:800; color:var(--navy); letter-spacing:.5px; font-family:'Trebuchet MS',Arial,sans-serif;}
+  .brand-text .tech{font-size:24px; font-weight:700; color:var(--orange); letter-spacing:3px; margin-top:-4px; font-family:'Trebuchet MS',Arial,sans-serif;}
+
+  .title-row{display:flex; align-items:center; justify-content:center; gap:16px; margin:22px 0 26px;}
+  .title-row .bar{height:2px; width:90px; background:linear-gradient(90deg,transparent,var(--navy));}
+  .title-row .bar.right{background:linear-gradient(90deg,var(--navy),transparent);}
+  .title-row h2{
+    margin:0; font-size:29px; letter-spacing:2px; color:var(--navy); font-weight:800; font-family:'Trebuchet MS',Arial,sans-serif;
+  }
+  .title-underline{width:70px; height:3px; background:var(--orange); margin:-18px auto 26px;}
+
+  .meta{
+    display:grid; grid-template-columns:1fr 1fr; column-gap:60px; row-gap:15px; margin-bottom:30px;
+  }
+  .meta-row{display:flex; align-items:baseline; gap:8px; font-size:14.5px;}
+  .meta-row .k{font-weight:700; color:var(--navy); width:88px; flex-shrink:0;}
+  .meta-row .v{flex:1; border-bottom:1.4px solid #9aa3b3; padding-bottom:3px; min-height:17px; color:var(--ink); font-weight:600;}
+
+  /* table */
+  .tables{display:flex; gap:22px; margin-top:6px;}
+  .tcol{flex:1;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  thead th{
+    background:var(--navy); color:#fff; font-size:11.5px; letter-spacing:.3px;
+    padding:10px 6px; text-align:center; font-weight:700; border:1px solid var(--navy);
+  }
+  tbody td{
+    border:1px solid var(--line); padding:9px 6px; text-align:center; color:var(--ink); height:16px;
+  }
+  tbody tr:nth-child(even) td{background:var(--row-alt);}
+  tbody td.sno{font-weight:700; color:var(--navy);}
+
+  /* footer */
+  .foot{
+    display:flex; justify-content:space-between; align-items:flex-end; margin-top:50px; padding:0 10px;
+  }
+  .sign-block{width:250px; position: relative;}
+  .sign-block img { height: 50px; position: absolute; bottom: 40px; left: 10px; opacity: 0.9; }
+  .sign-block .label{font-weight:700; color:var(--navy); font-size:14px; margin-bottom:40px;}
+  .sign-line{border-top:1.5px solid #8b93a3; margin-bottom:8px;}
+  .sign-date{font-size:12.5px; color:var(--muted);}
+  .seal-block{display:flex; flex-direction:column; align-items:center; gap:10px;}
+  .seal-block .label{font-weight:700; color:var(--navy); font-size:14px;}
+  .seal-block img { height: 90px; }
+
+  #printBox{display:none;}
+  
+  .text-present { color: #059669; font-weight: 700; }
+  .text-absent { color: #dc2626; font-weight: 700; }
+
+  @media print{
+    body{background:#fff; display: block; overflow: visible;}
+    #controls{display:none;}
+    #sheetWrap{padding:0; gap:0; display: block;}
+    .page{box-shadow:none; page-break-after:always; margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="controls">
+  <h1>
+    <img src="assets/cert/a logo.png" alt="Arox">
+    Attendance Generator
+  </h1>
+  <p class="sub">Select a student from the ERP database to auto-fill their details and attendance.</p>
+
+  <div class="grid">
+    <div class="field">
+      <label>Status Filter</label>
+      <select id="statusFilter" onchange="applyFilters()">
+        <option value="ALL">All Students</option>
+        <option value="ACTIVE" selected>Active</option>
+        <option value="COMPLETED">Completed</option>
+        <option value="INACTIVE">Inactive / Stopped</option>
+      </select>
+    </div>
+    <div class="field">
+      <label style="color: var(--orange);">Select Student (Live from ERP)</label>
+      <select id="studentSelect" onchange="handleStudentSelect(this.value)" style="border-color: var(--orange);">
+        <option value="">-- Loading students from ERP... --</option>
+      </select>
+    </div>
+    
+    <div class="field"><label>Candidate Name</label><input id="f_name" placeholder="Trainee full name" oninput="generateSheet()"></div>
+    <div class="field"><label>College Name</label><input id="f_college" placeholder="College / institute name" oninput="generateSheet()"></div>
+    
+    <div class="form-row">
+      <div class="field"><label>Department</label><input id="f_dept" placeholder="e.g. IT" oninput="generateSheet()"></div>
+      <div class="field"><label>Year</label><input id="f_year" placeholder="e.g. III Year" oninput="generateSheet()"></div>
+    </div>
+    
+    <div class="field"><label>Internship/Course</label><input id="f_intern" placeholder="e.g. Web Development" oninput="generateSheet()"></div>
+    
+    <div class="form-row">
+      <div class="field"><label>Month</label><input id="f_month" placeholder="e.g. August 2026" oninput="generateSheet()"></div>
+      <div class="field"><label>Total Days</label><input id="f_days" type="number" min="1" max="365" value="30" oninput="generateSheet()"></div>
+    </div>
+    
+    <div class="form-row">
+      <div class="field"><label>Start Date</label><input id="f_start" type="date" oninput="generateSheet()"></div>
+      <div class="field"><label>Trainer Name</label><input id="f_trainer" placeholder="e.g. Dr. Aris Thorne" oninput="generateSheet()"></div>
+    </div>
+  </div>
+
+  <div class="checks">
+    <label><input type="checkbox" id="f_skipsun" onchange="generateSheet()"> Skip Sundays when assigning dates</label>
+    <label><input type="checkbox" id="f_filldate" checked onchange="generateSheet()"> Auto-fill Date column</label>
+  </div>
+
+  <div class="actions">
+    <button id="genBtn" onclick="generateSheet()">Refresh Preview</button>
+    <button class="btn-orange" onclick="downloadPDF()">Download PDF</button>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn-outline" onclick="downloadPNG()">Save PNG</button>
+      <button class="btn-outline" onclick="window.print()">Print</button>
+    </div>
+    <button class="btn-outline" onclick="openCert()" style="border-color: var(--orange); color: var(--orange);">Generate Certificate instead</button>
+  </div>
+  <div id="status"></div>
+</div>
+
+<!-- LIVE PREVIEW SHEET -->
+<div id="sheetWrap">
+  <div id="scaleContainer"></div>
+</div>
+
+<script>
+let studentsData = [];
+
+async function fetchStudents() {
+  try {
+    const res = await fetch('/api/students');
+    studentsData = await res.json();
+    const select = document.getElementById('studentSelect');
+    select.innerHTML = '<option value="">-- Choose Student --</option>';
+    studentsData.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s.id;
+      opt.textContent = `${s.name} - ${s.internship}`;
+      select.appendChild(opt);
+    });
+  } catch(e) {
+    console.error(e);
+    document.getElementById('studentSelect').innerHTML = '<option value="">-- Failed to load students. Ensure ERP is running --</option>';
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  fetchStudents();
+  generateSheet();
+});
+
+function handleStudentSelect(id) {
+  if(!id) return;
+  const s = allStudents.find(st => st.id === id);
+  if(s) {
+    document.getElementById('f_name').value = s.name;
+    document.getElementById('f_dept').value = s.department;
+    document.getElementById('f_college').value = s.collegeName;
+    document.getElementById('f_year').value = s.year;
+    document.getElementById('f_intern').value = s.internship;
+    document.getElementById('f_trainer').value = s.trainerName;
+    
+    window.selectedStudentAttendances = s.attendances;
+    generateSheet();
+  }
+}
+
+function pad(n){return n<10 ? "0"+n : ""+n;}
+
+function buildDateList(startStr, totalDays, skipSun){
+  const dates = [];
+  if(!startStr){
+    for(let i=0;i<totalDays;i++) dates.push(null);
+    return dates;
+  }
+  let cur = new Date(startStr + "T00:00:00");
+  while(dates.length < totalDays){
+    if(skipSun && cur.getDay() === 0){
+      cur.setDate(cur.getDate()+1);
+      continue;
+    }
+    dates.push(new Date(cur));
+    cur.setDate(cur.getDate()+1);
+  }
+  return dates;
+}
+
+function fmtDate(d){
+  if(!d) return "";
+  return pad(d.getDate())+"/"+pad(d.getMonth()+1)+"/"+d.getFullYear();
+}
+
+function headerBlock(vals){
+  return `
+    <div class="corner-strip"></div>
+    <div class="tl-line"></div>
+    <div class="tr-line"></div>
+    <div class="brand">
+      <img src="assets/cert/a logo.png" alt="Arox Logo">
+      <div class="brand-text"><span class="arox">Arox</span><span class="tech">Tech</span></div>
+    </div>
+    <div class="title-row">
+      <div class="bar"></div><h2>ATTENDANCE SHEET</h2><div class="bar right"></div>
+    </div>
+    <div class="title-underline"></div>
+    <div class="meta">
+      <div class="meta-row"><span class="k">Name</span><span class="v">${vals.name}</span></div>
+      <div class="meta-row"><span class="k">Year</span><span class="v">${vals.year}</span></div>
+      <div class="meta-row"><span class="k">Department</span><span class="v">${vals.dept}</span></div>
+      <div class="meta-row"><span class="k">Internship</span><span class="v">${vals.intern}</span></div>
+      <div class="meta-row"><span class="k">College Name</span><span class="v">${vals.college}</span></div>
+      <div class="meta-row"><span class="k">Month</span><span class="v">${vals.month}</span></div>
+    </div>`;
+}
+
+function tableColumn(rows){
+  let trs = rows.map(r => `
+    <tr>
+      <td class="sno">${r.sno}</td>
+      <td>${r.date || ""}</td>
+      <td class="${r.attClass}">${r.attendance || ""}</td>
+      <td></td>
+    </tr>`).join("");
+  return `
+    <table>
+      <thead><tr><th>S.No</th><th>Date</th><th>Attendance</th><th>Signature</th></tr></thead>
+      <tbody>${trs}</tbody>
+    </table>`;
+}
+
+function footerBlock(vals, isLastPage){
+  if(!isLastPage) return `<div class="footer-strip"></div>`;
+  return `
+    <div class="foot">
+      <div class="sign-block">
+        <img src="assets/cert/Sign.png" alt="Trainer Signature">
+        <div class="label">Trainer Signature</div>
+        <div class="sign-line"></div>
+        <div class="sign-date">Name: ${vals.trainer ? vals.trainer : ""}</div>
+      </div>
+      <div class="seal-block">
+        <img src="assets/cert/arox logo.webp" alt="Arox Seal">
+        <div class="label">Company Seal</div>
+      </div>
+    </div>
+    <div class="footer-strip"></div>`;
+}
+
+function generateSheet(){
+  const vals = {
+    name: document.getElementById('f_name').value.trim(),
+    dept: document.getElementById('f_dept').value.trim(),
+    college: document.getElementById('f_college').value.trim(),
+    year: document.getElementById('f_year').value.trim(),
+    intern: document.getElementById('f_intern').value.trim(),
+    month: document.getElementById('f_month').value.trim(),
+    trainer: document.getElementById('f_trainer').value.trim(),
+  };
+  const start = document.getElementById('f_start').value;
+  const totalDays = Math.max(1, parseInt(document.getElementById('f_days').value || "30", 10));
+  const skipSun = document.getElementById('f_skipsun').checked;
+  const fillDate = document.getElementById('f_filldate').checked;
+
+  const dateList = fillDate ? buildDateList(start, totalDays, skipSun) : new Array(totalDays).fill(null);
+
+  const attendanceMap = {};
+  if (window.selectedStudentAttendances) {
+    window.selectedStudentAttendances.forEach(a => {
+      const d = new Date(a.date);
+      const k = fmtDate(d);
+      attendanceMap[k] = a.status;
+    });
+  }
+
+  const rows = [];
+  for(let i=0;i<totalDays;i++){
+    const d = dateList[i];
+    const dateStr = d ? fmtDate(d) : "";
+    const attStatus = dateStr ? (attendanceMap[dateStr] || "") : "";
+    const attClass = attStatus === "PRESENT" ? "text-present" : (attStatus === "ABSENT" || attStatus === "LATE" ? "text-absent" : "");
+
+    rows.push({
+      sno: i+1,
+      date: dateStr,
+      attendance: attStatus,
+      attClass: attClass
+    });
+  }
+
+  const pages = [];
+  for(let i=0;i<rows.length;i+=30){
+    pages.push(rows.slice(i, i+30));
+  }
+  if(pages.length === 0) pages.push([]);
+
+  const wrap = document.getElementById('scaleContainer');
+  wrap.innerHTML = "";
+
+  pages.forEach((pageRows, idx) => {
+    const isLastPage = idx === pages.length - 1;
+    const col1 = pageRows.slice(0, 15);
+    const col2 = pageRows.slice(15, 30);
+
+    const pageEl = document.createElement('div');
+    pageEl.className = 'page';
+    pageEl.id = 'page_' + (idx+1);
+    pageEl.innerHTML = `
+      <div class="content">
+        ${headerBlock(vals)}
+        <div class="tables">
+          <div class="tcol">${tableColumn(col1)}</div>
+          ${col2.length ? `<div class="tcol">${tableColumn(col2)}</div>` : ``}
+        </div>
+        ${footerBlock(vals, isLastPage)}
+      </div>`;
+    wrap.appendChild(pageEl);
+  });
+
+  document.getElementById('status').textContent =
+    `Generated ${pages.length} page${pages.length>1?'s':''} for ${totalDays} day${totalDays>1?'s':''}.`;
+    
+  updateScale();
+}
+
+function updateScale() {
+  const scroller = document.getElementById('sheetWrap');
+  const scaleCont = document.getElementById('scaleContainer');
+  if(!scroller || !scaleCont) return;
+  // page width is 794
+  const availWidth = scroller.clientWidth - 40;
+  const scale = Math.min(availWidth / 794, 1); // fit width
+  scaleCont.style.transform = `scale(${scale})`;
+}
+
+window.addEventListener('resize', updateScale);
+
+function openCert() {
+  const select = document.getElementById('studentSelect');
+  if(select && select.value) {
+    window.location.href = '/cert/index.html?studentId=' + select.value;
+  } else {
+    window.location.href = '/cert/index.html';
+  }
+}
+
+let allStudents = [];
+
+async function fetchStudents() {
+  try {
+    const res = await fetch('/api/students');
+    allStudents = await res.json();
+    if (!Array.isArray(allStudents)) allStudents = [];
+    applyFilters();
+    
+    // Check URL params for studentId
+    const urlParams = new URLSearchParams(window.location.search);
+    const studentId = urlParams.get('studentId');
+    if (studentId) {
+      const select = document.getElementById('studentSelect');
+      select.value = studentId;
+      handleStudentSelect(studentId);
+    }
+    
+  } catch(e) {
+    console.error(e);
+    document.getElementById('studentSelect').innerHTML = '<option value="">-- Failed to load students. Ensure ERP is running --</option>';
+  }
+}
+
+function applyFilters() {
+  const filter = document.getElementById('statusFilter').value;
+  let filtered = allStudents;
+  if(filter !== 'ALL') {
+    filtered = allStudents.filter(s => s.status === filter);
+  }
+  
+  const select = document.getElementById('studentSelect');
+  select.innerHTML = '<option value="">-- Choose Student --</option>';
+  filtered.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s.id;
+    opt.textContent = `${s.name} - ${s.internship}`;
+    select.appendChild(opt);
+  });
+}
+
+async function downloadPNG(){
+  const pages = document.querySelectorAll('.page');
+  for(let i=0;i<pages.length;i++){
+    const canvas = await html2canvas(pages[i], {scale:2, backgroundColor:'#fbfaf7'});
+    const link = document.createElement('a');
+    link.download = `attendance-sheet-page-${i+1}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+  document.getElementById('status').textContent = 'PNG(s) downloaded.';
+}
+
+async function downloadPDF(){
+  const allPages = document.querySelectorAll('.page');
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'pt', 'a4');
+  const pw = pdf.internal.pageSize.getWidth();
+  const ph = pdf.internal.pageSize.getHeight();
+
+  for(let i=0;i<allPages.length;i++){
+    const canvas = await html2canvas(allPages[i], {scale:2, backgroundColor:'#fbfaf7'});
+    const imgData = canvas.toDataURL('image/png');
+    if(i>0) pdf.addPage();
+    pdf.addImage(imgData, 'PNG', 0, 0, pw, ph);
+  }
+  pdf.save('attendance-sheet.pdf');
+  document.getElementById('status').textContent = 'PDF downloaded.';
+}
+</script>
+<script>
+  // --- INTEGRATION FOR AROX ERP ---
+  // If embedded inside the ERP iframe, hide the original sidebar and listen for data updates
+  if (window.self !== window.top) {
+    document.getElementById('controls').style.display = 'none';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.display = 'block';
+    
+    window.addEventListener('message', (event) => {
+      if (event.data.type === 'UPDATE_DATA') {
+        const d = event.data.data;
+        if (d.name) document.getElementById('f_name').value = d.name;
+        if (d.college) document.getElementById('f_college').value = d.college;
+        if (d.dept) document.getElementById('f_dept').value = d.dept;
+        if (d.year) document.getElementById('f_year').value = d.year;
+        if (d.intern) document.getElementById('f_intern').value = d.intern;
+        if (d.month) document.getElementById('f_month').value = d.month;
+        if (d.days) document.getElementById('f_days').value = d.days;
+        
+        generateSheet();
+      } else if (event.data.type === 'EXPORT_PDF') {
+        downloadPDF();
+      }
+    });
+  }
+</script>
+</body>
+</html>

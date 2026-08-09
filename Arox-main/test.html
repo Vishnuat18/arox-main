@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rolling Text List</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white dark:bg-neutral-950 flex items-center justify-center font-sans antialiased">
+
+    <div class="mx-auto flex w-full max-w-2xl flex-col items-center justify-center px-4 py-12">
+        <h3 class="mb-8 text-sm font-bold uppercase tracking-widest text-neutral-500 self-start md:self-center">
+            Process
+        </h3>
+        
+        <div class="w-full flex flex-col">
+            
+            <div class="group relative w-full cursor-pointer border-b border-neutral-200 dark:border-neutral-800 py-6">
+                <!-- Rolling text container -->
+                <div class="relative overflow-hidden h-[60px] md:h-20">
+                    <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                        <!-- State 1: Normal -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter">
+                                Discover
+                            </h2>
+                        </div>
+                        <!-- State 2: Hover (Italic + Color) -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-blue-500">
+                                Discover
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Label -->
+                <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-neutral-400 transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+                    Research
+                </span>
+
+                <!-- Image Reveal Effect -->
+                <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+                    <div class="relative h-full w-full bg-neutral-100">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&auto=format&fit=crop&q=60" alt="Team discovering insights" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                        <div class="absolute inset-0 bg-blue-600/15 mix-blend-overlay"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full cursor-pointer border-b border-neutral-200 dark:border-neutral-800 py-6">
+                <!-- Rolling text container -->
+                <div class="relative overflow-hidden h-[60px] md:h-20">
+                    <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                        <!-- State 1: Normal -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter">
+                                Design
+                            </h2>
+                        </div>
+                        <!-- State 2: Hover (Italic + Color) -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-blue-500">
+                                Design
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Label -->
+                <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-neutral-400 transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+                    Experience
+                </span>
+
+                <!-- Image Reveal Effect -->
+                <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+                    <div class="relative h-full w-full bg-neutral-100">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&auto=format&fit=crop&q=60" alt="Design collaboration" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                        <div class="absolute inset-0 bg-blue-600/15 mix-blend-overlay"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full cursor-pointer border-b border-neutral-200 dark:border-neutral-800 py-6">
+                <!-- Rolling text container -->
+                <div class="relative overflow-hidden h-[60px] md:h-20">
+                    <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                        <!-- State 1: Normal -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter">
+                                Develop
+                            </h2>
+                        </div>
+                        <!-- State 2: Hover (Italic + Color) -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-blue-500">
+                                Develop
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Label -->
+                <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-neutral-400 transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+                    Engineering
+                </span>
+
+                <!-- Image Reveal Effect -->
+                <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+                    <div class="relative h-full w-full bg-neutral-100">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop&q=60" alt="Developers coding" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                        <div class="absolute inset-0 bg-blue-600/15 mix-blend-overlay"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full cursor-pointer border-b border-neutral-200 dark:border-neutral-800 py-6">
+                <!-- Rolling text container -->
+                <div class="relative overflow-hidden h-[60px] md:h-20">
+                    <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                        <!-- State 1: Normal -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter">
+                                Deploy
+                            </h2>
+                        </div>
+                        <!-- State 2: Hover (Italic + Color) -->
+                        <div class="h-[60px] md:h-20 flex items-center">
+                            <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-blue-500">
+                                Deploy
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Label -->
+                <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-neutral-400 transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+                    Launch
+                </span>
+
+                <!-- Image Reveal Effect -->
+                <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+                    <div class="relative h-full w-full bg-neutral-100">
+                        <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=400&auto=format&fit=crop&q=60" alt="Product launch" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                        <div class="absolute inset-0 bg-blue-600/15 mix-blend-overlay"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

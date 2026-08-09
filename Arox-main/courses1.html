@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AROX TECH — Developer Training Courses</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <meta name="description" content="Level up your tech stack with AROX TECH. No fluff, just code. Learn practical skills in web development, backend systems, and modern frameworks." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --primary: #000000;
+      --secondary: #3C4043;
+      --accent: #5F6368;
+      --background: #FFFFFF;
+      --surface: #F8F9FA;
+      --surface-elevated: #FFFFFF;
+      --heading: #202124;
+      --body: #5F6368;
+      --muted: #9AA0A6;
+      --border: #DADCE0;
+      --success: #34A853;
+      --warning: #FBBC04;
+      --error: #EA4335;
+      --card-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+      --font-display: 'Sora', 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+      --font-sans: 'Inter', sans-serif;
+      --transition-normal: 300ms cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius-s: 8px;
+      --radius-m: 16px;
+      --radius-l: 24px;
+    }
+
+    .theme-dark {
+      --primary: #FFFFFF;
+      --secondary: #E8EAED;
+      --accent: #9AA0A6;
+      --background: #000000;
+      --surface: #202124;
+      --surface-elevated: #3C4043;
+      --heading: #FFFFFF;
+      --body: #E8EAED;
+      --muted: #9AA0A6;
+      --border: #3C4043;
+      --card-shadow: 0 1px 2px 0 rgba(0,0,0,0.3), 0 1px 3px 1px rgba(0,0,0,0.15);
+    }
+
+    /* ============================================================
+       BASE RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      background-color: var(--background);
+      color: var(--body);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      min-height: 100vh;
+      transition: background-color 300ms, color 300ms;
+    }
+    h1,h2,h3,h4,h5,h6 { color: var(--heading); font-family: var(--font-display); }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    input, select { font-family: inherit; }
+    a { text-decoration: none; color: inherit; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--background); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+    /* ============================================================
+       GRID BACKGROUND
+    ============================================================ */
+    .grid-lines-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-size: 40px 40px;
+      background-image:
+        linear-gradient(to right, var(--border) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 40%, transparent 100%);
+      mask-image: radial-gradient(ellipse at 50% 50%, black 40%, transparent 100%);
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       NOISE OVERLAY
+    ============================================================ */
+    .noise-overlay {
+      position: fixed;
+      top: -50%; left: -50%; right: -50%; bottom: -50%;
+      width: 200%; height: 200%;
+      background: transparent url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E") repeat;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    nav.pill-nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 12px 28px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: all 300ms ease;
+      white-space: nowrap;
+    }
+    .theme-dark nav.pill-nav {
+      background: rgba(32,33,36,0.85);
+    }
+    .nav-brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--heading);
+    }
+    .nav-brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--body);
+      opacity: 0.7;
+      transition: opacity 200ms;
+    }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; color: var(--heading); }
+    .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .btn-nav-login {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      color: var(--heading);
+      background: transparent;
+      transition: all 200ms;
+    }
+    .btn-nav-login:hover { background: var(--surface); }
+    .btn-nav-cta {
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      background: var(--heading);
+      color: var(--background);
+      transition: all 200ms;
+    }
+    .btn-nav-cta:hover { opacity: 0.85; }
+    .theme-toggle {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--heading);
+      background: transparent;
+      transition: all 200ms;
+      font-size: 1rem;
+    }
+    .theme-toggle:hover { background: var(--surface); }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    .hero-section {
+      position: relative;
+      padding: 120px 24px 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-section .grid-lines-bg { opacity: 0.12; }
+    .hero-eyebrow {
+      color: var(--primary);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      font-family: var(--font-display);
+      margin-bottom: 12px;
+      display: block;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+    .hero-title {
+      font-size: clamp(2.125rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--heading);
+      margin-bottom: 24px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.15;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.25s;
+    }
+    .hero-title .gradient-text {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .theme-dark .hero-title .gradient-text {
+      background: linear-gradient(135deg, #fff 0%, #9AA0A6 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2.5vw, 1.125rem);
+      color: var(--body);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       HORIZONTAL SCROLL SECTION (FLIP CARDS)
+    ============================================================ */
+    .hscroll-section {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      background: var(--background);
+    }
+    .hscroll-track {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 32px;
+      padding: 0 5vw;
+      padding-top: 5rem;
+      width: max-content;
+      will-change: transform;
+    }
+    .flip-card-wrapper {
+      width: min(85vw, 340px);
+      height: min(78vh, 580px);
+      flex-shrink: 0;
+    }
+
+    /* Pinned Pill Nav Styles */
+    .courses-pill-nav {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translate(-50%, -100px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
+      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 300ms, border-color 300ms;
+      pointer-events: auto;
+    }
+    .courses-pill-nav.pinned {
+      transform: translate(-50%, 0);
+    }
+    .pill-btn {
+      position: relative;
+      z-index: 2;
+      padding: 10px 24px;
+      font-size: 0.875rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--body);
+      border: none;
+      background: transparent;
+      border-radius: 9999px;
+      transition: all 0.3s;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .pill-btn.active {
+      color: var(--background);
+      background: var(--primary);
+    }
+
+    /* ============================================================
+       FLIP CARDS
+    ============================================================ */
+    .flip-card-outer {
+      width: 100%;
+      height: 100%;
+      perspective: 1000px;
+      cursor: pointer;
+      position: relative;
+    }
+    .flip-card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .flip-card-outer.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 2.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      transition: background-color 300ms, border-color 300ms;
+    }
+    .theme-dark .flip-card-front,
+    .theme-dark .flip-card-back {
+      background: rgba(32,33,36,0.5);
+    }
+    /* Moving edge highlighter on hover */
+    .flip-card-outer:hover .flip-card-front,
+    .flip-card-outer:hover .flip-card-back {
+      border: 1px solid transparent;
+      background: linear-gradient(var(--surface), var(--surface)) padding-box,
+                  radial-gradient(
+                    220px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+                    rgba(93, 76, 247, 0.6) 0%,
+                    rgba(93, 76, 247, 0.2) 40%,
+                    var(--border) 100%
+                  ) border-box;
+    }
+    .flip-card-back { transform: rotateY(180deg); display: flex; flex-direction: column; }
+
+    /* Front Card Content */
+    .card-deco-bg {
+      position: absolute;
+      bottom: -4px; right: -4px;
+      width: 80%; height: 80%;
+      pointer-events: none;
+      border-radius: 0 0 2.5rem 0;
+      z-index: 0;
+    }
+    .card-deco-bg img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      object-position: right bottom;
+      opacity: 0.85;
+      mix-blend-mode: multiply;
+      transition: all 0.3s;
+    }
+    .theme-dark .card-deco-bg img {
+      filter: invert(1) hue-rotate(180deg);
+      mix-blend-mode: screen;
+    }
+    .card-front-body {
+      position: relative;
+      z-index: 10;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+    .card-number {
+      width: 64px; height: 64px;
+      border-radius: 14px;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--background);
+      font-size: 1.75rem;
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .card-badge {
+      padding: 4px 12px;
+      background: rgba(0,0,0,0.04);
+      color: var(--primary);
+      font-size: 0.625rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.08);
+    }
+    .theme-dark .card-badge {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.1);
+    }
+    .card-title {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 800;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+      padding-right: 16px;
+    }
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--body);
+      line-height: 1.65;
+      margin-bottom: 16px;
+      padding-right: 16px;
+    }
+
+    /* Code mock illustration */
+    .code-mock-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .code-mock {
+      width: 192px; height: 128px;
+      background: linear-gradient(135deg, #f1f3f4, #e8eaed);
+      border-radius: 12px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid rgba(255,255,255,0.5);
+      transform: skewX(-8deg) rotate(3deg);
+      transition: transform 0.5s;
+      position: relative;
+    }
+    .theme-dark .code-mock {
+      background: linear-gradient(135deg, #3c4043, #202124);
+      border-color: rgba(255,255,255,0.05);
+    }
+    .code-mock-screen {
+      position: absolute;
+      inset: 8px 16px;
+      background: #111;
+      border-radius: 6px;
+      display: flex; flex-direction: column;
+      padding: 8px; gap: 4px; overflow: hidden;
+    }
+    .code-line { border-radius: 999px; height: 4px; opacity: 0.7; }
+    .code-line-green { background: #4ade80; width: 50%; }
+    .code-line-yellow { background: #facc15; width: 75%; }
+    .code-line-blue { background: #60a5fa; width: 67%; }
+    .code-line-purple { background: #c084fc; width: 33%; }
+    .code-mock-icon {
+      position: absolute;
+      width: 44px; height: 44px;
+      background: var(--surface-elevated);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      display: flex; align-items: center; justify-content: center;
+      animation: floatBounce 3s ease-in-out infinite;
+      color: var(--primary);
+      font-size: 1.125rem;
+    }
+    .theme-dark .code-mock-icon { background: var(--surface); }
+    .code-mock-icon-1 { top: -16px; right: -24px; animation-delay: 0.2s; animation-duration: 3s; }
+    .code-mock-icon-2 { top: 32px; left: -16px; animation-delay: 0s; animation-duration: 4s; }
+    @keyframes floatBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .card-action-btn {
+      padding: 14px 24px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: var(--background);
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex; align-items: center; gap: 10px;
+      transition: opacity 200ms;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .card-action-btn:hover { opacity: 0.88; }
+    .theme-dark .card-action-btn { color: #000; }
+
+    /* Back Card */
+    .card-back-header {
+      background: rgba(248,249,250,0.7);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 24px;
+      border-radius: 0 0 1.5rem 1.5rem;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .theme-dark .card-back-header { background: rgba(32,33,36,0.7); }
+    .card-back-header-title {
+      font-size: 0.8125rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--heading);
+      text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+    }
+    .card-back-header-title span { color: rgba(0,0,0,0.15); letter-spacing: 0.2em; }
+    .theme-dark .card-back-header-title span { color: rgba(255,255,255,0.15); }
+    .card-back-body {
+      flex: 1;
+      padding: 24px 32px;
+      overflow-y: auto;
+      position: relative;
+      z-index: 10;
+    }
+    .learn-list {
+      list-style: disc;
+      padding-left: 20px;
+      margin-bottom: 32px;
+    }
+    .learn-list li {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--body);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .tech-stack-divider {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .tech-stack-divider div { flex: 1; height: 2px; background: var(--border); border-radius: 999px; }
+    .tech-stack-divider span {
+      font-size: 0.6875rem;
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .tech-icons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      align-items: center;
+    }
+    .tech-icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: help;
+    }
+    .tech-icon-item svg, .tech-icon-item img {
+      width: 32px; height: 32px;
+      transition: transform 200ms;
+    }
+    .tech-icon-item:hover svg, .tech-icon-item:hover img { transform: translateY(-4px); }
+    .tech-icon-item span {
+      font-size: 0.5625rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .card-back-footer {
+      padding: 32px 32px 0;
+      flex-shrink: 0;
+    }
+
+    /* Floating tooltip */
+    .flip-tooltip {
+      position: absolute;
+      left: 0; top: 0;
+      pointer-events: none;
+      border-radius: 999px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      font-size: 0.625rem;
+      font-weight: 800;
+      color: var(--heading);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      z-index: 50;
+      display: none;
+      white-space: nowrap;
+      transform: translate(16px, 16px);
+      transition: rotate 0.2s;
+    }
+    @media (min-width: 640px) { .flip-tooltip { display: block; } }
+
+    /* ============================================================
+       EXPANDABLE COURSES SECTION
+    ============================================================ */
+    .courses-section {
+      padding: 80px 24px 100px;
+      background: var(--background);
+    }
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(168,85,247,0.3);
+      background: rgba(168,85,247,0.08);
+      color: #a855f7;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      color: var(--heading);
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+    }
+    .section-header { text-align: center; }
+
+    /* Desktop split layout */
+    .exp-grid {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .exp-layout {
+      display: none;
+      grid-template-columns: 5fr 7fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (min-width: 1024px) { .exp-layout { display: grid; } .exp-mobile { display: none !important; } }
+
+    /* Detail panel */
+    .exp-detail-panel {
+      position: sticky;
+      top: 112px;
+      border-radius: 24px;
+      padding: 32px;
+      border: 1px solid rgba(168,85,247,0.5);
+      box-shadow: 0 15px 45px -10px rgba(168,85,247,0.15);
+      background: linear-gradient(to bottom, rgba(250,245,255,0.6), white, white);
+      min-height: 580px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: sticky;
+      top: 112px;
+      transition: all 0.25s ease;
+    }
+    .theme-dark .exp-detail-panel {
+      background: linear-gradient(to bottom, #120D24, #0E0B1A, #0A0814);
+      box-shadow: 0 15px 45px -10px rgba(168,85,247,0.3);
+    }
+    .exp-panel-accent-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2.5px;
+      background: linear-gradient(to right, transparent, #a855f7, transparent);
+    }
+    .exp-panel-watermark {
+      position: absolute;
+      top: 8px; left: 24px;
+      font-size: 6rem;
+      font-weight: 900;
+      font-family: monospace;
+      color: rgba(168,85,247,0.04);
+      pointer-events: none;
+      user-select: none;
+    }
+    .theme-dark .exp-panel-watermark { color: rgba(255,255,255,0.03); }
+    .exp-icon-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; position: relative; z-index: 10; }
+    .exp-icon-box {
+      width: 64px; height: 64px;
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    .exp-icon-box svg { width: 32px; height: 32px; }
+    .exp-badge-pro {
+      padding: 6px 12px;
+      font-size: 0.625rem;
+      font-weight: 800;
+      border-radius: 6px;
+      background: rgba(168,85,247,0.25);
+      border: 1px solid rgba(168,85,247,0.4);
+      color: #c084fc;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .exp-course-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      color: var(--heading);
+      position: relative; z-index: 10;
+    }
+    .exp-course-desc {
+      font-size: 0.875rem;
+      color: var(--body);
+      line-height: 1.65;
+      font-weight: 300;
+      margin-bottom: 24px;
+      position: relative; z-index: 10;
+    }
+    .theme-dark .exp-course-desc { color: #d1d5db; }
+    .exp-meta-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; position: relative; z-index: 10; }
+    .pill-green {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(16,185,129,0.1);
+      border: 1px solid rgba(16,185,129,0.3);
+      color: #059669;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .theme-dark .pill-green { color: #6ee7b7; }
+    .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .pill-neutral {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--body);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .theme-dark .pill-neutral { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); color: #d1d5db; }
+
+    .exp-learn-box {
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(168,85,247,0.12);
+      background: rgba(168,85,247,0.03);
+      backdrop-filter: blur(12px);
+      margin-bottom: 24px;
+      position: relative; z-index: 10;
+    }
+    .theme-dark .exp-learn-box { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.1); }
+    .exp-learn-label {
+      font-size: 0.625rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #a855f7;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .exp-learn-list { list-style: none; padding: 0; }
+    .exp-learn-list li {
+      font-size: 0.75rem;
+      color: var(--body);
+      line-height: 1.5;
+      margin-bottom: 8px;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .theme-dark .exp-learn-list li { color: #e5e7eb; }
+    .exp-learn-list li::before {
+      content: '';
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a855f7' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'/%3E%3Cpolyline points='22 4 12 14.01 9 11.01'/%3E%3C/svg%3E") center/contain no-repeat;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .exp-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-top: 24px; border-top: 1px solid var(--border); margin-bottom: 24px; position: relative; z-index: 10; }
+    .theme-dark .exp-stats { border-top-color: rgba(255,255,255,0.1); }
+    .exp-stat { display: flex; align-items: center; gap: 10px; }
+    .exp-stat-icon {
+      padding: 6px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .exp-stat-icon svg { width: 14px; height: 14px; }
+    .exp-stat-val { font-size: 0.875rem; font-weight: 800; color: var(--heading); line-height: 1; }
+    .theme-dark .exp-stat-val { color: #fff; }
+    .exp-stat-lbl { font-size: 0.625rem; color: var(--muted); }
+    .theme-dark .exp-stat-lbl { color: #9ca3af; }
+    .exp-cta { position: relative; z-index: 10; display: flex; flex-direction: column; gap: 8px; }
+    .btn-explore {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.875rem;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 8px 24px rgba(124,58,237,0.2);
+      transition: all 200ms;
+    }
+    .btn-explore:hover { background: linear-gradient(135deg, #6d28d9, #4338ca); transform: scale(1.01); }
+    .btn-curriculum {
+      font-size: 0.6875rem;
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      background: none;
+      text-align: center;
+      transition: color 200ms;
+    }
+    .btn-curriculum:hover { color: #a855f7; }
+
+    /* Right list */
+    .exp-list { display: flex; flex-direction: column; gap: 14px; }
+    .exp-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(218,220,224,0.6);
+      background: rgba(248,249,250,0.7);
+      cursor: pointer;
+      transition: all 300ms;
+    }
+    .theme-dark .exp-row { border-color: rgba(60,64,67,0.6); background: rgba(32,33,36,0.7); }
+    .exp-row.active {
+      border-color: rgba(168,85,247,0.55);
+      background: rgba(168,85,247,0.04);
+      box-shadow: 0 4px 25px -5px rgba(168,85,247,0.12);
+    }
+    .exp-row:hover { border-color: rgba(168,85,247,0.3); }
+    .exp-row-left { display: flex; align-items: center; gap: 20px; min-width: 0; }
+    .exp-row-num {
+      font-size: 1.125rem;
+      font-weight: 800;
+      font-family: monospace;
+      width: 32px;
+      flex-shrink: 0;
+      color: var(--muted);
+      transition: color 300ms;
+    }
+    .exp-row.active .exp-row-num { color: #a855f7; }
+    .exp-row-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(218,220,224,0.4);
+      transition: all 300ms;
+    }
+    .exp-row.active .exp-row-icon { border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.12) !important; }
+    .exp-row-icon svg { width: 22px; height: 22px; }
+    .exp-row-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--heading);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 300ms;
+    }
+    .exp-row.active .exp-row-title { color: var(--primary); }
+    .exp-row-right { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+    .exp-row-meta { display: flex; align-items: center; gap: 16px; font-size: 0.75rem; color: var(--muted); }
+    .exp-row-arrow {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      transition: all 300ms;
+      flex-shrink: 0;
+    }
+    .exp-row.active .exp-row-arrow { background: var(--primary); border-color: var(--primary); color: var(--background); }
+    .exp-row-arrow svg { width: 16px; height: 16px; }
+
+    /* Mobile accordion */
+    .exp-mobile { display: flex; flex-direction: column; gap: 14px; }
+    .exp-mob-card {
+      border-radius: 16px;
+      border: 1px solid rgba(218,220,224,0.6);
+      background: rgba(248,249,250,0.7);
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 300ms;
+    }
+    .theme-dark .exp-mob-card { border-color: rgba(60,64,67,0.6); background: rgba(32,33,36,0.7); }
+    .exp-mob-card.active {
+      border-color: rgba(168,85,247,0.55);
+      box-shadow: 0 10px 40px -10px rgba(168,85,247,0.2);
+      background: linear-gradient(to bottom, rgba(250,245,255,0.8), white);
+    }
+    .theme-dark .exp-mob-card.active { background: linear-gradient(to bottom, #120D24, #0E0B1A); }
+    .exp-mob-collapsed {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 16px 20px;
+    }
+    .exp-mob-expanded { padding: 24px; display: none; position: relative; }
+    .exp-mob-card.active .exp-mob-expanded { display: block; }
+    .exp-mob-accent-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, transparent, #a855f7, transparent);
+    }
+
+    /* ============================================================
+       REGISTRATION MODAL
+    ============================================================ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 300ms;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-box {
+      width: 100%;
+      max-width: 560px;
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+      transform: scale(0.95);
+      transition: transform 300ms;
+    }
+    .modal-overlay.open .modal-box { transform: scale(1); }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .modal-title { font-size: 1.125rem; font-weight: 800; color: var(--heading); }
+    .modal-subtitle { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+    .modal-close { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--muted); border: none; background: none; cursor: pointer; font-size: 1.25rem; transition: background 200ms; }
+    .modal-close:hover { background: var(--surface); color: var(--heading); }
+    .modal-progress { height: 4px; background: var(--surface); flex-shrink: 0; }
+    .modal-progress-fill { height: 100%; background: var(--primary); transition: width 300ms ease; }
+    .modal-body { padding: 24px; overflow-y: auto; flex: 1; background: var(--background); }
+    .modal-footer { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; border-top: 1px solid var(--border); flex-shrink: 0; background: rgba(248,249,250,0.5); }
+    .theme-dark .modal-footer { background: rgba(32,33,36,0.5); }
+    .btn-back { display: flex; align-items: center; gap: 4px; font-size: 0.875rem; font-weight: 700; color: var(--muted); transition: color 200ms; background: none; border: none; cursor: pointer; }
+    .btn-back:hover { color: var(--heading); }
+    .btn-next { display: flex; align-items: center; gap: 4px; padding: 10px 24px; border-radius: 8px; font-size: 0.875rem; font-weight: 700; background: var(--primary); color: var(--background); transition: opacity 200ms; border: none; cursor: pointer; }
+    .btn-next:hover { opacity: 0.85; }
+
+    /* Form elements */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; color: var(--heading); font-family: var(--font-display); margin-bottom: 6px; }
+    .form-input, .form-select {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--heading);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 200ms;
+      font-family: var(--font-sans);
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--primary); }
+    .form-input.readonly { background: var(--muted); opacity: 0.6; cursor: not-allowed; }
+    .form-error { color: var(--error); font-size: 0.75rem; margin-top: 4px; }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .form-checkbox { width: 16px; height: 16px; accent-color: var(--primary); }
+    .form-checkbox-label { font-size: 0.875rem; color: var(--body); }
+    .step-title { font-size: 1.125rem; font-weight: 800; color: var(--heading); margin-bottom: 16px; }
+    .payment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .payment-option {
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      text-align: center;
+      font-weight: 800;
+      color: var(--heading);
+      font-size: 0.9rem;
+      transition: all 200ms;
+    }
+    .payment-option.selected { background: var(--primary); color: var(--background); border-color: var(--primary); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+    .review-section {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: rgba(248,249,250,0.5);
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .theme-dark .review-section { background: rgba(32,33,36,0.5); }
+    .review-edit-btn { position: absolute; top: 16px; right: 16px; color: var(--muted); cursor: pointer; background: none; border: none; font-size: 1rem; }
+    .review-edit-btn:hover { color: var(--primary); }
+    .review-label { font-size: 0.6875rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 0.75rem; }
+    .review-key { color: var(--muted); }
+    .review-val { color: var(--heading); font-weight: 600; }
+    .end-date-box { padding: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; font-size: 0.875rem; margin-bottom: 16px; }
+    .end-date-box span:first-child { color: var(--muted); }
+    .end-date-box span:last-child { font-weight: 800; color: var(--heading); }
+    .success-icon { width: 80px; height: 80px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+    .success-icon svg { width: 40px; height: 40px; color: var(--background); }
+    .btn-goto-login { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; border-radius: 12px; background: var(--primary); color: var(--background); font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(0,0,0,0.1); transition: opacity 200ms; }
+    .btn-goto-login:hover { opacity: 0.85; }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer.site-footer {
+      border-top: 1px solid var(--border);
+      padding: 64px 24px 32px;
+      background: var(--background);
+      position: relative;
+      overflow: hidden;
+      font-family: var(--font-sans);
+    }
+    .footer-grid { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1fr; gap: 48px; margin-bottom: 64px; }
+    @media (min-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1024px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1.5fr; } }
+    .footer-brand { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--heading); margin-bottom: 16px; display: block; }
+    .footer-brand span { color: var(--accent); }
+    .footer-desc { font-size: 0.875rem; color: var(--body); opacity: 0.7; line-height: 1.65; margin-bottom: 24px; }
+    .footer-socials { display: flex; gap: 12px; }
+    .social-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; opacity: 0.6; transition: all 200ms; color: var(--heading); }
+    .social-btn:hover { opacity: 1; transform: translateY(-2px); background: var(--surface); }
+    .footer-col-title { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.9; margin-bottom: 24px; color: var(--heading); }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a { font-size: 0.875rem; color: var(--body); opacity: 0.6; transition: opacity 200ms; }
+    .footer-links a:hover { opacity: 1; }
+    .footer-contact-item { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; opacity: 0.7; transition: opacity 200ms; }
+    .footer-contact-item:hover { opacity: 1; }
+    .footer-contact-item svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+    .footer-contact-item span { font-size: 0.875rem; color: var(--body); }
+    .footer-bottom { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; align-items: center; padding-top: 32px; border-top: 1px solid var(--border); }
+    @media (min-width: 768px) { .footer-bottom { flex-direction: row; justify-content: space-between; } }
+    .footer-copy { font-size: 0.875rem; color: var(--body); opacity: 0.5; }
+    .footer-legal { display: flex; gap: 24px; }
+    .footer-legal a { font-size: 0.875rem; opacity: 0.5; transition: opacity 200ms; color: var(--body); }
+    .footer-legal a:hover { opacity: 1; }
+
+    /* ============================================================
+       SCROLL HINT
+    ============================================================ */
+    .scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      animation: hintBounce 2s ease-in-out infinite;
+      z-index: 10;
+    }
+    .scroll-hint svg { width: 20px; height: 20px; }
+    @keyframes hintBounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+
+    /* ============================================================
+       RESPONSIVE UTILITIES
+    ============================================================ */
+    @media (max-width: 767px) {
+      nav.pill-nav .nav-links, nav.pill-nav .nav-actions { display: none; }
+      .hero-section { padding: 100px 20px 60px; }
+    }
+    .hidden-lg { display: block; }
+    @media (min-width: 1024px) { .hidden-lg { display: none; } }
+
+    /* Transition helper */
+    .fade-slide { animation: fadeUp 0.25s ease forwards; }
+  </style>
+</head>
+<body>
+
+<!-- Noise Overlay -->
+<div class="noise-overlay" aria-hidden="true"></div>
+
+<!-- ============================================================
+     NAVBAR
+============================================================ -->
+<header id="site-header">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="#" class="nav-logo">
+        <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
+          onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
+        <span id="nav-logo-text"
+          style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
+      </a>
+      <div class="nav-divider">/</div>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="courses1.html" class="nav-link active"><span class="nav-link-indicator"></span>Courses</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <a href="/login" class="nav-login">Login</a>
+      <button id="theme-toggle-btn" class="nav-theme-btn" aria-label="Toggle theme">
+        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </button>
+      <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
+        <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<div id="mobile-menu" aria-hidden="true">
+  <nav class="mobile-nav">
+    <a href="index.html" class="mobile-nav-link"><span>Home</span><svg width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6" />
+      </svg></a>
+    <a href="about.html" class="mobile-nav-link"><span>About</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6" />
+      </svg></a>
+    <a href="services.html" class="mobile-nav-link"><span>Services</span><svg width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6" />
+      </svg></a>
+    <a href="courses1.html" class="mobile-nav-link active"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6" />
+      </svg></a>
+    <a href="contact.html" class="mobile-nav-link"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6" />
+      </svg></a>
+  </nav>
+  <div class="mobile-bottom">
+    <div class="mobile-theme-row">
+      <span>Theme</span>
+      <div class="mobile-theme-buttons">
+        <button class="mobile-theme-btn" data-theme="light">light</button>
+        <button class="mobile-theme-btn active" data-theme="dark">dark</button>
+      </div>
+    </div>
+    <a href="/login" class="mobile-login-btn">Login</a>
+    <a href="#" class="mobile-cta-btn">Get Started</a>
+  </div>
+</div>
+
+<!-- ============================================================
+     HERO SECTION
+============================================================ -->
+<section id="hero" style="min-height: 55vh; padding-top: 8rem; display: flex; align-items: center; justify-content: center; text-align: center; position: relative;">
+  <div class="grid-lines-bg" aria-hidden="true"></div>
+  <div class="hero-inner" style="max-width: 900px; margin: 0 auto; position: relative; z-index: 10;">
+    <span class="hero-badge">Developer Training</span>
+    <h1 class="text-display-xl hero-title" style="margin-top: 1.5rem; line-height: 1.15;">
+      Level up your&nbsp;
+      <span class="gradient-text" style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">tech stack</span>
+    </h1>
+    <p class="hero-body" style="max-width: 600px; margin: 1.5rem auto 0; font-size: 1.125rem; opacity: 0.7; line-height: 1.7;">
+      No fluff, just code. Learn practical skills in web development, backend systems, and modern frameworks.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     HORIZONTAL SCROLL FLIP CARDS SECTION
+============================================================ -->
+<section class="hscroll-section" id="hscrollSection">
+  <div class="courses-pill-nav" id="coursesPillNav">
+    <button class="pill-btn active" data-type="training">Training</button>
+    <button class="pill-btn" data-type="internship">Internship</button>
+  </div>
+  <div class="hscroll-track" id="hscrollTrack">
+    <!-- Cards injected by JS -->
+  </div>
+  <div class="scroll-hint" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ============================================================
+     EXPANDABLE COURSES SECTION
+============================================================ -->
+<section class="courses-section">
+  <div class="exp-grid">
+    <div class="section-header">
+      <div class="section-eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        7 In-Demand Courses. 1 Powerful Transformation.
+      </div>
+      <h2 class="section-title">Explore Our Career Bootcamps</h2>
+    </div>
+
+    <!-- Desktop layout -->
+    <div class="exp-layout" id="expDesktop">
+      <!-- Detail Panel -->
+      <div id="expDetailPanel">
+        <!-- Injected by JS -->
+      </div>
+      <!-- Row List -->
+      <div class="exp-list" id="expRowList">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Mobile Accordion -->
+    <div class="exp-mobile hidden-lg" id="expMobile">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+  <!-- PRE-FOOTER CTA SECTION -->
+  <section class="cta-section">
+    <div class="cta-card">
+      <div class="cta-card-borders"></div>
+      <div class="corner-plus top-left">+</div>
+      <div class="corner-plus top-right">+</div>
+      <div class="corner-plus bottom-left">+</div>
+      <div class="corner-plus bottom-right">+</div>
+      
+      <div class="cta-content">
+        <span class="cta-eyebrow">CAREERS</span>
+        <h2 class="cta-heading">Ready to Level Up Your Career?</h2>
+        <p class="cta-text">Learn practical technologies, build real-world projects, and take your next step with AROX Tech.</p>
+        <div class="cta-action-row">
+          <a href="courses1.html" class="cta-btn-solid">
+            <span>Explore Courses</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="apply.html" class="cta-btn-outline">Apply for Internship</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<footer>
+  <div class="footer-glow-1"></div>
+  <div class="footer-glow-2"></div>
+  <div class="footer-watermark">Arox Tech</div>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <a href="#" style="display:inline-block;margin-bottom:.5rem;">
+          <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech"
+            style="height:3rem;width:auto;"
+            onerror="this.style.display='none';document.getElementById('footer-logo-text').style.display='block'" />
+          <span id="footer-logo-text"
+            style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--heading);">AROX</span>
+        </a>
+        <p class="footer-tagline">We build digital products, AI solutions, and powerful experiences that help
+          businesses grow faster and smarter.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24">
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+            </svg></a>
+          <a href="#" class="footer-social-btn" aria-label="Twitter"><svg viewBox="0 0 24 24">
+              <path
+                d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 0 1-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 0 1-2.212.085 4.936 4.936 0 0 0 4.604 3.417 9.867 9.867 0 0 1-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+            </svg></a>
+          <a href="#" class="footer-social-btn" aria-label="GitHub"><svg viewBox="0 0 24 24">
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+            </svg></a>
+        </div>
+        <p class="footer-copyright">&copy; <span>AROX Tech <span id="footer-year"></span></span> &bull; All Rights
+          Reserved</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Company</h4>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Services</h4>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
+          <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Contact</h4>
+        <div class="footer-contact-items">
+          <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>Salem, Tamil Nadu, India</div>
+          <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z" />
+            </svg>+91 12345 67890</div>
+          <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+              <polyline points="22,6 12,13 2,6" />
+            </svg>info@aroxtech.com</div>
+        </div>
+        <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+            <path
+              d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+            <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+            <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+          </svg><span>Let's Build Something<br />Amazing Together</span></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================================
+     REGISTRATION MODAL
+============================================================ -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Arox Tech Registration</div>
+        <div class="modal-subtitle" id="modalSubtitle">Step 1 of 4</div>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-progress" id="modalProgressBar">
+      <div class="modal-progress-fill" id="modalProgress" style="width:25%"></div>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Injected by JS -->
+    </div>
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn-back" id="btnBack">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+      <button class="btn-next" id="btnNext">
+        Next
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+(function() {
+
+  /* ──────── COURSE DATA ──────── */
+  const deviconMap = {
+    'HTML5': 'html5/html5-original.svg',
+    'CSS3': 'css3/css3-original.svg',
+    'JavaScript': 'javascript/javascript-original.svg',
+    'JS': 'javascript/javascript-original.svg',
+    'TypeScript': 'typescript/typescript-original.svg',
+    'TS': 'typescript/typescript-original.svg',
+    'React': 'react/react-original.svg',
+    'Node': 'nodejs/nodejs-original.svg',
+    'Node.js': 'nodejs/nodejs-original.svg',
+    'MongoDB': 'mongodb/mongodb-original.svg',
+    'Git': 'git/git-original.svg',
+    'Figma': 'figma/figma-original.svg',
+    'Sketch': 'sketch/sketch-original.svg',
+    'Adobe XD': 'xd/xd-plain.svg',
+    'Photoshop': 'photoshop/photoshop-original.svg',
+    'Illustrator': 'illustrator/illustrator-plain.svg',
+    'Python': 'python/python-original.svg',
+    'R': 'r/r-original.svg',
+    'SQL': 'mysql/mysql-original.svg',
+    'Pandas': 'pandas/pandas-original.svg',
+    'TensorFlow': 'tensorflow/tensorflow-original.svg',
+    'Kali Linux': 'linux/linux-original.svg',
+    'Wireshark': 'wireshark/wireshark-original.svg',
+    'Metasploit': 'linux/linux-original.svg',
+    'Bash': 'bash/bash-original.svg',
+    'Google Ads': 'google/google-original.svg',
+    'Meta Ads': 'facebook/facebook-original.svg',
+    'Analytics': 'google/google-original.svg',
+    'WordPress': 'wordpress/wordpress-plain.svg',
+    'Mailchimp': 'mailchimp/mailchimp-original.svg',
+    'C/C++': 'cplusplus/cplusplus-original.svg',
+    'Raspberry Pi': 'raspberrypi/raspberrypi-original.svg',
+    'Arduino': 'arduino/arduino-original.svg',
+    'AWS IoT': 'amazonwebservices/amazonwebservices-original.svg',
+    'Docker': 'docker/docker-original.svg',
+    'Kubernetes': 'kubernetes/kubernetes-plain.svg',
+    'Jenkins': 'jenkins/jenkins-original.svg',
+    'AWS': 'amazonwebservices/amazonwebservices-original.svg',
+    'Java': 'java/java-original.svg',
+    'Spring Boot': 'spring/spring-original.svg',
+    'Spring': 'spring/spring-original.svg',
+    'React Native': 'react/react-original.svg',
+    'Flutter': 'flutter/flutter-original.svg',
+    'Swift': 'swift/swift-original.svg',
+    'Android': 'android/android-original.svg',
+    'Firebase': 'firebase/firebase-plain.svg'
+  };
+
+  const flipCourses = [
+    { id:"full-stack-web-development", number:"01", badge:"DEV", title:"Full Stack Web Development", desc:"Engineer modern responsive web applications using React, Node.js, databases, and version control.",
+      learnItems:["HTML5, CSS3, & Modern UI Layouts","React & Next.js Frameworks","Node.js & Express API Backend","Database Modeling & Design","Git Version Control & Deployment"],
+      techStack:[{name:"HTML5"},{name:"CSS3"},{name:"JavaScript"},{name:"React"},{name:"Node.js"},{name:"MongoDB"},{name:"Git"}]
+    },
+    { id:"ui-ux-designing", number:"02", badge:"DESIGN", title:"UI & UX Designing", desc:"Master Figma, layout design, visual styling, wireframes, and prototypes.",
+      learnItems:["Design Systems & Figma Components","User Persona & Research","Interactive Prototyping & Flow","Visual Hierarchy & Layouts","Developer Handoff Best Practices"],
+      techStack:[{name:"Figma"},{name:"Sketch"},{name:"Adobe XD"},{name:"Photoshop"},{name:"Illustrator"}]
+    },
+    { id:"data-science-and-ai", number:"03", badge:"DATA", title:"Data Science & AI", desc:"Analyze data, train machine learning models, and engineer AI systems with Python.",
+      learnItems:["Data Analysis with Python & Pandas","SQL Querying & Database Management","Exploratory Data Visualization","Machine Learning Algorithms","Deep Learning & AI Integration"],
+      techStack:[{name:"Python"},{name:"R"},{name:"SQL"},{name:"Pandas"},{name:"TensorFlow"}]
+    },
+    { id:"cyber-security", number:"04", badge:"SECURITY", title:"Cyber Security", desc:"Ethically hack, audit networks, secure systems, and design security policies.",
+      learnItems:["Network Auditing & Wireshark Analysis","Pentesting with Kali Linux & Metasploit","System & Server Hardening","Cryptography Foundations","Security Scripting with Python & Bash"],
+      techStack:[{name:"Kali Linux"},{name:"Wireshark"},{name:"Metasploit"},{name:"Python"},{name:"Bash"}]
+    },
+    { id:"digital-marketing", number:"05", badge:"MARKETING", title:"Digital Marketing", desc:"Grow audiences, manage paid ads, orchestrate email campaigns, and analyze conversions.",
+      learnItems:["SEO Optimization & Keyword Analysis","Paid Campaigns on Google & Meta Ads","Email Marketing & Custom Newsletters","Web Analytics & Performance Tracking","CMS Systems & WordPress Customization"],
+      techStack:[{name:"Google Ads"},{name:"Meta Ads"},{name:"Analytics"},{name:"WordPress"},{name:"Mailchimp"}]
+    },
+    { id:"embedded-systems-and-iot", number:"06", badge:"HARDWARE", title:"Embedded Systems & IoT", desc:"Program hardware, integrate sensors, and interface devices with cloud dashboards.",
+      learnItems:["C/C++ Bare-Metal Programming","Raspberry Pi & Single Board Systems","Arduino Microcontrollers & Circuits","Sensor & Actuator Calibration","AWS IoT Cloud Integrations"],
+      techStack:[{name:"C/C++"},{name:"Raspberry Pi"},{name:"Arduino"},{name:"Python"},{name:"AWS IoT"}]
+    },
+    { id:"devops-engineering", number:"07", badge:"OPERATIONS", title:"DevOps Engineering", desc:"Deploy scalable containers, configure CI/CD pipelines, and manage cloud clusters.",
+      learnItems:["Docker Containerization & Packaging","Kubernetes Orchestration & Scaling","CI/CD Automation with Jenkins","AWS Cloud Provisioning & IAM","Git Version Control & Branching"],
+      techStack:[{name:"Docker"},{name:"Kubernetes"},{name:"Jenkins"},{name:"AWS"},{name:"Git"}]
+    },
+    { id:"software-development", number:"08", badge:"ENGINEERING", title:"Software Development", desc:"Master core computing, algorithms, object-oriented concepts, and relational databases.",
+      learnItems:["Core Java, Python, & C++ OOPs","Data Structures & Algorithms","Relational SQL Databases & Indexing","Design Patterns & Best Practices","Git Workflows & Team Collaboration"],
+      techStack:[{name:"Java"},{name:"Python"},{name:"C++"},{name:"SQL"},{name:"Git"}]
+    },
+    { id:"app-development", number:"09", badge:"MOBILE", title:"App Development", desc:"Build native and cross-platform apps for mobile operating systems.",
+      learnItems:["React Native & Cross-Platform UI","Flutter & Dart Frameworks","iOS Swift Native Programming","Android Native Development","Firebase Database & Authentication"],
+      techStack:[{name:"React Native"},{name:"Flutter"},{name:"Swift"},{name:"Android"},{name:"Firebase"}]
+    }
+  ];
+
+  const expCourses = [
+    { id:"java-fsd", number:"01", badge:"PRO", title:"Java Full Stack Development", desc:"Master Java, Spring Boot, SQL and build scalable full stack enterprise applications.", iconColor:"#F89820", iconBg:"rgba(248,152,32,0.15)", level:"Beginner to Advanced", duration:"12 Weeks", learnItems:["Core Java & OOPs Concepts","Spring Boot & REST APIs","HTML5, CSS3, JavaScript (ES6+)","MySQL & Database Architecture","Projects & Enterprise Deployment"], students:"150+", projects:"6" },
+    { id:"python-dev", number:"02", title:"Python Development", desc:"Build backend microservices, automation scripts, and RESTful web applications with Python & Django.", iconColor:"#3776AB", iconBg:"rgba(55,118,171,0.15)", level:"Beginner Friendly", duration:"12 Weeks", learnItems:["Python Fundamentals & Syntax","Django & FastAPI Frameworks","Data Structures & Algorithms","PostgreSQL Integration & ORM","Automated Testing & CI/CD"], students:"180+", projects:"8" },
+    { id:"mern-stack", number:"03", title:"MERN Stack Web Development", desc:"Engineer modern responsive web platforms using MongoDB, Express, React, and Node.js.", iconColor:"#61DAFB", iconBg:"rgba(97,218,251,0.15)", level:"Project Based", duration:"14 Weeks", learnItems:["React & Next.js App Router","Node.js & Express Async Services","MongoDB NoSQL & Mongoose Schema","State Management (Redux / Zustand)","Vercel & Docker Cloud Hosting"], students:"220+", projects:"10" },
+    { id:"ui-ux-design", number:"04", title:"UI/UX Design Professional", desc:"Craft world-class visual interfaces, high-fidelity wireframes, and design systems in Figma.", iconColor:"#F24E1E", iconBg:"rgba(242,78,30,0.15)", level:"Design Thinking", duration:"10 Weeks", learnItems:["Figma Advanced & Auto-Layout","User Research & Personas","Interactive Prototyping","Design Systems & Tokenization","Usability Testing & Audit"], students:"120+", projects:"5" },
+    { id:"data-science-ai", number:"05", title:"Data Science & AI", desc:"Train machine learning models, analyze big data, and engineer AI agents.", iconColor:"#A855F7", iconBg:"rgba(168,85,247,0.15)", level:"AI + ML Projects", duration:"16 Weeks", learnItems:["Python for Data (Pandas/NumPy)","Exploratory Data Analysis","Scikit-Learn & Machine Learning","Deep Learning with PyTorch","Generative AI & LLM Agents"], students:"140+", projects:"7" },
+    { id:"cyber-security", number:"06", title:"Cyber Security Professional", desc:"Protect networks, perform ethical penetration tests, and secure cloud server infrastructure.", iconColor:"#EF4444", iconBg:"rgba(239,68,68,0.15)", level:"Hands-on Labs", duration:"14 Weeks", learnItems:["Network Protocols & Firewalls","Ethical Hacking & Pentesting","Vulnerability Assessment","Cryptography & Security Policies","Cloud Security Compliance"], students:"95+", projects:"6" },
+    { id:"cloud-aws", number:"07", title:"Cloud Computing with AWS", desc:"Architect cloud networks, automate infrastructure, and manage DevOps pipelines.", iconColor:"#FF9900", iconBg:"rgba(255,153,0,0.15)", level:"AWS Certified Path", duration:"12 Weeks", learnItems:["AWS Core (EC2, S3, IAM, VPC)","Serverless Architecture (Lambda)","Terraform Infrastructure as Code","Docker & Kubernetes Basics","CI/CD Pipeline Automation"], students:"160+", projects:"8" }
+  ];
+
+  /* ──────── TECH ICON SVGs ──────── */
+  function techSVG(name, color) {
+    const slug = deviconMap[name];
+    if (slug) {
+      return `<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}" alt="${name}" style="width:32px; height:32px; display:block;" />`;
+    }
+    return `<svg viewBox="0 0 24 24" fill="${color || 'currentColor'}"><circle cx="12" cy="12" r="10" opacity="0.7"/></svg>`;
+  }
+
+  /* ──────── COURSE ICON SVG for expandable ──────── */
+  function courseIconSVG(id, color) {
+    const map = {
+      'java-fsd': `<svg viewBox="0 0 24 24" fill="${color}"><path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149M8.276 15.933s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308 0 0 .384.389.987.602-5.679 1.661-12.007.13-7.942-1.218M13.116 11.475c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688 0-.001-8.216 2.051-4.292 6.573M19.33 20.504s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033-.856-.373.75-.89 1.254-.998.527-.114.828-.093.828-.093-.953-.671-6.156 1.317-2.643 1.887 9.58 1.553 17.462-.7 14.977-1.82M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062 1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568 2.082-1.006 3.776-.892 3.776-.892M17.116 17.584c4.503-2.34 2.421-4.589.968-4.285-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562 0-.001.07-.062.09-.118M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.888 4.832-.001 6.836-2.274-2.053-3.943-3.858-2.824-5.541 1.644-2.469 6.197-3.665 5.19-7.625M9.734 23.924c4.322.277 10.959-.153 11.116-2.198 0 0-.302.775-3.572 1.391-3.688.694-8.239.613-10.937.168 0-.001.553.457 3.393.639"/></svg>`,
+      'python-dev': `<svg viewBox="0 0 24 24" fill="${color}"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05L0 11.97l.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05z"/></svg>`,
+      'mern-stack': `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5" fill="${color}"/><ellipse cx="12" cy="12" rx="11" ry="4.2" fill="none" stroke="${color}" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="11" ry="4.2" fill="none" stroke="${color}" stroke-width="1.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="11" ry="4.2" fill="none" stroke="${color}" stroke-width="1.5" transform="rotate(120 12 12)"/></svg>`,
+      'ui-ux-design': `<svg viewBox="0 0 24 24" fill="${color}"><path d="M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.354-3.02-3.019-3.02h-3.117V7.51z"/></svg>`,
+      'data-science-ai': `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+      'cyber-security': `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+      'cloud-aws': `<svg viewBox="0 0 24 24" fill="${color}"><path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.375 6.18 6.18 0 0 1-.248-.471c-.622.734-1.405 1.101-2.347 1.101-.67 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.255-.248-.686-.367-1.3-.367-.28 0-.568.031-.863.103-.295.072-.583.16-.862.272a2.287 2.287 0 0 1-.28.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.28a.597.597 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36a4.84 4.84 0 0 1 1.246-.151c.95 0 1.644.216 2.091.647.439.43.662 1.085.662 1.963v2.586z"/></svg>`
+    };
+    return map[id] || `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="${color}"/></svg>`;
+  }
+
+  /* ──────── INTERNSHIP DATA ──────── */
+  const flipInternships = [
+    { id:"full-stack-internship", number:"01", badge:"INTERNSHIP", title:"Full Stack Web Development", desc:"Build real production-ready web platforms using React, Node.js, and databases.",
+      learnItems:["Agile Sprints & Workflows","REST & GraphQL APIs","Git Flow Collaboration","CI/CD Deployment","SQL & NoSQL Integration"],
+      techStack:[{name:"React",color:"#61DAFB"},{name:"Node",color:"#339933"},{name:"TS",color:"#3178C6"},{name:"MongoDB",color:"#47A248"}]
+    },
+    { id:"python-backend-internship", number:"02", badge:"INTERNSHIP", title:"Python Backend Engineering", desc:"Engineer scalable backend microservices, REST APIs, and automation scripts.",
+      learnItems:["FastAPI Microservices","PostgreSQL Schema Design","Redis Caching Systems","Docker Containerization","Unit Testing & Coverage"],
+      techStack:[{name:"Python",color:"#3776AB"},{name:"Django",color:"#092E20"},{name:"PostgreSQL",color:"#4169E1"},{name:"Docker",color:"#2496ED"}]
+    },
+    { id:"ui-ux-design-internship", number:"03", badge:"INTERNSHIP", title:"UI/UX Product Design", desc:"Prototype enterprise-grade digital products and master complete design systems.",
+      learnItems:["Advanced Figma Auto-Layout","Component Variables","High-Fidelity Wireframes","Usability Audit Reports","Developer Handoff Workflows"],
+      techStack:[{name:"Figma",color:"#F24E1E"},{name:"HTML5",color:"#E34F26"},{name:"CSS3",color:"#1572B6"},{name:"React",color:"#61DAFB"}]
+    },
+    { id:"ai-agent-internship", number:"04", badge:"INTERNSHIP", title:"AI Agent Engineering", desc:"Orchestrate LLMs, build RAG pipelines, and deploy custom vector search engines.",
+      learnItems:["OpenAI API Orchestration","Vector Databases (Pinecone)","Semantic Search & RAG","Fine-Tuning Techniques","LangChain Frameworks"],
+      techStack:[{name:"Python",color:"#3776AB"},{name:"PostgreSQL",color:"#4169E1"},{name:"Docker",color:"#2496ED"},{name:"Git",color:"#F05032"}]
+    },
+    { id:"cloud-devops-internship", number:"05", badge:"INTERNSHIP", title:"Cloud & DevOps Engineering", desc:"Deploy serverless architectures and automate cloud infrastructure systems.",
+      learnItems:["AWS Infrastructure (IAM, VPC)","Terraform IaC","Docker & Kubernetes","CI/CD Pipeline Design","Monitoring & Alerting"],
+      techStack:[{name:"AWS",color:"#FF9900"},{name:"Docker",color:"#2496ED"},{name:"Python",color:"#3776AB"},{name:"Git",color:"#F05032"}]
+    },
+    { id:"mobile-app-internship", number:"06", badge:"INTERNSHIP", title:"Mobile App Engineering", desc:"Build native cross-platform mobile apps for iOS and Android devices.",
+      learnItems:["React Native & Expo","Mobile UI/UX Layouts","Navigation Architecture","App Store Publishing","Local Storage & APIs"],
+      techStack:[{name:"Android",color:"#3DDC84"},{name:"React",color:"#61DAFB"},{name:"TS",color:"#3178C6"},{name:"Git",color:"#F05032"}]
+    }
+  ];
+
+  /* ──────── BUILD FLIP CARDS ──────── */
+  let flippedId = null;
+
+  function buildFlipCards(type) {
+    const track = document.getElementById('hscrollTrack');
+    track.innerHTML = '';
+    flippedId = null;
+
+    const data = type === 'training' ? flipCourses : flipInternships;
+
+    data.forEach(course => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'flip-card-wrapper';
+
+      const techIconsHTML = course.techStack.map(t => `
+        <div class="tech-icon-item" title="${t.name}">
+          ${techSVG(t.name, t.color)}
+          <span>${t.name}</span>
+        </div>
+      `).join('');
+
+      wrapper.innerHTML = `
+        <div class="flip-card-outer" id="card-${course.id}">
+          <div class="flip-card-inner">
+            <!-- FRONT -->
+            <div class="flip-card-front">
+              <div class="card-deco-bg"><img src="assets/training/card bg.png" alt="" /></div>
+              <div class="card-front-body">
+                <div class="card-header">
+                  <div class="card-number">${course.number}</div>
+                  ${course.badge ? `<span class="card-badge">${course.badge}</span>` : ''}
+                </div>
+                <h3 class="card-title">${course.title}</h3>
+                <p class="card-desc">${course.desc}</p>
+                <div class="code-mock-wrap">
+                  <div class="code-mock">
+                    <div class="code-mock-screen">
+                      <div class="code-line code-line-green"></div>
+                      <div class="code-line code-line-yellow"></div>
+                      <div class="code-line code-line-blue"></div>
+                      <div class="code-line code-line-purple"></div>
+                    </div>
+                    <div class="code-mock-icon code-mock-icon-1">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <div class="code-mock-icon code-mock-icon-2">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-auto">
+                  <button class="card-action-btn" onclick="window.location.href='detail.html?course=${course.id}'; event.stopPropagation();">
+                    Explore Course
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- BACK -->
+            <div class="flip-card-back">
+              <div class="card-back-header">
+                <div class="card-back-header-title">
+                  <span>:::</span> What You'll Learn <span>:::</span>
+                </div>
+              </div>
+              <div class="card-back-body" style="padding-bottom: 32px;">
+                <ul class="learn-list">
+                  ${course.learnItems.map(i => `<li>${i}</li>`).join('')}
+                </ul>
+                <div class="tech-stack-divider">
+                  <div></div><span>Tech Stack</span><div></div>
+                </div>
+                <div class="tech-icons">
+                  ${techIconsHTML}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flip-tooltip" id="tip-${course.id}">click for more</div>
+        </div>
+      `;
+
+      track.appendChild(wrapper);
+
+      const cardEl = wrapper.querySelector(`#card-${course.id}`);
+      const tooltip = wrapper.querySelector(`#tip-${course.id}`);
+
+      cardEl.addEventListener('click', () => {
+        const wasFlipped = flippedId === course.id;
+        document.querySelectorAll('.flip-card-outer.flipped').forEach(c => c.classList.remove('flipped'));
+        flippedId = wasFlipped ? null : course.id;
+        if (flippedId) cardEl.classList.add('flipped');
+      });
+
+      cardEl.addEventListener('mousemove', (e) => {
+        const rect = cardEl.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        cardEl.style.setProperty('--mouse-x', `${x}px`);
+        cardEl.style.setProperty('--mouse-y', `${y}px`);
+        tooltip.style.left = x + 'px';
+        tooltip.style.top  = y + 'px';
+      });
+      cardEl.addEventListener('mouseenter', () => { tooltip.style.opacity = '1'; });
+      cardEl.addEventListener('mouseleave', () => { tooltip.style.opacity = '0'; });
+    });
+
+    initHScroll();
+    ScrollTrigger.refresh();
+  }
+
+  /* ──────── GSAP HORIZONTAL SCROLL & PILL PINNING ──────── */
+  gsap.registerPlugin(ScrollTrigger);
+
+  const section = document.getElementById('hscrollSection');
+  const trackEl = document.getElementById('hscrollTrack');
+  const pillNav = document.getElementById('coursesPillNav');
+
+  let hScrollTrigger = null;
+
+  function initHScroll() {
+    if (hScrollTrigger) {
+      hScrollTrigger.kill();
+    }
+
+    const trackWidth = trackEl.scrollWidth;
+    const vpWidth = window.innerWidth;
+    const scrollAmt = trackWidth - vpWidth;
+
+    if (scrollAmt > 0) {
+      hScrollTrigger = ScrollTrigger.create({
+        trigger: section,
+        pin: true,
+        scrub: 1,
+        start: 'top top',
+        end: () => `+=${scrollAmt}`,
+        invalidateOnRefresh: true,
+        animation: gsap.to(trackEl, {
+          x: -scrollAmt,
+          ease: 'none'
+        }),
+        onEnter: () => {
+          pillNav.classList.add('pinned');
+          const header = document.getElementById('site-header');
+          if (header) {
+            header.classList.add('hidden-nav');
+            header.style.pointerEvents = 'none';
+          }
+          window.isHScrollActive = true;
+        },
+        onLeave: () => {
+          pillNav.classList.remove('pinned');
+          const header = document.getElementById('site-header');
+          if (header) {
+            header.style.pointerEvents = '';
+          }
+          window.isHScrollActive = false;
+        },
+        onEnterBack: () => {
+          pillNav.classList.add('pinned');
+          const header = document.getElementById('site-header');
+          if (header) {
+            header.classList.add('hidden-nav');
+            header.style.pointerEvents = 'none';
+          }
+          window.isHScrollActive = true;
+        },
+        onLeaveBack: () => {
+          pillNav.classList.remove('pinned');
+          const header = document.getElementById('site-header');
+          if (header) {
+            header.style.pointerEvents = '';
+          }
+          window.isHScrollActive = false;
+        }
+      });
+    }
+  }
+
+  // Pill switcher event listeners
+  document.querySelectorAll('.pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.getAttribute('data-type');
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      buildFlipCards(type);
+    });
+  });
+
+  // Initial load
+  buildFlipCards('training');
+
+  window.addEventListener('resize', () => {
+    initHScroll();
+    ScrollTrigger.refresh();
+  });
+
+  /* ──────── BUILD EXPANDABLE COURSES ──────── */
+  let activeExpIdx = 0;
+  let hoverExpIdx = null;
+
+  function renderDetailPanel(idx) {
+    const c = expCourses[idx];
+    const panel = document.getElementById('expDetailPanel');
+    panel.innerHTML = `
+      <div class="exp-detail-panel">
+        <div class="exp-panel-accent-line"></div>
+        <span class="exp-panel-watermark">${c.number}</span>
+        <div>
+          <div class="exp-icon-row">
+            <div class="exp-icon-box" style="background:${c.iconBg}">
+              ${courseIconSVG(c.id, c.iconColor)}
+            </div>
+            ${c.badge ? `<span class="exp-badge-pro">${c.badge}</span>` : ''}
+          </div>
+          <div style="position:relative;z-index:10;">
+            <h3 class="exp-course-title">${c.title}</h3>
+            <p class="exp-course-desc">${c.desc}</p>
+          </div>
+          <div class="exp-meta-pills">
+            <span class="pill-green"><span class="pill-dot"></span>${c.level}</span>
+            <span class="pill-neutral">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${c.duration}
+            </span>
+          </div>
+          <div class="exp-learn-box">
+            <div class="exp-learn-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              What You'll Learn
+            </div>
+            <ul class="exp-learn-list">
+              ${c.learnItems.map(i => `<li>${i}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="exp-stats">
+            <div class="exp-stat">
+              <div class="exp-stat-icon" style="background:rgba(168,85,247,0.1);color:#a855f7;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div><div class="exp-stat-val">${c.students}</div><div class="exp-stat-lbl">Enrolled</div></div>
+            </div>
+            <div class="exp-stat">
+              <div class="exp-stat-icon" style="background:rgba(59,130,246,0.1);color:#3b82f6;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div><div class="exp-stat-val">${c.projects}</div><div class="exp-stat-lbl">Projects</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-cta">
+          <button class="btn-explore" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">
+            Explore Course
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <button class="btn-curriculum" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">View Curriculum</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRowList() {
+    const list = document.getElementById('expRowList');
+    const visIdx = hoverExpIdx !== null ? hoverExpIdx : activeExpIdx;
+    list.innerHTML = expCourses.map((c, i) => `
+      <div class="exp-row${i === visIdx ? ' active' : ''}" data-idx="${i}">
+        <div class="exp-row-left">
+          <span class="exp-row-num">${c.number}</span>
+          <div class="exp-row-icon" style="background:${i === visIdx ? '' : c.iconBg}">
+            ${courseIconSVG(c.id, i === visIdx ? 'var(--primary)' : c.iconColor)}
+          </div>
+          <h3 class="exp-row-title">${c.title}</h3>
+        </div>
+        <div class="exp-row-right">
+          <div class="exp-row-meta">
+            <span style="display:flex;align-items:center;gap:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${c.duration}
+            </span>
+            <span class="pill-green" style="font-size:0.6875rem;">
+              <span class="pill-dot"></span>${c.level}
+            </span>
+          </div>
+          <div class="exp-row-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.exp-row').forEach(row => {
+      const idx = parseInt(row.dataset.idx);
+      row.addEventListener('click', () => { activeExpIdx = idx; renderAll(); });
+      row.addEventListener('mouseenter', () => { hoverExpIdx = idx; renderAll(); });
+      row.addEventListener('mouseleave', () => { hoverExpIdx = null; renderAll(); });
+    });
+  }
+
+  function renderMobile() {
+    const mob = document.getElementById('expMobile');
+    mob.innerHTML = expCourses.map((c, i) => `
+      <div class="exp-mob-card${i === activeExpIdx ? ' active' : ''}" data-idx="${i}">
+        ${i === activeExpIdx ? '<div class="exp-mob-accent-line"></div>' : ''}
+        <div class="exp-mob-collapsed">
+          <div style="display:flex;align-items:center;gap:16px;min-width:0;">
+            <span style="font-size:1rem;font-weight:800;font-family:monospace;color:${i === activeExpIdx ? '#a855f7' : 'var(--muted)'};width:28px;flex-shrink:0;">${c.number}</span>
+            <div style="width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border);background:${c.iconBg};">
+              ${courseIconSVG(c.id, c.iconColor)}
+            </div>
+            <h3 style="font-size:1rem;font-weight:800;color:var(--heading);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.title}</h3>
+          </div>
+          <div style="width:36px;height:36px;border-radius:50%;border:1px solid ${i === activeExpIdx ? 'var(--primary)' : 'var(--border)'};background:${i === activeExpIdx ? 'var(--primary)' : 'var(--surface)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;color:${i === activeExpIdx ? 'var(--background)' : 'var(--muted)'};">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        ${i === activeExpIdx ? `
+        <div class="exp-mob-expanded">
+          <p style="font-size:0.875rem;color:var(--body);line-height:1.65;margin-bottom:16px;">${c.desc}</p>
+          <div class="exp-meta-pills" style="margin-bottom:16px;">
+            <span class="pill-green"><span class="pill-dot"></span>${c.level}</span>
+            <span class="pill-neutral"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>${c.duration}</span>
+          </div>
+          <div class="exp-learn-box">
+            <div class="exp-learn-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> What You'll Learn</div>
+            <ul class="exp-learn-list">${c.learnItems.map(it => `<li>${it}</li>`).join('')}</ul>
+          </div>
+          <button class="btn-explore" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">
+            Explore Course <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>` : ''}
+      </div>
+    `).join('');
+
+    mob.querySelectorAll('.exp-mob-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const idx = parseInt(card.dataset.idx);
+        activeExpIdx = activeExpIdx === idx ? -1 : idx;
+        renderAll();
+      });
+    });
+  }
+
+  function renderAll() {
+    const visIdx = hoverExpIdx !== null ? hoverExpIdx : activeExpIdx;
+    renderDetailPanel(visIdx);
+    renderRowList();
+    renderMobile();
+  }
+  renderAll();
+
+  /* ──────── REGISTRATION MODAL ──────── */
+  let modalStep = 1;
+  let isReview = false;
+  let isSuccess = false;
+  let selectedCourse = '';
+  let formData = {
+    fullName:'', email:'', whatsappNumber:'', gender:'',
+    collegeName:'', degree:'', specialization:'',
+    course:'', fromDate:'', totalDays:30, skipSundays:false,
+    reqOfferLetter:false, reqCompletion:false, reqAttendance:false, reqProject:false,
+    paymentMode:'PAY_NOW', advanceAmount:0
+  };
+  let errors = {};
+
+  window.openModal = function(courseName) {
+    selectedCourse = courseName || '';
+    formData.course = selectedCourse;
+    modalStep = 1; isReview = false; isSuccess = false; errors = {};
+    renderModal();
+    document.getElementById('modalOverlay').classList.add('open');
+  };
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('modalOverlay')) closeModal(); });
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+  document.getElementById('btnBack').addEventListener('click', () => {
+    if (isReview) { isReview = false; }
+    else if (modalStep > 1) { modalStep--; }
+    errors = {};
+    renderModal();
+  });
+
+  document.getElementById('btnNext').addEventListener('click', () => {
+    if (isSuccess) { closeModal(); return; }
+    if (isReview) { handleSubmit(); return; }
+    if (validate()) {
+      if (modalStep === 4) { isReview = true; }
+      else { modalStep++; }
+      renderModal();
+    }
+  });
+
+  function validate() {
+    errors = {};
+    if (modalStep === 1) {
+      if (!/^[A-Za-z]+(\s[A-Za-z]+)+$/.test(formData.fullName.trim())) errors.fullName = 'Please enter your full name (first + last, alphabets only)';
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Please enter a valid email';
+      if (!/^[6-9]\d{9}$/.test(formData.whatsappNumber)) errors.whatsappNumber = 'Please enter a valid 10-digit WhatsApp number';
+      if (!formData.gender) errors.gender = 'Please select gender';
+    } else if (modalStep === 2) {
+      if (!formData.collegeName.trim()) errors.collegeName = 'College name is required';
+      if (!formData.degree) errors.degree = 'Degree is required';
+      if (!formData.specialization) errors.specialization = 'Specialization is required';
+    } else if (modalStep === 3) {
+      if (!formData.fromDate) errors.fromDate = 'Start date is required';
+      if (formData.totalDays < 1) errors.totalDays = 'Must be at least 1 day';
+      if (!formData.reqOfferLetter && !formData.reqCompletion && !formData.reqAttendance && !formData.reqProject) errors.requirements = 'Please select at least one document';
+    } else if (modalStep === 4) {
+      if (formData.paymentMode === 'PAY_ADVANCE' && (!formData.advanceAmount || formData.advanceAmount <= 0)) errors.advanceAmount = 'Please enter a valid advance amount';
+    }
+    return Object.keys(errors).length === 0;
+  }
+
+  function calcEndDate() {
+    if (!formData.fromDate || !formData.totalDays) return 'N/A';
+    const d = new Date(formData.fromDate);
+    let added = 0;
+    while (added < formData.totalDays) {
+      d.setDate(d.getDate() + 1);
+      if (formData.skipSundays && d.getDay() === 0) continue;
+      added++;
+    }
+    return d.toISOString().split('T')[0];
+  }
+
+  async function handleSubmit() {
+    document.getElementById('btnNext').textContent = 'Registering...';
+    document.getElementById('btnNext').disabled = true;
+    await new Promise(r => setTimeout(r, 1500));
+    isSuccess = true; isReview = false;
+    renderModal();
+    document.getElementById('btnNext').textContent = 'Close';
+    document.getElementById('btnNext').disabled = false;
+  }
+
+  function renderModal() {
+    const subtitle = document.getElementById('modalSubtitle');
+    const progress = document.getElementById('modalProgress');
+    const progressBar = document.getElementById('modalProgressBar');
+    const footer = document.getElementById('modalFooter');
+    const body = document.getElementById('modalBody');
+    const btnNext = document.getElementById('btnNext');
+    const btnBack = document.getElementById('btnBack');
+
+    if (isSuccess) {
+      subtitle.textContent = 'Registration Complete';
+      progressBar.style.display = 'none';
+      footer.style.display = 'none';
+      body.innerHTML = `
+        <div style="text-align:center;padding:32px 0;">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 style="font-size:1.5rem;font-weight:800;color:var(--heading);margin-bottom:12px;">Registration Successful!</h3>
+          <p style="font-size:0.875rem;color:var(--body);max-width:340px;margin:0 auto 32px;line-height:1.65;">
+            Your details are recorded. You can now log into the Student Portal using your email. Your temporary password is: <span style="font-family:monospace;background:var(--surface);padding:2px 6px;border-radius:4px;font-weight:700;">Arox@2024</span>
+          </p>
+          <button class="btn-goto-login" onclick="document.getElementById('modalOverlay').classList.remove('open')">Close &amp; Return</button>
+        </div>
+      `;
+      return;
+    }
+
+    progressBar.style.display = 'block';
+    footer.style.display = 'flex';
+
+    if (isReview) {
+      subtitle.textContent = 'Final Verification';
+      progress.style.width = '100%';
+      btnNext.innerHTML = 'Submit &amp; Register <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+      body.innerHTML = renderReview();
+    } else {
+      subtitle.textContent = `Step ${modalStep} of 4`;
+      progress.style.width = `${(modalStep / 4) * 100}%`;
+      btnNext.innerHTML = modalStep < 4 ? 'Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>' : 'Review <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+      body.innerHTML = renderStep();
+    }
+
+    // Attach live listeners
+    body.querySelectorAll('input, select').forEach(el => {
+      el.addEventListener('input', e => {
+        const { name, type, checked, value } = e.target;
+        if (type === 'checkbox') formData[name] = checked;
+        else if (name === 'advanceAmount' || name === 'totalDays') formData[name] = Number(value);
+        else formData[name] = value;
+      });
+    });
+  }
+
+  function renderStep() {
+    if (modalStep === 1) return `
+      <div class="step-title">Step 1: Student Information</div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" name="fullName" type="text" value="${formData.fullName}" placeholder="John Doe" />
+        ${errors.fullName ? `<div class="form-error">${errors.fullName}</div>` : ''}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" name="email" type="email" value="${formData.email}" placeholder="john@example.com" />
+        ${errors.email ? `<div class="form-error">${errors.email}</div>` : ''}
+      </div>
+      <div class="form-group">
+        <label class="form-label">WhatsApp Number</label>
+        <input class="form-input" name="whatsappNumber" type="tel" value="${formData.whatsappNumber}" placeholder="9876543210" />
+        ${errors.whatsappNumber ? `<div class="form-error">${errors.whatsappNumber}</div>` : ''}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gender</label>
+        <select class="form-select" name="gender">
+          <option value="" ${!formData.gender?'selected':''}>Select Gender</option>
+          <option value="Male" ${formData.gender==='Male'?'selected':''}>Male</option>
+          <option value="Female" ${formData.gender==='Female'?'selected':''}>Female</option>
+          <option value="Other" ${formData.gender==='Other'?'selected':''}>Other</option>
+        </select>
+        ${errors.gender ? `<div class="form-error">${errors.gender}</div>` : ''}
+      </div>
+    `;
+    if (modalStep === 2) return `
+      <div class="step-title">Step 2: College Information</div>
+      <div class="form-group">
+        <label class="form-label">College Name</label>
+        <input class="form-input" name="collegeName" type="text" value="${formData.collegeName}" placeholder="University of Arox" />
+        ${errors.collegeName ? `<div class="form-error">${errors.collegeName}</div>` : ''}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Degree</label>
+        <select class="form-select" name="degree">
+          <option value="">Select Degree</option>
+          ${['B.Tech','M.Tech','BCA','MCA','BSc','MSc','BBA','MBA','Other'].map(d => `<option value="${d}" ${formData.degree===d?'selected':''}>${d}</option>`).join('')}
+        </select>
+        ${errors.degree ? `<div class="form-error">${errors.degree}</div>` : ''}
+      </div>
+      <div class="form-group">
+        <label class="form-label">Specialization / Branch</label>
+        <select class="form-select" name="specialization">
+          <option value="">Select Specialization</option>
+          ${['Computer Science','Information Technology','Software Engineering','Electronics & Communication','Electrical & Electronics','Mechanical Engineering','Civil Engineering','Artificial Intelligence','Data Science','Cyber Security','Cloud Computing','Other'].map(s => `<option value="${s}" ${formData.specialization===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        ${errors.specialization ? `<div class="form-error">${errors.specialization}</div>` : ''}
+      </div>
+    `;
+    if (modalStep === 3) return `
+      <div class="step-title">Step 3: Course &amp; Requirements</div>
+      <div class="form-group">
+        <label class="form-label">Course (Auto-selected)</label>
+        <input class="form-input readonly" name="course" type="text" value="${formData.course}" readonly />
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">From Date</label>
+          <input class="form-input" name="fromDate" type="date" value="${formData.fromDate}" />
+          ${errors.fromDate ? `<div class="form-error">${errors.fromDate}</div>` : ''}
+        </div>
+        <div class="form-group">
+          <label class="form-label">Total Days</label>
+          <input class="form-input" name="totalDays" type="number" min="1" value="${formData.totalDays}" />
+          ${errors.totalDays ? `<div class="form-error">${errors.totalDays}</div>` : ''}
+        </div>
+      </div>
+      <div class="form-checkbox-row" style="margin-bottom:12px;">
+        <input class="form-checkbox" type="checkbox" name="skipSundays" id="skipSundays" ${formData.skipSundays?'checked':''} />
+        <label class="form-checkbox-label" for="skipSundays">Skip Sundays when calculating end date</label>
+      </div>
+      <div class="end-date-box">
+        <span>Calculated End Date: </span><span>${calcEndDate()}</span>
+      </div>
+      <div style="border-top:1px solid var(--border);padding-top:16px;">
+        <label class="form-label">Required Documents</label>
+        ${errors.requirements ? `<div class="form-error" style="margin-bottom:8px;">${errors.requirements}</div>` : ''}
+        ${[['reqOfferLetter','Internship Offer Letter'],['reqCompletion','Completion Certificate'],['reqAttendance','Attendance Certificate'],['reqProject','Project Completion Certificate']].map(([n,l]) => `
+          <div class="form-checkbox-row">
+            <input class="form-checkbox" type="checkbox" name="${n}" id="${n}" ${formData[n]?'checked':''} />
+            <label class="form-checkbox-label" for="${n}">${l}</label>
+          </div>`).join('')}
+      </div>
+    `;
+    if (modalStep === 4) return `
+      <div class="step-title">Step 4: Payment Option</div>
+      <div class="payment-grid">
+        <div class="payment-option${formData.paymentMode==='PAY_NOW'?' selected':''}" onclick="updatePayment('PAY_NOW')">Pay Now</div>
+        <div class="payment-option${formData.paymentMode==='PAY_ADVANCE'?' selected':''}" onclick="updatePayment('PAY_ADVANCE')">Pay in Advance</div>
+      </div>
+      ${formData.paymentMode==='PAY_ADVANCE' ? `
+        <div class="form-group">
+          <label class="form-label">Advance Amount (₹)</label>
+          <input class="form-input" name="advanceAmount" type="number" value="${formData.advanceAmount||''}" placeholder="Enter amount" />
+          ${errors.advanceAmount ? `<div class="form-error">${errors.advanceAmount}</div>` : ''}
+        </div>` : ''}
+    `;
+  }
+
+  window.updatePayment = function(mode) {
+    formData.paymentMode = mode;
+    renderModal();
+  };
+
+  function renderReview() {
+    return `
+      <div class="review-section">
+        <button class="review-edit-btn" onclick="jumpTo(1)" title="Edit">✏️</button>
+        <div class="review-label">Student Information</div>
+        <div class="review-grid">
+          <span class="review-key">Full Name</span><span class="review-val">${formData.fullName}</span>
+          <span class="review-key">Email</span><span class="review-val">${formData.email}</span>
+          <span class="review-key">WhatsApp</span><span class="review-val">${formData.whatsappNumber}</span>
+          <span class="review-key">Gender</span><span class="review-val">${formData.gender}</span>
+        </div>
+      </div>
+      <div class="review-section">
+        <button class="review-edit-btn" onclick="jumpTo(2)" title="Edit">✏️</button>
+        <div class="review-label">College Information</div>
+        <div class="review-grid">
+          <span class="review-key">College</span><span class="review-val">${formData.collegeName}</span>
+          <span class="review-key">Degree</span><span class="review-val">${formData.degree}</span>
+          <span class="review-key">Specialization</span><span class="review-val">${formData.specialization}</span>
+        </div>
+      </div>
+      <div class="review-section">
+        <button class="review-edit-btn" onclick="jumpTo(3)" title="Edit">✏️</button>
+        <div class="review-label">Course &amp; Timeline</div>
+        <div class="review-grid">
+          <span class="review-key">Course</span><span class="review-val">${formData.course}</span>
+          <span class="review-key">Start Date</span><span class="review-val">${formData.fromDate}</span>
+          <span class="review-key">Total Days</span><span class="review-val">${formData.totalDays}</span>
+          <span class="review-key">End Date</span><span class="review-val">${calcEndDate()}</span>
+        </div>
+      </div>
+      <div class="review-section">
+        <button class="review-edit-btn" onclick="jumpTo(4)" title="Edit">✏️</button>
+        <div class="review-label">Payment</div>
+        <div class="review-grid">
+          <span class="review-key">Mode</span><span class="review-val">${formData.paymentMode==='PAY_NOW'?'Pay Now (Full)':'Pay in Advance'}</span>
+          ${formData.paymentMode==='PAY_ADVANCE' ? `<span class="review-key">Advance</span><span class="review-val" style="color:#a855f7;font-weight:800;">₹${formData.advanceAmount}</span>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  window.jumpTo = function(step) { modalStep = step; isReview = false; renderModal(); };
+
+})();
+</script>
+<script src="js/main.js" defer></script>
+</body>
+</html>
+
