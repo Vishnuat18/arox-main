@@ -239,6 +239,27 @@ router.post('/attendance/mark', async (req, res) => {
     const month = String(localToday.getMonth() + 1).padStart(2, '0');
     const day = String(localToday.getDate()).padStart(2, '0');
     const todayStr = `${year}-${month}-${day}`;
+
+    // Get registration details to check dates
+    const registration = db.prepare('SELECT start_date, end_date FROM registrations WHERE student_id = ? AND course_id = ?').get(student.id, course_id);
+    if (!registration) {
+      return res.status(400).json({ success: false, message: 'You are not registered for this course.' });
+    }
+
+    // Parse dates to compare (local YYYY-MM-DD format comparison)
+    const today = new Date(todayStr + 'T00:00:00');
+    if (registration.start_date) {
+      const start = new Date(registration.start_date + 'T00:00:00');
+      if (today < start) {
+        return res.status(400).json({ success: false, message: 'Attendance marking has not started yet (Course start date: ' + registration.start_date + ').' });
+      }
+    }
+    if (registration.end_date) {
+      const end = new Date(registration.end_date + 'T00:00:00');
+      if (today > end) {
+        return res.status(400).json({ success: false, message: 'Attendance marking has ended (Course end date: ' + registration.end_date + ').' });
+      }
+    }
     
     // Check if already marked
     const existing = db.prepare('SELECT id FROM attendance WHERE student_id = ? AND course_id = ? AND date = ?').get(student.id, course_id, todayStr);

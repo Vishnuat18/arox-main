@@ -463,7 +463,11 @@
               <div class="flex justify-between items-start mb-3">
                 <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="calendar-check" style="width: 18px; height: 18px;"></i></span>
                 <% if (registration.balance_amount === 0) { %>
-                  <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Unlocked</span>
+                  <% if (attendancePercent >= 75) { %>
+                    <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Unlocked</span>
+                  <% } else { %>
+                    <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1" title="Requires 75% attendance (current: <%= attendancePercent %>%)"><i data-lucide="lock" style="width: 10px;"></i> Attn Locked</span>
+                  <% } %>
                 <% } else { %>
                   <span class="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><i data-lucide="lock" style="width: 10px;"></i> Fee Locked</span>
                 <% } %>
@@ -471,11 +475,14 @@
               <h4 class="font-bold text-gray-800">Attendance Certificate</h4>
               <p class="text-xs text-gray-400 mt-1">Requires minimum 75% attendance and full fee payment.</p>
             </div>
-            <button id="btn-attendance" onclick="downloadStudentDoc('attendance')" class="btn <%= registration.balance_amount === 0 ? 'btn-primary' : 'btn-secondary' %> w-full mt-4 text-xs font-semibold py-2" <%= registration.balance_amount === 0 ? '' : 'disabled' %>>
-              <% if (registration.balance_amount === 0) { %>
+            <% const canDownloadAtt = registration.balance_amount === 0 && attendancePercent >= 75; %>
+            <button id="btn-attendance" onclick="downloadStudentDoc('attendance')" class="btn <%= canDownloadAtt ? 'btn-primary' : 'btn-secondary' %> w-full mt-4 text-xs font-semibold py-2" <%= canDownloadAtt ? '' : 'disabled' %>>
+              <% if (canDownloadAtt) { %>
                 <i data-lucide="download" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Download PDF
-              <% } else { %>
+              <% } else if (registration.balance_amount > 0) { %>
                 <i data-lucide="lock" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Complete Payment to Unlock
+              <% } else { %>
+                <i data-lucide="lock" style="width: 12px; margin-right: 4px; display: inline-block;"></i> Need 75%+ Attendance
               <% } %>
             </button>
           </div>

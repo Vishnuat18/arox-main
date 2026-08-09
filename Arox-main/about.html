@@ -1,794 +1,468 @@
-
 <!DOCTYPE html>
 <html lang="en" class="theme-dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arox - About Us</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
-    
-    <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- Babel for JSX -->
-    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- TailwindCSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              // Standard Arox Colors
-              primary: 'var(--primary)',
-              secondary: 'var(--secondary)',
-              accent: 'var(--accent)',
-              background: 'var(--background)',
-              surface: 'var(--surface)',
-              'surface-elevated': 'var(--surface-elevated)',
-              heading: 'var(--heading)',
-              body: 'var(--body)',
-              muted: 'var(--muted)',
-              border: 'var(--border)',
-              // Monochrome Arox Colors
-              base: 'var(--bg)',
-              invert: 'var(--fg)',
-              borderline: 'var(--border-mono)',
-              'overlay-light': 'rgba(255, 255, 255, 0.1)',
-              'overlay-dark': 'rgba(0, 0, 0, 0.1)',
-            },
-            fontFamily: {
-              display: ['Sora', 'Space Grotesk', 'Inter', 'sans-serif'],
-              sans: ['Inter', 'sans-serif']
-            },
-            transitionTimingFunction: {
-              'expo': 'cubic-bezier(0.76, 0, 0.24, 1)',
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AROX TECH - Building scalable software and systems</title>
+  <meta name="description"
+    content="AROX Tech designs world-class enterprise architectures, digital platforms, and custom ERP integrations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            muted: "var(--muted)",
+            heading: "var(--heading)",
+            body: "var(--body)",
+            border: "var(--border)",
+            background: "var(--background)",
+            surface: "var(--surface)",
+            "surface-elevated": "var(--surface-elevated)",
+            primary: "var(--primary)"
           }
         }
       }
-    </script>
-
-    
-    <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
-    <!-- Framer Motion -->
-    <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
-    
-    <!-- Arox Theme Styles -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/style.css" />
-    
-    <style>
-
-        /* Monochrome CSS vars for new About page content */
-        :root {
-            --bg: #ffffff;
-            --fg: #000000;
-            --border-mono: #e5e5e5;
-        }
-
-        .dark, .theme-dark, .theme-navy {
-            --bg: #030303;
-            --fg: #ffffff;
-            --border-mono: #222222;
-        }
-
-        /* Typography Outlines for Hover Effects */
-        .text-outline {
-            color: transparent;
-            -webkit-text-stroke: 2px var(--fg);
-        }
-
-        .dark .text-outline, .theme-dark .text-outline, .theme-navy .text-outline {
-            -webkit-text-stroke: 2px var(--fg);
-        }
-
-        /* Grid Borders for Brutalist Look */
-        .brutal-grid {
-            border: 1px solid var(--border-mono);
-        }
-
-        .brutal-grid>div {
-            border: 1px solid var(--border-mono);
-            margin: -1px 0 0 -1px;
-        }
-
-        .marquee-container {
-            display: flex;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        .marquee-content {
-            display: flex;
-            animation: marquee 20s linear infinite;
-        }
-
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            background-color: var(--background);
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--body);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        @keyframes moveRightSlow {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0%); }
-        }
-
-        @keyframes moveLeftSlow {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-        }
-
-        .animate-slow-right {
-            animation: moveRightSlow 28s linear infinite;
-        }
-
-        .animate-slow-left {
-            animation: moveLeftSlow 28s linear infinite;
-        }
-
-        :root:not(.theme-light) .theme-nextjs-logo {
-            filter: invert(1);
-        }
-
-        /* Page Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #000;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #222;
-            border-radius: 4px;
-        }
-
-        /* Hide Scrollbar for native horizontal scroll containers */
-        .hide-scroll::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scroll {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/coverflow.css" />
 </head>
 <body>
-    <div class="noise-overlay" aria-hidden="true"></div>
-    <header id="site-header">
-      <div class="nav-inner">
-        <div class="nav-left">
-          <a href="#" class="nav-logo">
-            <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
-              onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
-            <span id="nav-logo-text"
-              style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
-          </a>
-          <div class="nav-divider">/</div>
-          <nav class="nav-links" aria-label="Main navigation">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="about.html" class="nav-link active"><span class="nav-link-indicator"></span>About</a>
-            <a href="services.html" class="nav-link">Services</a>
-            <a href="courses.html?tab=training" class="nav-link">Training</a>
-            <a href="courses.html?tab=internship" class="nav-link">Internships</a>
-            <a href="contact.html" class="nav-link">Contact</a>
-          </nav>
-        </div>
-        <div class="nav-right">
-          <a href="/login" class="nav-login">Login</a>
-          <button id="theme-toggle-btn" class="nav-theme-btn" aria-label="Toggle theme">
-            <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
-          </button>
-          <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
-            <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
-          </button>
+  <header id="site-header">
+    <div class="nav-inner">
+      <div class="nav-left">
+        <a href="#" class="nav-logo">
+          <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
+            onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
+          <span id="nav-logo-text"
+            style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
+        </a>
+        <div class="nav-divider">/</div>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a href="index.html" class="nav-link"><span class="nav-link-indicator"></span>Home</a>
+          <a href="about.html" class="nav-link active"><span class="nav-link-indicator"></span>About</a>
+          <a href="services.html" class="nav-link">Services</a>
+          <a href="courses1.html" class="nav-link">Courses</a>
+          <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+      </div>
+      <div class="nav-right">
+        <a href="/login" class="nav-login">Login</a>
+        <button id="theme-toggle-btn" class="nav-theme-btn" aria-label="Toggle theme">
+          <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+        </button>
+        <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
+          <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <div id="mobile-menu" aria-hidden="true">
+    <nav class="mobile-nav">
+      <a href="index.html" class="mobile-nav-link"><span>Home</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="about.html" class="mobile-nav-link active"><span>About</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="services.html" class="mobile-nav-link"><span>Services</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="courses1.html" class="mobile-nav-link"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="contact.html" class="mobile-nav-link"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+    </nav>
+    <div class="mobile-bottom">
+      <div class="mobile-theme-row">
+        <span>Theme</span>
+        <div class="mobile-theme-buttons">
+          <button class="mobile-theme-btn" data-theme="light">light</button>
+          <button class="mobile-theme-btn active" data-theme="dark">dark</button>
         </div>
       </div>
-    </header>
-    <div id="mobile-menu" aria-hidden="true">
-      <nav class="mobile-nav">
-        <a href="index.html" class="mobile-nav-link"><span>Home</span><svg width="24" height="24" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="9 18 15 12 9 6" />
-          </svg></a>
-        <a href="about.html" class="mobile-nav-link active"><span>About</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2.5">
-            <polyline points="9 18 15 12 9 6" />
-          </svg></a>
-        <a href="services.html" class="mobile-nav-link"><span>Services</span><svg width="24" height="24" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="9 18 15 12 9 6" />
-          </svg></a>
-        <a href="courses.html?tab=training" class="mobile-nav-link"><span>Training</span><svg width="24" height="24" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="9 18 15 12 9 6" />
-          </svg></a>
-        <a href="courses.html?tab=internship" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="9 18 15 12 9 6" />
-          </svg></a>
-        <a href="contact.html" class="mobile-nav-link"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2.5">
-            <polyline points="9 18 15 12 9 6" />
-          </svg></a>
-      </nav>
-      <div class="mobile-bottom">
-        <div class="mobile-theme-row">
-          <span>Theme</span>
-          <div class="mobile-theme-buttons">
-            <button class="mobile-theme-btn" data-theme="light">light</button>
-            <button class="mobile-theme-btn active" data-theme="dark">dark</button>
-          </div>
+      <a href="/login" class="mobile-login-btn">Login</a>
+      <a href="#" class="mobile-cta-btn">Get Started</a>
+    </div>
+  </div>
+  
+  <main class="pt-[90px] bg-background text-body relative overflow-hidden">
+    <!-- Hero Section -->
+    <section class="relative bg-black text-white py-24 min-h-[450px] flex items-center justify-center overflow-hidden">
+      <!-- Hero Background Image (Grayscale and high contrast) -->
+      <div class="absolute inset-0 z-0 opacity-40">
+        <img src="assets/about_hero_image.png" alt="Arox About Us Hero" class="w-full h-full object-cover filter grayscale" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+      </div>
+      
+      <div class="max-w-6xl mx-auto px-6 relative z-10 w-full flex flex-col md:flex-row justify-between items-center gap-12">
+        <div class="flex flex-col text-left">
+          <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight uppercase leading-[0.9] font-display">
+            ELEVATING<br/>THE ESSENCE
+          </h1>
+          <p class="text-2xl font-light italic tracking-wider mt-4 opacity-80" style="font-family: Georgia, serif;">
+            ABOUT US
+          </p>
+        </div>
+      </div>
+    </section>
 
-<main class="flex-grow pt-[80px] lg:pt-[96px]">
+    <!-- Our Mission Section -->
+    <section class="py-24 bg-background border-b border-border">
+      <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <!-- Left side: Mission text inside diagonal SVG trapezoid -->
+        <div class="relative w-full h-48 md:h-64 flex items-center justify-center overflow-hidden">
+          <svg class="absolute inset-0 w-full h-full text-border" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polygon points="1,1 99,1 75,99 1,99" fill="none" stroke="currentColor" stroke-width="1" />
+          </svg>
+          <h2 class="relative z-10 text-4xl md:text-5xl font-extrabold uppercase tracking-tight text-heading pr-12 font-display">
+            OUR MISSION
+          </h2>
+        </div>
+        <!-- Right side: Mission description -->
+        <div class="bg-surface border border-border rounded-2xl p-8 md:p-12">
+          <p class="text-sm md:text-base leading-relaxed opacity-90 text-body">
+            Our mission statement is committed to analyzing user concerns. By understanding the core needs of our clients, we personalize and elevate the standard of service. We focus on opportunity, innovation, and value creation to support growth. Our strategy integrates cutting-edge technology to build collaborative and future-proof digital solutions.
+          </p>
+        </div>
+      </div>
+    </section>
 
-        <!-- Hero Section -->
-        <section
-            class="relative min-h-[70vh] lg:min-h-[85vh] flex items-center border-b border-borderline overflow-hidden">
-            <!-- Full bleed background image with monochrome overlay -->
-            <div class="absolute inset-0 z-0">
-                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"
-                    alt="Architecture" class="w-full h-full object-cover" />
-                <!-- The gradient ensures text readability. Light mode gets white gradient, Dark mode gets black gradient -->
-                <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-base via-base/90 to-base/20">
-                </div>
-            </div>
+    <!-- Our Vision Section -->
+    <section class="py-24 bg-background border-b border-border">
+      <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <!-- Left side: Vision description -->
+        <div class="bg-surface border border-border rounded-2xl p-8 md:p-12 order-2 md:order-1">
+          <p class="text-sm md:text-base leading-relaxed opacity-90 text-body">
+            Our vision is to stand as a benchmark of excellence, leading with transformation and sustainability. We set new standards of efficiency, economy, and functional creativity, ensuring that every digital product we engineer is built with reliability and lasting essence.
+          </p>
+        </div>
+        <!-- Right side: Vision text inside diagonal SVG trapezoid (Filled) -->
+        <div class="relative w-full h-48 md:h-64 flex items-center justify-center overflow-hidden order-1 md:order-2">
+          <svg class="absolute inset-0 w-full h-full text-border" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polygon points="25,1 99,1 99,99 1,99" fill="var(--surface-elevated)" stroke="currentColor" stroke-width="1" />
+          </svg>
+          <h2 class="relative z-10 text-4xl md:text-5xl font-extrabold uppercase tracking-tight text-heading pl-12 font-display">
+            OUR VISION
+          </h2>
+        </div>
+      </div>
+    </section>
 
-            <div class="max-w-[1400px] mx-auto w-full px-6 relative z-10 py-20">
-                <div class="w-full lg:w-[80%]">
-                    <div class="inline-flex items-center gap-4 mb-8">
-                        <span class="w-12 h-[2px] bg-invert"></span>
-                        <span class="uppercase font-bold tracking-[0.3em] text-xs">About Us</span>
-                    </div>
-                    <h1
-                        class="text-6xl md:text-7xl lg:text-[100px] font-extrabold font-display tracking-tighter mb-8 leading-[0.95] uppercase">
-                        Digital <br /> Experiences <br /> <span class="text-outline">Redefined.</span>
-                    </h1>
-                    <p class="text-muted text-lg lg:text-2xl mb-12 leading-relaxed max-w-2xl font-light">
-                        We strip away the noise to build powerful, scalable, and ruthlessly efficient software
-                        solutions. Pure function meets undeniable form.
-                    </p>
-                    <a class="inline-flex items-center gap-4 px-8 py-5 bg-invert text-base font-bold uppercase tracking-widest text-sm transition-transform duration-300 hover:scale-105"
-                        href="#">
-                        Initiate Project
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" class="mt-[-2px]">
-                            <path d="M5 12h14"></path>
-                            <path d="m12 5 7 7-7 7"></path>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Mission & Vision Section -->
-        <section class="grid grid-cols-1 lg:grid-cols-2 w-full border-b border-borderline">
-            <!-- Mission -->
-            <div
-                class="p-10 lg:p-24 border-b lg:border-b-0 lg:border-r border-borderline flex flex-col justify-between min-h-[500px] relative overflow-hidden group">
-                <div
-                    class="absolute top-10 right-10 w-32 h-32 border border-borderline rounded-full flex items-center justify-center transition-transform duration-700 group-hover:scale-110">
-                    <div class="w-16 h-16 bg-invert rounded-full"></div>
-                </div>
-                <div class="relative z-10 mt-32">
-                    <span class="uppercase font-bold tracking-[0.2em] text-xs mb-6 block text-muted">Mission</span>
-                    <h2 class="text-4xl lg:text-6xl font-display font-extrabold mb-8 leading-tight tracking-tight">
-                        Empower <br /> Through Logic.
-                    </h2>
-                    <p class="text-muted text-lg leading-relaxed max-w-md mb-10">
-                        Delivering innovative, reliable, and highly scalable digital architecture that empowers
-                        businesses to dominate their sector.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Vision -->
-            <div
-                class="p-10 lg:p-24 flex flex-col justify-between min-h-[500px] relative overflow-hidden group bg-invert text-base">
-                <div
-                    class="absolute top-10 right-10 w-32 h-32 border border-base/20 flex items-center justify-center transition-transform duration-700 group-hover:rotate-45">
-                    <div class="w-16 h-16 bg-base"></div>
-                </div>
-                <div class="relative z-10 mt-32">
-                    <span class="uppercase font-bold tracking-[0.2em] text-xs mb-6 block opacity-70">Vision</span>
-                    <h2 class="text-4xl lg:text-6xl font-display font-extrabold mb-8 leading-tight tracking-tight">
-                        Global <br /> Standard.
-                    </h2>
-                    <p class="text-base/70 text-lg leading-relaxed max-w-md mb-10">
-                        To forge a future where technology is seamless, essential, and beautiful. Setting the global
-                        benchmark for digital innovation.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Core Values Section (Brutalist Grid) -->
-        <section class="py-24 border-b border-borderline">
-            <div class="max-w-[1400px] mx-auto px-6">
-                <div class="mb-16">
-                    <span class="uppercase font-bold tracking-[0.2em] text-xs mb-4 block text-muted">Principles</span>
-                    <h2 class="text-4xl lg:text-6xl font-display font-extrabold tracking-tight">The Core Matrix.</h2>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 brutal-grid">
-                    <!-- Value 1 -->
-                    <div class="p-10 hover:bg-invert hover:text-base transition-colors duration-300 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.5" class="mb-8">
-                            <rect width="18" height="18" x="3" y="3" rx="2" />
-                            <path d="M3 9h18" />
-                            <path d="M9 21V9" />
-                        </svg>
-                        <h3 class="text-2xl font-bold font-display mb-4 uppercase">Integrity</h3>
-                        <p class="text-muted group-hover:text-base/70 leading-relaxed text-sm">Transparency and absolute
-                            truth in code and communication. No exceptions.</p>
-                    </div>
-                    <!-- Value 2 -->
-                    <div class="p-10 hover:bg-invert hover:text-base transition-colors duration-300 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.5" class="mb-8">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M12 2v20" />
-                            <path d="M2 12h20" />
-                        </svg>
-                        <h3 class="text-2xl font-bold font-display mb-4 uppercase">Innovation</h3>
-                        <p class="text-muted group-hover:text-base/70 leading-relaxed text-sm">Relentless pursuit of the
-                            next frontier. We do not rest on past architectures.</p>
-                    </div>
-                    <!-- Value 3 -->
-                    <div class="p-10 hover:bg-invert hover:text-base transition-colors duration-300 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.5" class="mb-8">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
-                        <h3 class="text-2xl font-bold font-display mb-4 uppercase">Sync</h3>
-                        <p class="text-muted group-hover:text-base/70 leading-relaxed text-sm">Perfect alignment between
-                            our engineers and your vision. True collaboration.</p>
-                    </div>
-                    <!-- Value 4 -->
-                    <div class="p-10 hover:bg-invert hover:text-base transition-colors duration-300 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.5" class="mb-8">
-                            <polygon
-                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                        </svg>
-                        <h3 class="text-2xl font-bold font-display mb-4 uppercase">Excellence</h3>
-                        <p class="text-muted group-hover:text-base/70 leading-relaxed text-sm">Craftsmanship in every
-                            line of code. We deploy only when it is flawless.</p>
-                    </div>
-                    <!-- Value 5 -->
-                    <div class="p-10 hover:bg-invert hover:text-base transition-colors duration-300 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.5" class="mb-8">
-                            <path
-                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                        </svg>
-                        <h3 class="text-2xl font-bold font-display mb-4 uppercase">User-Centric</h3>
-                        <p class="text-muted group-hover:text-base/70 leading-relaxed text-sm">Systems designed for
-                            human interaction. The end-user is the ultimate judge.</p>
-                    </div>
-                    <!-- Value 6 -->
-                    <div class="p-10 hover:bg-invert hover:text-base transition-colors duration-300 group">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.5" class="mb-8">
-                            <path d="m18 15-6-6-6 6" />
-                        </svg>
-                        <h3 class="text-2xl font-bold font-display mb-4 uppercase">Evolution</h3>
-                        <p class="text-muted group-hover:text-base/70 leading-relaxed text-sm">Constant iteration.
-                            Standing still is moving backwards in the digital space.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Process Section (Monochrome Rolling Text) -->
-        <section class="py-24 border-b border-borderline">
-            <div class="max-w-[1400px] mx-auto px-6">
-                <h3 class="mb-16 text-xs font-bold uppercase tracking-[0.2em] text-muted">
-                    Execution Pipeline
-                </h3>
-
-                <div class="w-full flex flex-col">
-
-                    <!-- Discover -->
-                    <div class="group relative w-full cursor-pointer border-t border-borderline py-8 md:py-12">
-                        <!-- Rolling text container -->
-                        <div class="relative overflow-hidden h-[60px] md:h-24">
-                            <div class="transition-transform duration-500 ease-expo group-hover:-translate-y-1/2">
-                                <!-- State 1: Normal -->
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter text-invert">
-                                        Discover
-                                    </h2>
-                                </div>
-                                <!-- State 2: Hover (Outline + Italic) -->
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter italic text-outline">
-                                        Discover
-                                    </h2>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Category Label -->
-                        <span
-                            class="absolute top-12 right-0 text-xs font-bold uppercase tracking-[0.2em] text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
-                            Phase 01 / Research
-                        </span>
-
-                        <!-- Image Reveal Effect -->
-                        <div
-                            class="pointer-events-none absolute right-0 top-1/2 z-20 h-40 w-64 -translate-y-1/2 overflow-hidden border border-borderline shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 translate-x-8 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 hidden lg:block">
-                            <div class="relative h-full w-full bg-base">
-                                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&auto=format&fit=crop&q=60"
-                                    alt="Discover" class="process-img absolute inset-0 h-full w-full object-cover" />
-                                <div class="absolute inset-0 bg-invert/10 mix-blend-overlay"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Design -->
-                    <div class="group relative w-full cursor-pointer border-t border-borderline py-8 md:py-12">
-                        <div class="relative overflow-hidden h-[60px] md:h-24">
-                            <div class="transition-transform duration-500 ease-expo group-hover:-translate-y-1/2">
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter text-invert">
-                                        Design
-                                    </h2>
-                                </div>
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter italic text-outline">
-                                        Design
-                                    </h2>
-                                </div>
-                            </div>
-                        </div>
-                        <span
-                            class="absolute top-12 right-0 text-xs font-bold uppercase tracking-[0.2em] text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
-                            Phase 02 / Experience
-                        </span>
-                        <div
-                            class="pointer-events-none absolute right-0 top-1/2 z-20 h-40 w-64 -translate-y-1/2 overflow-hidden border border-borderline shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 translate-x-8 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 hidden lg:block">
-                            <div class="relative h-full w-full bg-base">
-                                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&auto=format&fit=crop&q=60"
-                                    alt="Design" class="process-img absolute inset-0 h-full w-full object-cover" />
-                                <div class="absolute inset-0 bg-invert/10 mix-blend-overlay"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Develop -->
-                    <div class="group relative w-full cursor-pointer border-t border-borderline py-8 md:py-12">
-                        <div class="relative overflow-hidden h-[60px] md:h-24">
-                            <div class="transition-transform duration-500 ease-expo group-hover:-translate-y-1/2">
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter text-invert">
-                                        Develop
-                                    </h2>
-                                </div>
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter italic text-outline">
-                                        Develop
-                                    </h2>
-                                </div>
-                            </div>
-                        </div>
-                        <span
-                            class="absolute top-12 right-0 text-xs font-bold uppercase tracking-[0.2em] text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
-                            Phase 03 / Engineering
-                        </span>
-                        <div
-                            class="pointer-events-none absolute right-0 top-1/2 z-20 h-40 w-64 -translate-y-1/2 overflow-hidden border border-borderline shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 translate-x-8 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 hidden lg:block">
-                            <div class="relative h-full w-full bg-base">
-                                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=60"
-                                    alt="Develop" class="process-img absolute inset-0 h-full w-full object-cover" />
-                                <div class="absolute inset-0 bg-invert/10 mix-blend-overlay"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Deploy -->
-                    <div class="group relative w-full cursor-pointer border-y border-borderline py-8 md:py-12">
-                        <div class="relative overflow-hidden h-[60px] md:h-24">
-                            <div class="transition-transform duration-500 ease-expo group-hover:-translate-y-1/2">
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter text-invert">
-                                        Deploy
-                                    </h2>
-                                </div>
-                                <div class="h-[60px] md:h-24 flex items-center">
-                                    <h2
-                                        class="text-6xl md:text-8xl font-black font-display uppercase tracking-tighter italic text-outline">
-                                        Deploy
-                                    </h2>
-                                </div>
-                            </div>
-                        </div>
-                        <span
-                            class="absolute top-12 right-0 text-xs font-bold uppercase tracking-[0.2em] text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
-                            Phase 04 / Launch
-                        </span>
-                        <div
-                            class="pointer-events-none absolute right-0 top-1/2 z-20 h-40 w-64 -translate-y-1/2 overflow-hidden border border-borderline shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 translate-x-8 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 hidden lg:block">
-                            <div class="relative h-full w-full bg-base">
-                                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=600&auto=format&fit=crop&q=60"
-                                    alt="Deploy" class="process-img absolute inset-0 h-full w-full object-cover" />
-                                <div class="absolute inset-0 bg-invert/10 mix-blend-overlay"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Team Section -->
-        <section class="py-24 px-6 border-b border-borderline">
-            <div class="max-w-[1400px] mx-auto">
-                <div class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
-                    <div>
-                        <span class="uppercase font-bold tracking-[0.2em] text-xs mb-4 block text-muted">The
-                            Architects</span>
-                        <h2 class="text-4xl lg:text-6xl font-display font-extrabold tracking-tight">Leadership.</h2>
-                    </div>
-                    <a href="#"
-                        class="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest hover:opacity-70 transition-opacity">
-                        View Full Team <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-                    <!-- Member 1 -->
-                    <div class="group cursor-pointer">
-                        <div class="w-full aspect-[3/4] mb-6 overflow-hidden border border-borderline bg-muted/10">
-                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=600&auto=format&fit=crop"
-                                alt="Vishnu R"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        </div>
-                        <h3 class="text-xl font-bold font-display uppercase tracking-tight mb-1">Vishnu R</h3>
-                        <p class="text-sm text-muted uppercase tracking-widest font-medium mb-4">Founder / CEO</p>
-                        <div class="w-full h-[1px] bg-borderline group-hover:bg-invert transition-colors duration-500">
-                        </div>
-                    </div>
-
-                    <!-- Member 2 -->
-                    <div class="group cursor-pointer">
-                        <div class="w-full aspect-[3/4] mb-6 overflow-hidden border border-borderline bg-muted/10">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=600&auto=format&fit=crop"
-                                alt="Kavya S"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        </div>
-                        <h3 class="text-xl font-bold font-display uppercase tracking-tight mb-1">Kavya S</h3>
-                        <p class="text-sm text-muted uppercase tracking-widest font-medium mb-4">Design Lead</p>
-                        <div class="w-full h-[1px] bg-borderline group-hover:bg-invert transition-colors duration-500">
-                        </div>
-                    </div>
-
-                    <!-- Member 3 -->
-                    <div class="group cursor-pointer">
-                        <div class="w-full aspect-[3/4] mb-6 overflow-hidden border border-borderline bg-muted/10">
-                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop"
-                                alt="Arun Prasath"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        </div>
-                        <h3 class="text-xl font-bold font-display uppercase tracking-tight mb-1">Arun Prasath</h3>
-                        <p class="text-sm text-muted uppercase tracking-widest font-medium mb-4">Tech Lead</p>
-                        <div class="w-full h-[1px] bg-borderline group-hover:bg-invert transition-colors duration-500">
-                        </div>
-                    </div>
-
-                    <!-- Member 4 -->
-                    <div class="group cursor-pointer">
-                        <div class="w-full aspect-[3/4] mb-6 overflow-hidden border border-borderline bg-muted/10">
-                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=600&auto=format&fit=crop"
-                                alt="Divya R"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                        </div>
-                        <h3 class="text-xl font-bold font-display uppercase tracking-tight mb-1">Divya R</h3>
-                        <p class="text-sm text-muted uppercase tracking-widest font-medium mb-4">Project Mgr</p>
-                        <div class="w-full h-[1px] bg-borderline group-hover:bg-invert transition-colors duration-500">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section class="py-32 px-6 overflow-hidden">
-            <div class="max-w-[1400px] mx-auto border border-invert relative p-12 lg:p-24 bg-invert text-base group">
-                <!-- Brutalist Corner Accents -->
-                <div
-                    class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-base -translate-x-1 -translate-y-1">
-                </div>
-                <div
-                    class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-base translate-x-1 -translate-y-1">
-                </div>
-                <div
-                    class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-base -translate-x-1 translate-y-1">
-                </div>
-                <div
-                    class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-base translate-x-1 translate-y-1">
-                </div>
-
-                <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
-                    <div class="max-w-2xl">
-                        <h2
-                            class="text-5xl lg:text-7xl font-display font-extrabold mb-6 tracking-tighter uppercase leading-[0.9]">
-                            Initialize <br /> Sequence.
-                        </h2>
-                        <p class="text-base/80 text-lg lg:text-xl font-light">
-                            Ready to build something uncompromising? Deploy your ideas with our engineering team today.
-                        </p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row gap-6 shrink-0">
-                        <a href="#"
-                            class="px-10 py-5 bg-base text-invert font-bold uppercase tracking-widest text-sm text-center hover:opacity-80 transition-opacity">
-                            Start Project
-                        </a>
-                        <a href="#"
-                            class="px-10 py-5 border border-base text-base font-bold uppercase tracking-widest text-sm text-center hover:bg-base hover:text-invert transition-colors">
-                            Consultation
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Background visual noise/pattern -->
-                <div class="absolute inset-0 opacity-10 pointer-events-none"
-                    style="background-image: radial-gradient(var(--bg) 1px, transparent 1px); background-size: 24px 24px;">
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-<!-- PRE-FOOTER CTA SECTION -->
-    <section class="cta-section">
-      <div class="cta-card">
-        <div class="cta-card-borders"></div>
-        <div class="corner-plus top-left">+</div>
-        <div class="corner-plus top-right">+</div>
-        <div class="corner-plus bottom-left">+</div>
-        <div class="corner-plus bottom-right">+</div>
-        
-        <div class="cta-content">
-          <span class="cta-eyebrow">SOLUTIONS</span>
-          <h2 class="cta-heading">Have an Idea? Let’s Make It Real.</h2>
-          <p class="cta-text">From software and AI to cloud and digital experiences, we build solutions designed for real-world impact.</p>
-          <div class="cta-action-row">
-            <a href="contact.html" class="cta-btn-solid">
-              <span>Start Your Project</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
+    <!-- Our Core Values Section -->
+    <section class="py-24 bg-background border-b border-border">
+      <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <!-- Left side: Core Values text inside diagonal SVG trapezoid (Filled) -->
+        <div class="relative w-full h-48 md:h-64 flex items-center justify-center overflow-hidden">
+          <svg class="absolute inset-0 w-full h-full text-border" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <polygon points="1,1 75,1 99,99 1,99" fill="var(--surface-elevated)" stroke="currentColor" stroke-width="1" />
+          </svg>
+          <h2 class="relative z-10 text-3xl md:text-4xl font-extrabold uppercase tracking-tight text-heading pr-12 font-display">
+            OUR CORE VALUES
+          </h2>
+        </div>
+        <!-- Right side: Core values details -->
+        <div class="space-y-8">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-heading text-background flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
               </svg>
-            </a>
-            <a href="contact.html" class="cta-btn-outline">Talk to an Expert</a>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-heading">Integrity</h3>
+              <p class="text-sm text-muted mt-1 leading-relaxed">
+                Integrity for designers and engineers. Staying true to our core principles, quality craftsmanship, and transparency in everything we deliver.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-heading text-background flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A7 7 0 0 0 4 8c0 1.3.5 2.6 1.5 3.5.7.8 1.3 1.5 1.5 2.5"></path>
+                <line x1="9" y1="18" x2="15" y2="18"></line>
+                <line x1="10" y1="22" x2="14" y2="22"></line>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-heading">Innovation</h3>
+              <p class="text-sm text-muted mt-1 leading-relaxed">
+                Innovation is our material and foundation of excellence. Constant research and prototyping of new digital solutions for impact.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-heading text-background flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="7"></circle>
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-heading">Quality</h3>
+              <p class="text-sm text-muted mt-1 leading-relaxed">
+                Premium standards of core quality aspects. From high performance engineering to visually refined layouts, we design for excellence.
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <footer>
-      <div class="footer-glow-1"></div>
-      <div class="footer-glow-2"></div>
-      <div class="footer-watermark">Arox Tech</div>
-      <div class="footer-inner">
-        <div class="footer-grid">
-          <div>
-            <a href="#" style="display:inline-block;margin-bottom:.5rem;">
-              <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech"
-                style="height:3rem;width:auto;"
-                onerror="this.style.display='none';document.getElementById('footer-logo-text').style.display='block'" />
-              <span id="footer-logo-text"
-                style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--heading);">AROX</span>
-            </a>
-            <p class="footer-tagline">We build digital products, AI solutions, and powerful experiences that help
-              businesses grow faster and smarter.</p>
-            <div class="footer-socials">
-              <a href="#" class="footer-social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24">
-                  <path
-                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                </svg></a>
-              <a href="#" class="footer-social-btn" aria-label="Twitter"><svg viewBox="0 0 24 24">
-                  <path
-                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                </svg></a>
-              <a href="#" class="footer-social-btn" aria-label="GitHub"><svg viewBox="0 0 24 24">
-                  <path
-                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-                </svg></a>
+    <!-- Our Process Section -->
+    <section class="py-24 bg-background border-b border-border">
+      <div class="mx-auto flex w-full max-w-2xl flex-col items-center justify-center px-6">
+        <h3 class="mb-8 text-xs font-bold uppercase tracking-[0.2em] text-muted self-start md:self-center">
+          Process
+        </h3>
+        
+        <div class="w-full flex flex-col">
+          <!-- Discover -->
+          <div class="group relative w-full cursor-pointer border-b border-border py-6">
+            <div class="relative overflow-hidden h-[60px] md:h-20">
+              <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black text-heading uppercase tracking-tighter font-display">
+                    Discover
+                  </h2>
+                </div>
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-muted font-display">
+                    Discover
+                  </h2>
+                </div>
+              </div>
             </div>
-            <p class="footer-copyright">&copy; <span>AROX Tech <span id="footer-year"></span></span> &bull; All Rights
-              Reserved</p>
-          </div>
-          <div>
-            <h4 class="footer-col-title">Company</h4>
-            <ul class="footer-links">
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="footer-col-title">Services</h4>
-            <ul class="footer-links">
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
-              <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="footer-col-title">Contact</h4>
-            <div class="footer-contact-items">
-              <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>Salem, Tamil Nadu, India</div>
-              <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <path
-                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z" />
-                </svg>+91 12345 67890</div>
-              <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                  <polyline points="22,6 12,13 2,6" />
-                </svg>info@aroxtech.com</div>
+            <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+              Research
+            </span>
+            <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+              <div class="relative h-full w-full bg-surface">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&auto=format&fit=crop&q=60" alt="Team discovering insights" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                <div class="absolute inset-0 bg-heading/10 mix-blend-overlay"></div>
+              </div>
             </div>
-            <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-                <path
-                  d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
-              </svg><span>Let's Build Something<br />Amazing Together</span></a>
+          </div>
+
+          <!-- Design -->
+          <div class="group relative w-full cursor-pointer border-b border-border py-6">
+            <div class="relative overflow-hidden h-[60px] md:h-20">
+              <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black text-heading uppercase tracking-tighter font-display">
+                    Design
+                  </h2>
+                </div>
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-muted font-display">
+                    Design
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+              Experience
+            </span>
+            <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+              <div class="relative h-full w-full bg-surface">
+                <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=400&auto=format&fit=crop&q=60" alt="Design collaboration" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                <div class="absolute inset-0 bg-heading/10 mix-blend-overlay"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Develop -->
+          <div class="group relative w-full cursor-pointer border-b border-border py-6">
+            <div class="relative overflow-hidden h-[60px] md:h-20">
+              <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black text-heading uppercase tracking-tighter font-display">
+                    Develop
+                  </h2>
+                </div>
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-muted font-display">
+                    Develop
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+              Engineering
+            </span>
+            <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+              <div class="relative h-full w-full bg-surface">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&auto=format&fit=crop&q=60" alt="Developers coding" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                <div class="absolute inset-0 bg-heading/10 mix-blend-overlay"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deploy -->
+          <div class="group relative w-full cursor-pointer border-b border-border py-6">
+            <div class="relative overflow-hidden h-[60px] md:h-20">
+              <div class="transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:-translate-y-1/2">
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black text-heading uppercase tracking-tighter font-display">
+                    Deploy
+                  </h2>
+                </div>
+                <div class="h-[60px] md:h-20 flex items-center">
+                  <h2 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic text-muted font-display">
+                    Deploy
+                  </h2>
+                </div>
+              </div>
+            </div>
+            <span class="absolute top-8 right-0 text-xs font-bold uppercase tracking-widest text-muted transition-opacity duration-300 group-hover:opacity-0 hidden md:block">
+              Launch
+            </span>
+            <div class="pointer-events-none absolute right-0 top-1/2 z-20 h-32 w-48 -translate-y-1/2 overflow-hidden rounded-lg shadow-2xl transition-all duration-500 ease-out opacity-0 scale-95 rotate-3 translate-x-4 group-hover:opacity-100 group-hover:scale-100 group-hover:rotate-0 group-hover:translate-x-0">
+              <div class="relative h-full w-full bg-surface">
+                <img src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=400&auto=format&fit=crop&q=60" alt="Product launch" class="absolute inset-0 h-full w-full object-cover grayscale transition-all duration-500 ease-out group-hover:grayscale-0" />
+                <div class="absolute inset-0 bg-heading/10 mix-blend-overlay"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </footer>
-    <script src="js/main.js" defer></script>
+    </section>
+
+  <!-- PRE-FOOTER CTA SECTION -->
+  <section class="cta-section">
+    <div class="cta-card">
+      <div class="cta-card-borders"></div>
+      <div class="corner-plus top-left">+</div>
+      <div class="corner-plus top-right">+</div>
+      <div class="corner-plus bottom-left">+</div>
+      <div class="corner-plus bottom-right">+</div>
+      
+      <div class="cta-content">
+        <span class="cta-eyebrow">COLLABORATE</span>
+        <h2 class="cta-heading">Let’s Build Something Great Together.</h2>
+        <p class="cta-text">Discover the people, values, and vision behind AROX Tech.</p>
+        <div class="cta-action-row">
+          <a href="contact.html" class="cta-btn-solid">
+            <span>Get in Touch</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="services.html" class="cta-btn-outline">Explore Services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-glow-1"></div>
+    <div class="footer-glow-2"></div>
+    <div class="footer-watermark">Arox Tech</div>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <a href="#" style="display:inline-block;margin-bottom:.5rem;">
+            <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech"
+              style="height:3rem;width:auto;"
+              onerror="this.style.display='none';document.getElementById('footer-logo-text').style.display='block'" />
+            <span id="footer-logo-text"
+              style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--heading);">AROX</span>
+          </a>
+          <p class="footer-tagline">We build digital products, AI solutions, and powerful experiences that help
+            businesses grow faster and smarter.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+              </svg></a>
+            <a href="#" class="footer-social-btn" aria-label="Twitter"><svg viewBox="0 0 24 24">
+                <path
+                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+              </svg></a>
+            <a href="#" class="footer-social-btn" aria-label="GitHub"><svg viewBox="0 0 24 24">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg></a>
+          </div>
+          <p class="footer-copyright">&copy; <span>AROX Tech <span id="footer-year"></span></span> &bull; All Rights
+            Reserved</p>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Company</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Services</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
+            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Contact</h4>
+          <div class="footer-contact-items">
+            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>Salem, Tamil Nadu, India</div>
+            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z" />
+              </svg>+91 12345 67890</div>
+            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>info@aroxtech.com</div>
+          </div>
+          <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2">
+              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+              <path
+                d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+            </svg><span>Let's Build Something<br />Amazing Together</span></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

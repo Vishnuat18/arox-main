@@ -648,3 +648,28 @@ body.erp-body {
   color: var(--erp-text-secondary);
   border-color: var(--erp-border);
 }
+
+/* Sidebar logo centering and sizing overrides */
+.sidebar-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.sidebar-logo-large {
+  height: 65px !important; /* Make it bigger */
+  width: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  display: block;
+}
+.erp-sidebar:not(.collapsed) .erp-sidebar-header {
+  position: relative;
+  justify-content: center; /* Center the logo container */
+}
+.erp-sidebar:not(.collapsed) .sidebar-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}

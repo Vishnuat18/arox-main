@@ -60,6 +60,68 @@ app.use('/api/registrations', require('./routes/api/registrations'));
 app.use('/api/payments', require('./routes/api/payments'));
 app.use('/api/student', require('./routes/api/student'));
 
+// Standalone Generators API
+app.get('/api/students', (req, res) => {
+  try {
+    const { getDb } = require('./config/database');
+    const db = getDb();
+    
+    // Query students joined with registrations and courses
+    const students = db.prepare(`
+      SELECT 
+        s.id as db_id,
+        s.student_id as id,
+        (s.first_name || ' ' || s.last_name) as name,
+        s.department,
+        s.college as collegeName,
+        s.year_of_study as year,
+        s.status as student_status,
+        c.title as internship,
+        c.trainer_name as trainerName
+      FROM students s
+      LEFT JOIN registrations r ON r.student_id = s.id
+      LEFT JOIN courses c ON r.course_id = c.id
+      ORDER BY s.first_name ASC
+    `).all();
+
+    // Query attendances for all students
+    const attendances = db.prepare(`
+      SELECT student_id, date, status 
+      FROM attendance
+    `).all();
+
+    // Map attendances by student database ID
+    const attendanceMap = {};
+    attendances.forEach(a => {
+      if (!attendanceMap[a.student_id]) {
+        attendanceMap[a.student_id] = [];
+      }
+      attendanceMap[a.student_id].push({
+        date: a.date,
+        status: (a.status || 'present').toUpperCase()
+      });
+    });
+
+    // Format the result array
+    const formatted = students.map(s => ({
+      id: s.id,
+      name: s.name,
+      department: s.department || 'N/A',
+      collegeName: s.collegeName || 'N/A',
+      year: s.year || 'Final Year',
+      internship: s.internship || 'Internship Candidate',
+      trainerName: s.trainerName || 'Arox Mentor',
+      status: (s.student_status || 'active').toUpperCase(),
+      attendances: attendanceMap[s.db_id] || []
+    }));
+
+    res.json(formatted);
+  } catch (error) {
+    console.error('API /api/students error:', error);
+    res.status(500).json({ error: 'Failed to fetch students' });
+  }
+});
+
 // Web (page) routes
 app.use('/admin', require('./routes/web/admin'));
 app.use('/student', require('./routes/web/student'));
