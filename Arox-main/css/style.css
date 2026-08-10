@@ -1,39 +1,21 @@
 /* ─── THEMES ─────────────────────────────────────────────── */
 :root, .theme-light {
-  --primary: #000000; --secondary: #3C4043; --accent: #5F6368;
+  --primary: #155EEF; --secondary: #175cd3; --accent: #0f4ebb;
   --background: #FFFFFF; --surface: #F8F9FA; --surface-elevated: #FFFFFF;
-  --heading: #202124; --body: #5F6368; --muted: #9AA0A6; --border: #DADCE0;
+  --heading: #111827; --body: #4B5563; --muted: #6B7280; --border: #E5E7EB;
   --success: #34A853; --warning: #FBBC04; --error: #EA4335;
-  --glow-color: rgba(0,0,0,0.05); --glow-color-solid: #000000;
+  --glow-color: rgba(21, 94, 239, 0.15); --glow-color-solid: #155EEF;
   --card-shadow: 0 1px 2px 0 rgba(60,64,67,0.3),0 1px 3px 1px rgba(60,64,67,0.15);
-  
-  /* Bento Dual Monochrome Palette Settings */
-  --bento-bg-1: #FFFFFF;
-  --bento-bg-2: #F1F3F4;
-  --bento-text: #202124;
-  --bento-desc: #5F6368;
-  --bento-border: #DADCE0;
-  --bento-glow: rgba(0,0,0,0.08);
-  --bento-blob: rgba(0,0,0,0.015);
-  --bento-ripple: 0,0,0;
+  --bento-bg-1: #FFFFFF; --bento-bg-2: #F1F3F4; --bento-text: #202124; --bento-desc: #5F6368; --bento-border: #E5E7EB; --bento-glow: rgba(0,0,0,0.08); --bento-blob: rgba(0,0,0,0.015); --bento-ripple: 0,0,0;
 }
 .theme-navy, .theme-dark {
-  --primary: #FFFFFF; --secondary: #E8EAED; --accent: #9AA0A6;
-  --background: #000000; --surface: #202124; --surface-elevated: #3C4043;
-  --heading: #FFFFFF; --body: #E8EAED; --muted: #9AA0A6; --border: #3C4043;
+  --primary: #FF6B00; --secondary: #e66000; --accent: #cc5500;
+  --background: #000000; --surface: #121212; --surface-elevated: #1f1f1f;
+  --heading: #FFFFFF; --body: #E8EAED; --muted: #9AA0A6; --border: #333333;
   --success: #81C995; --warning: #FDE293; --error: #F28B82;
-  --glow-color: rgba(255,255,255,0.1); --glow-color-solid: #FFFFFF;
+  --glow-color: rgba(255, 107, 0, 0.15); --glow-color-solid: #FF6B00;
   --card-shadow: 0 1px 2px 0 rgba(0,0,0,0.3),0 1px 3px 1px rgba(0,0,0,0.15);
-
-  /* Bento Dual Monochrome Palette Settings */
-  --bento-bg-1: #000000;
-  --bento-bg-2: #141414;
-  --bento-text: #FFFFFF;
-  --bento-desc: #A1A1AA;
-  --bento-border: #222222;
-  --bento-glow: rgba(255,255,255,0.12);
-  --bento-blob: rgba(255,255,255,0.03);
-  --bento-ripple: 255,255,255;
+  --bento-bg-1: #000000; --bento-bg-2: #141414; --bento-text: #FFFFFF; --bento-desc: #A1A1AA; --bento-border: #222222; --bento-glow: rgba(255,107,0,0.15); --bento-blob: rgba(255,255,255,0.03); --bento-ripple: 255,255,255;
 }
 :root {
   --font-display:'Sora','Space Grotesk','Inter',sans-serif;
@@ -678,3 +660,7 @@ html.lenis {
   opacity: 0.9;
   transform: translateY(-1px);
 }
+
+/* Dynamic Logo Mapping */
+.theme-light #nav-logo-img, .theme-light #footer-logo-img { content: url('../public/assets/logo/logo-light.png'); }
+.theme-dark #nav-logo-img, .theme-dark #footer-logo-img { content: url('../public/assets/logo/logo-dark.png'); }
