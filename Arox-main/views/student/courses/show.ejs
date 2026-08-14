@@ -344,7 +344,7 @@
               <div class="font-bold text-amber-800">Mark Attendance for Today</div>
               <div class="text-xs text-amber-600 mt-1">Current Date: <%= new Date().toLocaleDateString('en-IN', {day: 'numeric', month: 'long', year: 'numeric'}) %></div>
             </div>
-            <button onclick="markPresentForToday(<%= registration.course_id %>)" class="btn btn-primary bg-amber-600 border-amber-600 hover:bg-amber-700 text-white rounded-xl px-6 py-2.5 text-sm font-semibold">
+            <button onclick="markPresentForToday(parseInt(this.getAttribute('data-course-id')))" data-course-id="<%= registration.course_id %>" class="btn btn-primary bg-amber-600 border-amber-600 hover:bg-amber-700 text-white rounded-xl px-6 py-2.5 text-sm font-semibold">
               Mark Present
             </button>
           </div>

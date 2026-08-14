@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 
 <html lang="en" data-theme="dark"><head>
+  <script>
+    (function () {
+      const storedTheme = localStorage.getItem('arox-theme') || 'dark';
+      document.documentElement.className = 'theme-' + storedTheme;
+      if (storedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Contact | AROX TECH</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
@@ -79,14 +88,14 @@
                 "card-gap": "24px"
             },
             "fontFamily": {
-                "headline-section": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
-                "body-lg": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
-                "display-hero": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
-                "body-sm": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
-                "label-caps": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
-                "display-hero-mobile": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
-                "headline-card": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"],
-                "numeric-display": ["'Roobert PRO'", "'Noto Sans'", "Inter", "sans-serif"]
+                "headline-section": ["'Montserrat'", "sans-serif"],
+                "body-lg": ["'Montserrat'", "sans-serif"],
+                "display-hero": ["'Montserrat'", "sans-serif"],
+                "body-sm": ["'Montserrat'", "sans-serif"],
+                "label-caps": ["'Montserrat'", "sans-serif"],
+                "display-hero-mobile": ["'Montserrat'", "sans-serif"],
+                "headline-card": ["'Montserrat'", "sans-serif"],
+                "numeric-display": ["'Montserrat'", "sans-serif"]
             },
             "fontSize": {
                 "headline-section": ["48px", {"lineHeight": "1.2", "fontWeight": "500"}],
@@ -140,6 +149,7 @@
           <a href="about.html" class="nav-link">About</a>
           <a href="services.html" class="nav-link">Services</a>
           <a href="courses.html" class="nav-link">Courses</a>
+          <a href="internships.html" class="nav-link">Internships</a>
           <a href="contact.html" class="nav-link active"><span class="nav-link-indicator"></span>Contact</a>
         </nav>
       </div>
@@ -171,6 +181,7 @@
           <polyline points="9 18 15 12 9 6" />
         </svg></a>
       <a href="courses.html" class="mobile-nav-link"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg></a>
+      <a href="internships.html" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg></a>
       <a href="contact.html" class="mobile-nav-link active"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
@@ -190,7 +201,7 @@
   </div>
 
 
-<main class="pt-[90px] bg-[var(--background)] text-[var(--body)] relative overflow-hidden">
+<main class="bg-[var(--background)] text-[var(--body)] relative overflow-hidden">
   <div class="ambient-layer">
     <div class="ambient-glow-orange" style="top: -10%; left: -10%;"></div>
     <div class="ambient-glow-blue" style="top: 40%; right: -10%;"></div>
@@ -198,60 +209,42 @@
     <div class="ambient-noise"></div>
   </div>
 
-  <!-- Geometric decorative background shapes from the mockup -->
-  <div class="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-    <!-- Top-left 3x4 dot grid matrix -->
-    <div class="absolute left-10 top-32 opacity-20">
-      <div class="grid grid-cols-3 gap-2">
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-[var(--heading)] rounded-full"></div>
+
+
+  <!-- Hero Section -->
+  <div class="contact-hero">
+    <div class="grid-lines-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <div class="max-w-[650px] flex flex-col items-start text-left">
+        <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--muted)] relative inline-block pb-2">
+          GET IN TOUCH
+          <span class="absolute bottom-0 left-0 right-1/2 h-[1px] bg-[var(--border)]"></span>
+        </span>
+        <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-[var(--heading)] mt-6 mb-4 font-display leading-[1.1] text-left">
+          Let's Build Something<br/>Amazing Together
+        </h1>
+        <p class="text-sm md:text-base text-[var(--muted)] leading-relaxed text-left mt-2">
+          Have a project in mind or want to know more about our services?<br class="hidden md:block"/>
+          We're here to help you bring your ideas to life.
+        </p>
+        <div class="flex flex-wrap justify-start gap-4 mt-8">
+          <button class="btn-primary" onclick="document.getElementById('contact-content-section').scrollIntoView({ behavior: 'smooth' })">
+            Send us a Message
+            <svg class="lucide-arrow-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+          <button class="btn-secondary" onclick="document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' })">
+            View Location
+          </button>
+        </div>
       </div>
     </div>
-    
-    <!-- Top-right circle arc and dot visual -->
-    <div class="absolute right-12 top-24 opacity-30">
-      <svg width="180" height="180" viewBox="0 0 100 100" fill="none" stroke="var(--heading)" stroke-width="0.75">
-        <path d="M 0,100 C 60,100 100,60 100,0" />
-        <line x1="50" y1="50" x2="100" y2="0" />
-        <line x1="75" y1="100" x2="100" y2="75" />
-        <circle cx="100" cy="0" r="3" fill="var(--heading)" />
-      </svg>
-    </div>
-
-    <!-- Hero diagonal corner stripe in bottom-left -->
-    <div class="absolute left-0 top-[400px] w-36 h-8 bg-[var(--heading)] opacity-10 transform -rotate-45 -translate-x-12 origin-top-left"></div>
+    <div class="scroll-indicator"><div class="mouse-wheel"></div></div>
   </div>
 
-  <div class="max-w-6xl mx-auto px-6 relative z-10">
-    
-    <!-- Hero Section -->
-    <div class="text-center pt-16 pb-16">
-      <span class="text-xs font-bold uppercase tracking-[0.2em] text-[var(--muted)] relative inline-block pb-2">
-        GET IN TOUCH
-        <span class="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-[var(--border)]"></span>
-      </span>
-      <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-[var(--heading)] mt-6 mb-4 font-display leading-[1.1]">
-        Let's Build Something<br/>Amazing Together
-      </h1>
-      <p class="text-sm md:text-base text-[var(--muted)] max-w-lg mx-auto leading-relaxed">
-        Have a project in mind or want to know more about our services?<br class="hidden md:block"/>
-        We're here to help you bring your ideas to life.
-      </p>
-    </div>
-
+  <div class="max-w-6xl mx-auto px-6 relative z-10" id="contact-content-section">
     <!-- Main Content Form & Contact Info Section -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 py-12 border-t border-[var(--border)]">
       
@@ -423,7 +416,7 @@
     </div>
 
     <!-- Map Banner Container -->
-    <div class="py-8 w-full z-10">
+    <div class="py-8 w-full z-10" id="map-section">
       <div class="w-full h-80 rounded-2xl overflow-hidden border border-[var(--border)] map-container relative">
         <iframe 
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m4!1m2!1d78.115!2d11.575!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf0c5a2c4e207%3A0xc3c94cf9787c8d9a!2sSalem%2C%20Tamil%20Nadu%2C%20India!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
@@ -503,23 +496,23 @@
         <div>
           <h4 class="footer-col-title">Company</h4>
           <ul class="footer-links">
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
+            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
+            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
+            <li><a href="apply.html" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
+            <li><a href="index.html" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
+            <li><a href="contact.html" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
           </ul>
         </div>
         <div>
           <h4 class="footer-col-title">Services</h4>
           <ul class="footer-links">
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
           </ul>
         </div>
         <div>
@@ -541,7 +534,7 @@
                 <polyline points="22,6 12,13 2,6" />
               </svg>info@aroxtech.com</div>
           </div>
-          <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+          <a href="contact.html" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2">
               <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
               <path

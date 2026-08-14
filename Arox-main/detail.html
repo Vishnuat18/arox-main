@@ -2,6 +2,15 @@
 <html lang="en" class="theme-dark">
 
 <head>
+    <script>
+        (function () {
+            const storedTheme = localStorage.getItem('arox-theme') || 'dark';
+            document.documentElement.className = 'theme-' + storedTheme;
+            if (storedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Arox Tech - Course Detail</title>
@@ -10,7 +19,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
 
     <!-- FontAwesome Icons -->
@@ -80,13 +89,14 @@
 
         /* ─── Hero ─── */
         .detail-hero {
-            padding-top: 7rem;
+            margin-top: 100px !important;
+            padding-top: 3rem;
             padding-bottom: 4rem;
             position: relative;
             overflow: hidden;
         }
         @media (min-width: 1024px) {
-            .detail-hero { padding-top: 9rem; padding-bottom: 6rem; }
+            .detail-hero { padding-top: 4rem; padding-bottom: 6rem; }
         }
         .detail-hero .grid-bg {
             position: absolute;
@@ -492,6 +502,7 @@
           <a href="about.html" class="nav-link">About</a>
           <a href="services.html" class="nav-link">Services</a>
           <a href="courses.html" class="nav-link active">Courses</a>
+          <a href="internships.html" class="nav-link">Internships</a>
           <a href="contact.html" class="nav-link">Contact</a>
         </nav>
       </div>
@@ -526,6 +537,10 @@
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
         </svg></a>
+      <a href="internships.html" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
       <a href="contact.html" class="mobile-nav-link"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
@@ -546,24 +561,7 @@
 
     <!-- ─── HERO SECTION ─── -->
     <main class="detail-hero">
-        <!-- Background decorative pattern -->
-        <div class="grid-bg">
-            <svg width="600" height="600" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="var(--border)" stroke-width="1" />
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" mask="url(#fade)" />
-                <mask id="fade">
-                    <radialGradient id="grad" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="white" stop-opacity="1" />
-                        <stop offset="100%" stop-color="white" stop-opacity="0" />
-                    </radialGradient>
-                    <rect width="100%" height="100%" fill="url(#grad)" />
-                </mask>
-            </svg>
-        </div>
+        <div class="grid-lines-bg" aria-hidden="true"></div>
 
         <div class="detail-container">
             <div class="hero-grid">
@@ -591,10 +589,16 @@
 
                     <div class="hero-btns">
                         <a href="courses.html" class="btn-primary">
-                            Explore Courses <i class="fa-solid fa-arrow-right"></i>
+                            Explore Courses <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+                              <line x1="5" y1="12" x2="19" y2="12"></line>
+                              <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
                         </a>
                         <a href="apply.html" id="apply-link" class="btn-outline">
-                            Apply Now <i class="fa-solid fa-arrow-right"></i>
+                            Apply Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+                              <line x1="5" y1="12" x2="19" y2="12"></line>
+                              <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -634,6 +638,7 @@
                 </div>
             </div>
         </div>
+        <div class="scroll-indicator"><div class="mouse-wheel"></div></div>
     </main>
 
     <!-- ─── SYLLABUS SECTION ─── -->
@@ -726,7 +731,10 @@
 
                 <div style="margin-top:2rem;display:flex;justify-content:center;">
                     <a href="#" class="btn-outline" style="padding:0.5rem 1.5rem;font-size:0.875rem;">
-                        View All Projects <i class="fa-solid fa-arrow-right"></i>
+                        View All Projects <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -776,7 +784,10 @@
 
                 <div style="display:flex;justify-content:center;margin-top:1.5rem;">
                     <a href="#" class="btn-outline" style="padding:0.5rem 1.5rem;font-size:0.875rem;">
-                        View All Reviews <i class="fa-solid fa-arrow-right"></i>
+                        View All Reviews <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
                     </a>
                 </div>
             </div>
@@ -844,11 +855,17 @@
                     <div style="display:flex;flex-wrap:wrap;gap:1rem;">
                         <a href="apply.html" id="cta-apply-link"
                             style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:white;color:#5d4cf7;font-size:0.875rem;font-weight:700;border-radius:0.5rem;box-shadow:0 10px 30px -10px rgba(0,0,0,0.3);transition:all 300ms;text-decoration:none;">
-                            Apply Now <i class="fa-solid fa-arrow-right"></i>
+                            Apply Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display: inline-block; vertical-align: middle;">
+                              <line x1="5" y1="12" x2="19" y2="12"></line>
+                              <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
                         </a>
                         <a href="courses.html"
                             style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;border:1px solid rgba(255,255,255,0.3);color:white;font-size:0.875rem;font-weight:600;border-radius:0.5rem;transition:all 300ms;text-decoration:none;">
-                            Explore Courses <i class="fa-solid fa-arrow-right"></i>
+                            Explore Courses <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display: inline-block; vertical-align: middle;">
+                              <line x1="5" y1="12" x2="19" y2="12"></line>
+                              <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
                         </a>
                     </div>
                 </div>
@@ -899,23 +916,23 @@
         <div>
           <h4 class="footer-col-title">Company</h4>
           <ul class="footer-links">
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
+            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
+            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
+            <li><a href="apply.html" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
+            <li><a href="index.html" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
+            <li><a href="contact.html" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
           </ul>
         </div>
         <div>
           <h4 class="footer-col-title">Services</h4>
           <ul class="footer-links">
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
           </ul>
         </div>
         <div>
@@ -937,7 +954,7 @@
                 <polyline points="22,6 12,13 2,6" />
               </svg>info@aroxtech.com</div>
           </div>
-          <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+          <a href="contact.html" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2">
               <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
               <path

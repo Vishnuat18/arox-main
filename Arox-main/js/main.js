@@ -10,8 +10,11 @@
 
   function applyTheme(t) {
     const root = document.documentElement;
-    root.classList.remove('theme-light', 'theme-dark');
+    root.classList.remove('theme-light', 'theme-dark', 'dark');
     root.classList.add('theme-' + t);
+    if (t === 'dark') {
+      root.classList.add('dark');
+    }
     currentTheme = t;
     localStorage.setItem('arox-theme', t);
     updateThemeUI();
@@ -21,12 +24,29 @@
   function updateThemeUI() {
     const icon = document.getElementById('theme-icon');
     if (!icon) return;
+    
+    if (!icon.querySelector('.eye-open-g')) {
+      icon.setAttribute('viewBox', '0 0 24 24');
+      icon.setAttribute('stroke-width', '2');
+      icon.innerHTML = `
+        <g class="eye-open-g">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </g>
+        <g class="eye-closed-g">
+          <path d="M2 10s3 5 10 5 10-5 10-5"></path>
+          <path d="M6 13l-1.5 2.5"></path>
+          <path d="M10 15v3"></path>
+          <path d="M14 15v3"></path>
+          <path d="M18 13l1.5 2.5"></path>
+        </g>
+      `;
+    }
+    
     if (currentTheme === 'light') {
       icon.setAttribute('stroke', '#f59e0b');
-      icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
     } else {
       icon.setAttribute('stroke', '#38bdf8');
-      icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
     }
     document.querySelectorAll('.mobile-theme-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.theme === currentTheme);
@@ -50,6 +70,17 @@
     btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
   });
   applyTheme(currentTheme);
+
+  // Sync theme changes across multiple tabs
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'arox-theme') {
+      const newTheme = e.newValue || 'dark';
+      if (newTheme !== currentTheme) {
+        applyTheme(newTheme);
+      }
+    }
+  });
+
   document.getElementById('footer-year').textContent = new Date().getFullYear();
 
   /* ── NAVBAR ─────────────────────────────────────────────────── */
@@ -144,160 +175,168 @@
     }
   }
 
-  statCards.forEach(c => revealStat(c, 0));
-  ScrollTrigger.create({
-    trigger: document.getElementById('stats-section'),
-    pin: true, start: 'top top', end: `+=${TOTAL_SCROLL_STATS}`,
-    scrub: 1, anticipatePin: 1,
-    onUpdate(self) {
-      statCards.forEach((card, i) => {
-        const sliceStart = i / N_STATS;
-        revealStat(card, (self.progress - sliceStart) / (1 / N_STATS));
-      });
-    }
-  });
+  if (N_STATS > 0 && document.getElementById('stats-section')) {
+    statCards.forEach(c => revealStat(c, 0));
+    ScrollTrigger.create({
+      trigger: document.getElementById('stats-section'),
+      pin: true, start: 'top top', end: `+=${TOTAL_SCROLL_STATS}`,
+      scrub: 1, anticipatePin: 1,
+      onUpdate(self) {
+        statCards.forEach((card, i) => {
+          const sliceStart = i / N_STATS;
+          revealStat(card, (self.progress - sliceStart) / (1 / N_STATS));
+        });
+      }
+    });
+  }
 
   /* ── GSAP WHY CHOOSE US ─────────────────────────────────────── */
-  const wcuScene = document.getElementById('wcu-scene');
-  const wcuSticky = document.getElementById('wcu-sticky');
-  const wcuLabel = document.getElementById('wcu-label');
-  const wcuListW = document.getElementById('wcu-list-wrap');
   const wcuList = document.getElementById('wcu-list');
-  const wcuItems = Array.from(wcuList.querySelectorAll('.wcu-item'));
-  const N_ITEMS = wcuItems.length;
-  let itemH = 0;
+  if (wcuList) {
+    const wcuScene = document.getElementById('wcu-scene');
+    const wcuSticky = document.getElementById('wcu-sticky');
+    const wcuLabel = document.getElementById('wcu-label');
+    const wcuListW = document.getElementById('wcu-list-wrap');
+    const wcuItems = Array.from(wcuList.querySelectorAll('.wcu-item'));
+    const N_ITEMS = wcuItems.length;
+    let itemH = 0;
 
-  function setupWCU() {
-    const lr = wcuLabel.getBoundingClientRect().right;
-    wcuListW.style.left = (lr + 18) + 'px';
-    if (wcuItems[0]) {
-      itemH = wcuItems[0].offsetHeight;
-      wcuList.style.top = (window.innerHeight / 2 - itemH / 2) + 'px';
+    function setupWCU() {
+      if (wcuLabel && wcuListW) {
+        const lr = wcuLabel.getBoundingClientRect().right;
+        wcuListW.style.left = (lr + 18) + 'px';
+      }
+      if (wcuItems[0]) {
+        itemH = wcuItems[0].offsetHeight;
+        wcuList.style.top = (window.innerHeight / 2 - itemH / 2) + 'px';
+      }
     }
-  }
 
-  function renderWCU(frac) {
-    frac = Math.max(0, Math.min(N_ITEMS - 1, frac));
-    const active = Math.round(frac);
-    gsap.set(wcuList, { y: -frac * itemH });
-    wcuItems.forEach((el, i) => {
-      const d = i - active;
-      if (d === 0) { el.style.opacity = '1'; el.style.filter = 'none'; }
-      else if (d < 0) { el.style.opacity = String(Math.max(0, 0.22 + d * 0.07)); el.style.filter = 'none'; }
-      else { el.style.opacity = String(Math.max(0.04, 0.48 - (d - 1) * 0.09)); el.style.filter = d > 1 ? `blur(${(d - 1) * 1.8}px)` : 'none'; }
+    function renderWCU(frac) {
+      frac = Math.max(0, Math.min(N_ITEMS - 1, frac));
+      const active = Math.round(frac);
+      gsap.set(wcuList, { y: -frac * itemH });
+      wcuItems.forEach((el, i) => {
+        const d = i - active;
+        if (d === 0) { el.style.opacity = '1'; el.style.filter = 'none'; }
+        else if (d < 0) { el.style.opacity = String(Math.max(0, 0.22 + d * 0.07)); el.style.filter = 'none'; }
+        else { el.style.opacity = String(Math.max(0.04, 0.48 - (d - 1) * 0.09)); el.style.filter = d > 1 ? `blur(${(d - 1) * 1.8}px)` : 'none'; }
+      });
+    }
+
+    setupWCU(); renderWCU(0);
+    ScrollTrigger.create({
+      trigger: wcuScene, start: 'top top', end: `+=${(N_ITEMS - 1) * 250}`,
+      pin: wcuSticky, scrub: 0.5,
+      onUpdate(self) { renderWCU(self.progress * (N_ITEMS - 1)); }
     });
+    window.addEventListener('resize', () => { setupWCU(); ScrollTrigger.refresh(); }, { passive: true });
   }
-
-  setupWCU(); renderWCU(0);
-  ScrollTrigger.create({
-    trigger: wcuScene, start: 'top top', end: `+=${(N_ITEMS - 1) * 250}`,
-    pin: wcuSticky, scrub: 0.5,
-    onUpdate(self) { renderWCU(self.progress * (N_ITEMS - 1)); }
-  });
-  window.addEventListener('resize', () => { setupWCU(); ScrollTrigger.refresh(); }, { passive: true });
 
   /* ── MAGIC BENTO ─────────────────────────────────────────────── */
-  const bentoData = [
-    { title: 'Web Development', desc: 'Bespoke enterprise websites and highly scalable cloud platforms.', label: 'TOP SERVICE' },
-    { title: 'App Development', desc: 'Premium cross-platform native iOS & Android applications.', label: 'MOBILE SOLUTIONS' },
-    { title: 'Software Development', desc: 'Secure desktop suites, API backends, and customized ERP integrations.', label: 'ENTERPRISE SYSTEM' },
-    { title: 'Digital Marketing', desc: 'Data-driven growth strategies and SEO.', label: 'GROWTH' },
-    { title: 'BPO Services', desc: 'Efficient outsourced business processes and support.', label: 'OPERATIONS' },
-    { title: 'Branding & Designing', desc: 'Crafting unforgettable identities and premium UX/UI experiences.', label: 'CREATIVE' },
-    { title: 'Industry Training', desc: 'Corporate skill development and specialized tech workshops.', label: 'EDUCATION' },
-    { title: 'Internships', desc: 'Hands-on experience building real-world enterprise applications.', label: 'CAREER' }
-  ];
   const bentoGrid = document.getElementById('bento-grid');
-  const arrowSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+  if (bentoGrid) {
+    const bentoData = [
+      { title: 'Web Development', desc: 'Bespoke enterprise websites and highly scalable cloud platforms.', label: 'TOP SERVICE' },
+      { title: 'App Development', desc: 'Premium cross-platform native iOS & Android applications.', label: 'MOBILE SOLUTIONS' },
+      { title: 'Software Development', desc: 'Secure desktop suites, API backends, and customized ERP integrations.', label: 'ENTERPRISE SYSTEM' },
+      { title: 'Digital Marketing', desc: 'Data-driven growth strategies and SEO.', label: 'GROWTH' },
+      { title: 'BPO Services', desc: 'Efficient outsourced business processes and support.', label: 'OPERATIONS' },
+      { title: 'Branding & Designing', desc: 'Crafting unforgettable identities and premium UX/UI experiences.', label: 'CREATIVE' },
+      { title: 'Industry Training', desc: 'Corporate skill development and specialized tech workshops.', label: 'EDUCATION' },
+      { title: 'Internships', desc: 'Hands-on experience building real-world enterprise applications.', label: 'CAREER' }
+    ];
+    const arrowSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
 
-  bentoData.forEach((card, idx) => {
-    const el = document.createElement('div');
-    const isEven = idx % 2 === 0;
-    el.className = `magic-bento-card magic-bento-card--border-glow particle-container ${isEven ? 'bento-primary' : 'bento-secondary'}`;
-    el.innerHTML = `<div class="magic-blob-1"></div><div class="magic-blob-2"></div>
-      <div class="magic-bento-card__header"><div class="magic-bento-card__label">${card.label}</div></div>
-      <div class="magic-bento-card__content"><h2 class="magic-bento-card__title">${card.title}</h2></div>
-      <div class="magic-bento-card__footer"><p class="magic-bento-card__description">${card.desc}</p><span class="magic-bento-card__arrow">${arrowSVG}</span></div>`;
-    bentoGrid.appendChild(el);
+    bentoData.forEach((card, idx) => {
+      const el = document.createElement('div');
+      const isEven = idx % 2 === 0;
+      el.className = `magic-bento-card magic-bento-card--border-glow particle-container ${isEven ? 'bento-primary' : 'bento-secondary'}`;
+      el.innerHTML = `<div class="magic-blob-1"></div><div class="magic-blob-2"></div>
+        <div class="magic-bento-card__header"><div class="magic-bento-card__label">${card.label}</div></div>
+        <div class="magic-bento-card__content"><h2 class="magic-bento-card__title">${card.title}</h2></div>
+        <div class="magic-bento-card__footer"><p class="magic-bento-card__description">${card.desc}</p><span class="magic-bento-card__arrow">${arrowSVG}</span></div>`;
+      bentoGrid.appendChild(el);
 
-    if (window.innerWidth > 768) {
-      let hovered = false, particles = [], timeouts = [];
+      if (window.innerWidth > 768) {
+        let hovered = false, particles = [], timeouts = [];
 
-      function clearParticles() {
-        timeouts.forEach(clearTimeout); timeouts = [];
-        particles.forEach(p => gsap.to(p, { scale: 0, opacity: 0, duration: 0.3, ease: 'back.in(1.7)', onComplete() { p.parentNode && p.parentNode.removeChild(p); } }));
-        particles = [];
-      }
-      function spawnParticles() {
-        if (!hovered) return;
-        const { width, height } = el.getBoundingClientRect();
-        
-        // Dynamic theme-aware particle colors (white in dark theme, dark gray in light theme)
-        const isDark = document.documentElement.classList.contains('theme-dark') || document.documentElement.classList.contains('theme-navy');
-        const pColor = isDark ? '255,255,255' : '95,99,104';
-        
-        for (let i = 0; i < 12; i++) {
-          const to = setTimeout(() => {
-            if (!hovered) return;
-            const p = document.createElement('div');
-            p.style.cssText = `position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(${pColor},1);box-shadow:0 0 6px rgba(${pColor},.6);pointer-events:none;z-index:100;left:${Math.random()*width}px;top:${Math.random()*height}px;`;
-            el.appendChild(p); particles.push(p);
-            gsap.fromTo(p, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' });
-            gsap.to(p, { x: (Math.random() - .5) * 100, y: (Math.random() - .5) * 100, rotation: Math.random() * 360, duration: 2 + Math.random() * 2, ease: 'none', repeat: -1, yoyo: true });
-            gsap.to(p, { opacity: 0.3, duration: 1.5, ease: 'power2.inOut', repeat: -1, yoyo: true });
-          }, i * 100);
-          timeouts.push(to);
+        function clearParticles() {
+          timeouts.forEach(clearTimeout); timeouts = [];
+          particles.forEach(p => gsap.to(p, { scale: 0, opacity: 0, duration: 0.3, ease: 'back.in(1.7)', onComplete() { p.parentNode && p.parentNode.removeChild(p); } }));
+          particles = [];
         }
+        function spawnParticles() {
+          if (!hovered) return;
+          const { width, height } = el.getBoundingClientRect();
+          
+          // Dynamic theme-aware particle colors (white in dark theme, dark gray in light theme)
+          const isDark = document.documentElement.classList.contains('theme-dark') || document.documentElement.classList.contains('theme-navy');
+          const pColor = isDark ? '255,255,255' : '95,99,104';
+          
+          for (let i = 0; i < 12; i++) {
+            const to = setTimeout(() => {
+              if (!hovered) return;
+              const p = document.createElement('div');
+              p.style.cssText = `position:absolute;width:4px;height:4px;border-radius:50%;background:rgba(${pColor},1);box-shadow:0 0 6px rgba(${pColor},.6);pointer-events:none;z-index:100;left:${Math.random()*width}px;top:${Math.random()*height}px;`;
+              el.appendChild(p); particles.push(p);
+              gsap.fromTo(p, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.7)' });
+              gsap.to(p, { x: (Math.random() - .5) * 100, y: (Math.random() - .5) * 100, rotation: Math.random() * 360, duration: 2 + Math.random() * 2, ease: 'none', repeat: -1, yoyo: true });
+              gsap.to(p, { opacity: 0.3, duration: 1.5, ease: 'power2.inOut', repeat: -1, yoyo: true });
+            }, i * 100);
+            timeouts.push(to);
+          }
+        }
+
+        el.addEventListener('mouseenter', () => { hovered = true; spawnParticles(); gsap.to(el, { rotateX: 5, rotateY: -5, duration: 0.3, ease: 'power2.out', transformPerspective: 1000 }); });
+        el.addEventListener('mouseleave', () => { hovered = false; clearParticles(); gsap.to(el, { rotateX: 0, rotateY: 0, x: 0, y: 0, duration: 0.3, ease: 'power2.out' }); el.style.setProperty('--glow-intensity', '0'); });
+        el.addEventListener('mousemove', e => {
+          const r = el.getBoundingClientRect();
+          const x = e.clientX - r.left, y = e.clientY - r.top;
+          const cx = r.width / 2, cy = r.height / 2;
+          gsap.to(el, { rotateX: ((y - cy) / cy) * -10, rotateY: ((x - cx) / cx) * 10, duration: 0.1, ease: 'power2.out', transformPerspective: 1000 });
+          gsap.to(el, { x: (x - cx) * 0.05, y: (y - cy) * 0.05, duration: 0.3, ease: 'power2.out' });
+          el.style.setProperty('--glow-x', ((x / r.width) * 100) + '%');
+          el.style.setProperty('--glow-y', ((y / r.height) * 100) + '%');
+          el.style.setProperty('--glow-intensity', '1');
+          el.style.setProperty('--glow-radius', '200px');
+        });
+        el.addEventListener('click', e => {
+          const r = el.getBoundingClientRect();
+          const cx = e.clientX - r.left, cy = e.clientY - r.top;
+          const maxD = Math.max(Math.hypot(cx, cy), Math.hypot(cx - r.width, cy), Math.hypot(cx, cy - r.height), Math.hypot(cx - r.width, cy - r.height));
+          
+          // Dynamic theme-aware ripple color
+          const isDark = document.documentElement.classList.contains('theme-dark') || document.documentElement.classList.contains('theme-navy');
+          const rColor = isDark ? '255,255,255' : '0,0,0';
+          
+          const ripple = document.createElement('div');
+          ripple.style.cssText = `position:absolute;width:${maxD*2}px;height:${maxD*2}px;border-radius:50%;background:radial-gradient(circle,rgba(${rColor},.3) 0%,rgba(${rColor},.1) 30%,transparent 70%);left:${cx-maxD}px;top:${cy-maxD}px;pointer-events:none;z-index:1000;`;
+          el.appendChild(ripple);
+          gsap.fromTo(ripple, { scale: 0, opacity: 1 }, { scale: 1, opacity: 0, duration: 0.8, ease: 'power2.out', onComplete() { ripple.remove(); } });
+        });
       }
-
-      el.addEventListener('mouseenter', () => { hovered = true; spawnParticles(); gsap.to(el, { rotateX: 5, rotateY: -5, duration: 0.3, ease: 'power2.out', transformPerspective: 1000 }); });
-      el.addEventListener('mouseleave', () => { hovered = false; clearParticles(); gsap.to(el, { rotateX: 0, rotateY: 0, x: 0, y: 0, duration: 0.3, ease: 'power2.out' }); el.style.setProperty('--glow-intensity', '0'); });
-      el.addEventListener('mousemove', e => {
-        const r = el.getBoundingClientRect();
-        const x = e.clientX - r.left, y = e.clientY - r.top;
-        const cx = r.width / 2, cy = r.height / 2;
-        gsap.to(el, { rotateX: ((y - cy) / cy) * -10, rotateY: ((x - cx) / cx) * 10, duration: 0.1, ease: 'power2.out', transformPerspective: 1000 });
-        gsap.to(el, { x: (x - cx) * 0.05, y: (y - cy) * 0.05, duration: 0.3, ease: 'power2.out' });
-        el.style.setProperty('--glow-x', ((x / r.width) * 100) + '%');
-        el.style.setProperty('--glow-y', ((y / r.height) * 100) + '%');
-        el.style.setProperty('--glow-intensity', '1');
-        el.style.setProperty('--glow-radius', '200px');
-      });
-      el.addEventListener('click', e => {
-        const r = el.getBoundingClientRect();
-        const cx = e.clientX - r.left, cy = e.clientY - r.top;
-        const maxD = Math.max(Math.hypot(cx, cy), Math.hypot(cx - r.width, cy), Math.hypot(cx, cy - r.height), Math.hypot(cx - r.width, cy - r.height));
-        
-        // Dynamic theme-aware ripple color
-        const isDark = document.documentElement.classList.contains('theme-dark') || document.documentElement.classList.contains('theme-navy');
-        const rColor = isDark ? '255,255,255' : '0,0,0';
-        
-        const ripple = document.createElement('div');
-        ripple.style.cssText = `position:absolute;width:${maxD*2}px;height:${maxD*2}px;border-radius:50%;background:radial-gradient(circle,rgba(${rColor},.3) 0%,rgba(${rColor},.1) 30%,transparent 70%);left:${cx-maxD}px;top:${cy-maxD}px;pointer-events:none;z-index:1000;`;
-        el.appendChild(ripple);
-        gsap.fromTo(ripple, { scale: 0, opacity: 1 }, { scale: 1, opacity: 0, duration: 0.8, ease: 'power2.out', onComplete() { ripple.remove(); } });
-      });
-    }
-  });
-
-  // Bento global spotlight
-  const spotlight = document.createElement('div');
-  spotlight.className = 'global-spotlight';
-  document.body.appendChild(spotlight);
-  document.addEventListener('mousemove', e => {
-    const rect = bentoGrid.getBoundingClientRect();
-    const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
-    if (!inside) { gsap.to(spotlight, { opacity: 0, duration: 0.3 }); return; }
-    gsap.to(spotlight, { left: e.clientX, top: e.clientY, duration: 0.1 });
-    let minD = Infinity;
-    bentoGrid.querySelectorAll('.magic-bento-card').forEach(c => {
-      const cr = c.getBoundingClientRect();
-      minD = Math.min(minD, Math.max(0, Math.hypot(e.clientX - (cr.left + cr.width / 2), e.clientY - (cr.top + cr.height / 2)) - Math.max(cr.width, cr.height) / 2));
     });
-    const prox = 150, fade = 225;
-    const op = minD <= prox ? 0.8 : minD <= fade ? ((fade - minD) / (fade - prox)) * 0.8 : 0;
-    gsap.to(spotlight, { opacity: op, duration: op > 0 ? 0.2 : 0.5 });
-  });
+
+    // Bento global spotlight
+    const spotlight = document.createElement('div');
+    spotlight.className = 'global-spotlight';
+    document.body.appendChild(spotlight);
+    document.addEventListener('mousemove', e => {
+      const rect = bentoGrid.getBoundingClientRect();
+      const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if (!inside) { gsap.to(spotlight, { opacity: 0, duration: 0.3 }); return; }
+      gsap.to(spotlight, { left: e.clientX, top: e.clientY, duration: 0.1 });
+      let minD = Infinity;
+      bentoGrid.querySelectorAll('.magic-bento-card').forEach(c => {
+        const cr = c.getBoundingClientRect();
+        minD = Math.min(minD, Math.max(0, Math.hypot(e.clientX - (cr.left + cr.width / 2), e.clientY - (cr.top + cr.height / 2)) - Math.max(cr.width, cr.height) / 2));
+      });
+      const prox = 150, fade = 225;
+      const op = minD <= prox ? 0.8 : minD <= fade ? ((fade - minD) / (fade - prox)) * 0.8 : 0;
+      gsap.to(spotlight, { opacity: op, duration: op > 0 ? 0.2 : 0.5 });
+    });
+  }
 
   /* ── PROJECTS ─────────────────────────────────────────────────── */
   const projectsData = [

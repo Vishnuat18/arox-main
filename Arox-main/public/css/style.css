@@ -795,6 +795,7 @@ img { max-width: 100%; height: auto; }
   flex: 1;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -1487,3 +1488,58 @@ img { max-width: 100%; height: auto; }
   opacity: 1;
   visibility: visible;
 }
+
+/* ─── MongoDB Style Arrow Animations on Hover ─── */
+a svg line,
+button svg line,
+.cta-btn-solid svg line,
+.cta-btn-outline svg line,
+.btn-primary svg line,
+.btn-secondary svg line,
+.btn-outline svg line,
+a svg.lucide-arrow-right path:first-child,
+button svg.lucide-arrow-right path:first-child {
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+}
+
+a svg polyline,
+button svg polyline,
+.cta-btn-solid svg polyline,
+.cta-btn-outline svg polyline,
+.btn-primary svg polyline,
+.btn-secondary svg polyline,
+.btn-outline svg polyline,
+a svg.lucide-arrow-right path:last-child,
+button svg.lucide-arrow-right path:last-child {
+  transform: translateX(-4px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+a:hover svg line,
+button:hover svg line,
+.cta-btn-solid:hover svg line,
+.cta-btn-outline:hover svg line,
+.btn-primary:hover svg line,
+.btn-secondary:hover svg line,
+.btn-outline:hover svg line,
+a:hover svg.lucide-arrow-right path:first-child,
+button:hover svg.lucide-arrow-right path:first-child {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+a:hover svg polyline,
+button:hover svg polyline,
+.cta-btn-solid:hover svg polyline,
+.cta-btn-outline:hover svg polyline,
+.btn-primary:hover svg polyline,
+.btn-secondary:hover svg polyline,
+.btn-outline:hover svg polyline,
+a:hover svg.lucide-arrow-right path:last-child,
+button:hover svg.lucide-arrow-right path:last-child {
+  transform: translateX(0);
+}
+

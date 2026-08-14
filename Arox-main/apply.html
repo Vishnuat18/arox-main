@@ -8,7 +8,7 @@
   <meta name="description" content="Apply for internship or training programs at AROX Tech. Multi-step application form.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     /* ============================================
@@ -1030,11 +1030,6 @@
       </div>
       <div class="stepper-step" data-step="3">
         <div class="stepper-circle"><span>4</span></div>
-        <div class="stepper-label">Payment</div>
-        <div class="stepper-line"><div class="stepper-line-fill"></div></div>
-      </div>
-      <div class="stepper-step" data-step="4">
-        <div class="stepper-circle"><span>5</span></div>
         <div class="stepper-label">Preview</div>
       </div>
     </div>
@@ -1042,12 +1037,11 @@
     <!-- Mobile Stepper -->
     <div class="mobile-stepper" id="mobileStepper">
       <div>
-        <div class="mobile-stepper-text">Step <span id="mobileStepNum">1</span> of 5</div>
+        <div class="mobile-stepper-text">Step <span id="mobileStepNum">1</span> of 4</div>
         <div class="mobile-stepper-sub" id="mobileStepName">Personal Information</div>
       </div>
       <div class="mobile-stepper-dots" id="mobileStepDots">
         <div class="mobile-stepper-dot active"></div>
-        <div class="mobile-stepper-dot"></div>
         <div class="mobile-stepper-dot"></div>
         <div class="mobile-stepper-dot"></div>
         <div class="mobile-stepper-dot"></div>
@@ -1228,140 +1222,8 @@
         </div>
       </div>
 
-      <!-- ============ STEP 4: Payment ============ -->
+      <!-- ============ STEP 4: Preview ============ -->
       <div class="step-panel" id="step3">
-        <div class="form-card-header">
-          <div class="form-card-title">Payment</div>
-          <div class="form-card-desc">Choose your payment method</div>
-        </div>
-
-        <div class="payment-options" id="paymentOptions">
-          <div class="payment-option selected" data-method="pay_now" onclick="selectPayment('pay_now')">
-            <div class="po-icon"><i data-lucide="credit-card" style="width:22px;height:22px;"></i></div>
-            <div class="po-title">Pay Now</div>
-            <div class="po-desc">Full payment today</div>
-          </div>
-          <div class="payment-option" data-method="pay_later" onclick="selectPayment('pay_later')">
-            <div class="po-icon"><i data-lucide="clock" style="width:22px;height:22px;"></i></div>
-            <div class="po-title">Pay Later</div>
-            <div class="po-desc">Pay within 7 days</div>
-          </div>
-          <div class="payment-option" data-method="pay_advance" onclick="selectPayment('pay_advance')">
-            <div class="po-icon"><i data-lucide="wallet" style="width:22px;height:22px;"></i></div>
-            <div class="po-title">Pay Advance</div>
-            <div class="po-desc">Partial payment now</div>
-          </div>
-        </div>
-
-        <!-- Pay Now Details -->
-        <div id="payNowDetails" class="payment-details">
-          <div class="payment-row">
-            <span class="pr-label">Course Fee</span>
-            <span class="pr-value" id="pnCourseFee">₹15,000</span>
-          </div>
-          <div class="payment-row">
-            <span class="pr-label">Discount</span>
-            <span class="pr-value" style="color:var(--success);">- ₹2,000</span>
-          </div>
-          <div class="payment-row total">
-            <span class="pr-label">Total Payable</span>
-            <span class="pr-value" id="pnTotal">₹13,000</span>
-          </div>
-          <div class="payment-qr-section">
-            <div style="font-size:13px;font-weight:600;color:var(--text-primary);">Scan to Pay</div>
-            <div class="qr-placeholder">
-              <div style="text-align:center;">
-                <i data-lucide="qr-code" style="width:48px;height:48px;color:var(--text-muted);"></i>
-                <div style="margin-top:8px;">UPI QR Code</div>
-              </div>
-            </div>
-            <div class="upi-id">
-              <span>aroxtech@upi</span>
-              <button class="copy-btn" onclick="copyUPI()" title="Copy UPI ID">
-                <i data-lucide="copy" style="width:14px;height:14px;"></i>
-              </button>
-            </div>
-            <div>
-              <span class="payment-status-badge badge-pending">
-                <i data-lucide="clock" style="width:12px;height:12px;"></i> Payment Pending
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pay Later Details -->
-        <div id="payLaterDetails" class="payment-details hidden">
-          <div class="payment-row">
-            <span class="pr-label">Total Amount</span>
-            <span class="pr-value">₹15,000</span>
-          </div>
-          <div class="payment-row">
-            <span class="pr-label">Payment Deadline</span>
-            <span class="pr-value" id="plDeadline">—</span>
-          </div>
-          <div class="pay-later-terms" style="margin-top:16px;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text-primary);">Payment Terms</div>
-            <ul>
-              <li><i data-lucide="check" style="width:14px;height:14px;color:var(--success);flex-shrink:0;margin-top:1px;"></i> Full payment must be made within 7 days of application</li>
-              <li><i data-lucide="check" style="width:14px;height:14px;color:var(--success);flex-shrink:0;margin-top:1px;"></i> Application will be auto-cancelled if not paid on time</li>
-              <li><i data-lucide="check" style="width:14px;height:14px;color:var(--success);flex-shrink:0;margin-top:1px;"></i> No discount applied for delayed payments</li>
-              <li><i data-lucide="check" style="width:14px;height:14px;color:var(--success);flex-shrink:0;margin-top:1px;"></i> Course seat is reserved once payment is confirmed</li>
-            </ul>
-          </div>
-          <label class="confirm-check" id="payLaterConfirmWrap">
-            <input type="checkbox" id="payLaterConfirm">
-            <span>I understand and agree to pay the full course fee of <strong>₹15,000</strong> within 7 days. Failure to pay will result in cancellation of my application.</span>
-          </label>
-          <div class="form-error" id="payLaterConfirmError">Please agree to the payment terms</div>
-        </div>
-
-        <!-- Pay Advance Details -->
-        <div id="payAdvanceDetails" class="payment-details hidden">
-          <div class="payment-row">
-            <span class="pr-label">Total Course Fee</span>
-            <span class="pr-value">₹15,000</span>
-          </div>
-          <div class="payment-row">
-            <span class="pr-label">Advance Amount (30%)</span>
-            <span class="pr-value" style="color:var(--text-primary);">₹4,500</span>
-          </div>
-          <div class="payment-row">
-            <span class="pr-label">Remaining Amount</span>
-            <span class="pr-value">₹10,500</span>
-          </div>
-          <div class="payment-row">
-            <span class="pr-label">Remaining Due By</span>
-            <span class="pr-value" id="paSchedule">Before course start date</span>
-          </div>
-          <div class="payment-qr-section">
-            <div style="font-size:13px;font-weight:600;color:var(--text-primary);">Pay ₹4,500 Advance</div>
-            <div class="qr-placeholder">
-              <div style="text-align:center;">
-                <i data-lucide="qr-code" style="width:48px;height:48px;color:var(--text-muted);"></i>
-                <div style="margin-top:8px;">UPI QR Code</div>
-              </div>
-            </div>
-            <div class="upi-id">
-              <span>aroxtech@upi</span>
-              <button class="copy-btn" onclick="copyUPI()" title="Copy UPI ID">
-                <i data-lucide="copy" style="width:14px;height:14px;"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-nav">
-          <button type="button" class="btn btn-secondary" onclick="prevStep()">
-            <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back
-          </button>
-          <button type="button" class="btn btn-primary" onclick="nextStep()">
-            Next <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- ============ STEP 5: Preview ============ -->
-      <div class="step-panel" id="step4">
         <div class="form-card-header">
           <div class="form-card-title">Preview & Submit</div>
           <div class="form-card-desc">Review your application before submitting</div>
@@ -1408,7 +1270,7 @@
     // AROX APPLICATION FORM — Complete Logic
     // ========================================
 
-    const STEP_NAMES = ['Personal Information', 'College Information', 'Course Information', 'Payment', 'Preview & Submit'];
+    const STEP_NAMES = ['Personal Information', 'College Information', 'Course Information', 'Preview & Submit'];
     const STORAGE_KEY = 'arox_application_form';
     let currentStep = 0;
     let submitting = false;
@@ -1813,13 +1675,6 @@
         if (!formData.course) { showSelectError('courseSelect', 'courseError'); valid = false; }
         if (!formData.startDate) { showError('startDate', 'startDateError'); valid = false; }
         if (!formData.duration) { showSelectError('durationSelect', 'durationError'); valid = false; }
-      } else if (step === 3) {
-        if (formData.paymentMethod === 'pay_later') {
-          if (!document.getElementById('payLaterConfirm').checked) {
-            document.getElementById('payLaterConfirmError').classList.add('visible');
-            valid = false;
-          }
-        }
       }
 
       return valid;
@@ -1867,12 +1722,12 @@
         return;
       }
       collectCurrentStepData();
-      if (currentStep < 4) {
+      if (currentStep < 3) {
         currentStep++;
         showStep(currentStep);
         saveState();
       }
-      if (currentStep === 4) buildPreview();
+      if (currentStep === 3) buildPreview();
     }
 
     function prevStep() {
@@ -1939,10 +1794,6 @@
       collectCurrentStepData();
       const pc = document.getElementById('previewContent');
       const genderLabel = { male: 'Male', female: 'Female', other: 'Other' }[formData.gender] || '—';
-      const payMethodLabel = { pay_now: 'Pay Now', pay_later: 'Pay Later', pay_advance: 'Pay in Advance' }[formData.paymentMethod] || '—';
-      const payStatus = formData.paymentMethod === 'pay_now' ? 'Pending Verification' :
-                         formData.paymentMethod === 'pay_later' ? 'Pay Later (Within 7 days)' :
-                         'Advance Paid — Remaining Pending';
       const photoHtml = photoDataUrl
         ? `<img src="${photoDataUrl}" class="preview-photo" alt="Profile photo">`
         : `<div style="width:64px;height:64px;border-radius:50%;background:var(--hover);display:flex;align-items:center;justify-content:center;border:2px solid var(--border);"><i data-lucide="user" style="width:24px;height:24px;color:var(--text-muted);"></i></div>`;
@@ -1997,19 +1848,6 @@
             <div class="preview-item"><div class="preview-item-label">Duration</div><div class="preview-item-value">${formData.duration}</div></div>
           </div>
           <div class="preview-item" style="margin-top:8px;"><div class="preview-item-label">Requirements</div><div class="preview-requirements" style="margin-top:6px;">${reqTags}</div></div>
-        </div>
-
-        <!-- Payment -->
-        <div class="preview-section">
-          <div class="preview-section-header">
-            <div class="preview-section-title">Payment</div>
-            <button class="preview-edit-btn" onclick="goToStep(3)"><i data-lucide="pencil" style="width:12px;height:12px;"></i> Edit</button>
-          </div>
-          <div class="preview-grid">
-            <div class="preview-item"><div class="preview-item-label">Payment Method</div><div class="preview-item-value">${payMethodLabel}</div></div>
-            <div class="preview-item"><div class="preview-item-label">Amount</div><div class="preview-item-value">₹15,000</div></div>
-            <div class="preview-item"><div class="preview-item-label">Status</div><div class="preview-item-value">${payStatus}</div></div>
-          </div>
         </div>
       `;
       lucide.createIcons();
@@ -2081,15 +1919,11 @@
       document.getElementById('successPage').classList.add('active');
       document.getElementById('appIdDisplay').textContent = data.studentId;
 
-      const payMethodLabel = { pay_now: 'Pay Now', pay_later: 'Pay Later', pay_advance: 'Pay in Advance' }[formData.paymentMethod] || '—';
-      const payStatus = formData.paymentMethod === 'pay_now' ? 'Pending Verification' :
-                         formData.paymentMethod === 'pay_later' ? 'Pending' : 'Advance Paid';
       const today = new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
       document.getElementById('successDetails').innerHTML = `
         <div class="success-detail-row"><span class="sd-label">Course</span><span class="sd-value">${formData.course}</span></div>
         <div class="success-detail-row"><span class="sd-label">Application Date</span><span class="sd-value">${today}</span></div>
-        <div class="success-detail-row"><span class="sd-label">Payment Status</span><span class="sd-value">${payStatus}</span></div>
         <div class="success-detail-row"><span class="sd-label">Application Status</span><span class="sd-value" style="color:var(--success);">Submitted</span></div>
       `;
 

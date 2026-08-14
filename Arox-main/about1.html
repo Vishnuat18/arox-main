@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" class="theme-dark">
 <head>
+  <script>
+    (function () {
+      const storedTheme = localStorage.getItem('arox-theme') || 'dark';
+      document.documentElement.className = 'theme-' + storedTheme;
+      if (storedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AROX TECH - Building scalable software and systems</title>
@@ -9,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -52,7 +61,8 @@
           <a href="index.html" class="nav-link"><span class="nav-link-indicator"></span>Home</a>
           <a href="about.html" class="nav-link active"><span class="nav-link-indicator"></span>About</a>
           <a href="services.html" class="nav-link">Services</a>
-          <a href="courses1.html" class="nav-link">Courses</a>
+          <a href="courses.html" class="nav-link">Courses</a>
+          <a href="internships.html" class="nav-link">Internships</a>
           <a href="contact.html" class="nav-link">Contact</a>
         </nav>
       </div>
@@ -83,7 +93,11 @@
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
         </svg></a>
-      <a href="courses1.html" class="mobile-nav-link"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24"
+      <a href="courses.html" class="mobile-nav-link"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="9 18 15 12 9 6" />
+        </svg></a>
+      <a href="internships.html" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24"
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
         </svg></a>
@@ -410,23 +424,23 @@
         <div>
           <h4 class="footer-col-title">Company</h4>
           <ul class="footer-links">
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
+            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
+            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
+            <li><a href="apply.html" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
+            <li><a href="index.html" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
+            <li><a href="contact.html" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
           </ul>
         </div>
         <div>
           <h4 class="footer-col-title">Services</h4>
           <ul class="footer-links">
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
-            <li><a href="#" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
+            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
           </ul>
         </div>
         <div>
@@ -448,7 +462,7 @@
                 <polyline points="22,6 12,13 2,6" />
               </svg>info@aroxtech.com</div>
           </div>
-          <a href="#" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+          <a href="contact.html" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2">
               <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
               <path
@@ -460,9 +474,6 @@
       </div>
     </div>
   </footer>
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

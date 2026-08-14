@@ -46,17 +46,15 @@ class StatementWrapper {
 
   run(...args) {
     const params = this._resolveParams(args);
-    const result = executeQuery(this.sql, params);
-    
-    // Auto-resolve last insert ID by querying lastval() if applicable
+    // Append RETURNING id so the inserted id comes back in the SAME session
+    // (lastval() in a separate process/session would return null).
+    const isInsert = this.sql.trim().toUpperCase().startsWith('INSERT');
+    const sql = isInsert ? this.sql + ' RETURNING id' : this.sql;
+    const result = executeQuery(sql, params);
+
     let lastInsertRowid = 0;
-    if (this.sql.trim().toUpperCase().startsWith('INSERT')) {
-      try {
-        const lastValRes = executeQuery('SELECT lastval() as id');
-        lastInsertRowid = lastValRes.rows[0]?.id || 0;
-      } catch (e) {
-        // May not have generated sequence
-      }
+    if (isInsert) {
+      lastInsertRowid = (result.rows && result.rows[0] && result.rows[0].id) || 0;
     }
 
     return { 
