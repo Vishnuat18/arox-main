@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 100px);
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--erp-font);
     position: relative;
     padding-bottom: 24px;
   }
@@ -20,15 +20,16 @@
 
   /* Panels */
   .hub-panel {
-    background: #fff;
-    border: 1px solid #E5E7EB;
-    border-radius: 8px;
+    background: var(--erp-bg);
+    border: var(--erp-border-width) solid var(--erp-border);
+    border-radius: var(--erp-radius);
     padding: 16px;
+    box-shadow: var(--erp-shadow-subtle);
   }
   .panel-title {
-    font-size: 13px;
+    font-size: var(--erp-fs-sm);
     font-weight: 700;
-    color: #111;
+    color: var(--erp-text-primary);
     margin-bottom: 12px;
     display: flex;
     align-items: center;
@@ -40,7 +41,7 @@
     display: flex;
     align-items: center;
     padding: 12px 0;
-    border-bottom: 1px solid #F3F4F6;
+    border-bottom: 1px solid var(--erp-divider);
   }
   .list-row:last-child { border-bottom: none; }
   
@@ -48,37 +49,38 @@
     display: flex;
     align-items: center;
     padding: 12px;
-    border: 1px solid #E5E7EB;
-    border-radius: 6px;
-    background: #fff;
+    border: var(--erp-border-width) solid var(--erp-border);
+    border-radius: var(--erp-radius-sm);
+    background: var(--erp-bg);
     margin-bottom: 8px;
-    transition: all 0.2s;
+    transition: all var(--erp-transition);
     cursor: pointer;
   }
-  .doc-list-item:hover { border-color: #9CA3AF; }
-  .doc-list-item.active { border-color: #111; background: #F9FAFB; box-shadow: 0 0 0 1px #111; }
-  .doc-icon-wrap { color: #4B5563; margin-right: 12px; }
+  .doc-list-item:hover { border-color: var(--erp-text-secondary); }
+  .doc-list-item.active { border-color: var(--erp-primary); background: var(--erp-primary-light); box-shadow: 0 0 0 1px var(--erp-primary); }
+  .doc-icon-wrap { color: var(--erp-text-secondary); margin-right: 12px; }
   .doc-info { flex: 1; }
-  .doc-title { font-size: 13px; font-weight: 600; color: #111; }
-  .doc-status { font-size: 11px; color: #6B7280; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+  .doc-title { font-size: var(--erp-fs-sm); font-weight: 600; color: var(--erp-text-primary); }
+  .doc-status { font-size: var(--erp-fs-xs); color: var(--erp-text-secondary); margin-top: 2px; display: flex; align-items: center; gap: 4px; }
   
   .btn-sm {
-    background: #fff; border: 1px solid #E5E7EB; border-radius: 4px; padding: 4px 8px;
-    font-size: 11px; font-weight: 600; color: #111; cursor: pointer; transition: 0.2s;
+    background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: 4px; padding: 4px 8px;
+    font-size: var(--erp-fs-xs); font-weight: 600; color: var(--erp-text-primary); cursor: pointer; transition: var(--erp-transition);
+    font-family: var(--erp-font);
   }
-  .btn-sm:hover { background: #f3f4f6; }
+  .btn-sm:hover { background: var(--erp-hover); }
 
   /* Buttons */
-  .btn-primary { background: #111; color: #fff; border: 1px solid #111; }
-  .btn-primary:hover { background: #000; }
+  .btn-primary { background: var(--erp-primary); color: #fff; border: 1px solid var(--erp-primary); }
+  .btn-primary:hover { background: #0F4EBB; }
   
   .action-bar {
     position: sticky;
     bottom: 0;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
-    border: 1px solid #E5E7EB;
-    border-radius: 8px;
+    border: var(--erp-border-width) solid var(--erp-border);
+    border-radius: var(--erp-radius);
     padding: 12px 24px;
     display: flex;
     gap: 12px;
@@ -90,27 +92,28 @@
   }
   .action-bar button {
     display: flex; align-items: center; gap: 6px; padding: 10px 20px;
-    border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
-    border: 1px solid #E5E7EB; background: #fff; color: #111; transition: 0.2s;
+    border-radius: var(--erp-radius-sm); font-size: var(--erp-fs-sm); font-weight: 600; cursor: pointer;
+    border: var(--erp-border-width) solid var(--erp-border); background: var(--erp-bg); color: var(--erp-text-primary); 
+    transition: var(--erp-transition); font-family: var(--erp-font);
   }
-  .action-bar button:hover { background: #f9fafb; }
-  .action-bar button.primary { background: #111; color: #fff; border-color: #111; }
-  .action-bar button.primary:hover { background: #000; }
+  .action-bar button:hover { background: var(--erp-hover); }
+  .action-bar button.primary { background: var(--erp-primary); color: #fff; border-color: var(--erp-primary); }
+  .action-bar button.primary:hover { background: #0F4EBB; }
 
   /* Iframe Sandbox */
   .sandbox-container {
-    flex: 1; background: #F3F4F6; border-radius: 8px; border: 1px solid #E5E7EB;
-    display: flex; flex-direction: column; overflow: hidden; min-height: 500px; position: relative;
+    flex: 1; background: var(--erp-bg-secondary); border-radius: var(--erp-radius); border: var(--erp-border-width) solid var(--erp-border);
+    display: flex; flex-direction: column; overflow: hidden; min-height: 600px; position: relative;
   }
   .sandbox-toolbar {
     display: flex; justify-content: center; gap: 16px; padding: 10px;
-    background: #fff; border-bottom: 1px solid #E5E7EB;
+    background: var(--erp-bg); border-bottom: var(--erp-border-width) solid var(--erp-border);
   }
-  .sandbox-toolbar button { background: none; border: none; cursor: pointer; color: #4B5563; }
+  .sandbox-toolbar button { background: none; border: none; cursor: pointer; color: var(--erp-text-secondary); font-family: var(--erp-font); }
 
   /* History Accordion */
-  .history-accordion { margin-top: 24px; border: 1px solid #E5E7EB; border-radius: 8px; background: #fff; }
-  .history-header { padding: 16px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .history-accordion { margin-top: 24px; border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); background: var(--erp-bg); }
+  .history-header { padding: 16px; font-size: var(--erp-fs-sm); font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--erp-text-primary); }
   .history-content { display: none; padding: 0 16px 16px; }
   .history-accordion.open .history-content { display: block; }
 </style>

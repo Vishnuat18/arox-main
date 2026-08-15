@@ -1072,6 +1072,87 @@ document.addEventListener("DOMContentLoaded", () => {
     selectCourse.dispatchEvent(new Event("change"));
   }
 
+  // ERP Integration: postMessage API for Live Document Hub
+  window.addEventListener('message', (event) => {
+    const { type, data } = event.data || {};
+    if (type === 'UPDATE_DATA' || type === 'UPDATE_CERT') {
+      if (data.name) {
+        inputName.value = data.name;
+        inputName.dispatchEvent(new Event('input'));
+      }
+      if (data.domain) {
+        let foundCourse = false;
+        Array.from(selectCourse.options).forEach(opt => {
+          if (opt.text.toUpperCase() === data.domain.toUpperCase() || opt.value.toUpperCase() === data.domain.toUpperCase() || (data.domain.toUpperCase().includes(opt.value.toUpperCase()) && opt.value !== '')) {
+            selectCourse.value = opt.value;
+            foundCourse = true;
+          }
+        });
+        if (!foundCourse) {
+          selectCourse.value = "other";
+          inputCourse.value = data.domain;
+          inputCourse.style.display = "block";
+          inputCourse.dispatchEvent(new Event("input"));
+        } else {
+          selectCourse.dispatchEvent(new Event("change"));
+        }
+        
+        let foundDomain = false;
+        Array.from(selectDomain.options).forEach(opt => {
+          if (opt.text.toUpperCase() === data.domain.toUpperCase() || opt.value.toUpperCase() === data.domain.toUpperCase()) {
+            selectDomain.value = opt.value;
+            foundDomain = true;
+          }
+        });
+        if (!foundDomain) {
+          selectDomain.value = "other";
+          inputDomain.value = data.domain;
+          inputDomain.style.display = "block";
+          inputDomain.dispatchEvent(new Event("input"));
+        } else {
+          selectDomain.dispatchEvent(new Event("change"));
+        }
+      }
+      if (data.date) {
+        inputIssueDate.value = toDateInputValue(data.date);
+        inputIssueDate.dispatchEvent(new Event('input'));
+        inputIssueDate.dispatchEvent(new Event('change'));
+      }
+      if (data.certId) {
+        const certMatch = data.certId.match(/AT\/INT\/(\d{4})\/(\d+)/);
+        if (certMatch) {
+          inputCertYear.value = certMatch[1];
+          inputCertNum.value = certMatch[2];
+          updateCertId();
+        } else {
+          inputCertId.value = data.certId;
+          inputCertId.dispatchEvent(new Event('input'));
+        }
+      }
+      if (data.desc) {
+        inputDescription.value = data.desc;
+        inputDescription.dispatchEvent(new Event('input'));
+      }
+      adjustPreviewScale();
+    } else if (type === 'EXPORT_PDF') {
+      runExport("pdf");
+    }
+  });
+
+  // Hide editor panel when embedded inside Document Hub iframe
+  if (window !== window.top) {
+    const editorPanel = document.getElementById("editorPanel");
+    if (editorPanel) {
+      editorPanel.style.display = "none";
+    }
+    const previewPanel = document.querySelector(".preview-panel");
+    if (previewPanel) {
+      previewPanel.style.width = "100%";
+      previewPanel.style.maxWidth = "100%";
+      previewPanel.style.flex = "1";
+    }
+  }
+
   try { if (typeof renderDatabase === 'function') renderDatabase(); } catch(e) {}
   advanceCertId({ rotateToken: false });
 });

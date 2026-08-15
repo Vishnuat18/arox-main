@@ -13,15 +13,20 @@
     <%= typeof title !=='undefined' ? title : 'AROX Tech' %>
   </title>
 
+  <!-- Google Fonts: Montserrat (unified brand font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <!-- Tailwind CSS v3 CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { inter: ['Montserrat', 'sans-serif'] },
+          fontFamily: { sans: ['Montserrat', 'sans-serif'] },
           colors: {
-            primary: { DEFAULT: '#4F46E5', light: '#6366F1', dark: '#4338CA', 50: '#EEF2FF', 100: '#E0E7FF', 200: '#C7D2FE' },
+            primary: { DEFAULT: '#155EEF', light: '#3B82F6', dark: '#0F4EBB', 50: '#EBF2FF', 100: '#D6E4FF', 200: '#ADC9FF' },
             secondary: { DEFAULT: '#7C3AED', light: '#8B5CF6' },
             accent: { DEFAULT: '#06B6D4', light: '#22D3EE' },
           }

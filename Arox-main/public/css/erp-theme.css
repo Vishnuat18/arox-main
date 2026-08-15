@@ -1,36 +1,55 @@
 /* ============================================
    AROX ERP - Premium Enterprise Design System
    Minimal, Monochrome, Linear/Notion Style
+   Font: Montserrat (unified with main website)
    ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
   /* Enterprise Monochrome Palette */
   --erp-bg: #FFFFFF;
-  --erp-bg-secondary: #FAFAFA;
-  --erp-sidebar: #111111;
-  --erp-text-primary: #111111;
-  --erp-text-secondary: #6B7280;
-  --erp-border: #E5E7EB;
-  --erp-divider: #ECECEC;
-  --erp-hover: #F4F4F5;
+  --erp-bg-secondary: #F8F9FA;
+  --erp-sidebar: #0A0B0F;
+  --erp-text-primary: #0A1B3F;
+  --erp-text-secondary: #5A6E8A;
+  --erp-border: #D6E0EF;
+  --erp-divider: #E8ECF2;
+  --erp-hover: #F1F3F7;
   --erp-active: #000000;
+  
+  /* Brand Accent */
+  --erp-primary: #155EEF;
+  --erp-primary-light: #E8F0FE;
   
   /* Status Colors */
   --erp-success: #16A34A;
+  --erp-success-bg: #F0FDF4;
+  --erp-success-border: #BBF7D0;
   --erp-warning: #D97706;
+  --erp-warning-bg: #FFFBEB;
   --erp-danger: #DC2626;
+  --erp-danger-bg: #FEF2F2;
 
   /* Typography */
-  --erp-font: 'Inter', sans-serif;
+  --erp-font: 'Montserrat', sans-serif;
+
+  /* Responsive Type Scale */
+  --erp-fs-xs: 11px;
+  --erp-fs-sm: 12px;
+  --erp-fs-base: 14px;
+  --erp-fs-md: 16px;
+  --erp-fs-lg: 18px;
+  --erp-fs-xl: 22px;
+  --erp-fs-2xl: 28px;
+  --erp-fs-display: 32px;
 
   /* Components */
-  --erp-radius: 12px;
+  --erp-radius: 10px;
+  --erp-radius-sm: 6px;
   --erp-border-width: 1px;
   
   /* Shadows */
   --erp-shadow-subtle: 0px 1px 2px rgba(0,0,0,0.04);
+  --erp-shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
   --erp-shadow-hover: 0px 6px 20px rgba(0,0,0,0.06);
 
   /* Transitions */

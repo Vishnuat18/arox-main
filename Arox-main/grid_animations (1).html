@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Instance GPGPU Particle Simulator | CoffeeCrews</title>
+    <!-- SEO tags -->
+    <meta name="description" content="High performance multi-instance GPGPU interactive 3D particle simulation grid showcasing Coffee Crews, React, and Python logos side-by-side using Three.js and custom GLSL shaders.">
+    <meta name="keywords" content="Three.js, WebGL, FBO, GPGPU, React Logo, Python Logo, CoffeeCrews, Grid Animation">
+    <meta name="author" content="CoffeeCrews">
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    
+    <style>
+        :root[data-theme="dark"] {
+            --bg-color: #06040d;
+            --bg-gradient: radial-gradient(circle at 50% 50%, #11092a 0%, #06040d 100%);
+            --card-bg: rgba(14, 9, 31, 0.65);
+            --card-border: rgba(139, 92, 246, 0.2);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-purple: #8b5cf6;
+            --glow-color: rgba(139, 92, 246, 0.25);
+            --accent-active: #a78bfa;
+            --control-track: rgba(255, 255, 255, 0.1);
+        }
+        
+        :root[data-theme="light"] {
+            --bg-color: #f1f5f9;
+            --bg-gradient: radial-gradient(circle at 50% 50%, #e2e8f0 0%, #f1f5f9 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(139, 92, 246, 0.15);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-purple: #7c3aed;
+            --glow-color: rgba(124, 58, 237, 0.15);
+            --accent-active: #6d28d9;
+            --control-track: rgba(0, 0, 0, 0.08);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.5s ease;
+        }
+
+        /* Ambient scanlines */
+        body::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* TOP DASHBOARD CONTROL HEADER */
+        .dashboard-header {
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(14, 9, 31, 0.35);
+            border-bottom: 1px solid var(--card-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 15;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .brand-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.15rem;
+            letter-spacing: 2px;
+            color: var(--accent-purple);
+            text-shadow: 0 0 10px var(--glow-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .back-btn:hover {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+            color: #fff;
+            transform: translateX(-3px);
+        }
+
+        .dashboard-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Control dashboard items */
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .global-sliders {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .global-slider-group {
+            display: flex;
+            flex-direction: column;
+            width: 130px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .slider-val {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-purple);
+        }
+
+        /* Sliders styling */
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 5px;
+            border-radius: 3px;
+            background: var(--control-track);
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-purple);
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--glow-color);
+            transition: all 0.15s ease;
+        }
+        
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            background: var(--accent-active);
+        }
+
+        /* Preset select and button styling */
+        .preset-select-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .select-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .theme-select {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .theme-select:hover {
+            border-color: var(--accent-purple);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .action-btn.primary {
+            background: var(--accent-purple);
+            border-color: var(--accent-purple);
+        }
+        
+        .action-btn.primary:hover {
+            background: var(--accent-active);
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+
+        /* 3 ROWS, 3 COLUMNS GRID CONTAINER */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 24px;
+            flex: 1;
+            width: 100%;
+            z-index: 1;
+        }
+
+        @media (max-width: 1199px) and (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .engine-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            height: 380px;
+        }
+
+        .engine-card:hover {
+            border-color: rgba(139, 92, 246, 0.35);
+            box-shadow: 0 12px 35px var(--glow-color);
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-light {
+            font-size: 0.7rem;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+            box-shadow: 0 0 6px #10b981;
+        }
+
+        /* 3D Canvas elements wrappers */
+        .canvas-wrapper {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            outline: none;
+            cursor: grab;
+        }
+
+        .canvas-wrapper:active {
+            cursor: grabbing;
+        }
+
+        .canvas-wrapper canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-footer {
+            padding: 12px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.15);
+            font-size: 0.72rem;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-val {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--accent-purple);
+            font-weight: bold;
+        }
+
+        /* Floating Theme Toggle (Bottom Left) */
+        .theme-toggle-floating {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            z-index: 15;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle-floating:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: scale(1.08);
+        }
+        
+        .theme-toggle-floating i {
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        [data-theme="dark"] .sun-icon,
+        [data-theme="light"] .moon-icon {
+            display: block;
+        }
+        
+        [data-theme="dark"] .moon-icon,
+        [data-theme="light"] .sun-icon {
+            display: none;
+        }
+
+        /* ── Flutter Create Card Special Styles ── */
+        .engine-card.flutter-card {
+            background: linear-gradient(135deg,
+                rgba(0, 68, 130, 0.22) 0%,
+                rgba(6, 4, 20, 0.72) 45%,
+                rgba(101, 155, 211, 0.12) 100%);
+            border-color: rgba(101, 155, 211, 0.38);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Diagonal stripe pattern overlay */
+        .engine-card.flutter-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(
+                -45deg,
+                rgba(101, 155, 211, 0.025) 0px,
+                rgba(101, 155, 211, 0.025) 1px,
+                transparent 1px,
+                transparent 14px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Corner glow accents */
+        .engine-card.flutter-card .canvas-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .flutter-create-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #659BD3 0%, #2C79C1 50%, #004482 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        /* Animated underline on the title */
+        .flutter-create-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #659BD3, #004482);
+            border-radius: 2px;
+            animation: flutter-line 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes flutter-line {
+            0%   { width: 0%; opacity: 0.4; }
+            100% { width: 100%; opacity: 1; }
+        }
+
+        /* Pulsing badge */
+        .flutter-badge {
+            font-size: 0.6rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #659BD3;
+            background: rgba(101, 155, 211, 0.12);
+            border: 1px solid rgba(101, 155, 211, 0.45);
+            border-radius: 4px;
+            padding: 2px 7px;
+            margin-left: 6px;
+            animation: badge-pulse 2s ease-in-out infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { box-shadow: 0 0 0px rgba(101,155,211,0); }
+            50% { box-shadow: 0 0 9px rgba(101,155,211,0.55); }
+        }
+
+        .engine-card.flutter-card .card-header {
+            background: linear-gradient(90deg,
+                rgba(0, 68, 130, 0.35) 0%,
+                rgba(6, 4, 20, 0.55) 100%);
+            border-bottom: 1px solid rgba(101, 155, 211, 0.22);
+            position: relative;
+            z-index: 1;
+        }
+
+        .engine-card.flutter-card .card-footer {
+            background: linear-gradient(90deg,
+                rgba(44, 121, 193, 0.22) 0%,
+                rgba(6, 4, 20, 0.55) 100%);
+            border-top: 1px solid rgba(101, 155, 211, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── C++ Create Card Special Styles ── */
+        .engine-card.cpp-card {
+            background: linear-gradient(135deg,
+                rgba(0, 68, 130, 0.22) 0%,
+                rgba(6, 4, 20, 0.72) 45%,
+                rgba(101, 155, 211, 0.12) 100%);
+            border-color: rgba(101, 155, 211, 0.38);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hexagon grid pattern overlay for C++ */
+        .engine-card.cpp-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(
+                    60deg,
+                    rgba(101, 155, 211, 0.03) 0px,
+                    rgba(101, 155, 211, 0.03) 1px,
+                    transparent 1px,
+                    transparent 18px
+                ),
+                repeating-linear-gradient(
+                    -60deg,
+                    rgba(0, 68, 130, 0.03) 0px,
+                    rgba(0, 68, 130, 0.03) 1px,
+                    transparent 1px,
+                    transparent 18px
+                );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .engine-card.cpp-card .canvas-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cpp-create-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #659BD3 0%, #2C79C1 50%, #004482 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .cpp-create-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #659BD3, #004482);
+            border-radius: 2px;
+            animation: cpp-line 2.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes cpp-line {
+            0%   { width: 0%; opacity: 0.3; }
+            100% { width: 100%; opacity: 1; }
+        }
+
+        .cpp-badge {
+            font-size: 0.58rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #659BD3;
+            background: rgba(101, 155, 211, 0.12);
+            border: 1px solid rgba(101, 155, 211, 0.45);
+            border-radius: 4px;
+            padding: 2px 7px;
+            margin-left: 6px;
+            animation: cpp-badge-pulse 2.2s ease-in-out infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes cpp-badge-pulse {
+            0%, 100% { box-shadow: 0 0 0px rgba(101,155,211,0); }
+            50%       { box-shadow: 0 0 9px rgba(101,155,211,0.55); }
+        }
+
+        .engine-card.cpp-card .card-header {
+            background: linear-gradient(90deg,
+                rgba(0, 68, 130, 0.35) 0%,
+                rgba(6, 4, 20, 0.55) 100%);
+            border-bottom: 1px solid rgba(101, 155, 211, 0.22);
+            position: relative;
+            z-index: 1;
+        }
+
+        .engine-card.cpp-card .card-footer {
+            background: linear-gradient(90deg,
+                rgba(44, 121, 193, 0.22) 0%,
+                rgba(6, 4, 20, 0.55) 100%);
+            border-top: 1px solid rgba(101, 155, 211, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Linux Create Card Special Styles ── */
+        .engine-card.linux-card {
+            background: linear-gradient(135deg,
+                rgba(30, 20, 10, 0.60) 0%,
+                rgba(6, 4, 13, 0.75) 50%,
+                rgba(255, 204, 0, 0.08) 100%);
+            border-color: rgba(255, 204, 0, 0.30);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Horizontal scanline pattern for Linux terminal feel */
+        .engine-card.linux-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255, 204, 0, 0.022) 0px,
+                    rgba(255, 204, 0, 0.022) 1px,
+                    transparent 1px,
+                    transparent 10px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(30, 20, 10, 0.03) 0px,
+                    rgba(30, 20, 10, 0.03) 1px,
+                    transparent 1px,
+                    transparent 28px
+                );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .engine-card.linux-card .canvas-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .linux-create-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #FFCC00 0%, #E6A800 55%, #CC8800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .linux-create-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #FFCC00, #CC8800);
+            border-radius: 2px;
+            animation: linux-line 3.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes linux-line {
+            0%   { width: 0%; opacity: 0.3; }
+            100% { width: 100%; opacity: 1; }
+        }
+
+        .linux-badge {
+            font-size: 0.58rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #FFCC00;
+            background: rgba(255, 204, 0, 0.10);
+            border: 1px solid rgba(255, 204, 0, 0.42);
+            border-radius: 4px;
+            padding: 2px 7px;
+            margin-left: 6px;
+            animation: linux-badge-pulse 2.5s ease-in-out infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes linux-badge-pulse {
+            0%, 100% { box-shadow: 0 0 0px rgba(255,204,0,0); }
+            50%       { box-shadow: 0 0 10px rgba(255,204,0,0.5); }
+        }
+
+        .engine-card.linux-card .card-header {
+            background: linear-gradient(90deg,
+                rgba(30, 20, 5, 0.55) 0%,
+                rgba(6, 4, 13, 0.60) 100%);
+            border-bottom: 1px solid rgba(255, 204, 0, 0.18);
+            position: relative;
+            z-index: 1;
+        }
+
+        .engine-card.linux-card .card-footer {
+            background: linear-gradient(90deg,
+                rgba(50, 35, 5, 0.30) 0%,
+                rgba(6, 4, 13, 0.55) 100%);
+            border-top: 1px solid rgba(255, 204, 0, 0.12);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Google Ads Card Special Styles ── */
+        .engine-card.googleads-card {
+            background: linear-gradient(135deg,
+                rgba(26, 115, 232, 0.18) 0%,
+                rgba(6, 4, 20, 0.70) 40%,
+                rgba(52, 168, 83, 0.10) 100%);
+            border-color: rgba(26, 115, 232, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Diagonal stripe pattern overlay */
+        .engine-card.googleads-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: repeating-linear-gradient(
+                -45deg,
+                rgba(26, 115, 232, 0.025) 0px,
+                rgba(26, 115, 232, 0.025) 1px,
+                transparent 1px,
+                transparent 14px
+            );
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .engine-card.googleads-card .canvas-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .googleads-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            background: linear-gradient(90deg, #1a73e8 0%, #f9ab00 50%, #34a853 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        /* Animated underline on the title */
+        .googleads-title::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(90deg, #1a73e8, #34a853);
+            border-radius: 2px;
+            animation: googleads-line 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes googleads-line {
+            0%   { width: 0%; opacity: 0.4; }
+            100% { width: 100%; opacity: 1; }
+        }
+
+        /* Pulsing badge */
+        .googleads-badge {
+            font-size: 0.6rem;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: #1a73e8;
+            background: rgba(26, 115, 232, 0.12);
+            border: 1px solid rgba(26, 115, 232, 0.4);
+            border-radius: 4px;
+            padding: 2px 7px;
+            margin-left: 6px;
+            animation: googleads-badge-pulse 2s ease-in-out infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes googleads-badge-pulse {
+            0%, 100% { box-shadow: 0 0 0px rgba(26,115,232,0); }
+            50% { box-shadow: 0 0 8px rgba(26,115,232,0.5); }
+        }
+
+        .engine-card.googleads-card .card-header {
+            background: linear-gradient(90deg,
+                rgba(26, 115, 232, 0.3) 0%,
+                rgba(6, 4, 20, 0.5) 100%);
+            border-bottom: 1px solid rgba(26, 115, 232, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .engine-card.googleads-card .card-footer {
+            background: linear-gradient(90deg,
+                rgba(52, 168, 83, 0.25) 0%,
+                rgba(6, 4, 20, 0.5) 100%);
+            border-top: 1px solid rgba(26, 115, 232, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Responsive Layout stacking */
+        @media (max-width: 991px) {
+            .dashboard-header {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+            }
+            .header-controls {
+                flex-direction: column;
+                width: 100%;
+                gap: 16px;
+            }
+            .global-sliders {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .preset-select-wrapper, .action-btns {
+                width: 100%;
+                justify-content: center;
+            }
+            .grid-container {
+                grid-template-columns: 1fr !important;
+                height: auto;
+                gap: 20px;
+                padding: 16px;
+            }
+            .engine-card {
+                height: 380px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Control Dashboard -->
+    <header class="dashboard-header">
+        <div class="brand-section">
+            <a href="index.html" class="brand-logo">
+                <i class="fa-solid fa-mug-hot"></i> COFFEECREWS
+            </a>
+            <a href="index.html" class="back-btn">
+                <i class="fa-solid fa-arrow-left"></i> Home
+            </a>
+        </div>
+
+        <h1 class="dashboard-title">Grid Particles Engine</h1>
+
+        <div class="header-controls">
+            <!-- Global Sliders -->
+            <div class="global-sliders">
+                <div class="global-slider-group">
+                    <div class="slider-header">
+                        <span>Size</span>
+                        <span class="slider-val" id="size-val">2.5</span>
+                    </div>
+                    <input type="range" class="slider" id="slider-size" min="0.5" max="6.0" step="0.1" value="2.5">
+                </div>
+                <div class="global-slider-group">
+                    <div class="slider-header">
+                        <span>Speed</span>
+                        <span class="slider-val" id="speed-val">0.015</span>
+                    </div>
+                    <input type="range" class="slider" id="slider-speed" min="0.005" max="0.05" step="0.001" value="0.015">
+                </div>
+                <div class="global-slider-group">
+                    <div class="slider-header">
+                        <span>Turbulence</span>
+                        <span class="slider-val" id="noise-val">0.35</span>
+                    </div>
+                    <input type="range" class="slider" id="slider-noise" min="0.0" max="1.5" step="0.05" value="0.35">
+                </div>
+            </div>
+
+            <!-- Global Preset & Actions -->
+            <div class="preset-select-wrapper">
+                <span class="select-label">Theme Preset:</span>
+                <select class="theme-select" id="preset-selector">
+                    <option value="classic">Classic Logos</option>
+                    <option value="cyberpunk">Cyberpunk Neon</option>
+                    <option value="matrix">Matrix Code</option>
+                    <option value="fire">Volcanic Flame</option>
+                    <option value="aurora">Aurora Borealis</option>
+                    <option value="chrome">Platinum Chrome</option>
+                </select>
+            </div>
+
+            <div class="action-btns">
+                <button class="action-btn" id="btn-disperse-all"><i class="fa-solid fa-wind"></i> Disperse All</button>
+                <button class="action-btn primary" id="btn-reset-all"><i class="fa-solid fa-rotate-left"></i> Align All</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Grid Layout: 3 Rows, 3 Columns -->
+    <main class="grid-container">
+        <!-- Card 1: React -->
+        <section class="engine-card">
+            <header class="card-header">
+                <h2 class="card-title" style="color: #61dafb"><i class="fa-brands fa-react"></i> React Engine</h2>
+                <div class="status-light">
+                    <span class="status-dot"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-react"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val">16,384</span> particles</span>
+                <span>Active: <span class="stat-val">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 2: Figma -->
+        <section class="engine-card">
+            <header class="card-header">
+                <h2 class="card-title" style="color: #a259ff"><i class="fa-brands fa-figma"></i> Figma Engine</h2>
+                <div class="status-light">
+                    <span class="status-dot"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-figma"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val">16,384</span> particles</span>
+                <span>Active: <span class="stat-val">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 3: Python -->
+        <section class="engine-card">
+            <header class="card-header">
+                <h2 class="card-title" style="color: #fbbf24"><i class="fa-brands fa-python"></i> Python Engine</h2>
+                <div class="status-light">
+                    <span class="status-dot"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-python"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val">16,384</span> particles</span>
+                <span>Active: <span class="stat-val">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 4: AWS -->
+        <section class="engine-card">
+            <header class="card-header">
+                <h2 class="card-title" style="color: #ff9900"><i class="fa-brands fa-aws"></i> AWS Engine</h2>
+                <div class="status-light">
+                    <span class="status-dot"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-aws"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val">16,384</span> particles</span>
+                <span>Active: <span class="stat-val">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 5: Mobile App -->
+        <section class="engine-card">
+            <header class="card-header">
+                <h2 class="card-title" style="color: #3ddc84"><i class="fa-solid fa-mobile-screen-button"></i> Mobile App Engine</h2>
+                <div class="status-light">
+                    <span class="status-dot"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-mobile"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val">16,384</span> particles</span>
+                <span>Active: <span class="stat-val">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 6: Flutter Create -->
+        <section class="engine-card flutter-card">
+            <header class="card-header">
+                <h2 class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 60 75" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:4px;vertical-align:middle">
+                        <polygon points="36,0 0,36 12,48 60,0" fill="#54C5F8"/>
+                        <polygon points="12,48 36,24 60,48 36,72" fill="#29B6F6"/>
+                        <polygon points="36,48 60,48 60,72 36,72" fill="#0553B1"/>
+                    </svg>
+                    <span class="flutter-create-title">flutter create</span>
+                    <span class="flutter-badge">v3</span>
+                </h2>
+                <div class="status-light">
+                    <span class="status-dot" style="background:#659BD3;box-shadow:0 0 6px #659BD3"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-flutter"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val" style="color:#659BD3">16,384</span> particles</span>
+                <span>Engine: <span class="stat-val" style="color:#2C79C1">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 7: C++ Create -->
+        <section class="engine-card cpp-card">
+            <header class="card-header">
+                <h2 class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" style="margin-right:5px;vertical-align:middle">
+                        <polygon points="64,4 112,30 112,82 64,108 16,82 16,30" fill="#659BD3"/>
+                        <polygon points="64,4 112,30 112,82 64,108" fill="#004482"/>
+                        <text x="32" y="78" font-size="52" font-weight="bold" fill="white" font-family="Arial">C</text>
+                        <text x="72" y="70" font-size="30" font-weight="bold" fill="white" font-family="Arial">++</text>
+                    </svg>
+                    <span class="cpp-create-title">C++ create</span>
+                    <span class="cpp-badge">v23</span>
+                </h2>
+                <div class="status-light">
+                    <span class="status-dot" style="background:#659BD3;box-shadow:0 0 6px #659BD3"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-cpp"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val" style="color:#659BD3">16,384</span> particles</span>
+                <span>Engine: <span class="stat-val" style="color:#2C79C1">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 8: Linux Create -->
+        <section class="engine-card linux-card">
+            <header class="card-header">
+                <h2 class="card-title">
+                    <svg width="18" height="20" viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg" style="margin-right:5px;vertical-align:middle">
+                        <!-- Tux simplified inline SVG -->
+                        <ellipse cx="32" cy="18" rx="14" ry="16" fill="#111"/>
+                        <ellipse cx="32" cy="44" rx="18" ry="22" fill="#111"/>
+                        <ellipse cx="32" cy="42" rx="11" ry="16" fill="#f5f5f5"/>
+                        <ellipse cx="28" cy="18" rx="4" ry="5" fill="white"/>
+                        <ellipse cx="36" cy="18" rx="4" ry="5" fill="white"/>
+                        <ellipse cx="28" cy="18" rx="2" ry="2.5" fill="#111"/>
+                        <ellipse cx="36" cy="18" rx="2" ry="2.5" fill="#111"/>
+                        <ellipse cx="32" cy="26" rx="6" ry="4" fill="#FFCC00"/>
+                        <ellipse cx="22" cy="62" rx="8" ry="5" fill="#FFCC00"/>
+                        <ellipse cx="42" cy="62" rx="8" ry="5" fill="#FFCC00"/>
+                    </svg>
+                    <span class="linux-create-title">linux create</span>
+                    <span class="linux-badge">v6.9</span>
+                </h2>
+                <div class="status-light">
+                    <span class="status-dot" style="background:#FFCC00;box-shadow:0 0 6px #FFCC00"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-linux"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val" style="color:#FFCC00">16,384</span> particles</span>
+                <span>Engine: <span class="stat-val" style="color:#E6A800">FBO GPU</span></span>
+            </footer>
+        </section>
+
+        <!-- Card 9: Google Ads -->
+        <section class="engine-card googleads-card">
+            <header class="card-header">
+                <h2 class="card-title">
+                    <svg width="18" height="18" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" style="margin-right:5px;vertical-align:middle">
+                        <path d="M72.2 4.4L18.6 97.2c-2.4 4.1.6 9.3 5.4 9.3h107.2c4.8 0 7.8-5.2 5.4-9.3L83 4.4c-2.4-4.2-8.4-4.2-10.8 0z" fill="#f9ab00"/>
+                        <path d="M83 4.4L29.4 97.2c-2.4 4.1.6 9.3 5.4 9.3h53.6c4.8 0 7.8-5.2 5.4-9.3L83 4.4c-2.4-4.2-8.4-4.2-10.8 0z" fill="#1a73e8"/>
+                        <circle cx="29.4" cy="97.2" r="21.4" fill="#34a853"/>
+                    </svg>
+                    <span class="googleads-title">Google Ads</span>
+                    <span class="googleads-badge">v1.2</span>
+                </h2>
+                <div class="status-light">
+                    <span class="status-dot" style="background:#1a73e8;box-shadow:0 0 6px #1a73e8"></span>
+                    <span>ONLINE</span>
+                </div>
+            </header>
+            <div class="canvas-wrapper" id="canvas-googleads"></div>
+            <footer class="card-footer">
+                <span>Density: <span class="stat-val" style="color:#1a73e8">16,384</span> particles</span>
+                <span>Engine: <span class="stat-val" style="color:#34a853">FBO GPU</span></span>
+            </footer>
+        </section>
+    </main>
+
+    <!-- Floating Theme Switch -->
+    <div class="theme-toggle-floating" id="theme-toggle">
+        <i class="fas fa-moon moon-icon" style="color: #c084fc;"></i>
+        <i class="fas fa-sun sun-icon" style="color: #eab308;"></i>
+    </div>
+
+    <!-- Import base64 string for mobile logo -->
+    <script src="assets/mobile-logo-base64.js"></script>
+    <script src="assets/flutter-logo-base64.js"></script>
+    <script src="assets/cpp-logo-base64.js"></script>
+    <script src="assets/linux-logo-base64.js"></script>
+    <script src="assets/googleads-logo-base64.js"></script>
+
+    <!-- Particle simulation logic module -->
+    <script type="module">
+        import * as THREE from 'three';
+
+        // ═══════════════════════════════════════════
+        // SVGS DATA URLS (PREVENTS local file:// CORS BLOCKS)
+        // ═══════════════════════════════════════════
+        
+        // 1. React Logo SVG
+        const reactSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-11.5 -10.23174 23 20.46348"><title>React Logo</title><circle cx="0" cy="0" r="2.05" fill="#61dafb"/><g stroke="#61dafb" stroke-width="1" fill="none"><ellipse rx="11" ry="4.2"/><ellipse rx="11" ry="4.2" transform="rotate(60)"/><ellipse rx="11" ry="4.2" transform="rotate(120)"/></g></svg>`;
+        const reactSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(reactSvg);
+
+        // 2. Python Logo SVG
+        const pythonSvg = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0.21 -0.077 110 110"><linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="63.8159" y1="56.6829" x2="118.4934" y2="1.8225" gradientTransform="matrix(1 0 0 -1 -53.2974 66.4321)"> <stop offset="0" stop-color="#387EB8"/> <stop offset="1" stop-color="#366994"/></linearGradient><path fill="url(#SVGID_1_)" d="M55.023-0.077c-25.971,0-26.25,10.081-26.25,12.156c0,3.148,0,12.594,0,12.594h26.75v3.781 c0,0-27.852,0-37.375,0c-7.949,0-17.938,4.833-17.938,26.25c0,19.673,7.792,27.281,15.656,27.281c2.335,0,9.344,0,9.344,0 s0-9.765,0-13.125c0-5.491,2.721-15.656,15.406-15.656c15.91,0,19.971,0,26.531,0c3.902,0,14.906-1.696,14.906-14.406 c0-13.452,0-17.89,0-24.219C82.054,11.426,81.515-0.077,55.023-0.077z M40.273,8.392c2.662,0,4.813,2.15,4.813,4.813 c0,2.661-2.151,4.813-4.813,4.813s-4.813-2.151-4.813-4.813C35.46,10.542,37.611,8.392,40.273,8.392z"/><linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="97.0444" y1="21.6321" x2="155.6665" y2="-34.5308" gradientTransform="matrix(1 0 0 -1 -53.2974 66.4321)"> <stop offset="0" stop-color="#FFE052"/> <stop offset="1" stop-color="#FFC331"/></linearGradient><path fill="url(#SVGID_2_)" d="M55.397,109.923c25.959,0,26.282-10.271,26.282-12.156c0-3.148,0-12.594,0-12.594H54.897v-3.781 c0,0,28.032,0,37.375,0c8.009,0,17.938-4.954,17.938-26.25c0-23.322-10.538-27.281-15.656-27.281c-2.336,0-9.344,0-9.344,0 s0,10.216,0,13.125c0,5.491-2.631,15.656-15.406,15.656c-15.91,0-19.476,0-26.532,0c-3.892,0-14.906,1.896-14.906,14.406 c0,14.475,0,18.265,0,24.219C28.366,100.497,31.562,109.923,55.397,109.923z M70.148,101.454c-2.662,0-4.813-2.151-4.813-4.813 s2.15-4.813,4.813-4.813c2.661,0,4.813,2.151,4.813,4.813S72.809,101.454,70.148,101.454z"/></svg>`;
+        const pythonSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(pythonSvg);
+
+        // 3. Figma Logo SVG
+        const figmaSvg = `<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300"><style>.st0{fill:#0acf83}.st1{fill:#a259ff}.st2{fill:#f24e1e}.st3{fill:#ff7262}.st4{fill:#1abcfe}</style><title>Figma.logo</title><desc>Created using Figma</desc><path id="path0_fill" class="st0" d="M50 300c27.6 0 50-22.4 50-50v-50H50c-27.6 0-50 22.4-50 50s22.4 50 50 50z"/><path id="path1_fill" class="st1" d="M0 150c0-27.6 22.4-50 50-50h50v100H50c-27.6 0-50-22.4-50-50z"/><path id="path1_fill_1_" class="st2" d="M0 50C0 22.4 22.4 0 50 0h50v100H50C22.4 100 0 77.6 0 50z"/><path id="path2_fill" class="st3" d="M100 0h50c27.6 0 50 22.4 50 50s-22.4 50-50 50h-50V0z"/><path id="path3_fill" class="st4" d="M200 150c0 27.6-22.4 50-50 50s-50-22.4-50-50 22.4-50 50-50 50 22.4 50 50z"/></svg>`;
+        const figmaSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(figmaSvg);
+
+        // 4. AWS Logo SVG
+        const awsSvg = `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 304 182"><style>.st0{fill:#ffffff;}.st1{fill:#FF9900;}</style><g><path class="st0" d="M86.4,66.4c0,3.7,0.4,6.7,1.1,8.9c0.8,2.2,1.8,4.6,3.2,7.2c0.5,0.8,0.7,1.6,0.7,2.3c0,1-0.6,2-1.9,3l-6.3,4.2c-0.9,0.6-1.8,0.9-2.6,0.9c-1,0-2-0.5-3-1.4C76.2,90,75,88.4,74,86.8c-1-1.7-2-3.6-3.1-5.9c-7.8,9.2-17.6,13.8-29.4,13.8c-8.4,0-15.1-2.4-20-7.2c-4.9-4.8-7.4-11.2-7.4-19.2c0-8.5,3-15.4,9.1-20.6c6.1-5.2,14.2-7.8,24.5-7.8c3.4,0,6.9,0.3,10.6,0.8c3.7,0.5,7.5,1.3,11.5,2.2v-7.3c0-7.6-1.6-12.9-4.7-16c-3.2-3.1-8.6-4.6-16.3-4.6c-3.5,0-7.1,0.4-10.8,1.3c-3.7,0.9-7.3,2-10.8,3.4c-1.6,0.7-2.8,1.1-3.5,1.3c-0.7,0.2-1.2,0.3-1.6,0.3c-1.4,0-2.1-1-2.1-3.1v-4.9c0-1.6,0.2-2.8,0.7-3.5c0.5-0.7,1.4-1.4,2.8-2.1c3.5-1.8,7.7-3.3,12.6-4.5c4.9-1.3,10.1-1.9,15.6-1.9c11.9,0,20.6,2.7,26.2,8.1c5.5,5.4,8.3,13.6,8.3,24.6V66.4z M45.8,81.6c3.3,0,6.7-0.6,10.3-1.8c3.6-1.2,6.8-3.4,9.5-6.4c1.6-1.9,2.8-4,3.4-6.4c0.6-2.4,1-5.3,1-8.7v-4.2c-2.9-0.7-6-1.3-9.2-1.7c-3.2-0.4-6.3-0.6-9.4-0.6c-6.7,0-11.6,1.3-14.9,4c-3.3,2.7-4.9,6.5-4.9,11.5c0,4.7,1.2,8.2,3.7,10.6C37.7,80.4,41.2,81.6,45.8,81.6z M126.1,92.4c-1.8,0-3-0.3-3.8-1c-0.8-0.6-1.5-2-2.1-3.9L96.7,10.2c-0.6-2-0.9-3.3-0.9-4c0-1.6,0.8-2.5,2.4-2.5h9.8c1.9,0,3.2,0.3,3.9,1c0.8,0.6,1.4,2,2,3.9l16.8,66.2l15.6-66.2c0.5-2,1.1-3.3,1.9-3.9c0.8-0.6,2.2-1,4-1h8c1.9,0,3.2,0.3,4,1c0.8,0.6,1.5,2,1.9,3.9l15.8,67l17.3-67c0.6-2,1.3-3.3,2-3.9c0.8-0.6,2.1-1,3.9-1h9.3c1.6,0,2.5,0.8,2.5,2.5c0,0.5-0.1,1-0.2,1.6c-0.1,0.6-0.3,1.4-0.7,2.5l-24.1,77.3c-0.6,2-1.3,3.3-2.1,3.9c-0.8,0.6-2.1,1-3.8,1h-8.6c-1.9,0-3.2-0.3-4-1c-0.8-0.7-1.5-2-1.9-4L156,23l-15.4,64.4c-0.5,2-1.1,3.3-1.9,4c-0.8,0.7-2.2,1-4,1H126.1z M254.6,95.1c-5.2,0-10.4-0.6-15.4-1.8c-5-1.2-8.9-2.5-11.5-4c-1.6-0.9-2.7-1.9-3.1-2.8c-0.4-0.9-0.6-1.9-0.6-2.8v-5.1c0-2.1,0.8-3.1,2.3-3.1c0.6,0,1.2,0.1,1.8,0.3c0.6,0.2,1.5,0.6,2.5,1c3.4,1.5,7.1,2.7,11,3.5c4,0.8,7.9,1.2,11.9,1.2c6.3,0,11.2-1.1,14.6-3.3c3.4-2.2,5.2-5.4,5.2-9.5c0-2.8-0.9-5.1-2.7-7c-1.8-1.9-5.2-3.6-10.1-5.2L246,52c-7.3-2.3-12.7-5.7-16-10.2c-3.3-4.4-5-9.3-5-14.5c0-4.2,0.9-7.9,2.7-11.1c1.8-3.2,4.2-6,7.2-8.2c3-2.3,6.4-4,10.4-5.2c4-1.2,8.2-1.7,12.6-1.7c2.2,0,4.5,0.1,6.7,0.4c2.3,0.3,4.4,0.7,6.5,1.1c2,0.5,3.9,1,5.7,1.6c1.8,0.6,3.2,1.2,4.2,1.8c1.4,0.8,2.4,1.6,3,2.5c0.6,0.8,0.9,1.9,0.9,3.3v4.7c0,2.1-0.8,3.2-2.3,3.2c-0.8,0-2.1-0.4-3.8-1.2c-5.7-2.6-12.1-3.9-19.2-3.9c-5.7,0-10.2,0.9-13.3,2.8c-3.1,1.9-4.7,4.8-4.7,8.9c0,2.8,1,5.2,3,7.1c2,1.9,5.7,3.8,11,5.5l14.2,4.5c7.2,2.3,12.4,5.5,15.5,9.6c3.1,4.1,4.6,8.8,4.6,14c0,4.3-0.9,8.2-2.6,11.6c-1.8,3.4-4.2,6.4-7.3,8.8c-3.1,2.5-6.8,4.3-11.1,5.6C264.4,94.4,259.7,95.1,254.6,95.1z"/><g><path class="st1" d="M273.5,143.7c-32.9,24.3-80.7,37.2-121.8,37.2c-57.6,0-109.5-21.3-148.7-56.7c-3.1-2.8-0.3-6.6,3.4-4.4c42.4,24.6,94.7,39.5,148.8,39.5c36.5,0,76.6-7.6,113.5-23.2C274.2,133.6,278.9,139.7,273.5,143.7z"/><path class="st1" d="M287.2,128.1c-4.2-5.4-27.8-2.6-38.5-1.3c-3.2,0.4-3.7-2.4-0.8-4.5c18.8-13.2,49.7-9.4,53.3-5c3.6,4.5-1,35.4-18.6,50.2c-2.7,2.3-5.3,1.1-4.1-1.9C282.5,155.7,291.4,133.4,287.2,128.1z"/></g></g></svg>`;
+        const awsSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(awsSvg);
+
+        // 5. Mobile App Logo Data URL (loaded via helper script)
+        const mobileLogoDataUrl = window.mobileLogoBase64;
+        // 6. Flutter Logo Data URL (loaded via helper script)
+        const flutterLogoDataUrl = window.flutterLogoBase64;
+        // 7. C++ Logo Data URL (loaded via helper script)
+        const cppLogoDataUrl = window.cppLogoBase64;
+        // 8. Linux Tux Logo Data URL (loaded via helper script)
+        const linuxLogoDataUrl = window.linuxLogoBase64;
+        // 9. Google Ads Logo Data URL (loaded via helper script)
+        const googleadsLogoDataUrl = window.googleadsLogoBase64;
+
+        // 7. Node.js Logo SVG
+        const nodejsSvg = `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Node.js</title><path fill="#339933" d="M11.998,24c-0.321,0-0.641-0.084-0.922-0.247l-2.936-1.737c-0.438-0.245-0.224-0.332-0.08-0.383 c0.585-0.203,0.703-0.25,1.328-0.604c0.065-0.037,0.151-0.023,0.218,0.017l2.256,1.339c0.082,0.045,0.197,0.045,0.272,0l8.795-5.076 c0.082-0.047,0.134-0.141,0.134-0.238V6.921c0-0.099-0.053-0.192-0.137-0.242l-8.791-5.072c-0.081-0.047-0.189-0.047-0.271,0 L3.075,6.68C2.99,6.729,2.936,6.825,2.936,6.921v10.15c0,0.097,0.054,0.189,0.139,0.235l2.409,1.392 c1.307,0.654,2.108-0.116,2.108-0.89V7.787c0-0.142,0.114-0.253,0.256-0.253h1.115c0.139,0,0.255,0.112,0.255,0.253v10.021 c0,1.745-0.95,2.745-2.604,2.745c-0.508,0-0.909,0-2.026-0.551L2.28,18.675c-0.57-0.329-0.922-0.945-0.922-1.604V6.921 c0-0.659,0.353-1.275,0.922-1.603l8.795-5.082c0.557-0.315,1.296-0.315,1.848,0l8.794,5.082c0.57,0.329,0.924,0.944,0.924,1.603 v10.15c0,0.659-0.354,1.273-0.924,1.604l-8.794,5.078C12.643,23.916,12.324,24,11.998,24z M19.099,13.993 c0-1.9-1.284-2.406-3.987-2.763c-2.731-0.361-3.009-0.548-3.009-1.187c0-0.528,0.235-1.233,2.258-1.233 c1.807,0,2.473,0.389,2.747,1.607c0.024,0.115,0.129,0.199,0.247,0.199h1.141c0.071,0,0.138-0.031,0.186-0.081 c0.048-0.054,0.074-0.123,0.067-0.196c-0.177-2.098-1.571-3.076-4.388-3.076c-2.508,0-4.004,1.058-4.004,2.833 c0,1.925,1.488,2.457,3.895,2.695c2.88,0.282,3.103,0.703,3.103,1.269c0,0.983-0.789,1.402-2.642,1.402 c-2.327,0-2.839-0.584-3.011-1.742c-0.02-0.124-0.126-0.215-0.253-0.215h-1.137c-0.141,0-0.254,0.112-0.254,0.253 c0,1.482,0.806,3.248,4.655,3.248C17.501,17.007,19.099,15.91,19.099,13.993z"/></svg>`;
+        const nodejsSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(nodejsSvg);
+
+        // 7. Docker Logo SVG
+        const dockerSvg = `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Docker</title><path fill="#2496ed" d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/></svg>`;
+        const dockerSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(dockerSvg);
+
+        // 8. Git Logo SVG
+        const gitSvg = `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Git</title><path fill="#f05032" d="M23.546 10.93L13.067.452c-.604-.603-1.582-.603-2.184 0L8.74 2.597l3.117 3.116c.664-.225 1.417-.058 1.93.454.514.514.68 1.27.456 1.93l3.115 3.115c.66-.223 1.417-.056 1.93.457.67.67.67 1.757 0 2.427-.67.67-1.756.67-2.426 0-.513-.513-.68-1.27-.456-1.93l-3.115-3.115c-.223.224-.536.376-.877.417v8.014c.34.04.654.193.878.417.67.67.67 1.757 0 2.427-.67.67-1.756.67-2.426 0-.514-.513-.68-1.27-.456-1.93V8.892c-.34-.041-.654-.194-.878-.418-.513-.513-.68-1.27-.455-1.93L5.074 3.427.453 8.048c-.604.604-.604 1.582 0 2.185l10.478 10.478c.604.604 1.582.604 2.184 0l10.43-10.43c.605-.603.605-1.58 0-2.184z"/></svg>`;
+        const gitSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(gitSvg);
+
+        // 9. VS Code Logo SVG
+        const vscodeSvg = `<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Visual Studio Code</title><path fill="#007acc" d="M23.99 6.84L20.21.36c-.19-.32-.57-.46-.92-.33L1.08 6.54c-.38.14-.62.53-.57.94l1.32 10.05c.05.41.36.73.76.79l16.89 2.51c.36.05.71-.11.87-.43l3.65-6.87c.21-.39.11-.88-.21-1.15l-3.66-2.91 3.99-3.16c.32-.26.42-.74.21-1.15zM17.5 13.9l-4.5-3.5 4.5-3.5v7z"/></svg>`;
+        const vscodeSvgDataUrl = 'data:image/svg+xml;base64,' + btoa(vscodeSvg);
+
+        // Simulation Simplex 3D Noise Shaders
+        const simVS = `
+            varying vec2 vUv;
+            void main() {
+                vUv = uv;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+        `;
+
+        const simFS = `
+            uniform sampler2D tCurr;
+            uniform sampler2D tTarget;
+            uniform float uTime;
+            uniform float uSpeed;
+            uniform float uNoiseAmp;
+            uniform float uNoiseFreq;
+            uniform float uNoiseSpeed;
+
+            varying vec2 vUv;
+
+            // Simplex 3D Noise Implementation by Ashima Arts
+            vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+            vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+            vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+            float snoise(vec3 v) {
+                const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+                vec3 i  = floor(v + dot(v, C.yyy));
+                vec3 x0 = v - i + dot(i, C.xxx);
+                vec3 g = step(x0.yzx, x0.xyz);
+                vec3 l = 1.0 - g;
+                vec3 i1 = min(g.xyz, l.zxy);
+                vec3 i2 = max(g.xyz, l.zxy);
+                vec3 x1 = x0 - i1 + C.xxx;
+                vec3 x2 = x0 - i2 + C.yyy;
+                vec3 x3 = x0 - D.yyy;
+                i = mod289(i);
+                vec4 p = permute(permute(permute(
+                            i.z + vec4(0.0, i1.z, i2.z, 1.0))
+                        + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+                        + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+                float n_ = 0.142857142857;
+                vec3 ns = n_ * D.wyz - D.xzx;
+                vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                vec4 x_ = floor(j * ns.z);
+                vec4 y_ = floor(j - 7.0 * x_);
+                vec4 x = x_ *ns.x + ns.yyyy;
+                vec4 y = y_ *ns.x + ns.yyyy;
+                vec4 h = 1.0 - abs(x) - abs(y);
+                vec4 b0 = vec4(x.xy, y.xy);
+                vec4 b1 = vec4(x.zw, y.zw);
+                vec4 s0 = floor(b0)*2.0 + 1.0;
+                vec4 s1 = floor(b1)*2.0 + 1.0;
+                vec4 sh = -step(h, vec4(0.0));
+                vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy;
+                vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww;
+                vec3 p0 = vec3(a0.xy, h.x);
+                vec3 p1 = vec3(a0.zw, h.y);
+                vec3 p2 = vec3(a1.xy, h.z);
+                vec3 p3 = vec3(a1.zw, h.w);
+                vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                m = m * m;
+                return 42.0 * dot(m*m, vec4(dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)));
+            }
+
+            void main() {
+                vec4 pos = texture2D(tCurr, vUv);
+                vec4 target = texture2D(tTarget, vUv);
+                
+                // Convergence towards target shape
+                vec3 dir = target.xyz - pos.xyz;
+                pos.xyz += dir * uSpeed * (1.0 + target.w * 3.0);
+                
+                // Add noise turbulence
+                if (uNoiseAmp > 0.0) {
+                    float n = snoise(pos.xyz * uNoiseFreq + uTime * uNoiseSpeed);
+                    pos.x += cos(n * 6.28) * uNoiseAmp * 0.005;
+                    pos.y += sin(n * 6.28) * uNoiseAmp * 0.005;
+                    pos.z += sin(n * 3.14) * uNoiseAmp * 0.005;
+                }
+                
+                gl_FragColor = vec4(pos.xyz, 1.0);
+            }
+        `;
+
+        class LogoParticleEngine {
+            constructor(containerId, logoType, svgDataOrText) {
+                this.container = document.getElementById(containerId);
+                if (!this.container) return;
+
+                this.width = this.container.offsetWidth;
+                this.height = this.container.offsetHeight || 380;
+                
+                this.logoType = logoType; // 'coffeecrews', 'react', 'python'
+                this.sourceData = svgDataOrText;
+
+                // Settings (using global settings initially)
+                this.size = 128; // Use 128x128 = 16k particles for each instance for optimal performance (total 50k particles on page)
+                this.totalParticles = this.size * this.size;
+
+                // State
+                this.targetRotation = new THREE.Vector2();
+                this.currentRotation = new THREE.Vector2();
+                this.isMouseDown = false;
+                this.lastMouseX = 0;
+                this.lastMouseY = 0;
+                this.isRunning = false;
+
+                this.init();
+            }
+
+            init() {
+                // Three Scene
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(60, this.width / this.height, 0.1, 100);
+                this.camera.position.z = 2.5;
+
+                // WebGL Renderer
+                this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                this.renderer.setSize(this.width, this.height);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.setClearColor(0x000000, 0);
+                this.container.appendChild(this.renderer.domElement);
+
+                // Build simulator textures & buffers
+                this.loadAndProcessShape().then(() => {
+                    this.initFBO();
+                    this.addEventListeners();
+                    this.isRunning = true;
+                    this.animate();
+                });
+            }
+
+            async loadAndProcessShape() {
+                return new Promise((resolve) => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = this.size;
+                    canvas.height = this.size;
+
+                    // Clean canvas background
+                    ctx.clearRect(0, 0, this.size, this.size);
+
+                    const processPixels = () => {
+                        const imageData = ctx.getImageData(0, 0, this.size, this.size);
+                        const data = imageData.data;
+
+                        this.targetData = new Float32Array(this.totalParticles * 4);
+                        this.colorData = new Float32Array(this.totalParticles * 4);
+
+                        const colors = this.getPresetColors();
+
+                        // Client-side flood fill background extraction for C++, Google Ads, and Flutter logos to handle white background
+                        const isBg = new Uint8Array(this.size * this.size);
+                        if (this.logoType === 'cpp' || this.logoType === 'googleads' || this.logoType === 'flutter') {
+                            const size = this.size;
+                            const visited = new Uint8Array(size * size);
+                            const queue = [];
+
+                            const checkAndAdd = (x, y) => {
+                                if (x < 0 || x >= size || y < 0 || y >= size) return;
+                                const idx = y * size + x;
+                                if (visited[idx]) return;
+                                visited[idx] = 1;
+
+                                const r = data[idx * 4] / 255;
+                                const g = data[idx * 4 + 1] / 255;
+                                const b = data[idx * 4 + 2] / 255;
+                                if (r > 0.90 && g > 0.90 && b > 0.90) {
+                                    isBg[idx] = 1;
+                                    queue.push({ x, y });
+                                }
+                            };
+
+                            // Start from outer boundary
+                            for (let x = 0; x < size; x++) {
+                                checkAndAdd(x, 0);
+                                checkAndAdd(x, size - 1);
+                            }
+                            for (let y = 1; y < size - 1; y++) {
+                                checkAndAdd(0, y);
+                                checkAndAdd(size - 1, y);
+                            }
+
+                            // Perform Breadth First Search (BFS)
+                            while (queue.length > 0) {
+                                const curr = queue.shift();
+                                checkAndAdd(curr.x + 1, curr.y);
+                                checkAndAdd(curr.x - 1, curr.y);
+                                checkAndAdd(curr.x, curr.y + 1);
+                                checkAndAdd(curr.x, curr.y - 1);
+                            }
+                        }
+
+                        for (let i = 0; i < this.totalParticles; i++) {
+                            const r = data[i * 4] / 255;
+                            const g = data[i * 4 + 1] / 255;
+                            const b = data[i * 4 + 2] / 255;
+                            const a = data[i * 4 + 3];
+
+                            const x = ((i % this.size) / this.size - 0.5) * 2;
+                            const y = (0.5 - Math.floor(i / this.size) / this.size) * 2;
+
+                            const isWhite = (r > 0.90 && g > 0.90 && b > 0.90);
+                            const isActive = (this.logoType === 'mobile') 
+                                ? (a > 30 && !isWhite) 
+                                : ((this.logoType === 'cpp' || this.logoType === 'googleads' || this.logoType === 'flutter') 
+                                    ? (a > 30 && isBg[i] === 0) 
+                                    : (a > 30));
+
+                            if (isActive) {
+                                // Logo particle target
+                                let scale = 1.3;
+                                if (this.logoType === 'flutter') scale = 2.1; // Make it even bigger!
+                                else if (this.logoType === 'cpp' || this.logoType === 'googleads') scale = 1.7; // Make it a bit bigger!
+                                this.targetData[i * 4] = x * scale;
+                                this.targetData[i * 4 + 1] = y * scale;
+                                this.targetData[i * 4 + 2] = (Math.random() - 0.5) * 0.05;
+                                this.targetData[i * 4 + 3] = a / 255;
+
+                                // Colors based on logo type & presets
+                                let color = this.getColorForPixel(r, g, b, colors);
+
+                                this.colorData[i * 4] = color.r;
+                                this.colorData[i * 4 + 1] = color.g;
+                                this.colorData[i * 4 + 2] = color.b;
+                                this.colorData[i * 4 + 3] = 1.0;
+                            } else {
+                                // Background dust particle (dim cosmic cloud)
+                                const radius = 2.5 + Math.random() * 2.0;
+                                const theta = Math.random() * Math.PI * 2;
+                                const phi = Math.acos(2 * Math.random() - 1);
+
+                                this.targetData[i * 4] = radius * Math.sin(phi) * Math.cos(theta);
+                                this.targetData[i * 4 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                                this.targetData[i * 4 + 2] = radius * Math.cos(phi);
+                                this.targetData[i * 4 + 3] = 0.0;
+
+                                const cloudColor = colors.ambientCloud[Math.floor(Math.random() * colors.ambientCloud.length)];
+                                this.colorData[i * 4] = cloudColor.r;
+                                this.colorData[i * 4 + 1] = cloudColor.g;
+                                this.colorData[i * 4 + 2] = cloudColor.b;
+                                
+                                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                                this.colorData[i * 4 + 3] = isDark ? 0.08 : 0.0;
+                            }
+                        }
+
+                        this.targetTexture = new THREE.DataTexture(this.targetData, this.size, this.size, THREE.RGBAFormat, THREE.FloatType);
+                        this.colorTexture = new THREE.DataTexture(this.colorData, this.size, this.size, THREE.RGBAFormat, THREE.FloatType);
+                        this.targetTexture.needsUpdate = true;
+                        this.colorTexture.needsUpdate = true;
+                        resolve();
+                    };
+
+                    // Draw SVG to Canvas (React, Figma, Python)
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.src = this.sourceData;
+                    img.onload = () => {
+                        const margin = 10;
+                        ctx.drawImage(img, margin, margin, this.size - margin * 2, this.size - margin * 2);
+                        processPixels();
+                    };
+                });
+            }
+
+            getColorForPixel(r, g, b, colors) {
+                let color = new THREE.Color('#ffffff');
+                if (this.logoType === 'python') {
+                    const isEye = (r > 0.95 && g > 0.95 && b > 0.95);
+                    if (isEye) {
+                        color = colors.eye;
+                    } else if (b > r) {
+                        color = colors.pythonBlue.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                    } else {
+                        color = colors.pythonYellow.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                    }
+                } else if (this.logoType === 'react') {
+                    color = colors.reactCyan.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                } else if (this.logoType === 'figma') {
+                    if (g > 0.6 && r < 0.2) {
+                        color = colors.figmaGreen.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else if (b > 0.8 && r < 0.2) {
+                        color = colors.figmaBlue.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else if (r > 0.3 && b > 0.8) {
+                        color = colors.figmaPurple.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else if (r > 0.8 && g > 0.4 && g < 0.6) {
+                        color = colors.figmaPink.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else {
+                        color = colors.figmaOrange.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    }
+                } else if (this.logoType === 'aws') {
+                    if (r > 0.8 && g > 0.5 && b < 0.2) {
+                        color = colors.awsOrange.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else {
+                        color = colors.awsWhite.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    }
+                } else if (this.logoType === 'mobile') {
+                    if (g > 0.6 && r < 0.3 && b < 0.5) {
+                        color = colors.mobileGreen.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else {
+                        color = colors.mobileBody.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    }
+                } else if (this.logoType === 'flutter') {
+                    // Flutter logo: cyan top, mid-blue, dark navy -> change to C++ colors
+                    const brightness = (r + g + b) / 3.0;
+                    if (r > 0.18 && g > 0.5 && b > 0.7) {
+                        // Bright cyan areas — top wing
+                        color = colors.cppLight.clone().multiplyScalar(1.0 + Math.random() * 0.3);
+                    } else if (r > 0.04 && g > 0.35 && b > 0.5) {
+                        // Mid-blue areas
+                        color = colors.cppBlue.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else if (g < 0.45 && b > 0.4) {
+                        // Dark navy areas
+                        color = colors.cppDark.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else {
+                        // Mix and shimmer
+                        const pick = Math.random();
+                        if (pick < 0.4) color = colors.cppLight.clone().multiplyScalar(0.8 + Math.random() * 0.4);
+                        else if (pick < 0.7) color = colors.cppBlue.clone().multiplyScalar(0.8 + Math.random() * 0.3);
+                        else color = colors.cppDark.clone().multiplyScalar(0.85 + Math.random() * 0.25);
+                    }
+                } else if (this.logoType === 'nodejs') {
+                    color = colors.nodejsGreen.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                } else if (this.logoType === 'cpp') {
+                    // C++ hex: light steel blue (#659BD3) top-left, dark navy (#004482) bottom-right, white C++
+                    const isWhitish = (r > 0.82 && g > 0.82 && b > 0.82);
+                    if (isWhitish) {
+                        // White C and ++ text — render as bright steel blue shimmer
+                        color = colors.cppLight.clone().multiplyScalar(1.1 + Math.random() * 0.3);
+                    } else if (r < 0.25 && g < 0.45 && b > 0.45) {
+                        // Dark navy region
+                        color = colors.cppDark.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else if (b > 0.5 && g > 0.4) {
+                        // Mid steel blue
+                        color = colors.cppBlue.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                    } else {
+                        const pick = Math.random();
+                        if (pick < 0.4) color = colors.cppLight.clone().multiplyScalar(0.9 + Math.random() * 0.35);
+                        else if (pick < 0.7) color = colors.cppBlue.clone().multiplyScalar(0.85 + Math.random() * 0.3);
+                        else color = colors.cppDark.clone().multiplyScalar(0.85 + Math.random() * 0.25);
+                    }
+                } else if (this.logoType === 'linux') {
+                    // Tux: black body, white belly, yellow beak+feet
+                    const lum = (r + g + b) / 3.0;
+                    const isYellow = (r > 0.7 && g > 0.5 && b < 0.3);
+                    const isDark = (lum < 0.25);
+                    const isLight = (r > 0.75 && g > 0.75 && b > 0.75);
+                    if (isYellow) {
+                        color = colors.linuxYellow.clone().multiplyScalar(1.0 + Math.random() * 0.3);
+                    } else if (isDark) {
+                        color = colors.linuxBlack.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                    } else if (isLight) {
+                        color = colors.linuxWhite.clone().multiplyScalar(1.0 + Math.random() * 0.2);
+                    } else {
+                        const pick = Math.random();
+                        if (pick < 0.45) color = colors.linuxYellow.clone().multiplyScalar(0.85 + Math.random() * 0.35);
+                        else if (pick < 0.75) color = colors.linuxBlack.clone().multiplyScalar(0.85 + Math.random() * 0.3);
+                        else color = colors.linuxWhite.clone().multiplyScalar(0.85 + Math.random() * 0.25);
+                    }
+                } else if (this.logoType === 'docker') {
+                    color = colors.dockerBlue.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                } else if (this.logoType === 'git') {
+                    color = colors.gitOrange.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                } else if (this.logoType === 'vscode') {
+                    color = colors.vscodeBlue.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                } else if (this.logoType === 'googleads') {
+                    const isYellow = (r > 0.7 && g > 0.5 && b < 0.3);
+                    const isGreen = (g > 0.5 && r < 0.4 && b < 0.4);
+                    const isBlue = (b > 0.5 && r < 0.4);
+                    if (isYellow) {
+                        color = colors.googleadsYellow.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                    } else if (isGreen) {
+                        color = colors.googleadsGreen.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                    } else if (isBlue) {
+                        color = colors.googleadsBlue.clone().multiplyScalar(1.0 + Math.random() * 0.25);
+                    } else {
+                        const pick = Math.random();
+                        if (pick < 0.5) color = colors.googleadsBlue.clone().multiplyScalar(0.9 + Math.random() * 0.2);
+                        else if (pick < 0.8) color = colors.googleadsYellow.clone().multiplyScalar(0.9 + Math.random() * 0.2);
+                        else color = colors.googleadsGreen.clone().multiplyScalar(0.9 + Math.random() * 0.2);
+                    }
+                }
+                return color;
+            }
+
+            getPresetColors() {
+                const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+                const isDark = (theme === 'dark');
+                const preset = document.getElementById('preset-selector').value;
+
+                switch (preset) {
+                    case 'cyberpunk':
+                        return {
+                            pythonBlue: new THREE.Color('#ff007f'),
+                            pythonYellow: new THREE.Color('#00f0ff'),
+                            reactCyan: new THREE.Color('#00f0ff'),
+                            figmaOrange: new THREE.Color('#ff007f'),
+                            figmaPink: new THREE.Color('#ff00ff'),
+                            figmaPurple: new THREE.Color('#8b5cf6'),
+                            figmaBlue: new THREE.Color('#00f0ff'),
+                            figmaGreen: new THREE.Color('#00ffcc'),
+                            awsOrange: new THREE.Color('#ffe600'),
+                            awsWhite: new THREE.Color('#ff00ff'),
+                            mobileGreen: new THREE.Color('#00ffcc'),
+                            mobileBody: new THREE.Color('#ff00ff'),
+                            flutterCyan: new THREE.Color('#00f0ff'),
+                            flutterMid: new THREE.Color('#00aaff'),
+                            flutterBlue: new THREE.Color('#7700ff'),
+                            flutterBody: new THREE.Color('#ffffff'),
+                            nodejsGreen: new THREE.Color('#00ffcc'),
+                            cppLight: new THREE.Color('#00f0ff'),
+                            cppBlue: new THREE.Color('#ff00cc'),
+                            cppDark: new THREE.Color('#aa00ff'),
+                            linuxYellow: new THREE.Color('#ffe600'),
+                            linuxBlack: new THREE.Color('#aa00ff'),
+                            linuxWhite: new THREE.Color('#00f0ff'),
+                            dockerBlue: new THREE.Color('#00f0ff'),
+                            gitOrange: new THREE.Color('#ff007f'),
+                            vscodeBlue: new THREE.Color('#8b5cf6'),
+                            googleadsBlue: new THREE.Color('#00f0ff'),
+                            googleadsYellow: new THREE.Color('#ff00ff'),
+                            googleadsGreen: new THREE.Color('#00ffcc'),
+                            eye: new THREE.Color('#ffffff'),
+                            ambientCloud: [new THREE.Color('#ff0055'), new THREE.Color('#00aaff')]
+                        };
+                    case 'matrix':
+                        return {
+                            pythonBlue: new THREE.Color('#00ff66'),
+                            pythonYellow: new THREE.Color('#003b00'),
+                            reactCyan: new THREE.Color('#00ff66'),
+                            figmaOrange: new THREE.Color('#00ff66'),
+                            figmaPink: new THREE.Color('#00ff33'),
+                            figmaPurple: new THREE.Color('#004d1a'),
+                            figmaBlue: new THREE.Color('#00b33c'),
+                            figmaGreen: new THREE.Color('#00e65c'),
+                            awsOrange: new THREE.Color('#00ff66'),
+                            awsWhite: new THREE.Color('#005500'),
+                            flutterCyan: new THREE.Color('#00ff99'),
+                            flutterMid: new THREE.Color('#00cc66'),
+                            flutterBlue: new THREE.Color('#007744'),
+                            flutterBody: new THREE.Color('#ffffff'),
+                            mobileGreen: new THREE.Color('#00ff66'),
+                            mobileBody: new THREE.Color('#005500'),
+                            nodejsGreen: new THREE.Color('#00e65c'),
+                            cppLight: new THREE.Color('#00ff99'),
+                            cppBlue: new THREE.Color('#00cc55'),
+                            cppDark: new THREE.Color('#005500'),
+                            linuxYellow: new THREE.Color('#aaff00'),
+                            linuxBlack: new THREE.Color('#002200'),
+                            linuxWhite: new THREE.Color('#00ff66'),
+                            dockerBlue: new THREE.Color('#00b33c'),
+                            gitOrange: new THREE.Color('#00ff33'),
+                            vscodeBlue: new THREE.Color('#00ff66'),
+                            googleadsBlue: new THREE.Color('#00cc55'),
+                            googleadsYellow: new THREE.Color('#005500'),
+                            googleadsGreen: new THREE.Color('#00ff66'),
+                            eye: new THREE.Color('#ffffff'),
+                            ambientCloud: [new THREE.Color('#002200'), new THREE.Color('#00aa33')]
+                        };
+                    case 'fire':
+                        return {
+                            pythonBlue: new THREE.Color('#ff2200'),
+                            pythonYellow: new THREE.Color('#ffaa00'),
+                            reactCyan: new THREE.Color('#ff3c00'),
+                            figmaOrange: new THREE.Color('#ff2200'),
+                            figmaPink: new THREE.Color('#ff5500'),
+                            figmaPurple: new THREE.Color('#ff8800'),
+                            figmaBlue: new THREE.Color('#ffaa00'),
+                            figmaGreen: new THREE.Color('#ffd400'),
+                            awsOrange: new THREE.Color('#ffaa00'),
+                            awsWhite: new THREE.Color('#ff3c00'),
+                            flutterCyan: new THREE.Color('#ffee00'),
+                            flutterMid: new THREE.Color('#ff8800'),
+                            flutterBlue: new THREE.Color('#ff3300'),
+                            flutterBody: new THREE.Color('#ffffff'),
+                            mobileGreen: new THREE.Color('#ffd400'),
+                            mobileBody: new THREE.Color('#ff2200'),
+                            nodejsGreen: new THREE.Color('#ffd400'),
+                            cppLight: new THREE.Color('#ffe066'),
+                            cppBlue: new THREE.Color('#ff9900'),
+                            cppDark: new THREE.Color('#cc3300'),
+                            linuxYellow: new THREE.Color('#ffdd00'),
+                            linuxBlack: new THREE.Color('#ff3300'),
+                            linuxWhite: new THREE.Color('#ff8800'),
+                            dockerBlue: new THREE.Color('#ff5500'),
+                            gitOrange: new THREE.Color('#ff2200'),
+                            vscodeBlue: new THREE.Color('#ff8800'),
+                            googleadsBlue: new THREE.Color('#ff3c00'),
+                            googleadsYellow: new THREE.Color('#ffaa00'),
+                            googleadsGreen: new THREE.Color('#ffd400'),
+                            eye: new THREE.Color('#ffffff'),
+                            ambientCloud: [new THREE.Color('#330000'), new THREE.Color('#ff5500')]
+                        };
+                    case 'aurora':
+                        return {
+                            pythonBlue: new THREE.Color('#a3e635'),
+                            pythonYellow: new THREE.Color('#7c3aed'),
+                            reactCyan: new THREE.Color('#22d3ee'),
+                            figmaOrange: new THREE.Color('#a3e635'),
+                            figmaPink: new THREE.Color('#22d3ee'),
+                            figmaPurple: new THREE.Color('#7c3aed'),
+                            figmaBlue: new THREE.Color('#4338ca'),
+                            figmaGreen: new THREE.Color('#05cf83'),
+                            awsOrange: new THREE.Color('#22d3ee'),
+                            awsWhite: new THREE.Color('#7c3aed'),
+                            flutterCyan: new THREE.Color('#22d3ee'),
+                            flutterMid: new THREE.Color('#4338ca'),
+                            flutterBlue: new THREE.Color('#7c3aed'),
+                            flutterBody: new THREE.Color('#ffffff'),
+                            mobileGreen: new THREE.Color('#05cf83'),
+                            mobileBody: new THREE.Color('#7c3aed'),
+                            nodejsGreen: new THREE.Color('#05cf83'),
+                            cppLight: new THREE.Color('#a3e635'),
+                            cppBlue: new THREE.Color('#22d3ee'),
+                            cppDark: new THREE.Color('#4338ca'),
+                            linuxYellow: new THREE.Color('#a3e635'),
+                            linuxBlack: new THREE.Color('#1e1b4b'),
+                            linuxWhite: new THREE.Color('#22d3ee'),
+                            dockerBlue: new THREE.Color('#22d3ee'),
+                            gitOrange: new THREE.Color('#a3e635'),
+                            vscodeBlue: new THREE.Color('#7c3aed'),
+                            googleadsBlue: new THREE.Color('#22d3ee'),
+                            googleadsYellow: new THREE.Color('#7c3aed'),
+                            googleadsGreen: new THREE.Color('#05cf83'),
+                            eye: new THREE.Color('#ffffff'),
+                            ambientCloud: [new THREE.Color('#1e1b4b'), new THREE.Color('#065f46')]
+                        };
+                    case 'chrome':
+                        return {
+                            pythonBlue: new THREE.Color(isDark ? '#cbd5e1' : '#475569'),
+                            pythonYellow: new THREE.Color(isDark ? '#f8fafc' : '#0f172a'),
+                            reactCyan: new THREE.Color(isDark ? '#cbd5e1' : '#334155'),
+                            figmaOrange: new THREE.Color(isDark ? '#e2e8f0' : '#475569'),
+                            figmaPink: new THREE.Color(isDark ? '#94a3b8' : '#334155'),
+                            figmaPurple: new THREE.Color(isDark ? '#cbd5e1' : '#1e293b'),
+                            figmaBlue: new THREE.Color(isDark ? '#e2e8f0' : '#334155'),
+                            figmaGreen: new THREE.Color(isDark ? '#94a3b8' : '#1e293b'),
+                            awsOrange: new THREE.Color(isDark ? '#e2e8f0' : '#475569'),
+                            awsWhite: new THREE.Color(isDark ? '#cbd5e1' : '#334155'),
+                            flutterCyan: new THREE.Color(isDark ? '#e2e8f0' : '#334155'),
+                            flutterMid: new THREE.Color(isDark ? '#cbd5e1' : '#475569'),
+                            flutterBlue: new THREE.Color(isDark ? '#94a3b8' : '#1e293b'),
+                            flutterBody: new THREE.Color(isDark ? '#e2e8f0' : '#334155'),
+                            mobileGreen: new THREE.Color(isDark ? '#cbd5e1' : '#1e293b'),
+                            mobileBody: new THREE.Color(isDark ? '#e2e8f0' : '#334155'),
+                            nodejsGreen: new THREE.Color(isDark ? '#94a3b8' : '#334155'),
+                            cppLight: new THREE.Color(isDark ? '#e2e8f0' : '#475569'),
+                            cppBlue: new THREE.Color(isDark ? '#cbd5e1' : '#334155'),
+                            cppDark: new THREE.Color(isDark ? '#94a3b8' : '#1e293b'),
+                            linuxYellow: new THREE.Color(isDark ? '#e2e8f0' : '#475569'),
+                            linuxBlack: new THREE.Color(isDark ? '#64748b' : '#1e293b'),
+                            linuxWhite: new THREE.Color(isDark ? '#cbd5e1' : '#334155'),
+                            dockerBlue: new THREE.Color(isDark ? '#e2e8f0' : '#1e293b'),
+                            gitOrange: new THREE.Color(isDark ? '#cbd5e1' : '#475569'),
+                            vscodeBlue: new THREE.Color(isDark ? '#e2e8f0' : '#334155'),
+                            googleadsBlue: new THREE.Color(isDark ? '#cbd5e1' : '#334155'),
+                            googleadsYellow: new THREE.Color(isDark ? '#e2e8f0' : '#475569'),
+                            googleadsGreen: new THREE.Color(isDark ? '#94a3b8' : '#1e293b'),
+                            eye: new THREE.Color(isDark ? '#3b82f6' : '#2563eb'),
+                            ambientCloud: [new THREE.Color('#475569'), new THREE.Color('#94a3b8')]
+                        };
+                    case 'classic':
+                    default:
+                        return {
+                            pythonBlue: new THREE.Color(isDark ? '#3b82f6' : '#306998'),
+                            pythonYellow: new THREE.Color(isDark ? '#fbbf24' : '#ffd43b'),
+                            reactCyan: new THREE.Color('#61dafb'),
+                            figmaOrange: new THREE.Color('#f24e1e'),
+                            figmaPink: new THREE.Color('#ff7262'),
+                            figmaPurple: new THREE.Color('#a259ff'),
+                            figmaBlue: new THREE.Color('#1abcfe'),
+                            figmaGreen: new THREE.Color('#0acf83'),
+                            awsOrange: new THREE.Color('#FF9900'),
+                            awsWhite: new THREE.Color('#ffffff'),
+                            flutterCyan: new THREE.Color('#54C5F8'),
+                            flutterMid: new THREE.Color('#29B6F6'),
+                            flutterBlue: new THREE.Color('#0553B1'),
+                            flutterBody: new THREE.Color(isDark ? '#54C5F8' : '#0553B1'),
+                            cppLight: new THREE.Color('#659BD3'),
+                            cppBlue: new THREE.Color('#2C79C1'),
+                            cppDark: new THREE.Color('#004482'),
+                            linuxYellow: new THREE.Color('#FFCC00'),
+                            linuxBlack: new THREE.Color(isDark ? '#dddddd' : '#222222'),
+                            linuxWhite: new THREE.Color(isDark ? '#ffffff' : '#aaaaaa'),
+                            mobileGreen: new THREE.Color('#3ddc84'),
+                            mobileBody: new THREE.Color(isDark ? '#ffffff' : '#101010'),
+                            nodejsGreen: new THREE.Color('#339933'),
+                            dockerBlue: new THREE.Color('#2496ed'),
+                            gitOrange: new THREE.Color('#f05032'),
+                            vscodeBlue: new THREE.Color('#007acc'),
+                            googleadsBlue: new THREE.Color('#1a73e8'),
+                            googleadsYellow: new THREE.Color('#f9ab00'),
+                            googleadsGreen: new THREE.Color('#34a853'),
+                            eye: new THREE.Color('#ffffff'),
+                            ambientCloud: [new THREE.Color('#1e3a8a'), new THREE.Color('#4c1d95')]
+                        };
+                }
+            }
+
+            updatePresetColors() {
+                if (!this.colorData) return;
+                
+                // Redraw shape and update colors
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = this.size;
+                canvas.height = this.size;
+                
+                const applyColors = () => {
+                    const data = ctx.getImageData(0, 0, this.size, this.size).data;
+                    const colors = this.getPresetColors();
+                    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+                    // Client-side flood fill background extraction for C++ logo to handle white background
+                    const isBg = new Uint8Array(this.size * this.size);
+                    if (this.logoType === 'cpp' || this.logoType === 'googleads') {
+                        const size = this.size;
+                        const visited = new Uint8Array(size * size);
+                        const queue = [];
+
+                        const checkAndAdd = (x, y) => {
+                            if (x < 0 || x >= size || y < 0 || y >= size) return;
+                            const idx = y * size + x;
+                            if (visited[idx]) return;
+                            visited[idx] = 1;
+
+                            const r = data[idx * 4] / 255;
+                            const g = data[idx * 4 + 1] / 255;
+                            const b = data[idx * 4 + 2] / 255;
+                            if (r > 0.90 && g > 0.90 && b > 0.90) {
+                                isBg[idx] = 1;
+                                queue.push({ x, y });
+                            }
+                        };
+
+                        // Start from outer boundary
+                        for (let x = 0; x < size; x++) {
+                            checkAndAdd(x, 0);
+                            checkAndAdd(x, size - 1);
+                        }
+                        for (let y = 1; y < size - 1; y++) {
+                            checkAndAdd(0, y);
+                            checkAndAdd(size - 1, y);
+                        }
+
+                        // Perform Breadth First Search (BFS)
+                        while (queue.length > 0) {
+                            const curr = queue.shift();
+                            checkAndAdd(curr.x + 1, curr.y);
+                            checkAndAdd(curr.x - 1, curr.y);
+                            checkAndAdd(curr.x, curr.y + 1);
+                            checkAndAdd(curr.x, curr.y - 1);
+                        }
+                    }
+
+                    for (let i = 0; i < this.totalParticles; i++) {
+                        const r = data[i * 4] / 255;
+                        const g = data[i * 4 + 1] / 255;
+                        const b = data[i * 4 + 2] / 255;
+                        const a = data[i * 4 + 3];
+
+                        const isWhite = (r > 0.90 && g > 0.90 && b > 0.90);
+                        const isActive = (this.logoType === 'mobile' || this.logoType === 'flutter') 
+                            ? (a > 30 && !isWhite) 
+                            : ((this.logoType === 'cpp' || this.logoType === 'googleads') 
+                                ? (a > 30 && isBg[i] === 0) 
+                                : (a > 30));
+
+                        if (isActive) {
+                            let color = this.getColorForPixel(r, g, b, colors);
+
+                            this.colorData[i * 4] = color.r;
+                            this.colorData[i * 4 + 1] = color.g;
+                            this.colorData[i * 4 + 2] = color.b;
+                            this.colorData[i * 4 + 3] = 1.0;
+                        } else {
+                            const cloudColor = colors.ambientCloud[Math.floor(Math.random() * colors.ambientCloud.length)];
+                            this.colorData[i * 4] = cloudColor.r;
+                            this.colorData[i * 4 + 1] = cloudColor.g;
+                            this.colorData[i * 4 + 2] = cloudColor.b;
+                            this.colorData[i * 4 + 3] = isDark ? 0.08 : 0.0;
+                        }
+                    }
+                    this.colorTexture.needsUpdate = true;
+                };
+
+                const img = new Image();
+                img.src = this.sourceData;
+                img.onload = () => {
+                    const margin = 10;
+                    ctx.drawImage(img, margin, margin, this.size - margin * 2, this.size - margin * 2);
+                    applyColors();
+                };
+            }
+
+            initFBO() {
+                // Render Targets
+                this.rtA = new THREE.WebGLRenderTarget(this.size, this.size, {
+                    type: THREE.FloatType,
+                    minFilter: THREE.NearestFilter,
+                    magFilter: THREE.NearestFilter,
+                    format: THREE.RGBAFormat
+                });
+                this.rtB = this.rtA.clone();
+
+                this.simScene = new THREE.Scene();
+                this.simCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+                
+                // Grab slider positions
+                const initSpeed = parseFloat(document.getElementById('slider-speed').value);
+                const initNoise = parseFloat(document.getElementById('slider-noise').value);
+
+                this.simMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        tCurr: { value: null },
+                        tTarget: { value: this.targetTexture },
+                        uTime: { value: 0 },
+                        uSpeed: { value: initSpeed },
+                        uNoiseAmp: { value: initNoise },
+                        uNoiseFreq: { value: 1.2 },
+                        uNoiseSpeed: { value: 0.1 }
+                    },
+                    vertexShader: simVS,
+                    fragmentShader: simFS
+                });
+
+                const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.simMaterial);
+                this.simScene.add(plane);
+
+                // Prime Positions
+                this.renderer.setRenderTarget(this.rtA);
+                const primeMat = new THREE.MeshBasicMaterial({ map: this.targetTexture });
+                const primeMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), primeMat);
+                this.renderer.render(primeMesh, this.simCamera);
+                this.renderer.setRenderTarget(null);
+
+                // Geometry
+                const geometry = new THREE.BufferGeometry();
+                const uvs = new Float32Array(this.totalParticles * 2);
+                for (let i = 0; i < this.totalParticles; i++) {
+                    uvs[i * 2] = (i % this.size) / this.size;
+                    uvs[i * 2 + 1] = Math.floor(i / this.size) / this.size;
+                }
+                geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+                geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(this.totalParticles * 3), 3));
+
+                // Particle Point Shader Material
+                const initSize = parseFloat(document.getElementById('slider-size').value);
+                
+                this.particleMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        tPos: { value: null },
+                        tColor: { value: this.colorTexture },
+                        uTime: { value: 0 },
+                        uSize: { value: initSize },
+                        uIsDark: { value: document.documentElement.getAttribute('data-theme') === 'dark' ? 1.0 : 0.0 }
+                    },
+                    vertexShader: `
+                        uniform sampler2D tPos;
+                        uniform sampler2D tColor;
+                        uniform float uTime;
+                        uniform float uSize;
+                        uniform float uIsDark;
+                        varying vec4 vColor;
+                        void main() {
+                            vec4 pos = texture2D(tPos, uv);
+                            vColor = texture2D(tColor, uv);
+                            vec4 mvPosition = modelViewMatrix * vec4(pos.xyz, 1.0);
+                            float pulse = 1.0 + sin(uTime * 3.5 + uv.x * 25.0) * 0.15;
+                            float baseSize = uSize * (uIsDark < 0.5 ? 0.75 : 1.0);
+                            gl_PointSize = (baseSize * pulse) * (3.0 / -mvPosition.z);
+                            gl_Position = projectionMatrix * mvPosition;
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec4 vColor;
+                        void main() {
+                            float d = length(gl_PointCoord - vec2(0.5));
+                            if (d > 0.5) discard;
+                            float intensity = pow(1.0 - d * 2.0, 1.25);
+                            gl_FragColor = vec4(vColor.rgb * 1.5, intensity * vColor.a);
+                        }
+                    `,
+                    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+                });
+
+                this.points = new THREE.Points(geometry, this.particleMaterial);
+                this.scene.add(this.points);
+            }
+
+            disperse() {
+                const data = new Float32Array(this.totalParticles * 4);
+                for (let i = 0; i < this.totalParticles; i++) {
+                    const radius = 2.0 + Math.random() * 3.5;
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    data[i * 4] = radius * Math.sin(phi) * Math.cos(theta);
+                    data[i * 4 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                    data[i * 4 + 2] = radius * Math.cos(phi);
+                    data[i * 4 + 3] = 1.0;
+                }
+                const randTex = new THREE.DataTexture(data, this.size, this.size, THREE.RGBAFormat, THREE.FloatType);
+                randTex.needsUpdate = true;
+
+                this.renderer.setRenderTarget(this.rtA);
+                const primeMat = new THREE.MeshBasicMaterial({ map: randTex });
+                const primeMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), primeMat);
+                this.renderer.render(primeMesh, this.simCamera);
+                this.renderer.setRenderTarget(null);
+            }
+
+            align() {
+                this.renderer.setRenderTarget(this.rtA);
+                const primeMat = new THREE.MeshBasicMaterial({ map: this.targetTexture });
+                const primeMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), primeMat);
+                this.renderer.render(primeMesh, this.simCamera);
+                this.renderer.setRenderTarget(null);
+            }
+
+            addEventListeners() {
+                window.addEventListener('resize', () => {
+                    this.width = this.container.offsetWidth;
+                    this.height = this.container.offsetHeight;
+                    this.renderer.setSize(this.width, this.height);
+                    this.camera.aspect = this.width / this.height;
+                    this.camera.updateProjectionMatrix();
+                });
+
+                const onMove = (clientX, clientY) => {
+                    if (this.isMouseDown) {
+                        const dx = clientX - this.lastMouseX;
+                        const dy = clientY - this.lastMouseY;
+                        this.targetRotation.y += dx * 0.007;
+                        this.targetRotation.x += dy * 0.007;
+                        this.lastMouseX = clientX;
+                        this.lastMouseY = clientY;
+                    }
+                };
+
+                this.container.addEventListener('mousedown', (e) => {
+                    this.isMouseDown = true;
+                    this.lastMouseX = e.clientX;
+                    this.lastMouseY = e.clientY;
+                });
+
+                window.addEventListener('mouseup', () => {
+                    this.isMouseDown = false;
+                });
+
+                this.container.addEventListener('mousemove', (e) => {
+                    onMove(e.clientX, e.clientY);
+                });
+
+                // Touch
+                this.container.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) {
+                        this.isMouseDown = true;
+                        this.lastMouseX = e.touches[0].clientX;
+                        this.lastMouseY = e.touches[0].clientY;
+                    }
+                });
+                window.addEventListener('touchend', () => this.isMouseDown = false);
+                this.container.addEventListener('touchmove', (e) => {
+                    if (e.touches.length === 1) {
+                        onMove(e.touches[0].clientX, e.touches[0].clientY);
+                    }
+                });
+            }
+
+            animate() {
+                if (!this.isRunning) return;
+
+                requestAnimationFrame(() => this.animate());
+
+                const uTime = performance.now() * 0.001;
+
+                // Sync with sliders
+                const globalSpeed = parseFloat(document.getElementById('slider-speed').value);
+                const globalNoise = parseFloat(document.getElementById('slider-noise').value);
+                const globalSize = parseFloat(document.getElementById('slider-size').value);
+
+                this.simMaterial.uniforms.uTime.value = uTime;
+                this.simMaterial.uniforms.uSpeed.value = globalSpeed;
+                this.simMaterial.uniforms.uNoiseAmp.value = globalNoise;
+                this.simMaterial.uniforms.tCurr.value = this.rtA.texture;
+                
+                this.renderer.setRenderTarget(this.rtB);
+                this.renderer.render(this.simScene, this.simCamera);
+                
+                const tmp = this.rtA; this.rtA = this.rtB; this.rtB = tmp;
+
+                this.particleMaterial.uniforms.tPos.value = this.rtA.texture;
+                this.particleMaterial.uniforms.uTime.value = uTime;
+                this.particleMaterial.uniforms.uSize.value = globalSize;
+                this.particleMaterial.uniforms.uIsDark.value = 
+                    document.documentElement.getAttribute('data-theme') === 'dark' ? 1.0 : 0.0;
+
+                // Rotations
+                this.currentRotation.x += (this.targetRotation.x - this.currentRotation.x) * 0.08;
+                this.currentRotation.y += (this.targetRotation.y - this.currentRotation.y) * 0.08;
+
+                this.points.rotation.x = this.currentRotation.x;
+                // Add default spinning rotation, custom offset direction per instance
+                let spinOffset = 0.05;
+                if (this.logoType === 'react') spinOffset = -0.06;
+                else if (this.logoType === 'python') spinOffset = 0.08;
+                else if (this.logoType === 'aws') spinOffset = -0.04;
+                else if (this.logoType === 'mobile') spinOffset = 0.05;
+                else if (this.logoType === 'flutter') spinOffset = 0.05;
+                else if (this.logoType === 'nodejs') spinOffset = -0.05;
+                else if (this.logoType === 'cpp') spinOffset = -0.06;
+                else if (this.logoType === 'linux') spinOffset = 0.055;
+                else if (this.logoType === 'docker') spinOffset = 0.06;
+                else if (this.logoType === 'git') spinOffset = -0.07;
+                else if (this.logoType === 'googleads') spinOffset = 0.04;
+
+                this.points.rotation.y = this.currentRotation.y + uTime * spinOffset;
+
+                this.renderer.setRenderTarget(null);
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // Initialize grid instances on DOM load
+        const engines = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            // Instantiate 9 simulators side-by-side
+            engines.push(new LogoParticleEngine('canvas-react', 'react', reactSvgDataUrl));
+            engines.push(new LogoParticleEngine('canvas-figma', 'figma', figmaSvgDataUrl));
+            engines.push(new LogoParticleEngine('canvas-python', 'python', pythonSvgDataUrl));
+            engines.push(new LogoParticleEngine('canvas-aws', 'aws', awsSvgDataUrl));
+            engines.push(new LogoParticleEngine('canvas-mobile', 'mobile', mobileLogoDataUrl));
+            engines.push(new LogoParticleEngine('canvas-flutter', 'flutter', flutterLogoDataUrl));
+            engines.push(new LogoParticleEngine('canvas-nodejs', 'nodejs', nodejsSvgDataUrl));
+            engines.push(new LogoParticleEngine('canvas-cpp', 'cpp', cppLogoDataUrl));
+            engines.push(new LogoParticleEngine('canvas-linux', 'linux', linuxLogoDataUrl));
+            engines.push(new LogoParticleEngine('canvas-googleads', 'googleads', googleadsLogoDataUrl));
+
+            setupDashboardEvents();
+        });
+
+        // ═══════════════════════════════════════════
+        // DASHBOARD EVENT HANDLERS
+        // ═══════════════════════════════════════════
+        function setupDashboardEvents() {
+            // Theme toggle switch
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.addEventListener('click', () => {
+                const html = document.documentElement;
+                const nextTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                html.setAttribute('data-theme', nextTheme);
+            });
+
+            // Sliders value synchronization
+            bindSlider('slider-size', 'size-val');
+            bindSlider('slider-speed', 'speed-val');
+            bindSlider('slider-noise', 'noise-val');
+
+            // Action buttons events
+            document.getElementById('btn-disperse-all').addEventListener('click', () => {
+                engines.forEach(eng => eng.disperse());
+            });
+
+            document.getElementById('btn-reset-all').addEventListener('click', () => {
+                engines.forEach(eng => eng.align());
+            });
+
+            // Preset selector event
+            document.getElementById('preset-selector').addEventListener('change', () => {
+                engines.forEach(eng => eng.updatePresetColors());
+            });
+        }
+
+        function bindSlider(sliderId, spanId) {
+            const slider = document.getElementById(sliderId);
+            const span = document.getElementById(spanId);
+            slider.addEventListener('input', (e) => {
+                span.textContent = e.target.value;
+            });
+        }
+    </script>
+</body>
+</html>

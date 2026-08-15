@@ -3,7 +3,7 @@
 <div class="erp-grid-2">
   
   <!-- Left Side: Control Panel -->
-  <div class="erp-card" style="height: fit-content;">
+  <div class="erp-card" style="height: calc(100vh - 200px); overflow-y: auto;">
     <h3 class="erp-h3">Project Details</h3>
     
     <div id="erpFormFields">
@@ -41,8 +41,8 @@
   </div>
 
   <!-- Right Side: Preview -->
-  <div class="erp-card" style="padding: 0; overflow: hidden; background: #E2E8F0; display: flex; align-items: center; justify-content: center;">
-    <iframe id="certFrame" src="/project/index.html" style="width: 100%; height: 800px; border: none;"></iframe>
+  <div class="erp-card" style="padding: 0; overflow: hidden; background: var(--erp-bg-secondary); border: var(--erp-border-width) solid var(--erp-border); display: flex; align-items: center; justify-content: center; height: calc(100vh - 200px);">
+    <iframe id="certFrame" src="/project/index.html" style="width: 100%; height: 100%; border: none;"></iframe>
   </div>
 </div>
 
