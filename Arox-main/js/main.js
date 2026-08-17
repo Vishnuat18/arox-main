@@ -22,32 +22,38 @@
   }
 
   function updateThemeUI() {
+    // Sync all switch checkboxes with current theme (checked = light, unchecked = dark)
+    document.querySelectorAll('#checkbox, #theme-checkbox, .theme-switch-checkbox').forEach(cb => {
+      cb.checked = (currentTheme === 'light');
+    });
+
     const icon = document.getElementById('theme-icon');
-    if (!icon) return;
-    
-    if (!icon.querySelector('.eye-open-g')) {
-      icon.setAttribute('viewBox', '0 0 24 24');
-      icon.setAttribute('stroke-width', '2');
-      icon.innerHTML = `
-        <g class="eye-open-g">
-          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
-          <circle cx="12" cy="12" r="3"></circle>
-        </g>
-        <g class="eye-closed-g">
-          <path d="M2 10s3 5 10 5 10-5 10-5"></path>
-          <path d="M6 13l-1.5 2.5"></path>
-          <path d="M10 15v3"></path>
-          <path d="M14 15v3"></path>
-          <path d="M18 13l1.5 2.5"></path>
-        </g>
-      `;
+    if (icon) {
+      if (!icon.querySelector('.eye-open-g')) {
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.setAttribute('stroke-width', '2');
+        icon.innerHTML = `
+          <g class="eye-open-g">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </g>
+          <g class="eye-closed-g">
+            <path d="M2 10s3 5 10 5 10-5 10-5"></path>
+            <path d="M6 13l-1.5 2.5"></path>
+            <path d="M10 15v3"></path>
+            <path d="M14 15v3"></path>
+            <path d="M18 13l1.5 2.5"></path>
+          </g>
+        `;
+      }
+      
+      if (currentTheme === 'light') {
+        icon.setAttribute('stroke', '#f59e0b');
+      } else {
+        icon.setAttribute('stroke', '#38bdf8');
+      }
     }
-    
-    if (currentTheme === 'light') {
-      icon.setAttribute('stroke', '#f59e0b');
-    } else {
-      icon.setAttribute('stroke', '#38bdf8');
-    }
+
     document.querySelectorAll('.mobile-theme-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.theme === currentTheme);
     });
@@ -62,10 +68,19 @@
     });
   }
 
-  document.getElementById('theme-toggle-btn').addEventListener('click', () => {
-    const idx = THEMES.indexOf(currentTheme);
-    applyTheme(THEMES[(idx + 1) % THEMES.length]);
+  document.addEventListener('change', (e) => {
+    if (e.target.id === 'checkbox' || e.target.id === 'theme-checkbox' || e.target.classList.contains('theme-switch-checkbox')) {
+      applyTheme(e.target.checked ? 'light' : 'dark');
+    }
   });
+
+  const oldBtn = document.getElementById('theme-toggle-btn');
+  if (oldBtn) {
+    oldBtn.addEventListener('click', () => {
+      const idx = THEMES.indexOf(currentTheme);
+      applyTheme(THEMES[(idx + 1) % THEMES.length]);
+    });
+  }
   document.querySelectorAll('.mobile-theme-btn').forEach(btn => {
     btn.addEventListener('click', () => applyTheme(btn.dataset.theme));
   });

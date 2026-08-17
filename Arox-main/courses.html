@@ -42,12 +42,51 @@
       }
     }
   </script>
+  <!-- Three.js ESM Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <link rel="stylesheet" href="css/style.css" />
 
   <style>
+    /* 3D Particle Canvas Card Wrappers */
+    .card-particle-wrap {
+      width: 100%;
+      height: 180px;
+      position: relative;
+      margin: 10px 0 14px 0;
+      border-radius: 16px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-dark .card-particle-wrap {
+      background: transparent;
+      border: none;
+    }
+    .card-particle-canvas {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: grab;
+    }
+    .card-particle-canvas:active {
+      cursor: grabbing;
+    }
     /* ============================================================
        DESIGN TOKENS
     ============================================================ */
@@ -297,20 +336,20 @@
       align-items: center;
       gap: 32px;
       padding: 0 5vw;
-      padding-top: 5rem;
+      padding-top: 3.5rem;
       width: max-content;
       will-change: transform;
     }
     .flip-card-wrapper {
       width: min(85vw, 340px);
-      height: min(78vh, 580px);
+      height: min(75vh, 550px);
       flex-shrink: 0;
     }
 
     /* Pinned Pill Nav Styles */
     .courses-pill-nav {
       position: absolute;
-      top: 3rem;
+      top: 2rem;
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
@@ -322,7 +361,12 @@
       border: 1px solid var(--border);
       border-radius: 9999px;
       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
-      transition: background-color 300ms, border-color 300ms;
+      transition: opacity 0.3s ease, background-color 300ms, border-color 300ms;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .courses-pill-nav.is-visible {
+      opacity: 1;
       pointer-events: auto;
     }
 
@@ -394,6 +438,7 @@
       overflow-y: hidden;
       scrollbar-width: thin;
       -webkit-overflow-scrolling: touch;
+      margin-top: 2rem;
     }
     .carousel-container {
       width: 100%;
@@ -1787,16 +1832,28 @@
         <a href="about.html" class="nav-link">About</a>
         <a href="services.html" class="nav-link">Services</a>
         <a href="courses.html" class="nav-link active"><span class="nav-link-indicator"></span>Courses</a>
+        <a href="anotherinternship.html" class="nav-link">Bootcamps</a>
         <a href="internships.html" class="nav-link">Internships</a>
         <a href="contact.html" class="nav-link">Contact</a>
       </nav>
     </div>
     <div class="nav-right">
       <a href="/login" class="nav-login">Login</a>
-      <button id="theme-toggle-btn" class="nav-theme-btn" aria-label="Toggle theme">
-        <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
-      </button>
+      <label class="switch" title="Toggle theme">
+        <input id="theme-checkbox" type="checkbox" aria-label="Toggle theme" />
+        <span class="slider">
+          <div class="star star_1"></div>
+          <div class="star star_2"></div>
+          <div class="star star_3"></div>
+          <svg viewBox="0 0 16 16" class="cloud_1 cloud">
+            <path
+              transform="matrix(.77976 0 0 .78395-299.99-418.63)"
+              fill="#fff"
+              d="m391.84 540.91c-.421-.329-.949-.524-1.523-.524-1.351 0-2.451 1.084-2.485 2.435-1.395.526-2.388 1.88-2.388 3.466 0 1.874 1.385 3.423 3.182 3.667v.034h12.73v-.006c1.775-.104 3.182-1.584 3.182-3.395 0-1.747-1.309-3.186-2.994-3.379.007-.106.011-.214.011-.322 0-2.707-2.271-4.901-5.072-4.901-2.073 0-3.856 1.202-4.643 2.925"
+            ></path>
+          </svg>
+        </span>
+      </label>
       <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
         <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
@@ -1819,6 +1876,10 @@
         <polyline points="9 18 15 12 9 6" />
       </svg></a>
     <a href="courses.html" class="mobile-nav-link active"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6" />
+      </svg></a>
+    <a href="anotherinternship.html" class="mobile-nav-link"><span>Bootcamps</span><svg width="24" height="24" viewBox="0 0 24 24"
         fill="none" stroke="currentColor" stroke-width="2.5">
         <polyline points="9 18 15 12 9 6" />
       </svg></a>
@@ -2090,37 +2151,7 @@
   </div>
 </div>
 
-<!-- ============================================================
-     EXPANDABLE COURSES SECTION
-============================================================ -->
-<section class="courses-section" id="bootcampsSection">
-  <div class="exp-grid">
-    <div class="section-header">
-      <div class="section-eyebrow">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        7 In-Demand Courses. 1 Powerful Transformation.
-      </div>
-      <h2 class="section-title">Explore Our Career Bootcamps</h2>
-    </div>
 
-    <!-- Desktop layout -->
-    <div class="exp-layout" id="expDesktop">
-      <!-- Detail Panel -->
-      <div id="expDetailPanel">
-        <!-- Injected by JS -->
-      </div>
-      <!-- Row List -->
-      <div class="exp-list" id="expRowList">
-        <!-- Injected by JS -->
-      </div>
-    </div>
-
-    <!-- Mobile Accordion -->
-    <div class="exp-mobile hidden-lg" id="expMobile">
-      <!-- Injected by JS -->
-    </div>
-  </div>
-</section>
 
 <!-- ============================================================
      FOOTER
@@ -2272,8 +2303,32 @@
 <!-- ============================================================
      JAVASCRIPT
 ============================================================ -->
-<script>
+<script type="module">
+import { LogoParticleEngine } from './js/particle-engine.js';
+
 (function() {
+
+  function getLogoTypeForCourseId(id) {
+    const map = {
+      'full-stack-web-development': 'react',
+      'full-stack-internship': 'react',
+      'ui-ux-designing': 'figma',
+      'ui-ux-design-internship': 'figma',
+      'data-science-and-ai': 'python',
+      'ai-agent-internship': 'python',
+      'cyber-security': 'linux',
+      'cyber-security-internship': 'linux',
+      'digital-marketing': 'googleads',
+      'embedded-systems-and-iot': 'cpp',
+      'devops-engineering': 'aws',
+      'cloud-devops-internship': 'aws',
+      'software-development': 'mobile',
+      'python-backend-internship': 'mobile',
+      'app-development': 'flutter',
+      'mobile-app-internship': 'flutter'
+    };
+    return map[id] || 'react';
+  }
 
   /* ──────── COURSE DATA ──────── */
   const deviconMap = {
@@ -2427,8 +2482,12 @@
 
   /* ──────── BUILD FLIP CARDS ──────── */
   let flippedId = null;
+  const activeParticleEngines = [];
 
   function buildFlipCards(type) {
+    activeParticleEngines.forEach(eng => eng.destroy());
+    activeParticleEngines.length = 0;
+
     const track = document.getElementById('hscrollTrack');
     track.innerHTML = '';
     flippedId = null;
@@ -2438,6 +2497,7 @@
     data.forEach(course => {
       const wrapper = document.createElement('div');
       wrapper.className = 'flip-card-wrapper';
+      const logoType = getLogoTypeForCourseId(course.id);
 
       const techIconsHTML = course.techStack.map(t => `
         <div class="tech-icon-item" title="${t.name}">
@@ -2459,21 +2519,8 @@
                 </div>
                 <h3 class="card-title">${course.title}</h3>
                 <p class="card-desc">${course.desc}</p>
-                <div class="code-mock-wrap">
-                  <div class="code-mock">
-                    <div class="code-mock-screen">
-                      <div class="code-line code-line-green"></div>
-                      <div class="code-line code-line-yellow"></div>
-                      <div class="code-line code-line-blue"></div>
-                      <div class="code-line code-line-purple"></div>
-                    </div>
-                    <div class="code-mock-icon code-mock-icon-1">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                    </div>
-                    <div class="code-mock-icon code-mock-icon-2">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                    </div>
-                  </div>
+                <div class="card-particle-wrap">
+                  <div class="card-particle-canvas" id="particle-canvas-${course.id}"></div>
                 </div>
                 <div class="mt-auto">
                   <button class="card-action-btn" onclick="window.location.href='detail.html?course=${course.id}'; event.stopPropagation();">
@@ -2508,6 +2555,14 @@
       `;
 
       track.appendChild(wrapper);
+
+      setTimeout(() => {
+        const cContainer = document.getElementById(`particle-canvas-${course.id}`);
+        if (cContainer) {
+          const eng = new LogoParticleEngine(cContainer, logoType);
+          activeParticleEngines.push(eng);
+        }
+      }, 50);
 
       const cardEl = wrapper.querySelector(`#card-${course.id}`);
       const tooltip = wrapper.querySelector(`#tip-${course.id}`);
@@ -2572,13 +2627,16 @@
             header.classList.add('hidden-nav');
             header.style.pointerEvents = 'none';
           }
+          if (pillNav) pillNav.classList.add('is-visible');
           window.isHScrollActive = true;
         },
         onLeave: () => {
           const header = document.getElementById('site-header');
           if (header) {
+            header.classList.remove('hidden-nav');
             header.style.pointerEvents = '';
           }
+          if (pillNav) pillNav.classList.remove('is-visible');
           window.isHScrollActive = false;
         },
         onEnterBack: () => {
@@ -2587,13 +2645,16 @@
             header.classList.add('hidden-nav');
             header.style.pointerEvents = 'none';
           }
+          if (pillNav) pillNav.classList.add('is-visible');
           window.isHScrollActive = true;
         },
         onLeaveBack: () => {
           const header = document.getElementById('site-header');
           if (header) {
+            header.classList.remove('hidden-nav');
             header.style.pointerEvents = '';
           }
+          if (pillNav) pillNav.classList.remove('is-visible');
           window.isHScrollActive = false;
         }
       });
@@ -2610,7 +2671,8 @@
   function initInternTrigger() {
     if (internTrigger) internTrigger.kill();
     internTrigger = ScrollTrigger.create({
-      trigger: internBand,
+      trigger: hscrollSectionEl,
+      endTrigger: internBand,
       start: 'top top',
       end: 'bottom bottom',
       onEnter: () => {
@@ -2620,6 +2682,7 @@
           header.classList.add('hidden-nav');
           header.style.pointerEvents = 'none';
         }
+        if (pillNav) pillNav.classList.add('is-visible');
       },
       onLeave: () => {
         window.isHScrollActive = false;
@@ -2628,6 +2691,7 @@
           header.classList.remove('hidden-nav');
           header.style.pointerEvents = '';
         }
+        if (pillNav) pillNav.classList.remove('is-visible');
       },
       onEnterBack: () => {
         window.isHScrollActive = true;
@@ -2636,6 +2700,7 @@
           header.classList.add('hidden-nav');
           header.style.pointerEvents = 'none';
         }
+        if (pillNav) pillNav.classList.add('is-visible');
       },
       onLeaveBack: () => {
         window.isHScrollActive = false;
@@ -2644,6 +2709,7 @@
           header.classList.remove('hidden-nav');
           header.style.pointerEvents = '';
         }
+        if (pillNav) pillNav.classList.remove('is-visible');
       }
     });
   }
@@ -2653,7 +2719,7 @@
     if (target) target.scrollIntoView({ behavior: 'smooth' });
   };
 
-  function setActiveType(type) {
+  function setActiveType(type, isInitialLoad = false) {
     document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
     const targetBtn = document.querySelector('.pill-btn[data-type="' + type + '"]');
     if (targetBtn) targetBtn.classList.add('active');
@@ -2665,8 +2731,24 @@
     const carouselWrap = document.getElementById('internshipCarouselWrap');
     const scrollHint = document.querySelector('.scroll-hint');
 
+    // Only anchor scroll position if section is actively being viewed (user scrolled down into it)
+    let targetY = null;
+    if (!isInitialLoad && hscrollSectionEl && window.scrollY > 150) {
+      const rect = hscrollSectionEl.getBoundingClientRect();
+      const isVisible = rect.top < (window.innerHeight * 0.7) && rect.bottom > 0;
+      if (isVisible) {
+        targetY = (hScrollTrigger && hScrollTrigger.start !== undefined)
+          ? hScrollTrigger.start
+          : (rect.top + window.scrollY);
+      }
+    }
+
     // Smooth transition for sections inside hscrollSection
     if (isTraining) {
+      if (targetY !== null) {
+        window.scrollTo({ top: targetY, behavior: 'instant' });
+      }
+
       // Transition to Training
       if (carouselWrap && carouselWrap.style.display !== 'none') {
         gsap.to(carouselWrap, {
@@ -2701,10 +2783,18 @@
 
       // Setup Training layout and triggers
       if (internTrigger) { internTrigger.kill(); internTrigger = null; }
-      window.isHScrollActive = false;
-      if (header) {
-        header.classList.remove('hidden-nav');
-        header.style.pointerEvents = '';
+      if (targetY !== null && header) {
+        window.isHScrollActive = true;
+        header.classList.add('hidden-nav');
+        header.style.pointerEvents = 'none';
+        if (pillNav) pillNav.classList.add('is-visible');
+      } else {
+        window.isHScrollActive = false;
+        if (header) {
+          header.classList.remove('hidden-nav');
+          header.style.pointerEvents = '';
+        }
+        if (pillNav) pillNav.classList.remove('is-visible');
       }
       buildFlipCards('training');
       
@@ -2715,6 +2805,14 @@
       setTimeout(() => {
         initHScroll();
         ScrollTrigger.refresh();
+        if (targetY !== null) {
+          window.scrollTo({ top: targetY, behavior: 'instant' });
+          if (header) {
+            header.classList.add('hidden-nav');
+            header.style.pointerEvents = 'none';
+          }
+          if (pillNav) pillNav.classList.add('is-visible');
+        }
       }, 350);
 
     } else {
@@ -2748,11 +2846,28 @@
       }
 
       // Setup Internship layout and triggers
-      if (hScrollTrigger) { hScrollTrigger.kill(); hScrollTrigger = null; }
-      window.isHScrollActive = false;
-      if (header) {
-        header.classList.remove('hidden-nav');
-        header.style.pointerEvents = '';
+      if (hScrollTrigger) { 
+        hScrollTrigger.kill(); 
+        hScrollTrigger = null; 
+      }
+      if (hscrollTrack) {
+        gsap.set(hscrollTrack, { clearProps: 'transform' });
+      }
+      if (targetY !== null) {
+        window.scrollTo({ top: targetY, behavior: 'instant' });
+        if (header) {
+          header.classList.add('hidden-nav');
+          header.style.pointerEvents = 'none';
+        }
+        if (pillNav) pillNav.classList.add('is-visible');
+        window.isHScrollActive = true;
+      } else {
+        window.isHScrollActive = false;
+        if (header) {
+          header.classList.remove('hidden-nav');
+          header.style.pointerEvents = '';
+        }
+        if (pillNav) pillNav.classList.remove('is-visible');
       }
 
       if (internBand) internBand.style.display = '';
@@ -2762,6 +2877,14 @@
       setTimeout(() => {
         initInternTrigger();
         ScrollTrigger.refresh();
+        if (targetY !== null) {
+          window.scrollTo({ top: targetY, behavior: 'instant' });
+          if (header) {
+            header.classList.add('hidden-nav');
+            header.style.pointerEvents = 'none';
+          }
+          if (pillNav) pillNav.classList.add('is-visible');
+        }
       }, 350);
     }
   }
@@ -2775,7 +2898,7 @@
   // Initial load - respect ?tab=internship / ?tab=training (used by /internships & /training routes)
   const urlParams = new URLSearchParams(window.location.search);
   const initialTab = urlParams.get('tab') === 'internship' ? 'internship' : 'training';
-  setActiveType(initialTab);
+  setActiveType(initialTab, true);
 
   window.addEventListener('resize', () => {
     if (hscrollSectionEl && hscrollSectionEl.style.display !== 'none') {

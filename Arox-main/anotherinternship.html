@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Career Bootcamps — AROX Tech</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* Expandable courses section specific styles */
+    .exp-grid {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    .exp-layout {
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 2rem;
+      margin-top: 2.5rem;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .exp-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .exp-detail-panel {
+      position: sticky;
+      top: 5rem;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 540px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+    }
+    .exp-panel-accent-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), #a855f7);
+    }
+    .exp-panel-watermark {
+      position: absolute;
+      right: 1rem; top: 1rem;
+      font-size: 6rem;
+      font-weight: 900;
+      font-family: monospace;
+      color: var(--muted);
+      opacity: 0.08;
+      user-select: none;
+      pointer-events: none;
+    }
+    .exp-icon-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .exp-icon-box {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+    }
+    .exp-icon-box svg {
+      width: 30px; height: 30px;
+    }
+    .exp-badge-pro {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, rgba(248,152,32,0.2), rgba(248,152,32,0.05));
+      color: #f89820;
+      border: 1px solid rgba(248,152,32,0.3);
+      letter-spacing: 0.05em;
+    }
+    .exp-course-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--heading);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+    .exp-course-desc {
+      color: var(--muted);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .exp-meta-pills {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 1.75rem;
+    }
+    .pill-green {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(34,197,94,0.1);
+      color: #22c55e;
+      border: 1px solid rgba(34,197,94,0.2);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .pill-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    .pill-neutral {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: var(--surface);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .exp-learn-box {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .exp-learn-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--heading);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .exp-learn-list {
+      list-style: none;
+      padding: 0; margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .exp-learn-list li {
+      font-size: 0.84375rem;
+      color: var(--body);
+      position: relative;
+      padding-left: 18px;
+      line-height: 1.4;
+    }
+    .exp-learn-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .exp-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .exp-stat {
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.875rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .exp-stat-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .exp-stat-icon svg { width: 18px; height: 18px; }
+    .exp-stat-val { font-size: 1.125rem; font-weight: 800; color: var(--heading); }
+    .exp-stat-lbl { font-size: 0.75rem; color: var(--muted); }
+    
+    .exp-cta {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-explore {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: var(--background);
+      font-weight: 700;
+      font-size: 0.875rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-explore:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .btn-curriculum {
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--heading);
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-curriculum:hover {
+      background: var(--surface);
+    }
+
+    /* List rows */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .exp-row {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .exp-row:hover {
+      border-color: rgba(56,189,248,0.4);
+      transform: translateX(4px);
+    }
+    .exp-row.active {
+      border-color: var(--primary);
+      background: linear-gradient(90deg, rgba(56,189,248,0.06), transparent);
+      box-shadow: 0 4px 20px -5px rgba(56,189,248,0.15);
+    }
+    .exp-row-left {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .exp-row-num {
+      font-size: 1.125rem;
+      font-weight: 800;
+      font-family: monospace;
+      color: var(--muted);
+      width: 28px;
+    }
+    .exp-row.active .exp-row-num {
+      color: var(--primary);
+    }
+    .exp-row-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--border);
+      transition: all 0.25s;
+    }
+    .exp-row-icon svg { width: 22px; height: 22px; }
+    .exp-row-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--heading);
+    }
+    .exp-row-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    .exp-row-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+    .exp-row-arrow {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      transition: all 0.25s;
+    }
+    .exp-row.active .exp-row-arrow {
+      background: var(--primary);
+      color: var(--background);
+      border-color: var(--primary);
+      transform: rotate(90deg);
+    }
+
+    /* Mobile Accordion */
+    .exp-mob-card {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+    .exp-mob-card.active {
+      border-color: var(--primary);
+    }
+    .exp-mob-collapsed {
+      padding: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+    .exp-mob-expanded {
+      padding: 0 1.25rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Hero Banner for anotherinternship page */
+    .page-hero-banner {
+      padding: 8rem 1.5rem 4rem;
+      text-align: center;
+      background: radial-gradient(circle at top center, rgba(56,189,248,0.1), transparent 70%);
+    }
+    .page-hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      background: rgba(56,189,248,0.1);
+      border: 1px solid rgba(56,189,248,0.2);
+      color: var(--primary);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+    .page-hero-title {
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--heading);
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .page-hero-desc {
+      color: var(--muted);
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: 1.0625rem;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header id="site-header">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="index.html" class="nav-logo">
+        <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
+          onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
+        <span id="nav-logo-text"
+          style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
+      </a>
+      <div class="nav-divider">/</div>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="courses.html" class="nav-link">Courses</a>
+        <a href="anotherinternship.html" class="nav-link active"><span class="nav-link-indicator"></span>Bootcamps</a>
+        <a href="internships.html" class="nav-link">Internships</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <a href="/login" class="nav-login">Login</a>
+      <label class="switch" title="Toggle theme">
+        <input id="theme-checkbox" type="checkbox" aria-label="Toggle theme" />
+        <span class="slider">
+          <div class="star star_1"></div>
+          <div class="star star_2"></div>
+          <div class="star star_3"></div>
+          <svg viewBox="0 0 16 16" class="cloud_1 cloud">
+            <path
+              transform="matrix(.77976 0 0 .78395-299.99-418.63)"
+              fill="#fff"
+              d="m391.84 540.91c-.421-.329-.949-.524-1.523-.524-1.351 0-2.451 1.084-2.485 2.435-1.395.526-2.388 1.88-2.388 3.466 0 1.874 1.385 3.423 3.182 3.667v.034h12.73v-.006c1.775-.104 3.182-1.584 3.182-3.395 0-1.747-1.309-3.186-2.994-3.379.007-.106.011-.214.011-.322 0-2.707-2.271-4.901-5.072-4.901-2.073 0-3.856 1.202-4.643 2.925"
+            ></path>
+          </svg>
+        </span>
+      </label>
+      <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
+        <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="mobile-menu" aria-hidden="true">
+  <nav class="mobile-nav">
+    <a href="index.html" class="mobile-nav-link"><span>Home</span></a>
+    <a href="about.html" class="mobile-nav-link"><span>About</span></a>
+    <a href="services.html" class="mobile-nav-link"><span>Services</span></a>
+    <a href="courses.html" class="mobile-nav-link"><span>Courses</span></a>
+    <a href="anotherinternship.html" class="mobile-nav-link active"><span>Bootcamps</span></a>
+    <a href="internships.html" class="mobile-nav-link"><span>Internships</span></a>
+    <a href="contact.html" class="mobile-nav-link"><span>Contact</span></a>
+  </nav>
+</div>
+
+<!-- Hero Banner Section -->
+<section class="page-hero-banner">
+  <div class="page-hero-eyebrow">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    Specialized Career Bootcamps
+  </div>
+  <h1 class="page-hero-title">Explore Our Career Bootcamps</h1>
+  <p class="page-hero-desc">
+    Intensive, project-driven bootcamps designed to transform beginners into production-ready software engineers.
+  </p>
+</section>
+
+<!-- EXPANDABLE COURSES SECTION -->
+<section class="courses-section" id="bootcampsSection" style="padding-top: 1rem; padding-bottom: 6rem;">
+  <div class="exp-grid">
+    <!-- Desktop layout -->
+    <div class="exp-layout" id="expDesktop">
+      <!-- Detail Panel -->
+      <div id="expDetailPanel">
+        <!-- Injected by JS -->
+      </div>
+      <!-- Row List -->
+      <div class="exp-list" id="expRowList">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
+    <!-- Mobile Accordion -->
+    <div class="exp-mobile hidden-lg" id="expMobile">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- PRE-FOOTER CTA SECTION -->
+<section class="cta-section">
+  <div class="cta-card">
+    <div class="cta-card-borders"></div>
+    <div class="corner-plus top-left">+</div>
+    <div class="corner-plus top-right">+</div>
+    <div class="corner-plus bottom-left">+</div>
+    <div class="corner-plus bottom-right">+</div>
+    
+    <div class="cta-content">
+      <span class="cta-eyebrow">CAREERS</span>
+      <h2 class="cta-heading">Ready to Level Up Your Career?</h2>
+      <p class="cta-text">Learn practical technologies, build real-world projects, and take your next step with AROX Tech.</p>
+      <div class="cta-action-row">
+        <a href="courses.html" class="cta-btn-solid">
+          <span>Explore Courses</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href="internships.html" class="cta-btn-outline">Apply for Internship</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-glow-1"></div>
+  <div class="footer-glow-2"></div>
+  <div class="footer-watermark">Arox Tech</div>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <a href="index.html" style="display:inline-block;margin-bottom:.5rem;">
+          <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech"
+            style="height:3rem;width:auto;"
+            onerror="this.style.display='none';document.getElementById('footer-logo-text').style.display='block'" />
+          <span id="footer-logo-text"
+            style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--heading);">AROX</span>
+        </a>
+        <p class="footer-tagline">We build digital products, AI solutions, and powerful experiences that help
+          businesses grow faster and smarter.</p>
+        <p class="footer-copyright">&copy; <span>AROX Tech <span id="footer-year">2026</span></span> &bull; All Rights Reserved</p>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Company</h4>
+        <ul class="footer-links">
+          <li><a href="about.html" class="footer-link">About Us</a></li>
+          <li><a href="anotherinternship.html" class="footer-link">Bootcamps</a></li>
+          <li><a href="internships.html" class="footer-link">Internships</a></li>
+          <li><a href="contact.html" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Programs</h4>
+        <ul class="footer-links">
+          <li><a href="courses.html" class="footer-link">Full Stack Web Development</a></li>
+          <li><a href="courses.html" class="footer-link">Python Development</a></li>
+          <li><a href="courses.html" class="footer-link">Data Science &amp; AI</a></li>
+          <li><a href="courses.html" class="footer-link">UI/UX Design</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-col-title">Contact</h4>
+        <div class="footer-contact-items">
+          <div class="footer-contact-item">Salem, Tamil Nadu, India</div>
+          <div class="footer-contact-item">+91 12345 67890</div>
+          <div class="footer-contact-item">info@aroxtech.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- REGISTRATION MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div>
+        <div class="modal-step-badge" id="modalStepBadge">STEP 1 OF 3</div>
+        <h3 class="modal-title" id="modalTitle">Program Application</h3>
+      </div>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="modal-progress" id="modalProgressBar">
+      <div class="modal-progress-fill" id="modalProgress" style="width:33%"></div>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Injected by JS -->
+    </div>
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn-back" id="btnBack">Back</button>
+      <button class="btn-next" id="btnNext">Next</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+(function() {
+  const expCourses = [
+    { id:"java-fsd", number:"01", badge:"PRO", title:"Java Full Stack Development", desc:"Master Java, Spring Boot, SQL and build scalable full stack enterprise applications.", iconColor:"#F89820", iconBg:"rgba(248,152,32,0.15)", level:"Beginner to Advanced", duration:"12 Weeks", learnItems:["Core Java & OOPs Concepts","Spring Boot & REST APIs","HTML5, CSS3, JavaScript (ES6+)","MySQL & Database Architecture","Projects & Enterprise Deployment"], students:"150+", projects:"6" },
+    { id:"python-dev", number:"02", title:"Python Development", desc:"Build backend microservices, automation scripts, and RESTful web applications with Python & Django.", iconColor:"#3776AB", iconBg:"rgba(55,118,171,0.15)", level:"Beginner Friendly", duration:"12 Weeks", learnItems:["Python Fundamentals & Syntax","Django & FastAPI Frameworks","Data Structures & Algorithms","PostgreSQL Integration & ORM","Automated Testing & CI/CD"], students:"180+", projects:"8" },
+    { id:"mern-stack", number:"03", title:"MERN Stack Web Development", desc:"Engineer modern responsive web platforms using MongoDB, Express, React, and Node.js.", iconColor:"#61DAFB", iconBg:"rgba(97,218,251,0.15)", level:"Project Based", duration:"14 Weeks", learnItems:["React & Next.js App Router","Node.js & Express Async Services","MongoDB NoSQL & Mongoose Schema","State Management (Redux / Zustand)","Vercel & Docker Cloud Hosting"], students:"220+", projects:"10" },
+    { id:"ui-ux-design", number:"04", title:"UI/UX Design Professional", desc:"Craft world-class visual interfaces, high-fidelity wireframes, and design systems in Figma.", iconColor:"#F24E1E", iconBg:"rgba(242,78,30,0.15)", level:"Design Thinking", duration:"10 Weeks", learnItems:["Figma Advanced & Auto-Layout","User Research & Personas","Interactive Prototyping","Design Systems & Tokenization","Usability Testing & Audit"], students:"120+", projects:"5" },
+    { id:"data-science-ai", number:"05", title:"Data Science & AI", desc:"Train machine learning models, analyze big data, and engineer AI agents.", iconColor:"#A855F7", iconBg:"rgba(168,85,247,0.15)", level:"AI + ML Projects", duration:"16 Weeks", learnItems:["Python for Data (Pandas/NumPy)","Exploratory Data Analysis","Scikit-Learn & Machine Learning","Deep Learning with PyTorch","Generative AI & LLM Agents"], students:"140+", projects:"7" },
+    { id:"cyber-security", number:"06", title:"Cyber Security Professional", desc:"Protect networks, perform ethical penetration tests, and secure cloud server infrastructure.", iconColor:"#EF4444", iconBg:"rgba(239,68,68,0.15)", level:"Hands-on Labs", duration:"14 Weeks", learnItems:["Network Protocols & Firewalls","Ethical Hacking & Pentesting","Vulnerability Assessment","Cryptography & Security Policies","Cloud Security Compliance"], students:"95+", projects:"6" },
+    { id:"cloud-aws", number:"07", title:"Cloud Computing with AWS", desc:"Architect cloud networks, automate infrastructure, and manage DevOps pipelines.", iconColor:"#FF9900", iconBg:"rgba(255,153,0,0.15)", level:"AWS Certified Path", duration:"12 Weeks", learnItems:["AWS Core (EC2, S3, IAM, VPC)","Serverless Architecture (Lambda)","Terraform Infrastructure as Code","Docker & Kubernetes Basics","CI/CD Pipeline Automation"], students:"160+", projects:"8" }
+  ];
+
+  function courseIconSVG(id, color) {
+    const map = {
+      'java-fsd': `<svg viewBox="0 0 24 24" fill="${color}"><path d="M8.851 18.56s-.917.534.653.714c1.902.218 2.874.187 4.969-.211 0 0 .552.346 1.321.646-4.699 2.013-10.633-.118-6.943-1.149M8.276 15.933s-1.028.761.542.924c2.032.209 3.636.227 6.413-.308 0 0 .384.389.987.602-5.679 1.661-12.007.13-7.942-1.218M13.116 11.475c1.158 1.333-.304 2.533-.304 2.533s2.939-1.518 1.589-3.418c-1.261-1.772-2.228-2.652 3.007-5.688 0-.001-8.216 2.051-4.292 6.573M19.33 20.504s.679.559-.747.991c-2.712.822-11.288 1.069-13.669.033-.856-.373.75-.89 1.254-.998.527-.114.828-.093.828-.093-.953-.671-6.156 1.317-2.643 1.887 9.58 1.553 17.462-.7 14.977-1.82M9.292 13.21s-4.362 1.036-1.544 1.412c1.189.159 3.561.123 5.77-.062 1.806-.152 3.618-.477 3.618-.477s-.637.272-1.098.587c-4.429 1.165-12.986.623-10.522-.568 2.082-1.006 3.776-.892 3.776-.892M17.116 17.584c4.503-2.34 2.421-4.589.968-4.285-.355.074-.515.138-.515.138s.132-.207.385-.297c2.875-1.011 5.086 2.981-.928 4.562 0-.001.07-.062.09-.118M14.401 0s2.494 2.494-2.365 6.33c-3.896 3.077-.888 4.832-.001 6.836-2.274-2.053-3.943-3.858-2.824-5.541 1.644-2.469 6.197-3.665 5.19-7.625M9.734 23.924c4.322.277 10.959-.153 11.116-2.198 0 0-.302.775-3.572 1.391-3.688.694-8.239.613-10.937.168 0-.001.553.457 3.393.639"/></svg>`,
+      'python-dev': `<svg viewBox="0 0 24 24" fill="${color}"><path d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05L0 11.97l.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05z"/></svg>`,
+      'mern-stack': `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5" fill="${color}"/><ellipse cx="12" cy="12" rx="11" ry="4.2" fill="none" stroke="${color}" stroke-width="1.5"/><ellipse cx="12" cy="12" rx="11" ry="4.2" fill="none" stroke="${color}" stroke-width="1.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="11" ry="4.2" fill="none" stroke="${color}" stroke-width="1.5" transform="rotate(120 12 12)"/></svg>`,
+      'ui-ux-design': `<svg viewBox="0 0 24 24" fill="${color}"><path d="M15.852 8.981h-4.588V0h4.588c2.476 0 4.49 2.014 4.49 4.49s-2.014 4.491-4.49 4.491zM12.735 7.51h3.117c1.665 0 3.019-1.355 3.019-3.019s-1.354-3.02-3.019-3.02h-3.117V7.51z"/></svg>`,
+      'data-science-ai': `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
+      'cyber-security': `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+      'cloud-aws': `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>`
+    };
+    return map[id] || `<svg viewBox="0 0 24 24" fill="${color}"><circle cx="12" cy="12" r="8"/></svg>`;
+  }
+
+  let activeExpIdx = 0;
+  let hoverExpIdx = null;
+
+  function renderDetailPanel(idx) {
+    const c = expCourses[idx];
+    const panel = document.getElementById('expDetailPanel');
+    if (!panel) return;
+    panel.innerHTML = `
+      <div class="exp-detail-panel">
+        <div class="exp-panel-accent-line"></div>
+        <span class="exp-panel-watermark">${c.number}</span>
+        <div>
+          <div class="exp-icon-row">
+            <div class="exp-icon-box" style="background:${c.iconBg}">
+              ${courseIconSVG(c.id, c.iconColor)}
+            </div>
+            ${c.badge ? `<span class="exp-badge-pro">${c.badge}</span>` : ''}
+          </div>
+          <div style="position:relative;z-index:10;">
+            <h3 class="exp-course-title">${c.title}</h3>
+            <p class="exp-course-desc">${c.desc}</p>
+          </div>
+          <div class="exp-meta-pills">
+            <span class="pill-green"><span class="pill-dot"></span>${c.level}</span>
+            <span class="pill-neutral">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${c.duration}
+            </span>
+          </div>
+          <div class="exp-learn-box">
+            <div class="exp-learn-label">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              What You'll Learn
+            </div>
+            <ul class="exp-learn-list">
+              ${c.learnItems.map(i => `<li>${i}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="exp-stats">
+            <div class="exp-stat">
+              <div class="exp-stat-icon" style="background:rgba(168,85,247,0.1);color:#a855f7;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              </div>
+              <div><div class="exp-stat-val">${c.students}</div><div class="exp-stat-lbl">Enrolled</div></div>
+            </div>
+            <div class="exp-stat">
+              <div class="exp-stat-icon" style="background:rgba(59,130,246,0.1);color:#3b82f6;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div><div class="exp-stat-val">${c.projects}</div><div class="exp-stat-lbl">Projects</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="exp-cta">
+          <button class="btn-explore" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">
+            Apply Now
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRowList() {
+    const list = document.getElementById('expRowList');
+    if (!list) return;
+    const visIdx = hoverExpIdx !== null ? hoverExpIdx : activeExpIdx;
+    list.innerHTML = expCourses.map((c, i) => `
+      <div class="exp-row${i === visIdx ? ' active' : ''}" data-idx="${i}">
+        <div class="exp-row-left">
+          <span class="exp-row-num">${c.number}</span>
+          <div class="exp-row-icon" style="background:${i === visIdx ? '' : c.iconBg}">
+            ${courseIconSVG(c.id, i === visIdx ? 'var(--primary)' : c.iconColor)}
+          </div>
+          <h3 class="exp-row-title">${c.title}</h3>
+        </div>
+        <div class="exp-row-right">
+          <div class="exp-row-meta">
+            <span style="display:flex;align-items:center;gap:6px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${c.duration}
+            </span>
+            <span class="pill-green" style="font-size:0.6875rem;">
+              <span class="pill-dot"></span>${c.level}
+            </span>
+          </div>
+          <div class="exp-row-arrow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    list.querySelectorAll('.exp-row').forEach(row => {
+      const idx = parseInt(row.dataset.idx);
+      row.addEventListener('click', () => { activeExpIdx = idx; renderAll(); });
+      row.addEventListener('mouseenter', () => { hoverExpIdx = idx; renderAll(); });
+      row.addEventListener('mouseleave', () => { hoverExpIdx = null; renderAll(); });
+    });
+  }
+
+  function renderMobile() {
+    const mob = document.getElementById('expMobile');
+    if (!mob) return;
+    mob.innerHTML = expCourses.map((c, i) => `
+      <div class="exp-mob-card${i === activeExpIdx ? ' active' : ''}" data-idx="${i}">
+        <div class="exp-mob-collapsed">
+          <div style="display:flex;align-items:center;gap:16px;min-width:0;">
+            <span style="font-size:1rem;font-weight:800;font-family:monospace;color:${i === activeExpIdx ? '#a855f7' : 'var(--muted)'};">${c.number}</span>
+            <h3 style="font-size:1rem;font-weight:800;color:var(--heading);">${c.title}</h3>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderAll() {
+    renderDetailPanel(hoverExpIdx !== null ? hoverExpIdx : activeExpIdx);
+    renderRowList();
+    renderMobile();
+  }
+
+  renderAll();
+
+  // Modal logic
+  window.openModal = function(title) {
+    const modal = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+    if (modalTitle) modalTitle.textContent = title ? `Apply for ${title}` : 'Bootcamp Application';
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <form style="display:flex;flex-direction:column;gap:1rem;">
+          <div>
+            <label style="display:block;margin-bottom:0.35rem;font-size:0.875rem;font-weight:600;">Full Name</label>
+            <input type="text" placeholder="John Doe" style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--background);color:var(--heading);" required />
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:0.35rem;font-size:0.875rem;font-weight:600;">Email Address</label>
+            <input type="email" placeholder="john@example.com" style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--background);color:var(--heading);" required />
+          </div>
+          <div>
+            <label style="display:block;margin-bottom:0.35rem;font-size:0.875rem;font-weight:600;">Phone Number</label>
+            <input type="tel" placeholder="+91 98765 43210" style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--background);color:var(--heading);" required />
+          </div>
+          <button type="submit" style="margin-top:0.5rem;padding:12px;border-radius:8px;background:var(--primary);color:var(--background);font-weight:700;border:none;cursor:pointer;">Submit Application</button>
+        </form>
+      `;
+    }
+    if (modal) modal.style.display = 'flex';
+  };
+
+  const modalClose = document.getElementById('modalClose');
+  if (modalClose) {
+    modalClose.addEventListener('click', () => {
+      const modal = document.getElementById('modalOverlay');
+      if (modal) modal.style.display = 'none';
+    });
+  }
+})();
+</script>
+</body>
+</html>
