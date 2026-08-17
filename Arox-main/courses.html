@@ -309,10 +309,10 @@
 
     /* Pinned Pill Nav Styles */
     .courses-pill-nav {
-      position: fixed;
-      top: 1.5rem;
+      position: absolute;
+      top: 3rem;
       left: 50%;
-      transform: translate(-50%, -100px);
+      transform: translateX(-50%);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -322,12 +322,11 @@
       border: 1px solid var(--border);
       border-radius: 9999px;
       box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
-      transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), background-color 300ms, border-color 300ms;
+      transition: background-color 300ms, border-color 300ms;
       pointer-events: auto;
     }
-    .courses-pill-nav.pinned {
-      transform: translate(-50%, 0);
-    }
+
+
     .pill-btn {
       position: relative;
       z-index: 2;
@@ -1864,7 +1863,7 @@
         No fluff, just code. Learn practical skills in web development, backend systems, and modern frameworks.
       </p>
       <div class="flex flex-wrap justify-start gap-4 mt-8">
-        <button class="btn-primary" onclick="document.getElementById('hscrollSection').scrollIntoView({ behavior: 'smooth' })">
+        <button class="btn-primary" onclick="scrollToCoursesSection()">
           Explore Courses
           <svg class="lucide-arrow-right" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -1882,6 +1881,7 @@
      HORIZONTAL SCROLL FLIP CARDS SECTION
 ============================================================ -->
 <section class="hscroll-section" id="hscrollSection">
+  <!-- Tab switcher directly inside the section -->
   <div class="courses-pill-nav" id="coursesPillNav">
     <button class="pill-btn active" data-type="training">Training</button>
     <button class="pill-btn" data-type="internship">Internship</button>
@@ -1889,6 +1889,15 @@
   <div class="hscroll-track" id="hscrollTrack">
     <!-- Cards injected by JS -->
   </div>
+  
+  <!-- Internship Magnetic Carousel Wrap (replaces course flip cards in the same place) -->
+  <div class="carousel-scroll" id="internshipCarouselWrap" style="display:none; width:100%; opacity:0;">
+    <div class="carousel-container" id="carousel-container"></div>
+    <p style="text-align:center;color:var(--muted);font-size:.875rem;margin-top:1.5rem;width:100%;">
+      Hover the bars to expand a program &middot; click <strong style="color:var(--heading);">Apply Now</strong> to start your application
+    </p>
+  </div>
+
   <div class="scroll-hint" aria-hidden="true">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     Scroll to explore
@@ -1911,13 +1920,7 @@
       </p>
     </div>
 
-    <!-- Magnetic carousel -->
-    <div class="carousel-scroll" style="margin-top:2rem;">
-      <div class="carousel-container" id="carousel-container"></div>
-    </div>
-    <p style="text-align:center;color:var(--muted);font-size:.875rem;margin-top:.5rem;">
-      Hover the bars to expand a program &middot; click <strong style="color:var(--heading);">Apply Now</strong> to start your application
-    </p>
+
 
     <!-- Perks -->
     <div class="perks-head" style="margin-top:3.5rem;">
@@ -2564,7 +2567,6 @@
           ease: 'none'
         }),
         onEnter: () => {
-          pillNav.classList.add('pinned');
           const header = document.getElementById('site-header');
           if (header) {
             header.classList.add('hidden-nav');
@@ -2573,7 +2575,6 @@
           window.isHScrollActive = true;
         },
         onLeave: () => {
-          pillNav.classList.remove('pinned');
           const header = document.getElementById('site-header');
           if (header) {
             header.style.pointerEvents = '';
@@ -2581,7 +2582,6 @@
           window.isHScrollActive = false;
         },
         onEnterBack: () => {
-          pillNav.classList.add('pinned');
           const header = document.getElementById('site-header');
           if (header) {
             header.classList.add('hidden-nav');
@@ -2590,7 +2590,6 @@
           window.isHScrollActive = true;
         },
         onLeaveBack: () => {
-          pillNav.classList.remove('pinned');
           const header = document.getElementById('site-header');
           if (header) {
             header.style.pointerEvents = '';
@@ -2604,17 +2603,166 @@
   // Pill switcher event listeners
   const internBand = document.getElementById('internshipBand');
   const bootcampsSection = document.getElementById('bootcampsSection');
+  const hscrollSectionEl = document.getElementById('hscrollSection');
+
+  let internTrigger = null;
+
+  function initInternTrigger() {
+    if (internTrigger) internTrigger.kill();
+    internTrigger = ScrollTrigger.create({
+      trigger: internBand,
+      start: 'top top',
+      end: 'bottom bottom',
+      onEnter: () => {
+        window.isHScrollActive = true;
+        const header = document.getElementById('site-header');
+        if (header) {
+          header.classList.add('hidden-nav');
+          header.style.pointerEvents = 'none';
+        }
+      },
+      onLeave: () => {
+        window.isHScrollActive = false;
+        const header = document.getElementById('site-header');
+        if (header) {
+          header.classList.remove('hidden-nav');
+          header.style.pointerEvents = '';
+        }
+      },
+      onEnterBack: () => {
+        window.isHScrollActive = true;
+        const header = document.getElementById('site-header');
+        if (header) {
+          header.classList.add('hidden-nav');
+          header.style.pointerEvents = 'none';
+        }
+      },
+      onLeaveBack: () => {
+        window.isHScrollActive = false;
+        const header = document.getElementById('site-header');
+        if (header) {
+          header.classList.remove('hidden-nav');
+          header.style.pointerEvents = '';
+        }
+      }
+    });
+  }
+
+  window.scrollToCoursesSection = function() {
+    const target = (hscrollSectionEl && hscrollSectionEl.style.display !== 'none') ? hscrollSectionEl : internBand;
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  };
 
   function setActiveType(type) {
     document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
     const targetBtn = document.querySelector('.pill-btn[data-type="' + type + '"]');
     if (targetBtn) targetBtn.classList.add('active');
-    buildFlipCards(type);
-    if (internBand) {
-      internBand.style.display = type === 'internship' ? '' : 'none';
-    }
-    if (bootcampsSection) {
-      bootcampsSection.style.display = type === 'training' ? '' : 'none';
+
+    const isTraining = type === 'training';
+    const header = document.getElementById('site-header');
+
+    const hscrollTrack = document.getElementById('hscrollTrack');
+    const carouselWrap = document.getElementById('internshipCarouselWrap');
+    const scrollHint = document.querySelector('.scroll-hint');
+
+    // Smooth transition for sections inside hscrollSection
+    if (isTraining) {
+      // Transition to Training
+      if (carouselWrap && carouselWrap.style.display !== 'none') {
+        gsap.to(carouselWrap, {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            carouselWrap.style.display = 'none';
+            if (hscrollTrack) {
+              hscrollTrack.style.display = 'flex';
+              gsap.fromTo(hscrollTrack, { opacity: 0 }, { opacity: 1, duration: 0.4 });
+            }
+            if (scrollHint) {
+              scrollHint.style.display = 'flex';
+              gsap.fromTo(scrollHint, { opacity: 0 }, { opacity: 1, duration: 0.4 });
+            }
+          }
+        });
+      } else {
+        if (hscrollTrack) {
+          hscrollTrack.style.display = 'flex';
+          hscrollTrack.style.opacity = 1;
+        }
+        if (scrollHint) {
+          scrollHint.style.display = 'flex';
+          scrollHint.style.opacity = 1;
+        }
+        if (carouselWrap) {
+          carouselWrap.style.display = 'none';
+          carouselWrap.style.opacity = 0;
+        }
+      }
+
+      // Setup Training layout and triggers
+      if (internTrigger) { internTrigger.kill(); internTrigger = null; }
+      window.isHScrollActive = false;
+      if (header) {
+        header.classList.remove('hidden-nav');
+        header.style.pointerEvents = '';
+      }
+      buildFlipCards('training');
+      
+      if (internBand) internBand.style.display = 'none';
+      if (bootcampsSection) bootcampsSection.style.display = '';
+      
+      // Re-enable and refresh ScrollTrigger for training hscroll
+      setTimeout(() => {
+        initHScroll();
+        ScrollTrigger.refresh();
+      }, 350);
+
+    } else {
+      // Transition to Internship
+      if (hscrollTrack && hscrollTrack.style.display !== 'none') {
+        gsap.to([hscrollTrack, scrollHint], {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: () => {
+            if (hscrollTrack) hscrollTrack.style.display = 'none';
+            if (scrollHint) scrollHint.style.display = 'none';
+            if (carouselWrap) {
+              carouselWrap.style.display = 'block';
+              gsap.fromTo(carouselWrap, { opacity: 0 }, { opacity: 1, duration: 0.4 });
+            }
+          }
+        });
+      } else {
+        if (carouselWrap) {
+          carouselWrap.style.display = 'block';
+          carouselWrap.style.opacity = 1;
+        }
+        if (hscrollTrack) {
+          hscrollTrack.style.display = 'none';
+          hscrollTrack.style.opacity = 0;
+        }
+        if (scrollHint) {
+          scrollHint.style.display = 'none';
+          scrollHint.style.opacity = 0;
+        }
+      }
+
+      // Setup Internship layout and triggers
+      if (hScrollTrigger) { hScrollTrigger.kill(); hScrollTrigger = null; }
+      window.isHScrollActive = false;
+      if (header) {
+        header.classList.remove('hidden-nav');
+        header.style.pointerEvents = '';
+      }
+
+      if (internBand) internBand.style.display = '';
+      if (bootcampsSection) bootcampsSection.style.display = 'none';
+
+      // Initialize internship scrolltrigger and refresh
+      setTimeout(() => {
+        initInternTrigger();
+        ScrollTrigger.refresh();
+      }, 350);
     }
   }
 
@@ -2630,7 +2778,9 @@
   setActiveType(initialTab);
 
   window.addEventListener('resize', () => {
-    initHScroll();
+    if (hscrollSectionEl && hscrollSectionEl.style.display !== 'none') {
+      initHScroll();
+    }
     ScrollTrigger.refresh();
   });
 
@@ -3317,6 +3467,10 @@
       targetRef = DATA.map(() => 0);
       startPhysics();
     });
+
+    if (typeof ScrollTrigger !== 'undefined') {
+      ScrollTrigger.refresh();
+    }
 
     /* ============ SPLIT-SCREEN MODAL + WORKING APPLICATION ============ */
     const modalBackdrop = document.getElementById('modal-backdrop');
