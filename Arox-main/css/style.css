@@ -713,14 +713,14 @@ html.lenis {
   justify-content: center;
   padding: 3rem 0 4rem;
   box-sizing: border-box;
-  background-image: url('/public/assets/hero/home_light.png');
+  background-image: url('../public/assets/hero/home_light.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 100px !important;
 }
 .theme-dark .home-hero {
-  background-image: url('/public/assets/hero/home_dark.png');
+  background-image: url('../public/assets/hero/home_dark.png');
 }
 
 .courses-hero {
@@ -731,14 +731,14 @@ html.lenis {
   justify-content: center;
   padding: 3rem 0 4rem;
   box-sizing: border-box;
-  background-image: url('/public/assets/hero/courses_light.png');
+  background-image: url('../public/assets/hero/courses_light.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 100px !important;
 }
 .theme-dark .courses-hero {
-  background-image: url('/public/assets/hero/courses_dark.png');
+  background-image: url('../public/assets/hero/courses_dark.png');
 }
 
 .services-hero {
@@ -750,14 +750,14 @@ html.lenis {
   justify-content: center;
   padding: 80px 0 3rem;
   box-sizing: border-box;
-  background-image: url('/public/assets/hero/services_light.png');
+  background-image: url('../public/assets/hero/services_light.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 0 !important;
 }
 .theme-dark .services-hero {
-  background-image: url('/public/assets/hero/services_dark.png');
+  background-image: url('../public/assets/hero/services_dark.png');
 }
 
 .contact-hero {
@@ -768,14 +768,14 @@ html.lenis {
   justify-content: center;
   padding: 3rem 0 4rem;
   box-sizing: border-box;
-  background-image: url('/public/assets/hero/contact_light.png');
+  background-image: url('../public/assets/hero/contact_light.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 100px !important;
 }
 .theme-dark .contact-hero {
-  background-image: url('/public/assets/hero/contact_dark.png');
+  background-image: url('../public/assets/hero/contact_dark.png');
 }
 
 .detail-hero {
@@ -786,14 +786,14 @@ html.lenis {
   justify-content: center;
   padding: 3rem 1.5rem 4rem;
   box-sizing: border-box;
-  background-image: url('/public/assets/hero/courses_light.png');
+  background-image: url('../public/assets/hero/courses_light.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 100px !important;
 }
 .theme-dark .detail-hero {
-  background-image: url('/public/assets/hero/courses_dark.png');
+  background-image: url('../public/assets/hero/courses_dark.png');
 }
 
 .about-hero {
@@ -804,14 +804,14 @@ html.lenis {
   justify-content: center;
   padding: 3rem 0 4rem;
   box-sizing: border-box;
-  background-image: url('/public/assets/hero/about_light.png');
+  background-image: url('../public/assets/hero/about_light.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   margin-top: 100px !important;
 }
 .theme-dark .about-hero {
-  background-image: url('/public/assets/hero/about_dark.png');
+  background-image: url('../public/assets/hero/about_dark.png');
 }
 
 .ambient-layer {

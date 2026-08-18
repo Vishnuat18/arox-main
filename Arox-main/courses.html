@@ -437,29 +437,29 @@
 
     /* ---- MAGNETIC EXPANDABLE CAROUSEL ---- */
     .magnetic-section {
-      padding: 3.5rem 1.5rem 4rem;
+      padding: 2.5rem 1.5rem 3rem;
       max-width: 1600px;
       margin: 0 auto;
     }
     .magnetic-header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
     .magnetic-title {
       font-family: var(--font-display);
-      font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+      font-size: clamp(1.85rem, 3.5vw, 2.75rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--heading);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
       line-height: 1.1;
     }
     .magnetic-subtitle {
-      max-width: 620px;
+      max-width: 600px;
       margin: 0 auto;
       color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.65;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     .carousel-scroll {
@@ -475,7 +475,7 @@
     .carousel-container {
       width: 100%;
       max-width: 1540px;
-      height: 580px;
+      height: 470px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -494,8 +494,8 @@
 
     .carousel-bar {
       flex: none;
-      height: 560px;
-      border-radius: 26px;
+      height: 450px;
+      border-radius: 20px;
       border: 1px solid var(--border);
       background-color: var(--surface-elevated);
       cursor: pointer;
@@ -511,19 +511,19 @@
     }
     .carousel-bar:hover {
       border-color: var(--primary);
-      box-shadow: 0 12px 36px var(--glow-color);
+      box-shadow: 0 10px 28px var(--glow-color);
     }
     .carousel-bar.is-expanded {
       border-color: var(--primary);
-      box-shadow: 0 20px 50px var(--glow-color);
-      height: 575px;
+      box-shadow: 0 16px 40px var(--glow-color);
+      height: 465px;
     }
 
     /* CLOSED CARD VIEW */
     .collapsed-view {
       position: absolute;
       inset: 0;
-      padding: 24px 16px;
+      padding: 20px 14px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -537,21 +537,21 @@
     }
     .collapsed-number {
       font-family: var(--font-display);
-      font-size: 64px;
+      font-size: 46px;
       font-weight: 900;
       color: var(--heading);
       opacity: 0.12;
       line-height: 1;
       position: absolute;
-      top: 24px;
+      top: 20px;
       left: 50%;
       transform: translateX(-50%);
       pointer-events: none;
     }
     .collapsed-art-container {
-      width: 76px;
-      height: 86px;
-      margin-top: 54px;
+      width: 54px;
+      height: 62px;
+      margin-top: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -560,7 +560,7 @@
     .collapsed-art-container svg {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 4px 14px var(--glow-color));
+      filter: drop-shadow(0 4px 12px var(--glow-color));
     }
     .collapsed-title {
       position: absolute;
@@ -568,21 +568,21 @@
       left: 50%;
       transform: translate(-50%, -50%) rotate(-90deg);
       font-family: var(--font-display);
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--heading);
       white-space: nowrap;
     }
     .collapsed-dots {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       margin-bottom: 12px;
     }
     .collapsed-dots span {
-      width: 5px;
-      height: 5px;
+      width: 4px;
+      height: 4px;
       border-radius: 50%;
       background: var(--muted);
       opacity: 0.35;
@@ -592,9 +592,9 @@
     .expanded-view {
       position: absolute;
       inset: 0;
-      padding: 38px 42px;
+      padding: 28px 32px;
       display: flex;
-      gap: 36px;
+      gap: 24px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.35s ease;
@@ -615,28 +615,28 @@
     .expanded-top-tag {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       font-family: var(--font-display);
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 800;
       color: var(--primary);
       letter-spacing: 0.05em;
     }
     .expanded-num-badge {
-      padding: 4px 12px;
+      padding: 3px 10px;
       border-radius: 999px;
       background: var(--glow-color);
       border: 1px solid var(--border);
     }
     .expanded-title {
       font-family: var(--font-display);
-      font-size: clamp(1.85rem, 3.2vw, 2.65rem);
+      font-size: clamp(1.5rem, 2.4vw, 2.1rem);
       font-weight: 800;
-      line-height: 1.12;
+      line-height: 1.15;
       letter-spacing: -0.02em;
       color: var(--heading);
-      margin: 10px 0 12px;
-      transform: translateY(12px);
+      margin: 8px 0 10px;
+      transform: translateY(10px);
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.08s, opacity 0.4s ease 0.08s;
     }
@@ -646,11 +646,11 @@
     }
 
     .expanded-desc {
-      font-size: 0.95rem;
+      font-size: 0.875rem;
       color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 18px;
-      transform: translateY(12px);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      transform: translateY(10px);
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.16s, opacity 0.4s ease 0.16s;
     }
@@ -662,9 +662,9 @@
     .expanded-skills {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 22px;
-      transform: translateY(12px);
+      gap: 6px;
+      margin-bottom: 16px;
+      transform: translateY(10px);
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.24s, opacity 0.4s ease 0.24s;
     }
@@ -673,9 +673,9 @@
       opacity: 1;
     }
     .skill-pill {
-      padding: 6px 14px;
+      padding: 4px 10px;
       border-radius: 999px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -684,7 +684,7 @@
     }
 
     .expanded-cta-row {
-      transform: translateY(12px);
+      transform: translateY(10px);
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.32s, opacity 0.4s ease 0.32s;
     }
@@ -695,23 +695,23 @@
     .btn-magnetic-explore {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 14px 28px;
+      gap: 8px;
+      padding: 10px 22px;
       border-radius: 999px;
       font-family: var(--font-display);
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       font-weight: 800;
       letter-spacing: 0.04em;
       background: var(--primary);
       color: #ffffff;
-      box-shadow: 0 4px 20px var(--glow-color);
+      box-shadow: 0 4px 16px var(--glow-color);
       transition: all 0.25s ease;
       cursor: pointer;
       border: none;
     }
     .btn-magnetic-explore:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--glow-color);
+      box-shadow: 0 6px 24px var(--glow-color);
       background: var(--secondary);
     }
     .btn-magnetic-explore svg {
@@ -724,7 +724,7 @@
     /* RIGHT Column Artwork (42%) */
     .expanded-right {
       flex: 1 1 42%;
-      border-radius: 20px;
+      border-radius: 16px;
       background: var(--surface);
       border: 1px solid var(--border);
       position: relative;
@@ -732,8 +732,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
-      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.04);
+      padding: 16px;
+      box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.04);
     }
     .expanded-right-glow {
       position: absolute;
@@ -745,7 +745,7 @@
     .expanded-art-svg {
       width: 100%;
       height: 100%;
-      max-height: 440px;
+      max-height: 350px;
       object-fit: contain;
       position: relative;
       z-index: 2;
@@ -2124,9 +2124,6 @@
   <!-- Internship Magnetic Carousel Wrap (replaces course flip cards in the same place) -->
   <div class="carousel-scroll" id="internshipCarouselWrap" style="display:none; width:100%; opacity:0;">
     <div class="carousel-container" id="carousel-container"></div>
-    <p style="text-align:center;color:var(--muted);font-size:.875rem;margin-top:1.5rem;width:100%;">
-      Hover the bars to expand a program &middot; click <strong style="color:var(--heading);">Apply Now</strong> to start your application
-    </p>
   </div>
 
   <div class="scroll-hint" aria-hidden="true">
@@ -3537,234 +3534,399 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
     const DATA = [
       {
         index: "01",
+        id: "full-stack-web-development",
         title: "Full Stack Web Development",
-        subtitle: "React, Node.js & Databases",
+        subtitle: "React, Node.js & Scalable Databases",
         pill: "FRONTEND & BACKEND",
         badge: "Duration: 1–3 Months",
-        desc: "Build real production-ready web platforms using React, Node.js, REST & GraphQL APIs, and SQL/NoSQL databases.",
+        desc: "Build real production-ready web platforms using React, Node.js, REST APIs, and modern SQL/NoSQL databases with scalable architecture.",
         duration: "3 Months",
-        rating: "4.85",
-        accentColor: "#3b82f6",
-        accentGlow: "rgba(59, 130, 246, 0.4)",
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`
+        rating: "4.92",
+        accentColor: "#155EEF",
+        accentGlow: "rgba(21, 94, 239, 0.35)",
+        skills: ["React.js", "Node.js", "REST APIs", "PostgreSQL", "Tailwind CSS"],
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="art-fs-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#155EEF" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-fs-grad)" stroke="#155EEF" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect x="50" y="70" width="300" height="210" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="75" cy="92" r="4.5" fill="#EF4444"/><circle cx="90" cy="92" r="4.5" fill="#F59E0B"/><circle cx="105" cy="92" r="4.5" fill="#10B981"/>
+          <line x1="50" y1="110" x2="350" y2="110" stroke="var(--border)" stroke-width="1"/>
+          <path d="M120 160L90 185L120 210" stroke="#155EEF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M280 160L310 185L280 210" stroke="#155EEF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M210 148L190 222" stroke="#155EEF" stroke-width="3" stroke-linecap="round"/>
+          <rect x="50" y="300" width="140" height="130" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
+          <rect x="70" y="325" width="100" height="10" rx="4" fill="#155EEF" opacity="0.85"/>
+          <rect x="70" y="345" width="70" height="8" rx="4" fill="var(--muted)" opacity="0.5"/>
+          <rect x="70" y="365" width="85" height="8" rx="4" fill="var(--muted)" opacity="0.3"/>
+          <rect x="210" y="300" width="140" height="130" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="280" cy="365" r="32" fill="none" stroke="#155EEF" stroke-width="3"/>
+          <path d="M280 345V365L295 375" stroke="#155EEF" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`
       },
       {
         index: "02",
+        id: "python-backend-engineering",
         title: "Python Backend Engineering",
-        subtitle: "FastAPI, PostgreSQL & Docker",
+        subtitle: "FastAPI, PostgreSQL & Docker Microservices",
         pill: "PYTHON & DJANGO",
         badge: "Duration: 1–3 Months",
-        desc: "Engineer scalable backend microservices, REST APIs, and automation scripts with FastAPI, PostgreSQL, Redis, and Docker.",
+        desc: "Engineer scalable backend microservices, REST APIs, and data automation scripts with FastAPI, PostgreSQL, Redis, and Docker containers.",
         duration: "3 Months",
         rating: "4.90",
-        accentColor: "#f59e0b",
-        accentGlow: "rgba(245, 158, 11, 0.4)",
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>`
+        accentColor: "#F59E0B",
+        accentGlow: "rgba(245, 158, 11, 0.35)",
+        skills: ["FastAPI", "Python", "PostgreSQL", "Redis", "Docker"],
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>`,
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="art-py-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-py-grad)" stroke="#F59E0B" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect x="60" y="80" width="280" height="75" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="95" cy="117" r="7" fill="#10B981"/>
+          <rect x="120" y="112" width="140" height="10" rx="4" fill="var(--heading)" opacity="0.85"/>
+          <rect x="60" y="175" width="280" height="75" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
+          <circle cx="95" cy="212" r="7" fill="#155EEF"/>
+          <rect x="120" y="207" width="170" height="10" rx="4" fill="var(--heading)" opacity="0.85"/>
+          <ellipse cx="200" cy="320" rx="95" ry="28" fill="var(--surface-elevated)" stroke="#F59E0B" stroke-width="2.5"/>
+          <path d="M105 320V390C105 405 147.5 417 200 417C252.5 417 295 405 295 390V320" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
+          <path d="M105 355C105 370 147.5 382 200 382C252.5 382 295 370 295 355" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4 4"/>
+        </svg>`
       },
       {
         index: "03",
+        id: "ui-ux-product-design",
         title: "UI/UX Product Design",
-        subtitle: "Figma & Design Systems",
+        subtitle: "Figma, Wireframing & Design Systems",
         pill: "FIGMA & PROTOTYPE",
         badge: "Duration: 1–3 Months",
-        desc: "Prototype enterprise-grade digital products and master complete design systems with advanced Figma workflows.",
+        desc: "Design meaningful digital experiences through user research, wireframing, component-driven design systems, and interactive prototypes.",
         duration: "3 Months",
-        rating: "4.91",
-        accentColor: "#ec4899",
-        accentGlow: "rgba(236, 72, 153, 0.4)",
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`
+        rating: "4.95",
+        accentColor: "#EC4899",
+        accentGlow: "rgba(236, 72, 153, 0.35)",
+        skills: ["Figma", "Research", "Wireframing", "Prototyping", "Design Systems"],
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`,
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="art-ux-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#EC4899" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-ux-grad)" stroke="#EC4899" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect x="50" y="80" width="210" height="270" rx="16" fill="var(--surface-elevated)" stroke="#EC4899" stroke-width="2"/>
+          <rect x="70" y="110" width="170" height="35" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+          <rect x="70" y="160" width="75" height="75" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+          <rect x="165" y="160" width="75" height="75" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+          <rect x="190" y="180" width="150" height="240" rx="20" fill="var(--surface-elevated)" stroke="#155EEF" stroke-width="2"/>
+          <rect x="225" y="195" width="80" height="8" rx="4" fill="var(--muted)" opacity="0.4"/>
+          <circle cx="265" cy="395" r="7" stroke="var(--muted)" stroke-width="1.5"/>
+        </svg>`
       },
       {
         index: "04",
+        id: "ai-agent-engineering",
         title: "AI Agent Engineering",
-        subtitle: "LLM, RAG & Vector Search",
+        subtitle: "LLMs, RAG & Vector Search",
         pill: "LLM & RAG",
         badge: "Duration: 3–6 Months",
-        desc: "Orchestrate LLMs, build RAG pipelines, and deploy custom vector search engines with LangChain and OpenAI APIs.",
+        desc: "Architect autonomous AI agents and intelligent RAG systems. Master vector database retrieval, prompt engineering, and LangChain orchestration.",
         duration: "6 Months",
-        rating: "4.95",
-        accentColor: "#10b981",
-        accentGlow: "rgba(16, 185, 129, 0.4)",
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>`
+        rating: "4.96",
+        accentColor: "#10B981",
+        accentGlow: "rgba(16, 185, 129, 0.35)",
+        skills: ["LangChain", "LLMs", "RAG Pipelines", "Vector DBs", "OpenAI API"],
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>`,
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="art-ai-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#10B981" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-ai-grad)" stroke="#10B981" stroke-width="1.5" stroke-opacity="0.3"/>
+          <circle cx="200" cy="190" r="55" fill="var(--surface-elevated)" stroke="#10B981" stroke-width="3"/>
+          <circle cx="200" cy="190" r="22" fill="#10B981" opacity="0.3"/>
+          <circle cx="200" cy="190" r="10" fill="#10B981"/>
+          <line x1="200" y1="135" x2="100" y2="90" stroke="#10B981" stroke-width="2" stroke-dasharray="4 4"/>
+          <circle cx="100" cy="90" r="18" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
+          <line x1="200" y1="135" x2="300" y2="90" stroke="#10B981" stroke-width="2" stroke-dasharray="4 4"/>
+          <circle cx="300" cy="90" r="18" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
+          <line x1="145" y1="190" x2="70" y2="230" stroke="#10B981" stroke-width="2"/>
+          <circle cx="70" cy="230" r="22" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
+          <line x1="255" y1="190" x2="330" y2="230" stroke="#10B981" stroke-width="2"/>
+          <circle cx="330" cy="230" r="22" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
+          <rect x="90" y="320" width="220" height="80" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
+          <path d="M120 360H280" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`
       },
       {
         index: "05",
+        id: "cloud-devops-engineering",
         title: "Cloud & DevOps Engineering",
-        subtitle: "AWS, Terraform & Kubernetes",
+        subtitle: "AWS, Terraform & Kubernetes Infrastructure",
         pill: "AWS & CLOUD",
         badge: "Duration: 1–3 Months",
-        desc: "Deploy serverless architectures and automate cloud infrastructure with AWS, Terraform, Docker, and Kubernetes.",
+        desc: "Automate cloud infrastructure and continuous delivery pipelines with AWS cloud services, Terraform Infrastructure as Code, Docker, and Kubernetes.",
         duration: "3 Months",
         rating: "4.89",
-        accentColor: "#06b6d4",
-        accentGlow: "rgba(6, 182, 212, 0.4)",
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`
+        accentColor: "#06B6D4",
+        accentGlow: "rgba(6, 182, 212, 0.35)",
+        skills: ["AWS", "Docker", "Kubernetes", "Terraform", "CI/CD Pipelines"],
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="art-cd-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-cd-grad)" stroke="#06B6D4" stroke-width="1.5" stroke-opacity="0.3"/>
+          <path d="M290 210C290 165.8 254.2 130 210 130C174.5 130 144.5 153.1 134 185.5C129.5 184.2 124.8 183.3 120 183.3C90.5 183.3 66.7 207.2 66.7 236.7C66.7 266.2 90.5 290 120 290H280C307.6 290 330 267.6 330 240C330 215.2 311.9 214.6 290 210Z" fill="var(--surface-elevated)" stroke="#06B6D4" stroke-width="2.5"/>
+          <path d="M110 360 C 170 320, 230 400, 290 360" stroke="#06B6D4" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <circle cx="110" cy="360" r="10" fill="#06B6D4"/>
+          <circle cx="200" cy="360" r="10" fill="#155EEF"/>
+          <circle cx="290" cy="360" r="10" fill="#10B981"/>
+        </svg>`
       },
       {
         index: "06",
+        id: "mobile-app-engineering",
         title: "Mobile App Engineering",
-        subtitle: "React Native & Expo",
+        subtitle: "React Native & Expo Workflows",
         pill: "IOS & ANDROID",
         badge: "Duration: 1–3 Months",
-        desc: "Build native cross-platform mobile apps for iOS and Android with React Native, Expo, and App Store publishing.",
+        desc: "Develop cross-platform mobile applications for iOS & Android with React Native, Expo workflows, native device features, and app store deployment.",
         duration: "3 Months",
-        rating: "4.92",
-        accentColor: "#8b5cf6",
-        accentGlow: "rgba(139, 92, 246, 0.4)",
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>`
+        rating: "4.93",
+        accentColor: "#8B5CF6",
+        accentGlow: "rgba(139, 92, 246, 0.35)",
+        skills: ["React Native", "Expo", "iOS & Android", "Redux", "Mobile UI"],
+        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>`,
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="art-mb-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+            </linearGradient>
+          </defs>
+          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-mb-grad)" stroke="#8B5CF6" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect x="110" y="70" width="180" height="360" rx="28" fill="var(--surface-elevated)" stroke="#8B5CF6" stroke-width="3"/>
+          <rect x="160" y="85" width="80" height="12" rx="6" fill="var(--border)"/>
+          <rect x="130" y="115" width="140" height="80" rx="12" fill="var(--surface)" stroke="var(--border)"/>
+          <circle cx="160" cy="155" r="16" fill="#8B5CF6" opacity="0.4"/>
+          <rect x="190" y="145" width="60" height="8" rx="4" fill="var(--heading)" opacity="0.7"/>
+          <rect x="130" y="210" width="65" height="90" rx="10" fill="var(--surface)" stroke="var(--border)"/>
+          <rect x="205" y="210" width="65" height="90" rx="10" fill="var(--surface)" stroke="var(--border)"/>
+          <rect x="130" y="315" width="140" height="45" rx="10" fill="#155EEF"/>
+          <circle cx="200" cy="410" r="9" stroke="var(--muted)" stroke-width="1.5"/>
+        </svg>`
       }
     ];
 
-    /* ============ CAROUSEL RENDER + PHYSICS ============ */
-    const collapsedWidth = 110;
-    const hoverWidth = 290;
-    const collapsedHeight = 440;
-    const hoverHeight = 480;
-    const gap = 16;
-    const influence = 180;
-
+    /* ============ CAROUSEL RENDER + MAGNETIC INTERACTION ============ */
     const container = document.getElementById('carousel-container');
-    if (!container) return;
+    if (container) {
+      let activeIndex = -1; // INITIAL STATE: ALL CARDS CLOSED!
+      const bars = [];
 
-    let factors = DATA.map(() => 0);
-    let targetRef = DATA.map(() => 0);
-    let curRef = DATA.map(() => 0);
-    let loopId = null;
+      function createCarousel() {
+        container.innerHTML = '';
+        bars.length = 0;
 
-    DATA.forEach((item, i) => {
-      const bar = document.createElement('div');
-      bar.className = 'carousel-bar';
-      bar.style.width = collapsedWidth + 'px';
-      bar.style.height = collapsedHeight + 'px';
-      bar.style.setProperty('--accent-color', item.accentColor);
-      bar.style.setProperty('--accent-glow', item.accentGlow);
+        DATA.forEach((item, i) => {
+          const bar = document.createElement('div');
+          bar.className = 'carousel-bar' + (i === activeIndex ? ' is-expanded' : '');
+          bar.style.setProperty('--glow-color', item.accentGlow);
+          bar.style.setProperty('--accent-color', item.accentColor);
 
-      const collapsedDiv = document.createElement('div');
-      collapsedDiv.className = 'collapsed-view';
-      const titleVert = document.createElement('span');
-      titleVert.className = 'collapsed-title';
-      titleVert.textContent = item.title;
-      const indexBot = document.createElement('span');
-      indexBot.className = 'collapsed-index';
-      indexBot.textContent = item.index;
-      collapsedDiv.appendChild(titleVert);
-      collapsedDiv.appendChild(indexBot);
-      bar.appendChild(collapsedDiv);
+          // 1. COLLAPSED VIEW (Closed state)
+          const collapsedDiv = document.createElement('div');
+          collapsedDiv.className = 'collapsed-view';
 
-      const hoverDiv = document.createElement('div');
-      hoverDiv.className = 'hover-view';
+          const numText = document.createElement('div');
+          numText.className = 'collapsed-number';
+          numText.textContent = item.index;
 
-      const topRow = document.createElement('div');
-      topRow.className = 'hover-top-row';
-      const pill = document.createElement('span');
-      pill.className = 'hover-pill';
-      pill.textContent = item.pill;
-      const indexTop = document.createElement('span');
-      indexTop.className = 'hover-index';
-      indexTop.textContent = item.index;
-      topRow.appendChild(pill);
-      topRow.appendChild(indexTop);
-      hoverDiv.appendChild(topRow);
+          const artDiv = document.createElement('div');
+          artDiv.className = 'collapsed-art-container';
+          artDiv.innerHTML = item.artSvg;
 
-      const iconDiv = document.createElement('div');
-      iconDiv.className = 'hover-icon-container';
-      iconDiv.innerHTML = item.icon;
-      hoverDiv.appendChild(iconDiv);
+          const titleVert = document.createElement('span');
+          titleVert.className = 'collapsed-title';
+          titleVert.textContent = item.title;
 
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'hover-info-container';
+          const dotsDiv = document.createElement('div');
+          dotsDiv.className = 'collapsed-dots';
+          dotsDiv.innerHTML = '<span></span><span></span><span></span>';
 
-      const mainTitle = document.createElement('h3');
-      mainTitle.className = 'hover-title';
-      mainTitle.textContent = item.title;
-      const subTitle = document.createElement('p');
-      subTitle.className = 'hover-subtitle';
-      subTitle.textContent = item.subtitle;
-      const divLine = document.createElement('hr');
-      divLine.className = 'hover-divider';
-      const metricRow = document.createElement('div');
-      metricRow.className = 'hover-metric-row';
-      metricRow.innerHTML = '<span>Duration</span><span class="metric-val">' + item.duration + '</span>';
-      const ratingRow = document.createElement('div');
-      ratingRow.className = 'hover-metric-row';
-      ratingRow.innerHTML = '<span>Rating</span><span class="metric-val"><svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>' + item.rating + '</span>';
-      const applyBtn = document.createElement('div');
-      applyBtn.className = 'hover-apply-btn';
-      applyBtn.innerHTML = 'Apply Now &rarr;';
+          collapsedDiv.appendChild(numText);
+          collapsedDiv.appendChild(artDiv);
+          collapsedDiv.appendChild(titleVert);
+          collapsedDiv.appendChild(dotsDiv);
+          bar.appendChild(collapsedDiv);
 
-      infoDiv.appendChild(mainTitle);
-      infoDiv.appendChild(subTitle);
-      infoDiv.appendChild(divLine);
-      infoDiv.appendChild(metricRow);
-      infoDiv.appendChild(ratingRow);
-      infoDiv.appendChild(applyBtn);
-      hoverDiv.appendChild(infoDiv);
-      bar.appendChild(hoverDiv);
+          // 2. EXPANDED VIEW (2-Column Grid)
+          const expandedDiv = document.createElement('div');
+          expandedDiv.className = 'expanded-view';
 
-      container.appendChild(bar);
+          // LEFT COLUMN
+          const leftCol = document.createElement('div');
+          leftCol.className = 'expanded-left';
 
-      bar.addEventListener('click', (e) => {
-        e.stopPropagation();
-        openModal(item);
-      });
-    });
+          const topTag = document.createElement('div');
+          topTag.className = 'expanded-top-tag';
+          topTag.innerHTML = `<span class="expanded-num-badge">${item.index}</span> <span>${item.pill}</span>`;
 
-    const bars = Array.from(container.querySelectorAll('.carousel-bar'));
+          const titleH2 = document.createElement('h2');
+          titleH2.className = 'expanded-title';
+          titleH2.textContent = item.title;
 
-    function physicsStep() {
-      let moving = false;
-      for (let i = 0; i < curRef.length; i++) {
-        const diff = targetRef[i] - curRef[i];
-        if (Math.abs(diff) > 0.001) {
-          curRef[i] += diff * 0.16;
-          moving = true;
-        } else {
-          curRef[i] = targetRef[i];
-        }
+          const descP = document.createElement('p');
+          descP.className = 'expanded-desc';
+          descP.textContent = item.desc;
+
+          const skillsDiv = document.createElement('div');
+          skillsDiv.className = 'expanded-skills';
+          item.skills.forEach(sk => {
+            const sp = document.createElement('span');
+            sp.className = 'skill-pill';
+            sp.textContent = sk;
+            skillsDiv.appendChild(sp);
+          });
+
+          const ctaRow = document.createElement('div');
+          ctaRow.className = 'expanded-cta-row';
+          const exploreBtn = document.createElement('button');
+          exploreBtn.className = 'btn-magnetic-explore';
+          exploreBtn.innerHTML = `EXPLORE INTERNSHIP <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+          exploreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(item);
+          });
+          ctaRow.appendChild(exploreBtn);
+
+          leftCol.appendChild(topTag);
+          leftCol.appendChild(titleH2);
+          leftCol.appendChild(descP);
+          leftCol.appendChild(skillsDiv);
+          leftCol.appendChild(ctaRow);
+
+          // RIGHT COLUMN (Artwork)
+          const rightCol = document.createElement('div');
+          rightCol.className = 'expanded-right';
+          rightCol.innerHTML = `<div class="expanded-right-glow"></div><div class="expanded-art-svg">${item.artSvg}</div>`;
+
+          expandedDiv.appendChild(leftCol);
+          expandedDiv.appendChild(rightCol);
+          bar.appendChild(expandedDiv);
+
+          // EVENT LISTENERS
+          bar.addEventListener('mouseenter', () => {
+            if (activeIndex !== i) {
+              activeIndex = i;
+              updateDimensions();
+            }
+          });
+          bar.addEventListener('click', () => {
+            if (activeIndex !== i) {
+              activeIndex = i;
+              updateDimensions();
+            }
+          });
+
+          container.appendChild(bar);
+          bars.push(bar);
+        });
+
+        updateDimensions();
       }
-      factors = curRef.slice();
 
-      bars.forEach((bar, i) => {
-        const f = factors[i] || 0;
-        const w = collapsedWidth + (hoverWidth - collapsedWidth) * f;
-        const h = collapsedHeight + (hoverHeight - collapsedHeight) * f;
-        bar.style.width = w + 'px';
-        bar.style.height = h + 'px';
-        if (w > 180) {
-          bar.classList.add('is-hovered');
-        } else {
-          bar.classList.remove('is-hovered');
+      function updateDimensions() {
+        const totalW = container.clientWidth || 1320;
+        const isMobile = window.innerWidth <= 900;
+        const numCards = DATA.length;
+
+        if (isMobile) {
+          bars.forEach((bar) => {
+            bar.style.width = '280px';
+            bar.classList.remove('is-expanded');
+          });
+          return;
         }
-      });
 
-      loopId = moving ? requestAnimationFrame(physicsStep) : null;
-    }
+        if (activeIndex === -1) {
+          // ALL CLOSED INITIAL STATE: equal distribution
+          const closedWidth = Math.min(160, Math.floor((totalW - (numCards - 1) * 14) / numCards));
+          bars.forEach((bar) => {
+            bar.style.width = closedWidth + 'px';
+            bar.classList.remove('is-expanded');
+          });
+          return;
+        }
 
-    function startPhysics() {
-      if (!loopId) {
-        loopId = requestAnimationFrame(physicsStep);
+        // EXPANDED STATE
+        const expandedW = Math.min(840, Math.max(580, Math.floor(totalW * 0.56)));
+        const remainingW = totalW - expandedW - (numCards - 1) * 14;
+        const collapsedW = Math.max(85, Math.floor(remainingW / (numCards - 1)));
+
+        bars.forEach((bar, i) => {
+          if (i === activeIndex) {
+            bar.style.width = expandedW + 'px';
+            bar.classList.add('is-expanded');
+          } else {
+            bar.style.width = collapsedW + 'px';
+            bar.classList.remove('is-expanded');
+          }
+        });
       }
-    }
 
-    container.addEventListener('mousemove', (e) => {
-      const rect = container.getBoundingClientRect();
-      const cx = e.clientX - rect.left;
-      const n = DATA.length;
-      const totalBase = n * collapsedWidth + (n - 1) * gap;
-      const startX = (rect.width - totalBase) / 2;
-      targetRef = DATA.map((_, i) => {
-        const center = startX + i * (collapsedWidth + gap) + collapsedWidth / 2;
-        const dist = Math.abs(cx - center);
-        const f = Math.max(0, 1 - dist / influence);
-        return f * f * (3 - 2 * f);
+      // MAGNETIC POINTER ATTRACTION
+      container.addEventListener('mousemove', (e) => {
+        if (window.innerWidth <= 900) return;
+        const rect = container.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+
+        bars.forEach((bar, index) => {
+          if (index === activeIndex) {
+            bar.style.transform = 'translate3d(0,0,0) scale(1)';
+            return;
+          }
+          const barRect = bar.getBoundingClientRect();
+          const barCenter = barRect.left + barRect.width / 2 - rect.left;
+          const dist = Math.abs(mouseX - barCenter);
+
+          if (dist < 220) {
+            const pull = (1 - dist / 220);
+            const moveX = (mouseX > barCenter ? 1 : -1) * pull * 10;
+            bar.style.transform = `translate3d(${moveX}px, 0, 0) scale(${1 + pull * 0.02})`;
+          } else {
+            bar.style.transform = 'translate3d(0,0,0) scale(1)';
+          }
+        });
       });
-      startPhysics();
-    });
 
-    container.addEventListener('mouseleave', () => {
-      targetRef = DATA.map(() => 0);
-      startPhysics();
-    });
+      container.addEventListener('mouseleave', () => {
+        activeIndex = -1; // Reset to all closed when mouse leaves!
+        updateDimensions();
+        bars.forEach(bar => {
+          bar.style.transform = 'translate3d(0,0,0) scale(1)';
+        });
+      });
+
+      window.addEventListener('resize', updateDimensions);
+      createCarousel();
+    }
 
     if (typeof ScrollTrigger !== 'undefined') {
       ScrollTrigger.refresh();

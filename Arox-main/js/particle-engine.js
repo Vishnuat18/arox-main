@@ -126,8 +126,8 @@ const renderFS = `
   void main() {
     float d = length(gl_PointCoord - vec2(0.5));
     if (d > 0.5) discard;
-    float intensity = pow(1.0 - d * 2.0, 1.0);
-    gl_FragColor = vec4(vColor.rgb * 2.2, intensity * vColor.a);
+    float intensity = smoothstep(0.5, 0.05, d);
+    gl_FragColor = vec4(vColor.rgb, intensity * vColor.a);
   }
 `;
 
@@ -300,7 +300,7 @@ export class LogoParticleEngine {
           this.targetData[i * 4 + 2] = (Math.random() - 0.5) * 0.05;
           this.targetData[i * 4 + 3] = a / 255;
 
-          const color = this.getColorForPixel(r, g, b, colors);
+          const color = this.getColorForPixel(r, g, b, isDark);
           this.colorData[i * 4] = color.r;
           this.colorData[i * 4 + 1] = color.g;
           this.colorData[i * 4 + 2] = color.b;
@@ -370,41 +370,23 @@ export class LogoParticleEngine {
     });
   }
 
-  getColorForPixel(r, g, b, colors) {
-    const isWhiteDetail = (r > 0.90 && g > 0.90 && b > 0.90);
-    const isSecondary = (r > 0.70 || g > 0.70 || b > 0.70);
-
-    let color;
+  getColorForPixel(r, g, b, isDark) {
+    const isWhiteDetail = (r > 0.92 && g > 0.92 && b > 0.92);
     if (isWhiteDetail) {
-      color = colors.eye.clone();
-    } else if (isSecondary) {
-      color = colors.accent.clone().multiplyScalar(1.0 + (Math.random() - 0.5) * 0.12);
-    } else {
-      color = colors.primary.clone().multiplyScalar(1.0 + (Math.random() - 0.5) * 0.12);
+      return isDark
+        ? new THREE.Color(1.0, 1.0, 1.0)
+        : new THREE.Color(0.06, 0.10, 0.20);
     }
-    return color;
+    if (!isDark && r < 0.5 && g > 0.7 && b > 0.8) {
+      return new THREE.Color(0.0, 0.65, 0.88);
+    }
+    return new THREE.Color(r, g, b);
   }
 
   getPresetColors(isDarkOverride) {
     const isDark = isDarkOverride !== undefined
       ? isDarkOverride
       : (document.documentElement.classList.contains('dark') || document.documentElement.className.includes('dark'));
-    if (this.isCourses) {
-      return {
-        primary: isDark ? new THREE.Color('#ffffff') : new THREE.Color('#080808'),
-        accent: isDark ? new THREE.Color('#f1f5f9') : new THREE.Color('#242424'),
-        eye: isDark ? new THREE.Color('#ffffff') : new THREE.Color('#000000'),
-        ambientCloud: [new THREE.Color(0, 0, 0)]
-      };
-    }
-    if (this.isDetail) {
-      return {
-        primary: isDark ? new THREE.Color('#ffffff') : new THREE.Color('#000a26'),
-        accent: isDark ? new THREE.Color('#38bdf8') : new THREE.Color('#002299'),
-        eye: isDark ? new THREE.Color('#ffffff') : new THREE.Color('#000414'),
-        ambientCloud: [new THREE.Color(0, 0, 0)]
-      };
-    }
     return {
       primary: isDark ? new THREE.Color('#ffffff') : new THREE.Color('#001a4d'),
       accent: isDark ? new THREE.Color('#38bdf8') : new THREE.Color('#0033aa'),
@@ -415,9 +397,8 @@ export class LogoParticleEngine {
 
   updateParticleColors(isDark) {
     if (!this.colorData || !this.activeIndices) return;
-    const colors = this.getPresetColors(isDark);
     this.activeIndices.forEach(({ i, r, g, b }) => {
-      const color = this.getColorForPixel(r, g, b, colors);
+      const color = this.getColorForPixel(r, g, b, isDark);
       this.colorData[i * 4] = color.r;
       this.colorData[i * 4 + 1] = color.g;
       this.colorData[i * 4 + 2] = color.b;
@@ -479,14 +460,14 @@ export class LogoParticleEngine {
         tPos: { value: null },
         tColor: { value: this.colorTexture },
         uTime: { value: 0 },
-        uSize: { value: this.isDetail ? 5.4 : 3.8 },
+        uSize: { value: this.isDetail ? 5.8 : 4.4 },
         uIsDark: { value: isDark ? 1.0 : 0.0 }
       },
       vertexShader: renderVS,
       fragmentShader: renderFS,
       transparent: true,
       depthWrite: false,
-      blending: THREE.AdditiveBlending
+      blending: THREE.NormalBlending
     });
 
     this.points = new THREE.Points(geometry, this.particleMaterial);
