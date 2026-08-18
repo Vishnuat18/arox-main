@@ -10,7 +10,7 @@ const SVG_DATA_URLS = {
 
   linux: 'data:image/svg+xml;base64,' + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150"><rect x="15" y="15" width="270" height="120" rx="14" fill="none" stroke="#2563eb" stroke-width="12"/><text x="45" y="102" font-size="76" font-weight="800" fill="#2563eb" font-family="Arial, sans-serif" letter-spacing="4">KALI</text></svg>`),
 
-  meta: 'data:image/svg+xml;base64,' + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"><path fill="#0064e0" fill-rule="evenodd" d="M225.8 25c-25.2 0-47.5 13.9-64.2 34.6-19.1 23.6-35.8 53-50.4 80-14.6-27-31.3-56.4-50.4-80C94.1 38.9 71.8 25 46.6 25 15.6 25 0 45.6 0 76.7c0 43.1 34.5 78.3 76.6 78.3 25.2 0 47.5-13.9 64.2-34.6 18.4-22.8 34.4-50.9 48.6-77.4 14.2 26.5 30.2 54.6 48.6 77.4 16.7 20.7 39 34.6 64.2 34.6 31 0 57.8-20.6 57.8-51.7C300 60.1 265.5 25 225.8 25zm-179.2 95c-19.1 0-34.7-15.6-34.7-34.7s15.6-34.7 34.7-34.7c8.5 0 16.3 4.5 22.5 12.1 9.2 11.3 18 26.6 25.5 40.8-7.7 14.5-16.3 29.5-25.5 40.8-6.2 7.6-14 12.1-22.5 12.1zm179.2 0c-8.5 0-16.3-4.5-22.5-12.1-9.2-11.3-18-26.4-25.5-40.8 7.5-14.2 16.3-29.5 25.5-40.8 6.2-7.6 14-12.1 22.5-12.1 19.1 0 34.7 15.6 34.7 34.7s-15.6 34.7-34.7 34.7z"/></svg>`),
+  meta: 'data:image/svg+xml;base64,' + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200"><path fill="#002b66" fill-rule="evenodd" d="M225.8 25c-25.2 0-47.5 13.9-64.2 34.6-19.1 23.6-35.8 53-50.4 80-14.6-27-31.3-56.4-50.4-80C94.1 38.9 71.8 25 46.6 25 15.6 25 0 45.6 0 76.7c0 43.1 34.5 78.3 76.6 78.3 25.2 0 47.5-13.9 64.2-34.6 18.4-22.8 34.4-50.9 48.6-77.4 14.2 26.5 30.2 54.6 48.6 77.4 16.7 20.7 39 34.6 64.2 34.6 31 0 57.8-20.6 57.8-51.7C300 60.1 265.5 25 225.8 25zm-179.2 95c-19.1 0-34.7-15.6-34.7-34.7s15.6-34.7 34.7-34.7c8.5 0 16.3 4.5 22.5 12.1 9.2 11.3 18 26.6 25.5 40.8-7.7 14.5-16.3 29.5-25.5 40.8-6.2 7.6-14 12.1-22.5 12.1zm179.2 0c-8.5 0-16.3-4.5-22.5-12.1-9.2-11.3-18-26.4-25.5-40.8 7.5-14.2 16.3-29.5 25.5-40.8 6.2-7.6 14-12.1 22.5-12.1 19.1 0 34.7 15.6 34.7 34.7s-15.6 34.7-34.7 34.7z"/></svg>`),
 
   cpp: 'data:image/svg+xml;base64,' + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140"><polygon points="70,8 126,36 126,104 70,132 14,104 14,36" fill="none" stroke="#0064e0" stroke-width="10"/><text x="70" y="72" font-size="44" font-weight="900" fill="#0064e0" font-family="system-ui, -apple-system, sans-serif" text-anchor="middle" dominant-baseline="central">C++</text></svg>`),
 
@@ -793,39 +793,31 @@ export class MetaParticleEngine {
     if (!this.colorData || !this.colorTexture) return;
     const count = this.totalParticles;
     for (let i = 0; i < count; i++) {
-      const shimmer = 1.0 + (Math.random() - 0.5) * 0.20;
+      const shimmer = 1.0 + (Math.random() - 0.5) * 0.15;
       if (this.targetData[i * 4 + 3] > 0) {
-        if (this.options.isCourses) {
-          // Sharp dark black (#080808) matching Kali Linux in Light Mode, white in Dark Mode
-          const cVal = isDark ? 1.0 : 0.05;
-          this.colorData[i * 4 + 0] = Math.min(1.0, cVal * shimmer);
-          this.colorData[i * 4 + 1] = Math.min(1.0, cVal * shimmer);
-          this.colorData[i * 4 + 2] = Math.min(1.0, cVal * shimmer);
+        if (isDark) {
+          // Royal Navy Blue in Dark Mode (#1b4998 / #0044cc)
+          this.colorData[i * 4 + 0] = Math.min(1.0, 0.05 * shimmer);
+          this.colorData[i * 4 + 1] = Math.min(1.0, 0.35 * shimmer);
+          this.colorData[i * 4 + 2] = Math.min(1.0, 0.88 * shimmer);
           this.colorData[i * 4 + 3] = 1.0;
         } else {
-          // Match all other 3D particle logos on detail page hero (Deep Navy Blue in Light Mode, White/Sky Blue in Dark Mode)
-          if (isDark) {
-            this.colorData[i * 4 + 0] = Math.min(1.0, 0.85 * shimmer);
-            this.colorData[i * 4 + 1] = Math.min(1.0, 0.92 * shimmer);
-            this.colorData[i * 4 + 2] = Math.min(1.0, 1.0 * shimmer);
-            this.colorData[i * 4 + 3] = 1.0;
-          } else {
-            this.colorData[i * 4 + 0] = Math.min(1.0, 0.0 * shimmer);
-            this.colorData[i * 4 + 1] = Math.min(1.0, 0.06 * shimmer);
-            this.colorData[i * 4 + 2] = Math.min(1.0, 0.25 * shimmer);
-            this.colorData[i * 4 + 3] = 1.0;
-          }
+          // Deep Navy Blue in Light Mode (#002b66 / #003388)
+          this.colorData[i * 4 + 0] = Math.min(1.0, 0.0 * shimmer);
+          this.colorData[i * 4 + 1] = Math.min(1.0, 0.18 * shimmer);
+          this.colorData[i * 4 + 2] = Math.min(1.0, 0.52 * shimmer);
+          this.colorData[i * 4 + 3] = 1.0;
         }
       } else {
         if (isDark) {
           this.colorData[i * 4 + 0] = 0.02;
-          this.colorData[i * 4 + 1] = 0.15;
-          this.colorData[i * 4 + 2] = 0.40;
+          this.colorData[i * 4 + 1] = 0.12;
+          this.colorData[i * 4 + 2] = 0.35;
           this.colorData[i * 4 + 3] = 0.04;
         } else {
           this.colorData[i * 4 + 0] = 0.0;
-          this.colorData[i * 4 + 1] = 0.20;
-          this.colorData[i * 4 + 2] = 0.50;
+          this.colorData[i * 4 + 1] = 0.10;
+          this.colorData[i * 4 + 2] = 0.35;
           this.colorData[i * 4 + 3] = 0.05;
         }
       }

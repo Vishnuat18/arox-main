@@ -484,12 +484,25 @@
       position: relative;
       user-select: none;
     }
-    @media (max-width: 900px) {
-      .carousel-container {
-        justify-content: flex-start;
-        min-width: max-content;
-        padding: 0 16px;
-      }
+    .magnetic-carousel-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: 0.02em;
+      opacity: 0.85;
+    }
+    .magnetic-carousel-indicator svg {
+      animation: magnetPulse 2s infinite ease-in-out;
+    }
+    @keyframes magnetPulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
     }
 
     .carousel-bar {
@@ -535,66 +548,109 @@
       opacity: 0;
       pointer-events: none;
     }
-    .collapsed-number {
-      font-family: var(--font-display);
-      font-size: 46px;
-      font-weight: 900;
-      color: var(--heading);
-      opacity: 0.12;
-      line-height: 1;
+
+    /* Geometric Background Pattern for Closed State */
+    .collapsed-geo-bg {
       position: absolute;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      inset: 0;
       pointer-events: none;
-    }
-    .collapsed-art-container {
-      width: 54px;
-      height: 62px;
-      margin-top: 42px;
+      overflow: hidden;
+      opacity: 0.18;
+      transition: opacity 0.35s ease, transform 0.35s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
+      color: var(--heading);
     }
-    .collapsed-art-container svg {
+    .collapsed-geo-bg svg {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 4px 12px var(--glow-color));
+      object-fit: cover;
     }
-    .collapsed-title {
-      position: absolute;
-      top: 56%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-90deg);
+    .carousel-bar:hover .collapsed-geo-bg {
+      opacity: 0.32;
+      transform: scale(1.05);
+    }
+
+    .collapsed-number {
       font-family: var(--font-display);
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 38px;
+      font-weight: 900;
       color: var(--heading);
-      white-space: nowrap;
+      opacity: 0.20;
+      line-height: 1;
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 2;
     }
     .collapsed-dots {
+      position: absolute;
+      top: 62px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
-      gap: 5px;
-      margin-bottom: 12px;
+      gap: 4px;
+      z-index: 2;
     }
     .collapsed-dots span {
       width: 4px;
       height: 4px;
       border-radius: 50%;
-      background: var(--muted);
-      opacity: 0.35;
+      background: var(--primary);
+      opacity: 0.85;
+    }
+
+    .collapsed-title {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      font-family: var(--font-display);
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--heading);
+      white-space: nowrap;
+      z-index: 2;
+      opacity: 0.9;
+    }
+
+    /* 3D Domain Artwork on Podium (Bottom of Closed Card) */
+    .collapsed-artwork {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 3;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+    }
+    .collapsed-artwork img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.25));
+    }
+    .carousel-bar:hover .collapsed-artwork {
+      transform: translateX(-50%) scale(1.06);
     }
 
     /* EXPANDED CARD VIEW (2-Column Grid) */
     .expanded-view {
       position: absolute;
       inset: 0;
-      padding: 28px 32px;
+      padding: 22px 24px;
       display: flex;
-      gap: 24px;
+      gap: 18px;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.35s ease;
@@ -604,9 +660,9 @@
       pointer-events: auto;
     }
 
-    /* LEFT Column Content (58%) */
+    /* LEFT Column Content (57%) */
     .expanded-left {
-      flex: 1 1 58%;
+      flex: 1 1 57%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -615,27 +671,27 @@
     .expanded-top-tag {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       font-family: var(--font-display);
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 800;
       color: var(--primary);
       letter-spacing: 0.05em;
     }
     .expanded-num-badge {
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 999px;
       background: var(--glow-color);
       border: 1px solid var(--border);
     }
     .expanded-title {
       font-family: var(--font-display);
-      font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+      font-size: clamp(1.35rem, 2vw, 1.75rem);
       font-weight: 800;
       line-height: 1.15;
       letter-spacing: -0.02em;
       color: var(--heading);
-      margin: 8px 0 10px;
+      margin: 6px 0 8px;
       transform: translateY(10px);
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.08s, opacity 0.4s ease 0.08s;
@@ -646,10 +702,10 @@
     }
 
     .expanded-desc {
-      font-size: 0.875rem;
+      font-size: 0.825rem;
       color: var(--muted);
-      line-height: 1.55;
-      margin-bottom: 14px;
+      line-height: 1.45;
+      margin-bottom: 10px;
       transform: translateY(10px);
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.16s, opacity 0.4s ease 0.16s;
@@ -662,8 +718,8 @@
     .expanded-skills {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 16px;
+      gap: 5px;
+      margin-bottom: 12px;
       transform: translateY(10px);
       opacity: 0;
       transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) 0.24s, opacity 0.4s ease 0.24s;
@@ -673,9 +729,9 @@
       opacity: 1;
     }
     .skill-pill {
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 999px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       background: var(--surface);
       border: 1px solid var(--border);
@@ -695,11 +751,11 @@
     .btn-magnetic-explore {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 22px;
+      gap: 6px;
+      padding: 8px 18px;
       border-radius: 999px;
       font-family: var(--font-display);
-      font-size: 0.8125rem;
+      font-size: 0.78rem;
       font-weight: 800;
       letter-spacing: 0.04em;
       background: var(--primary);
@@ -721,10 +777,10 @@
       transform: translateX(4px);
     }
 
-    /* RIGHT Column Artwork (42%) */
+    /* RIGHT Column Artwork (43%) */
     .expanded-right {
-      flex: 1 1 42%;
-      border-radius: 16px;
+      flex: 1 1 43%;
+      border-radius: 14px;
       background: var(--surface);
       border: 1px solid var(--border);
       position: relative;
@@ -732,26 +788,46 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 0;
+      width: 100%;
+      height: 100%;
       box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.04);
     }
     .expanded-right-glow {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 50% 50%, var(--glow-color) 0%, transparent 70%);
-      opacity: 0.5;
+      background: radial-gradient(circle at 50% 50%, var(--glow-color) 0%, transparent 75%);
+      opacity: 0.45;
       pointer-events: none;
+      z-index: 1;
+    }
+    .expanded-right-geo-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.22;
+      transition: opacity 0.35s ease;
+      color: var(--heading);
+    }
+    .expanded-right-geo-bg svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     .expanded-art-svg {
       width: 100%;
       height: 100%;
-      max-height: 350px;
-      object-fit: contain;
       position: relative;
-      z-index: 2;
-      transform: scale(0.92);
-      opacity: 0.65;
+      z-index: 3;
+      transform: scale(0.98);
+      opacity: 0.85;
       transition: transform 0.45s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.45s ease;
+    }
+    .expanded-art-svg svg {
+      width: 100%;
+      height: 100%;
+      display: block;
     }
     .carousel-bar.is-expanded .expanded-art-svg {
       transform: scale(1);
@@ -3546,14 +3622,14 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
         accentGlow: "rgba(21, 94, 239, 0.35)",
         skills: ["React.js", "Node.js", "REST APIs", "PostgreSQL", "Tailwind CSS"],
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="art-fs-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#155EEF" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#155EEF" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
             </linearGradient>
           </defs>
-          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-fs-grad)" stroke="#155EEF" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect width="400" height="500" fill="url(#art-fs-grad)"/>
           <rect x="50" y="70" width="300" height="210" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
           <circle cx="75" cy="92" r="4.5" fill="#EF4444"/><circle cx="90" cy="92" r="4.5" fill="#F59E0B"/><circle cx="105" cy="92" r="4.5" fill="#10B981"/>
           <line x1="50" y1="110" x2="350" y2="110" stroke="var(--border)" stroke-width="1"/>
@@ -3583,14 +3659,14 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
         accentGlow: "rgba(245, 158, 11, 0.35)",
         skills: ["FastAPI", "Python", "PostgreSQL", "Redis", "Docker"],
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="art-py-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
             </linearGradient>
           </defs>
-          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-py-grad)" stroke="#F59E0B" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect width="400" height="500" fill="url(#art-py-grad)"/>
           <rect x="60" y="80" width="280" height="75" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
           <circle cx="95" cy="117" r="7" fill="#10B981"/>
           <rect x="120" y="112" width="140" height="10" rx="4" fill="var(--heading)" opacity="0.85"/>
@@ -3616,14 +3692,14 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
         accentGlow: "rgba(236, 72, 153, 0.35)",
         skills: ["Figma", "Research", "Wireframing", "Prototyping", "Design Systems"],
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="art-ux-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#EC4899" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#EC4899" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
             </linearGradient>
           </defs>
-          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-ux-grad)" stroke="#EC4899" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect width="400" height="500" fill="url(#art-ux-grad)"/>
           <rect x="50" y="80" width="210" height="270" rx="16" fill="var(--surface-elevated)" stroke="#EC4899" stroke-width="2"/>
           <rect x="70" y="110" width="170" height="35" rx="8" fill="var(--surface)" stroke="var(--border)"/>
           <rect x="70" y="160" width="75" height="75" rx="8" fill="var(--surface)" stroke="var(--border)"/>
@@ -3647,14 +3723,14 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
         accentGlow: "rgba(16, 185, 129, 0.35)",
         skills: ["LangChain", "LLMs", "RAG Pipelines", "Vector DBs", "OpenAI API"],
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="art-ai-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#10B981" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#10B981" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
             </linearGradient>
           </defs>
-          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-ai-grad)" stroke="#10B981" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect width="400" height="500" fill="url(#art-ai-grad)"/>
           <circle cx="200" cy="190" r="55" fill="var(--surface-elevated)" stroke="#10B981" stroke-width="3"/>
           <circle cx="200" cy="190" r="22" fill="#10B981" opacity="0.3"/>
           <circle cx="200" cy="190" r="10" fill="#10B981"/>
@@ -3684,14 +3760,14 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
         accentGlow: "rgba(6, 182, 212, 0.35)",
         skills: ["AWS", "Docker", "Kubernetes", "Terraform", "CI/CD Pipelines"],
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="art-cd-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
             </linearGradient>
           </defs>
-          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-cd-grad)" stroke="#06B6D4" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect width="400" height="500" fill="url(#art-cd-grad)"/>
           <path d="M290 210C290 165.8 254.2 130 210 130C174.5 130 144.5 153.1 134 185.5C129.5 184.2 124.8 183.3 120 183.3C90.5 183.3 66.7 207.2 66.7 236.7C66.7 266.2 90.5 290 120 290H280C307.6 290 330 267.6 330 240C330 215.2 311.9 214.6 290 210Z" fill="var(--surface-elevated)" stroke="#06B6D4" stroke-width="2.5"/>
           <path d="M110 360 C 170 320, 230 400, 290 360" stroke="#06B6D4" stroke-width="3" stroke-linecap="round" fill="none"/>
           <circle cx="110" cy="360" r="10" fill="#06B6D4"/>
@@ -3713,14 +3789,14 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
         accentGlow: "rgba(139, 92, 246, 0.35)",
         skills: ["React Native", "Expo", "iOS & Android", "Redux", "Mobile UI"],
         icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="art-mb-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.05"/>
+              <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
             </linearGradient>
           </defs>
-          <rect x="20" y="30" width="360" height="440" rx="24" fill="url(#art-mb-grad)" stroke="#8B5CF6" stroke-width="1.5" stroke-opacity="0.3"/>
+          <rect width="400" height="500" fill="url(#art-mb-grad)"/>
           <rect x="110" y="70" width="180" height="360" rx="28" fill="var(--surface-elevated)" stroke="#8B5CF6" stroke-width="3"/>
           <rect x="160" y="85" width="80" height="12" rx="6" fill="var(--border)"/>
           <rect x="130" y="115" width="140" height="80" rx="12" fill="var(--surface)" stroke="var(--border)"/>
@@ -3740,6 +3816,49 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
       let activeIndex = -1; // INITIAL STATE: ALL CARDS CLOSED!
       const bars = [];
 
+      const GEO_SVGS = [
+        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M-40 60 L200 240 M-40 160 L200 340 M-40 260 L200 440" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
+          <path d="M200 60 L-40 240 M200 160 L-40 340 M200 260 L-40 440" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
+          <line x1="80" y1="0" x2="80" y2="450" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
+          <circle cx="80" cy="225" r="55" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.3"/>
+          <polygon points="80,180 120,225 80,270 40,225" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+        </svg>`,
+        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="80,140 135,172 135,236 80,268 25,236 25,172" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <polygon points="80,95 155,138 155,268 80,311 5,268 5,138" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+          <circle cx="80" cy="204" r="30" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>
+          <line x1="80" y1="0" x2="80" y2="450" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
+          <line x1="0" y1="204" x2="160" y2="204" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
+        </svg>`,
+        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="80" cy="225" r="75" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+          <circle cx="80" cy="225" r="50" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <circle cx="80" cy="225" r="25" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+          <polygon points="80,130 145,300 15,300" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
+          <line x1="0" y1="225" x2="160" y2="225" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
+        </svg>`,
+        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M80 110 L140 210 L80 310 L20 210 Z" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <path d="M80 150 L115 210 L80 270 L45 210 Z" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+          <line x1="0" y1="210" x2="160" y2="210" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <line x1="80" y1="0" x2="80" y2="450" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
+          <circle cx="80" cy="210" r="6" fill="currentColor" opacity="0.5"/>
+        </svg>`,
+        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M80 135 L130 165 L130 225 L80 255 L30 225 L30 165 Z" stroke="currentColor" stroke-width="1.5" opacity="0.45"/>
+          <path d="M80 135 V255 M130 165 L80 195 L30 165" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
+          <path d="M80 75 L155 118 V302 L80 345 L5 302 V118 Z" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+        </svg>`,
+        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="80" cy="225" r="85" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
+          <circle cx="80" cy="225" r="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
+          <circle cx="80" cy="225" r="35" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+          <line x1="80" y1="40" x2="80" y2="410" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
+          <line x1="0" y1="225" x2="160" y2="225" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
+        </svg>`
+      ];
+
       function createCarousel() {
         container.innerHTML = '';
         bars.length = 0;
@@ -3750,17 +3869,17 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
           bar.style.setProperty('--glow-color', item.accentGlow);
           bar.style.setProperty('--accent-color', item.accentColor);
 
-          // 1. COLLAPSED VIEW (Closed state)
+          // 1. COLLAPSED VIEW (Closed state with Geometric Background)
           const collapsedDiv = document.createElement('div');
           collapsedDiv.className = 'collapsed-view';
+
+          const geoBgDiv = document.createElement('div');
+          geoBgDiv.className = 'collapsed-geo-bg';
+          geoBgDiv.innerHTML = GEO_SVGS[i % GEO_SVGS.length];
 
           const numText = document.createElement('div');
           numText.className = 'collapsed-number';
           numText.textContent = item.index;
-
-          const artDiv = document.createElement('div');
-          artDiv.className = 'collapsed-art-container';
-          artDiv.innerHTML = item.artSvg;
 
           const titleVert = document.createElement('span');
           titleVert.className = 'collapsed-title';
@@ -3770,8 +3889,8 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
           dotsDiv.className = 'collapsed-dots';
           dotsDiv.innerHTML = '<span></span><span></span><span></span>';
 
+          collapsedDiv.appendChild(geoBgDiv);
           collapsedDiv.appendChild(numText);
-          collapsedDiv.appendChild(artDiv);
           collapsedDiv.appendChild(titleVert);
           collapsedDiv.appendChild(dotsDiv);
           bar.appendChild(collapsedDiv);
@@ -3822,10 +3941,22 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
           leftCol.appendChild(skillsDiv);
           leftCol.appendChild(ctaRow);
 
-          // RIGHT COLUMN (Artwork)
+          // RIGHT COLUMN (Artwork & Full-Bleed Geometric Background Overlay)
           const rightCol = document.createElement('div');
           rightCol.className = 'expanded-right';
-          rightCol.innerHTML = `<div class="expanded-right-glow"></div><div class="expanded-art-svg">${item.artSvg}</div>`;
+          rightCol.innerHTML = `
+            <div class="expanded-right-glow"></div>
+            <div class="expanded-right-geo-bg">
+              <svg viewBox="0 0 400 450" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M-50 0 L450 500 M-50 100 L450 600 M-50 -100 L450 400 M-50 200 L450 700" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
+                <path d="M450 0 L-50 500 M450 100 L-50 600 M450 -100 L-50 400 M450 200 L-50 700" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
+                <circle cx="200" cy="225" r="140" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.35"/>
+                <circle cx="200" cy="225" r="90" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+                <polygon points="200,60 340,225 200,390 60,225" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
+              </svg>
+            </div>
+            <div class="expanded-art-svg">${item.artSvg}</div>
+          `;
 
           expandedDiv.appendChild(leftCol);
           expandedDiv.appendChild(rightCol);
@@ -3876,7 +4007,7 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
         }
 
         // EXPANDED STATE
-        const expandedW = Math.min(840, Math.max(580, Math.floor(totalW * 0.56)));
+        const expandedW = Math.min(640, Math.max(480, Math.floor(totalW * 0.44)));
         const remainingW = totalW - expandedW - (numCards - 1) * 14;
         const collapsedW = Math.max(85, Math.floor(remainingW / (numCards - 1)));
 
