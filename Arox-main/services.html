@@ -171,8 +171,8 @@
             <a href="index.html" class="nav-link">Home</a>
             <a href="about.html" class="nav-link">About</a>
             <a href="services.html" class="nav-link active"><span class="nav-link-indicator"></span>Services</a>
-            <a href="courses.html" class="nav-link">Courses</a>
-            <a href="internships.html" class="nav-link">Internships</a>
+            <a href="courses.html" class="nav-link">Training</a>
+            <a href="anotherinternship.html" class="nav-link">Bootcamps</a>
             <a href="contact.html" class="nav-link">Contact</a>
           </nav>
         </div>
@@ -214,8 +214,8 @@
             fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="9 18 15 12 9 6" />
           </svg></a>
-        <a href="courses.html" class="mobile-nav-link"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg></a>
-        <a href="internships.html" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg></a>
+        <a href="courses.html" class="mobile-nav-link"><span>Training</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg></a>
+        <a href="anotherinternship.html" class="mobile-nav-link"><span>Bootcamps</span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6" /></svg></a>
         <a href="contact.html" class="mobile-nav-link"><span>Contact</span><svg width="24" height="24" viewBox="0 0 24 24"
             fill="none" stroke="currentColor" stroke-width="2.5">
             <polyline points="9 18 15 12 9 6" />
@@ -322,10 +322,26 @@
                 name: "Development",
                 color: "rgba(59, 130, 246, ", // Blue
                 services: [
-                    { name: "Software Development", img: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&h=400&fit=crop" },
-                    { name: "Web Design & Development", img: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=600&h=400&fit=crop" },
-                    { name: "App Development", img: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=400&fit=crop" },
-                    { name: "API Integration", img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&h=400&fit=crop" }
+                    { 
+                        name: "Software Development", 
+                        imgLight: "assets/services/software_development_light.jpg",
+                        imgDark: "assets/services/software_development_dark.jpg"
+                    },
+                    { 
+                        name: "Web Design & Development", 
+                        imgLight: "assets/services/web_development_light.jpg",
+                        imgDark: "assets/services/web_development_dark.jpg"
+                    },
+                    { 
+                        name: "App Development", 
+                        imgLight: "assets/services/app_development_light.jpg",
+                        imgDark: "assets/services/app_development_dark.jpg"
+                    },
+                    { 
+                        name: "API Integration", 
+                        imgLight: "assets/services/api_integration_light.jpg",
+                        imgDark: "assets/services/api_integration_dark.jpg"
+                    }
                 ]
             },
             {
@@ -333,10 +349,26 @@
                 name: "Creative & Experience",
                 color: "rgba(180, 66, 245, ", // Purple
                 services: [
-                    { name: "UI/UX Design", img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop" },
-                    { name: "Graphic Design", img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&h=400&fit=crop" },
-                    { name: "Branding & Visual Identity", img: "https://images.unsplash.com/photo-1509395062183-67c5ad6faff9?w=600&h=400&fit=crop" },
-                    { name: "Motion Graphics", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" }
+                    { 
+                        name: "UI/UX Design", 
+                        imgLight: "assets/services/ui_ux_design_light.svg",
+                        imgDark: "assets/services/ui_ux_design_dark.svg"
+                    },
+                    { 
+                        name: "Graphic Design", 
+                        imgLight: "assets/services/graphic_design_light.svg",
+                        imgDark: "assets/services/graphic_design_dark.svg"
+                    },
+                    { 
+                        name: "Branding & Visual Identity", 
+                        imgLight: "assets/services/branding_light.svg",
+                        imgDark: "assets/services/branding_dark.svg"
+                    },
+                    { 
+                        name: "Motion Graphics", 
+                        imgLight: "assets/services/motion_graphics_light.svg",
+                        imgDark: "assets/services/motion_graphics_dark.svg"
+                    }
                 ]
             },
             {
@@ -344,10 +376,26 @@
                 name: "Business Solutions",
                 color: "rgba(224, 139, 38, ", // Orange
                 services: [
-                    { name: "E-Commerce Solutions", img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop" },
-                    { name: "Digital Marketing", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" },
-                    { name: "BPO Services", img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=400&fit=crop" },
-                    { name: "Strategy Consulting", img: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop" }
+                    { 
+                        name: "E-Commerce Solutions", 
+                        imgLight: "assets/services/ecommerce_light.svg",
+                        imgDark: "assets/services/ecommerce_dark.svg"
+                    },
+                    { 
+                        name: "Digital Marketing", 
+                        imgLight: "assets/services/digital_marketing_light.svg",
+                        imgDark: "assets/services/digital_marketing_dark.svg"
+                    },
+                    { 
+                        name: "BPO Services", 
+                        imgLight: "assets/services/bpo_services_light.svg",
+                        imgDark: "assets/services/bpo_services_dark.svg"
+                    },
+                    { 
+                        name: "Strategy Consulting", 
+                        imgLight: "assets/services/strategy_consulting_light.svg",
+                        imgDark: "assets/services/strategy_consulting_dark.svg"
+                    }
                 ]
             },
             {
@@ -355,8 +403,16 @@
                 name: "Infrastructure",
                 color: "rgba(46, 201, 83, ", // Green
                 services: [
-                    { name: "Cloud & Hosting", img: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&h=400&fit=crop" },
-                    { name: "Network Security", img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=600&h=400&fit=crop" }
+                    { 
+                        name: "Cloud & Hosting", 
+                        imgLight: "assets/services/cloud_hosting_light.svg",
+                        imgDark: "assets/services/cloud_hosting_dark.svg"
+                    },
+                    { 
+                        name: "Network Security", 
+                        imgLight: "assets/services/network_security_light.svg",
+                        imgDark: "assets/services/network_security_dark.svg"
+                    }
                 ]
             }
         ];
@@ -384,13 +440,24 @@
                     }}
                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 >
-                    {/* Full Height Image */}
+                    {/* Full Height Image (Light & Dark Theme Switch) */}
                     <div className="absolute inset-0 w-full h-full">
                         <motion.img 
-                            src={service.img} 
-                            className="w-full h-full object-cover"
+                            src={service.imgLight || service.img} 
+                            alt={service.name}
+                            className="w-full h-full object-cover dark:hidden"
                             variants={{
-                                rest: { scale: 1, opacity: 0.9 },
+                                rest: { scale: 1, opacity: 0.95 },
+                                hover: { scale: 1.05, opacity: 1 }
+                            }}
+                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        />
+                        <motion.img 
+                            src={service.imgDark || service.img} 
+                            alt={service.name}
+                            className="w-full h-full object-cover hidden dark:block"
+                            variants={{
+                                rest: { scale: 1, opacity: 0.95 },
                                 hover: { scale: 1.05, opacity: 1 }
                             }}
                             transition={{ type: "spring", stiffness: 300, damping: 25 }}

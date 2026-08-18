@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meta Logo — 3D GPGPU Particle Animation</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #030712;
+    --panel: rgba(8, 15, 30, 0.78);
+    --text: #e5eefc;
+    --muted: #8ea2c5;
+  }
+  * { box-sizing: border-box; }
+  html, body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--bg); }
+  body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif; }
+  #app { position:fixed; inset:0; }
+  canvas { display:block; width:100%; height:100%; }
+  .hud {
+    position:fixed; left:20px; top:20px; z-index:10;
+    width:min(360px, calc(100vw - 40px));
+    padding:16px 16px 14px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:18px;
+    background:var(--panel);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 14px 55px rgba(0,0,0,.38);
+  }
+  .title { font-weight:700; letter-spacing:.02em; font-size:18px; }
+  .sub { margin-top:4px; color:var(--muted); font-size:12px; line-height:1.5; }
+  .row { display:grid; grid-template-columns: 84px 1fr 50px; gap:10px; align-items:center; margin-top:12px; }
+  label { color:#c7d4ec; font-size:12px; }
+  input[type=range] { width:100%; }
+  output { text-align:right; color:#b9d2ff; font-variant-numeric: tabular-nums; font-size:12px; }
+  .buttons { display:flex; gap:8px; margin-top:14px; }
+  button {
+    flex:1; border:1px solid rgba(255,255,255,.10); color:#e7f1ff;
+    background:rgba(255,255,255,.06); border-radius:10px; padding:10px 12px;
+    cursor:pointer; font-weight:600;
+  }
+  button:hover { background:rgba(255,255,255,.10); }
+  .hint { margin-top:10px; color:#7489ae; font-size:11px; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="hud">
+  <div class="title">Meta · GPGPU Particle Logo</div>
+  <div class="sub">Exact uploaded Meta infinity mark · 16,384 particles · GPU GPGPU turbulence</div>
+
+  <div class="row">
+    <label for="size">Size</label>
+    <input id="size" type="range" min="0.5" max="6" step="0.1" value="2.5">
+    <output id="sizeOut">2.5</output>
+  </div>
+  <div class="row">
+    <label for="speed">Speed</label>
+    <input id="speed" type="range" min="0.005" max="0.05" step="0.001" value="0.015">
+    <output id="speedOut">0.015</output>
+  </div>
+  <div class="row">
+    <label for="noise">Turbulence</label>
+    <input id="noise" type="range" min="0" max="1.5" step="0.05" value="0.35">
+    <output id="noiseOut">0.35</output>
+  </div>
+
+  <div class="buttons">
+    <button id="disperse">Disperse</button>
+    <button id="align">Align</button>
+  </div>
+  <div class="hint">Drag to orbit · targets re-form continuously</div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ------------------------------------------------------------------
+   Meta logo image, embedded from the uploaded source image.
+   ------------------------------------------------------------------ */
+const LOGO_DATA_URI = "data:image/png;base64,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";
+
+/* ------------------------------------------------------------------
+   Exact particle/FBO configuration from the supplied prompt:
+   128×128 = 16,384 particles, FloatType ping-pong targets.
+   ------------------------------------------------------------------ */
+const SIZE = 128;
+const COUNT = SIZE * SIZE;
+
+const app = document.getElementById('app');
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  alpha: true,
+  powerPreference: 'high-performance'
+});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setClearColor(0x000000, 0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+app.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+  60, window.innerWidth / window.innerHeight, 0.1, 100
+);
+camera.position.z = 2.15;
+
+/* ------------------------ Simulation scene ------------------------ */
+const simScene = new THREE.Scene();
+const simCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+const simQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2));
+simScene.add(simQuad);
+
+const rtOptions = {
+  minFilter: THREE.NearestFilter,
+  magFilter: THREE.NearestFilter,
+  format: THREE.RGBAFormat,
+  type: THREE.FloatType,
+  depthBuffer: false,
+  stencilBuffer: false,
+};
+let rtA = new THREE.WebGLRenderTarget(SIZE, SIZE, rtOptions);
+let rtB = new THREE.WebGLRenderTarget(SIZE, SIZE, rtOptions);
+
+const simVS = /* glsl */`
+varying vec2 vUv;
+void main() {
+  vUv = uv;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
+`;
+
+const simFS = /* glsl */`
+uniform sampler2D tCurr;
+uniform sampler2D tTarget;
+uniform float uTime;
+uniform float uSpeed;
+uniform float uNoiseAmp;
+uniform float uNoiseFreq;
+uniform float uNoiseSpeed;
+varying vec2 vUv;
+
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
+vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+float snoise(vec3 v) {
+  const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+  const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+
+  vec3 i = floor(v + dot(v, C.yyy));
+  vec3 x0 = v - i + dot(i, C.xxx);
+
+  vec3 g = step(x0.yzx, x0.xyz);
+  vec3 l = 1.0 - g;
+  vec3 i1 = min(g.xyz, l.zxy);
+  vec3 i2 = max(g.xyz, l.zxy);
+
+  vec3 x1 = x0 - i1 + C.xxx;
+  vec3 x2 = x0 - i2 + C.yyy;
+  vec3 x3 = x0 - D.yyy;
+
+  i = mod289(i);
+
+  vec4 p = permute(permute(permute(
+    i.z + vec4(0.0, i1.z, i2.z, 1.0))
+    + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+    + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+
+  float n_ = 0.142857142857;
+  vec3 ns = n_ * D.wyz - D.xzx;
+
+  vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+  vec4 x_ = floor(j * ns.z);
+  vec4 y_ = floor(j - 7.0 * x_);
+
+  vec4 x = x_ * ns.x + ns.yyyy;
+  vec4 y = y_ * ns.x + ns.yyyy;
+
+  vec4 h = 1.0 - abs(x) - abs(y);
+  vec4 b0 = vec4(x.xy, y.xy);
+  vec4 b1 = vec4(x.zw, y.zw);
+
+  vec4 s0 = floor(b0) * 2.0 + 1.0;
+  vec4 s1 = floor(b1) * 2.0 + 1.0;
+  vec4 sh = -step(h, vec4(0.0));
+
+  vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+  vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+
+  vec3 p0 = vec3(a0.xy, h.x);
+  vec3 p1 = vec3(a0.zw, h.y);
+  vec3 p2 = vec3(a1.xy, h.z);
+  vec3 p3 = vec3(a1.zw, h.w);
+
+  vec4 norm = taylorInvSqrt(vec4(
+    dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)
+  ));
+
+  p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+
+  vec4 m = max(0.6 - vec4(
+    dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)
+  ), 0.0);
+  m = m * m;
+
+  return 42.0 * dot(m*m, vec4(
+    dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3)
+  ));
+}
+
+void main() {
+  vec4 pos = texture2D(tCurr, vUv);
+  vec4 target = texture2D(tTarget, vUv);
+
+  vec3 dir = target.xyz - pos.xyz;
+  pos.xyz += dir * uSpeed * (1.0 + target.w * 3.0);
+
+  if (uNoiseAmp > 0.0) {
+    float n = snoise(pos.xyz * uNoiseFreq + uTime * uNoiseSpeed);
+    pos.x += cos(n * 6.28) * uNoiseAmp * 0.005;
+    pos.y += sin(n * 6.28) * uNoiseAmp * 0.005;
+    pos.z += sin(n * 3.14) * uNoiseAmp * 0.005;
+  }
+
+  gl_FragColor = vec4(pos.xyz, 1.0);
+}
+`;
+
+const simMaterial = new THREE.ShaderMaterial({
+  vertexShader: simVS,
+  fragmentShader: simFS,
+  uniforms: {
+    tCurr: { value: null },
+    tTarget: { value: null },
+    uTime: { value: 0 },
+    uSpeed: { value: 0.015 },
+    uNoiseAmp: { value: 0.35 },
+    uNoiseFreq: { value: 1.2 },
+    uNoiseSpeed: { value: 0.1 }
+  }
+});
+simQuad.material = simMaterial;
+
+/* ---------------------- Particle render setup --------------------- */
+const geometry = new THREE.BufferGeometry();
+const positions = new Float32Array(COUNT * 3);
+const uvs = new Float32Array(COUNT * 2);
+
+for (let i = 0; i < COUNT; i++) {
+  const x = i % SIZE;
+  const y = Math.floor(i / SIZE);
+  uvs[i * 2 + 0] = x / SIZE;
+  uvs[i * 2 + 1] = y / SIZE;
+}
+geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));
+
+const particleVS = /* glsl */`
+uniform sampler2D tPos;
+uniform sampler2D tColor;
+uniform float uTime;
+uniform float uSize;
+uniform float uIsDark;
+varying vec4 vColor;
+
+void main() {
+  vec4 pos = texture2D(tPos, uv);
+  vColor = texture2D(tColor, uv);
+
+  vec4 mvPosition = modelViewMatrix * vec4(pos.xyz, 1.0);
+
+  float pulse = 1.0 + sin(uTime * 3.5 + uv.x * 25.0) * 0.15;
+  float baseSize = uSize * (uIsDark < 0.5 ? 0.75 : 1.0);
+
+  gl_PointSize = (baseSize * pulse) * (3.0 / -mvPosition.z);
+  gl_Position = projectionMatrix * mvPosition;
+}
+`;
+
+const particleFS = /* glsl */`
+varying vec4 vColor;
+
+void main() {
+  float d = length(gl_PointCoord - vec2(0.5));
+  if (d > 0.5) discard;
+  float intensity = pow(1.0 - d * 2.0, 1.25);
+  gl_FragColor = vec4(vColor.rgb * 1.5, intensity * vColor.a);
+}
+`;
+
+const colorTexture = new THREE.DataTexture(
+  new Float32Array(COUNT * 4),
+  SIZE, SIZE, THREE.RGBAFormat, THREE.FloatType
+);
+colorTexture.needsUpdate = true;
+colorTexture.minFilter = THREE.NearestFilter;
+colorTexture.magFilter = THREE.NearestFilter;
+
+const particleMaterial = new THREE.ShaderMaterial({
+  transparent: true,
+  depthWrite: false,
+  blending: THREE.AdditiveBlending,
+  vertexShader: particleVS,
+  fragmentShader: particleFS,
+  uniforms: {
+    tPos: { value: null },
+    tColor: { value: colorTexture },
+    uTime: { value: 0 },
+    uSize: { value: 2.5 },
+    uIsDark: { value: 1.0 }
+  }
+});
+
+const points = new THREE.Points(geometry, particleMaterial);
+scene.add(points);
+
+/* ------------------------- Logo -> targets ------------------------ */
+function makeLogoTargets(img) {
+  const c = document.createElement('canvas');
+  c.width = SIZE;
+  c.height = SIZE;
+
+  const ctx = c.getContext('2d', { willReadFrequently: true });
+  ctx.clearRect(0, 0, SIZE, SIZE);
+
+  // Preserve the exact Meta logo aspect ratio instead of stretching it
+  // into a square. The source image is 223×148.
+  const margin = 10;
+  const box = SIZE - margin * 2;
+  const scale = Math.min(box / img.naturalWidth, box / img.naturalHeight);
+  const drawW = img.naturalWidth * scale;
+  const drawH = img.naturalHeight * scale;
+  const drawX = (SIZE - drawW) * 0.5;
+  const drawY = (SIZE - drawH) * 0.5;
+
+  // White background is intentionally drawn by the source image.
+  // We will remove it using the near-white pixel rule below.
+  ctx.drawImage(img, drawX, drawY, drawW, drawH);
+
+  const pixels = ctx.getImageData(0, 0, SIZE, SIZE).data;
+  const targetData = new Float32Array(COUNT * 4);
+  const colorData = new Float32Array(COUNT * 4);
+
+  for (let i = 0; i < COUNT; i++) {
+    const r = pixels[i * 4 + 0] / 255;
+    const g = pixels[i * 4 + 1] / 255;
+    const b = pixels[i * 4 + 2] / 255;
+    const a = pixels[i * 4 + 3];
+
+    const x = ((i % SIZE) / SIZE - 0.5) * 2.0;
+    const y = (0.5 - Math.floor(i / SIZE) / SIZE) * 2.0;
+
+    // IMPORTANT:
+    // The uploaded Meta logo has a WHITE background with opaque alpha.
+    // Therefore alpha alone would incorrectly turn the whole rectangle
+    // into particles. The exact visible Meta shape is selected by
+    // removing near-white background pixels.
+    const nearWhite = r > 0.90 && g > 0.90 && b > 0.90;
+    const active = a > 30 && !nearWhite;
+
+    if (active) {
+      // Keep the recognizable Meta infinity silhouette.
+      targetData[i * 4 + 0] = x * 1.3;
+      targetData[i * 4 + 1] = y * 1.3;
+      targetData[i * 4 + 2] = (Math.random() - 0.5) * 0.05;
+      targetData[i * 4 + 3] = a / 255;
+
+      // Use the exact sampled blue from the uploaded logo,
+      // with only a subtle random brightness shimmer.
+      const shimmer = 1.0 + Math.random() * 0.20;
+      colorData[i * 4 + 0] = r * shimmer;
+      colorData[i * 4 + 1] = g * shimmer;
+      colorData[i * 4 + 2] = b * shimmer;
+      colorData[i * 4 + 3] = 1.0;
+    } else {
+      // Ambient background dust cloud, matching the supplied animation spec.
+      const radius = 2.5 + Math.random() * 2.0;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+
+      targetData[i * 4 + 0] = radius * Math.sin(phi) * Math.cos(theta);
+      targetData[i * 4 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+      targetData[i * 4 + 2] = radius * Math.cos(phi);
+      targetData[i * 4 + 3] = 0.0;
+
+      colorData[i * 4 + 0] = 0.12;
+      colorData[i * 4 + 1] = 0.30;
+      colorData[i * 4 + 2] = 0.65;
+      colorData[i * 4 + 3] = 0.08;
+    }
+  }
+
+  const target = new THREE.DataTexture(
+    targetData, SIZE, SIZE, THREE.RGBAFormat, THREE.FloatType
+  );
+  const color = new THREE.DataTexture(
+    colorData, SIZE, SIZE, THREE.RGBAFormat, THREE.FloatType
+  );
+
+  target.minFilter = target.magFilter = THREE.NearestFilter;
+  color.minFilter = color.magFilter = THREE.NearestFilter;
+  target.needsUpdate = true;
+  color.needsUpdate = true;
+
+  return { target, color, data: targetData };
+}
+
+function randomSphericalPositions() {
+  const data = new Float32Array(COUNT * 4);
+  for (let i = 0; i < COUNT; i++) {
+    const radius = 2.0 + Math.random() * 3.5;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    data[i*4+0] = radius * Math.sin(phi) * Math.cos(theta);
+    data[i*4+1] = radius * Math.sin(phi) * Math.sin(theta);
+    data[i*4+2] = radius * Math.cos(phi);
+    data[i*4+3] = 1.0;
+  }
+  return new THREE.DataTexture(data, SIZE, SIZE, THREE.RGBAFormat, THREE.FloatType);
+}
+
+function primeRenderTarget(target, tex) {
+  const old = simMaterial.uniforms.tTarget.value;
+  simMaterial.uniforms.tTarget.value = tex;
+  renderer.setRenderTarget(target);
+  renderer.render(simScene, simCamera);
+  renderer.setRenderTarget(null);
+  simMaterial.uniforms.tTarget.value = old;
+}
+
+let targetTexture = null;
+
+function setTargetTexture(tex) {
+  tex.needsUpdate = true;
+  tex.minFilter = THREE.NearestFilter;
+  tex.magFilter = THREE.NearestFilter;
+  targetTexture = tex;
+  simMaterial.uniforms.tTarget.value = targetTexture;
+}
+
+function disperse() {
+  const tex = randomSphericalPositions();
+  tex.needsUpdate = true;
+  primeRenderTarget(rtA, tex);
+  tex.dispose();
+}
+
+function align() {
+  if (targetTexture) primeRenderTarget(rtA, targetTexture);
+}
+
+document.getElementById('disperse').addEventListener('click', disperse);
+document.getElementById('align').addEventListener('click', align);
+
+const img = new Image();
+img.decoding = 'async';
+img.onload = () => {
+  const result = makeLogoTargets(img);
+  result.target.minFilter = result.target.magFilter = THREE.NearestFilter;
+  result.color.minFilter = result.color.magFilter = THREE.NearestFilter;
+  result.target.needsUpdate = true;
+  result.color.needsUpdate = true;
+
+  setTargetTexture(result.target);
+  particleMaterial.uniforms.tColor.value = result.color;
+
+  // Initial state: a dispersed cloud, then it naturally aligns.
+  disperse();
+};
+img.src = LOGO_DATA_URI;
+
+/* ---------------------------- Controls ---------------------------- */
+const size = document.getElementById('size');
+const speed = document.getElementById('speed');
+const noise = document.getElementById('noise');
+
+function bindRange(el, out, digits=2) {
+  el.addEventListener('input', () => out.textContent = Number(el.value).toFixed(digits));
+}
+bindRange(size, document.getElementById('sizeOut'), 1);
+bindRange(speed, document.getElementById('speedOut'), 3);
+bindRange(noise, document.getElementById('noiseOut'), 2);
+
+let dragging = false;
+let px = 0, py = 0;
+let targetRotation = { x: 0, y: 0 };
+let currentRotation = { x: 0, y: 0 };
+
+renderer.domElement.addEventListener('pointerdown', e => {
+  dragging = true;
+  px = e.clientX; py = e.clientY;
+  renderer.domElement.setPointerCapture(e.pointerId);
+});
+renderer.domElement.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  const dx = e.clientX - px;
+  const dy = e.clientY - py;
+  px = e.clientX; py = e.clientY;
+
+  // Exact drag sensitivity requested by the supplied prompt.
+  targetRotation.x += dy * 0.007;
+  targetRotation.y += dx * 0.007;
+});
+renderer.domElement.addEventListener('pointerup', () => dragging = false);
+renderer.domElement.addEventListener('pointercancel', () => dragging = false);
+
+/* ---------------------------- Render loop -------------------------- */
+const clock = new THREE.Clock();
+let lastTime = 0;
+const spinOffset = 0.04; // Meta uses a gentle custom spin.
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const uTime = performance.now() * 0.001;
+  const speedValue = Number(speed.value);
+  const noiseValue = Number(noise.value);
+  const sizeValue = Number(size.value);
+
+  simMaterial.uniforms.uTime.value = uTime;
+  simMaterial.uniforms.uSpeed.value = speedValue;
+  simMaterial.uniforms.uNoiseAmp.value = noiseValue;
+  simMaterial.uniforms.tCurr.value = rtA.texture;
+  simMaterial.uniforms.tTarget.value = targetTexture;
+
+  renderer.setRenderTarget(rtB);
+  renderer.render(simScene, simCamera);
+  renderer.setRenderTarget(null);
+
+  [rtA, rtB] = [rtB, rtA];
+
+  particleMaterial.uniforms.tPos.value = rtA.texture;
+  particleMaterial.uniforms.uTime.value = uTime;
+  particleMaterial.uniforms.uSize.value = sizeValue;
+  particleMaterial.uniforms.uIsDark.value = 1.0;
+
+  currentRotation.x += (targetRotation.x - currentRotation.x) * 0.08;
+  currentRotation.y += (targetRotation.y - currentRotation.y) * 0.08;
+
+  points.rotation.x = currentRotation.x;
+  points.rotation.y = currentRotation.y + uTime * spinOffset;
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+/* ----------------------------- Resize ----------------------------- */
+function resize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+window.addEventListener('resize', resize);
+resize();
+
+/* ------------------------ Capability check ------------------------ */
+if (!renderer.capabilities.isWebGL2) {
+  console.warn('WebGL2 is recommended for FloatType GPGPU render targets.');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad_dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow_dark" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FFFFFF" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="800" fill="#0b0c11"/>
+  
+  <!-- Subtle Background Grid -->
+  <g opacity="0.25" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 8">
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="0" y1="150" x2="600" y2="150"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="450" x2="600" y2="450"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+  </g>
+  
+  <!-- Content Area -->
+  
+    <circle cx="300" cy="400" r="220" fill="url(#grad_dark)"/>
+    
+    <!-- Central Upright Smartphone Silhouette -->
+    <g transform="translate(180, 160)" filter="url(#shadow_dark)">
+      <rect x="0" y="0" width="240" height="480" rx="36" fill="#161822" stroke="#2563eb" stroke-width="3"/>
+      <!-- Speaker Notch -->
+      <rect x="80" y="16" width="80" height="6" rx="3" fill="#1E293B"/>
+      <!-- Screen Bounds -->
+      <rect x="14" y="38" width="212" height="404" rx="20" fill="#0b0c11"/>
+      
+      <!-- Layered Floating Component Cards -->
+      <!-- App Header -->
+      <rect x="30" y="60" width="180" height="45" rx="10" fill="#161822" stroke="#1E293B" stroke-width="1.5"/>
+      <circle cx="55" cy="82" r="12" fill="#2563eb"/>
+      <rect x="80" y="76" width="90" height="12" rx="4" fill="#FFFFFF"/>
+      
+      <!-- Central Feature Card -->
+      <g transform="translate(-20, 125)" filter="url(#shadow_dark)">
+        <rect x="0" y="0" width="220" height="140" rx="16" fill="#161822" stroke="#2563eb" stroke-width="2"/>
+        <circle cx="40" cy="40" r="18" fill="#2563eb" opacity="0.2"/>
+        <path d="M32 40 L38 46 L50 32" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+        <rect x="70" y="32" width="120" height="14" rx="4" fill="#FFFFFF"/>
+        <rect x="70" y="54" width="90" height="10" rx="3" fill="#C5D3E8" opacity="0.4"/>
+        <!-- Action Button -->
+        <rect x="30" y="85" width="160" height="34" rx="8" fill="#2563eb"/>
+      </g>
+      
+      <!-- Interactive Touch Nodes -->
+      <circle cx="120" cy="320" r="24" fill="#2563eb" opacity="0.15"/>
+      <circle cx="120" cy="320" r="12" fill="#2563eb"/>
+      <circle cx="120" cy="415" r="18" fill="none" stroke="#1E293B" stroke-width="2"/>
+    </g>
+    
+</svg>

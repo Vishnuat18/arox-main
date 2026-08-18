@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad_dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow_dark" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FFFFFF" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="800" fill="#0b0c11"/>
+  
+  <!-- Subtle Background Grid -->
+  <g opacity="0.25" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 8">
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="0" y1="150" x2="600" y2="150"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="450" x2="600" y2="450"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+  </g>
+  
+  <!-- Content Area -->
+  
+    <circle cx="300" cy="400" r="230" fill="url(#grad_dark)"/>
+    
+    <!-- Dynamic S-Curve Motion Path Ribbon -->
+    <path d="M 100 600 C 120 380, 480 420, 500 200" fill="none" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+    <!-- Secondary Motion Echo Trace -->
+    <path d="M 80 620 C 100 400, 460 440, 480 220" fill="none" stroke="#1E293B" stroke-width="3" stroke-dasharray="6 8"/>
+    
+    <!-- Orbiting Particle Trajectory Rings -->
+    <ellipse cx="300" cy="400" rx="180" ry="70" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="4 6" transform="rotate(-25, 300, 400)"/>
+    
+    <!-- Staggered Diamond Keyframe Nodes -->
+    <!-- Keyframe 1 -->
+    <g transform="translate(140, 520) rotate(45)" filter="url(#shadow_dark)">
+      <rect x="-16" y="-16" width="32" height="32" rx="6" fill="#161822" stroke="#2563eb" stroke-width="3"/>
+    </g>
+    
+    <!-- Keyframe 2 (Active Center) -->
+    <g transform="translate(300, 400) rotate(45)" filter="url(#shadow_dark)">
+      <rect x="-24" y="-24" width="48" height="48" rx="10" fill="#2563eb"/>
+      <circle cx="0" cy="0" r="8" fill="#0b0c11"/>
+    </g>
+    
+    <!-- Keyframe 3 -->
+    <g transform="translate(440, 260) rotate(45)" filter="url(#shadow_dark)">
+      <rect x="-16" y="-16" width="32" height="32" rx="6" fill="#161822" stroke="#2563eb" stroke-width="3"/>
+    </g>
+    
+    <!-- Motion Trail Spark Particles -->
+    <circle cx="230" cy="450" r="6" fill="#2563eb"/>
+    <circle cx="370" cy="340" r="8" fill="#3b82f6"/>
+    <circle cx="480" cy="220" r="5" fill="#2563eb"/>
+    
+</svg>

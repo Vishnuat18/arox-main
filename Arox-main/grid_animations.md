@@ -1,6 +1,6 @@
 # Particle Animations — Exact AI Prompt
 
-> This file contains a **single self-contained AI prompt** that reproduces **every particle animation** from [`grid_animations.html`](file:///c:/Users/Lenovo/Downloads/Coffeecrews-main/Coffeecrews-main/grid_animations.html) exactly — including the GPGPU pipeline, all GLSL shaders, color logic per logo, BFS background removal, spin speeds, disperse/align, and all 6 color presets.
+> This file contains a **single self-contained AI prompt** that reprodures **every particle animation** from [`grid_animations.html`](file:///c:/Users/Lenovo/Downloads/Coffeecrews-main/Coffeecrews-main/grid_animations.html) exactly — including the GPGPU pipeline, all GLSL shaders, color logic per logo, BFS background removal, spin speeds, disperse/align, and all 6 color presets.
 
 ---
 

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad_light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155EEF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#155EEF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow_light" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0A1B3F" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="800" fill="#FFFFFF"/>
+  
+  <!-- Subtle Background Grid -->
+  <g opacity="0.4" stroke="#D6E0EF" stroke-width="1" stroke-dasharray="4 8">
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="0" y1="150" x2="600" y2="150"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="450" x2="600" y2="450"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+  </g>
+  
+  <!-- Content Area -->
+  
+    <circle cx="330" cy="370" r="230" fill="url(#grad_light)"/>
+    
+    <!-- Floating Browser Viewport Offset Right -->
+    <g transform="translate(130, 180)" filter="url(#shadow_light)">
+      <rect x="0" y="0" width="340" height="420" rx="16" fill="#F8F9FA" stroke="#D6E0EF" stroke-width="2"/>
+      
+      <!-- Window Controls -->
+      <rect x="0" y="0" width="340" height="50" rx="16" fill="#D6E0EF" opacity="0.3"/>
+      <circle cx="25" cy="25" r="5" fill="#155EEF"/>
+      <circle cx="42" cy="25" r="5" fill="#334766" opacity="0.3"/>
+      <circle cx="59" cy="25" r="5" fill="#334766" opacity="0.3"/>
+      <rect x="90" y="14" width="180" height="22" rx="6" fill="#FFFFFF" stroke="#D6E0EF" stroke-width="1"/>
+      
+      <!-- Web Globe Icon Badge -->
+      <g transform="translate(250, 80)">
+        <circle cx="30" cy="30" r="32" fill="#155EEF"/>
+        <circle cx="30" cy="30" r="22" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+        <ellipse cx="30" cy="30" rx="10" ry="22" fill="none" stroke="#FFFFFF" stroke-width="2.5"/>
+        <line x1="8" y1="30" x2="52" y2="30" stroke="#FFFFFF" stroke-width="2.5"/>
+      </g>
+      
+      <!-- Wireframe Layout Blocks -->
+      <rect x="30" y="80" width="200" height="120" rx="10" fill="#FFFFFF" stroke="#D6E0EF" stroke-width="2"/>
+      <rect x="45" y="100" width="100" height="12" rx="4" fill="#155EEF"/>
+      <rect x="45" y="125" width="140" height="8" rx="3" fill="#334766" opacity="0.3"/>
+      <rect x="45" y="140" width="110" height="8" rx="3" fill="#334766" opacity="0.3"/>
+      
+      <!-- Responsive Grid Columns -->
+      <rect x="30" y="225" width="85" height="150" rx="10" fill="#FFFFFF" stroke="#D6E0EF" stroke-width="2"/>
+      <rect x="127" y="225" width="85" height="150" rx="10" fill="#FFFFFF" stroke="#D6E0EF" stroke-width="2"/>
+      <rect x="225" y="225" width="85" height="150" rx="10" fill="#155EEF" opacity="0.15" stroke="#155EEF" stroke-width="2"/>
+    </g>
+    
+</svg>

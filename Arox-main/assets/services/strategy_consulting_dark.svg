@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad_dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow_dark" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FFFFFF" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="800" fill="#0b0c11"/>
+  
+  <!-- Subtle Background Grid -->
+  <g opacity="0.25" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 8">
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="0" y1="150" x2="600" y2="150"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="450" x2="600" y2="450"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+  </g>
+  
+  <!-- Content Area -->
+  
+    <circle cx="300" cy="380" r="230" fill="url(#grad_dark)"/>
+    
+    <!-- Vertical Roadmap Stepped Path with Checkpoints -->
+    <g transform="translate(150, 160)" filter="url(#shadow_dark)">
+      <rect x="0" y="0" width="300" height="480" rx="24" fill="#161822" stroke="#1E293B" stroke-width="2"/>
+      
+      <!-- Stepped Roadmap Path -->
+      <path d="M 60 400 L 60 300 L 150 300 L 150 180 L 240 180 L 240 80" fill="none" stroke="#2563eb" stroke-width="4.5" stroke-dasharray="6 6"/>
+      
+      <!-- Milestone Checkpoint 1 -->
+      <circle cx="60" cy="400" r="14" fill="#161822" stroke="#2563eb" stroke-width="3"/>
+      <circle cx="60" cy="400" r="6" fill="#2563eb"/>
+      
+      <!-- Milestone Checkpoint 2 -->
+      <circle cx="150" cy="300" r="14" fill="#161822" stroke="#2563eb" stroke-width="3"/>
+      <circle cx="150" cy="300" r="6" fill="#2563eb"/>
+      
+      <!-- Milestone Checkpoint 3 -->
+      <circle cx="150" cy="180" r="14" fill="#161822" stroke="#2563eb" stroke-width="3"/>
+      <circle cx="150" cy="180" r="6" fill="#2563eb"/>
+      
+      <!-- Top Target Compass Emblem -->
+      <g transform="translate(240, 80)">
+        <circle cx="0" cy="0" r="28" fill="#2563eb"/>
+        <polygon points="0,-18 7,0 0,18 -7,0" fill="#0b0c11"/>
+      </g>
+    </g>
+    
+</svg>

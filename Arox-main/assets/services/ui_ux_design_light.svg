@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad_light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155EEF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#155EEF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow_light" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0A1B3F" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="800" fill="#FFFFFF"/>
+  
+  <!-- Subtle Background Grid -->
+  <g opacity="0.4" stroke="#D6E0EF" stroke-width="1" stroke-dasharray="4 8">
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="0" y1="150" x2="600" y2="150"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="450" x2="600" y2="450"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+  </g>
+  
+  <!-- Content Area -->
+  
+    <circle cx="300" cy="400" r="230" fill="url(#grad_light)"/>
+    
+    <!-- Curved Bezier Spline & Precision Handles -->
+    <g transform="translate(100, 180)" filter="url(#shadow_light)">
+      <!-- UI Canvas Frame -->
+      <rect x="0" y="0" width="400" height="440" rx="24" fill="#F8F9FA" stroke="#D6E0EF" stroke-width="2"/>
+      
+      <!-- Smooth Vector Curve -->
+      <path d="M 40 340 C 120 120, 280 400, 360 140" fill="none" stroke="#155EEF" stroke-width="4.5"/>
+      
+      <!-- Control Points & Tangent Lines -->
+      <line x1="120" y1="120" x2="220" y2="120" stroke="#175cd3" stroke-width="2" stroke-dasharray="4 4"/>
+      <circle cx="120" cy="120" r="7" fill="#FFFFFF" stroke="#155EEF" stroke-width="3"/>
+      <circle cx="220" cy="120" r="6" fill="#155EEF"/>
+      
+      <line x1="280" y1="400" x2="180" y2="400" stroke="#175cd3" stroke-width="2" stroke-dasharray="4 4"/>
+      <circle cx="280" cy="400" r="7" fill="#FFFFFF" stroke="#155EEF" stroke-width="3"/>
+      <circle cx="180" cy="400" r="6" fill="#155EEF"/>
+      
+      <!-- Precision Pen Tool Cursor Icon -->
+      <g transform="translate(320, 80)">
+        <path d="M 0 0 L 28 35 L 16 35 L 24 55 L 16 58 L 8 38 L 0 45 Z" fill="#155EEF" stroke="#FFFFFF" stroke-width="2"/>
+      </g>
+      
+      <!-- Floating Layer Bounding Box -->
+      <rect x="50" y="200" width="140" height="90" rx="8" fill="none" stroke="#155EEF" stroke-width="2" stroke-dasharray="6 6"/>
+      <rect x="45" y="195" width="10" height="10" fill="#155EEF"/>
+      <rect x="185" y="195" width="10" height="10" fill="#155EEF"/>
+      <rect x="45" y="285" width="10" height="10" fill="#155EEF"/>
+      <rect x="185" y="285" width="10" height="10" fill="#155EEF"/>
+    </g>
+    
+</svg>

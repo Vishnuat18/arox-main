@@ -50,9 +50,9 @@
             position: relative;
             z-index: 10;
             border-radius: 1.75rem;
-            background: radial-gradient(circle at 50% 50%, rgba(26, 26, 48, 0.9) 0%, rgba(12, 12, 26, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), inset 0 0 35px rgba(93, 76, 247, 0.15);
+            background: rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: 0 20px 50px -10px rgba(31, 38, 135, 0.10);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             overflow: hidden;
@@ -61,8 +61,68 @@
             align-items: center;
             justify-content: center;
         }
+        .theme-dark #hero-particle-canvas {
+            background: radial-gradient(circle at 50% 50%, rgba(32, 34, 64, 0.85) 0%, rgba(18, 18, 38, 0.90) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5);
+        }
         #hero-particle-canvas:active {
             cursor: grabbing;
+        }
+
+        /* ── Breadcrumb & Back Button Styling ── */
+        .detail-breadcrumb {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            background: var(--surface, rgba(255, 255, 255, 0.7));
+            border: 1px solid var(--border);
+            margin-bottom: 1.25rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .theme-dark .detail-breadcrumb {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+        .breadcrumb-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: var(--primary, #2563eb);
+            color: #ffffff !important;
+            border: none;
+            padding: 0.3rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .breadcrumb-back-btn:hover {
+            transform: translateX(-3px);
+            box-shadow: 0 4px 14px var(--glow-color, rgba(37, 99, 235, 0.4));
+        }
+        .breadcrumb-separator {
+            color: var(--muted);
+            opacity: 0.6;
+        }
+        .breadcrumb-link {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .breadcrumb-link:hover {
+            color: var(--primary);
+        }
+        .breadcrumb-current {
+            color: var(--heading);
+            font-weight: 700;
         }
 
         /* Override body for this page to use theme variables */
@@ -843,8 +903,8 @@
           <a href="index.html" class="nav-link">Home</a>
           <a href="about.html" class="nav-link">About</a>
           <a href="services.html" class="nav-link">Services</a>
-          <a href="courses.html" class="nav-link active">Courses</a>
-          <a href="internships.html" class="nav-link">Internships</a>
+          <a href="courses.html" class="nav-link active">Training</a>
+          <a href="anotherinternship.html" class="nav-link">Bootcamps</a>
           <a href="contact.html" class="nav-link">Contact</a>
         </nav>
       </div>
@@ -886,11 +946,11 @@
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
         </svg></a>
-      <a href="courses.html" class="mobile-nav-link active"><span>Courses</span><svg width="24" height="24" viewBox="0 0 24 24"
+      <a href="courses.html" class="mobile-nav-link active"><span>Training</span><svg width="24" height="24" viewBox="0 0 24 24"
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
         </svg></a>
-      <a href="internships.html" class="mobile-nav-link"><span>Internships</span><svg width="24" height="24" viewBox="0 0 24 24"
+      <a href="anotherinternship.html" class="mobile-nav-link"><span>Bootcamps</span><svg width="24" height="24" viewBox="0 0 24 24"
           fill="none" stroke="currentColor" stroke-width="2.5">
           <polyline points="9 18 15 12 9 6" />
         </svg></a>
@@ -920,7 +980,19 @@
             <div class="hero-grid">
                 <!-- Left Content -->
                 <div data-aos="fade-right" data-aos-duration="1000">
-                    <div class="hero-badge"><i class="fa-solid fa-circle-play"></i> <span id="hero-badge">TRAINING PROGRAM</span></div>
+                    <nav class="detail-breadcrumb" aria-label="Breadcrumb navigation">
+                        <button id="back-btn" class="breadcrumb-back-btn" title="Go back to exact section">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            <span>Back</span>
+                        </button>
+                        <span class="breadcrumb-separator">/</span>
+                        <a href="courses.html" id="breadcrumb-parent-link" class="breadcrumb-link">Training</a>
+                        <span class="breadcrumb-separator">/</span>
+                        <span id="breadcrumb-current-text" class="breadcrumb-current">Full Stack Developer</span>
+                    </nav>
 
                     <h1 class="hero-title">Become an <br />
                         <span class="accent">Industry Ready</span><br />
@@ -1213,47 +1285,7 @@
         </div>
     </section>
 
-    <!-- ─── CTA SECTION ─── -->
-    <section class="detail-section" style="padding-bottom:4rem;">
-        <div class="detail-container">
-            <div class="cta-section bg-cta-gradient" data-aos="fade-up" data-aos-offset="100">
-                <div class="cta-glow" style="top:0;right:0;width:16rem;height:16rem;transform:translate(33%,-50%);"></div>
-                <div class="cta-glow" style="bottom:0;left:0;width:10rem;height:10rem;transform:translate(-50%,50%);"></div>
 
-                <div style="flex:3;z-index:10;position:relative;">
-                    <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);font-weight:700;margin-bottom:0.75rem;line-height:1.2;">
-                        Ready to Build Your Career?<br>
-                        Join AROX Tech Training 🚀
-                    </h2>
-                    <p style="color:rgba(255,255,255,0.8);font-size:0.875rem;margin-bottom:2rem;max-width:28rem;">
-                        Gain real-world experience, build awesome projects and become industry ready.
-                    </p>
-                    <div style="display:flex;flex-wrap:wrap;gap:1rem;">
-                        <a href="apply.html" id="cta-apply-link"
-                            style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:white;color:#5d4cf7;font-size:0.875rem;font-weight:700;border-radius:0.5rem;box-shadow:0 10px 30px -10px rgba(0,0,0,0.3);transition:all 300ms;text-decoration:none;">
-                            Apply Now <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display: inline-block; vertical-align: middle;">
-                              <line x1="5" y1="12" x2="19" y2="12"></line>
-                              <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
-                        <a href="courses.html"
-                            style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;border:1px solid rgba(255,255,255,0.3);color:white;font-size:0.875rem;font-weight:600;border-radius:0.5rem;transition:all 300ms;text-decoration:none;">
-                            Explore Courses <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="display: inline-block; vertical-align: middle;">
-                              <line x1="5" y1="12" x2="19" y2="12"></line>
-                              <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div style="flex:2;display:flex;justify-content:flex-end;z-index:10;position:relative;">
-                    <img src="https://placehold.co/300x300/a29bfe/ffffff?text=Join+Us"
-                        alt="Join Us"
-                        style="width:100%;max-width:280px;border-radius:50%;border:4px solid rgba(255,255,255,0.2);">
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- ─── FOOTER ─── -->
     <footer>
@@ -1353,7 +1385,7 @@
 
     <!-- Course Data & Dynamic Rendering -->
     <script type="module">
-        import { LogoParticleEngine } from './js/particle-engine.js';
+        import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js';
         const deviconMap = {
             'HTML5': 'html5/html5-original.svg',
             'CSS3': 'css3/css3-original.svg',
@@ -1902,8 +1934,33 @@
                 const heroTitle = document.getElementById('hero-title');
                 if (heroTitle) heroTitle.innerText = course.title;
 
-                const heroBadge = document.getElementById('hero-badge');
-                if (heroBadge) heroBadge.innerText = `${course.category.toUpperCase()} PROGRAM`;
+                // Update Breadcrumbs & Back Button
+                const fromSource = urlParams.get('from') || (document.referrer.includes('anotherinternship') ? 'bootcamps' : 'training');
+                const parentLink = document.getElementById('breadcrumb-parent-link');
+                const currentText = document.getElementById('breadcrumb-current-text');
+                const backBtn = document.getElementById('back-btn');
+
+                const cardAnchor = course.id || course.slug;
+                const targetPage = fromSource === 'bootcamps' ? 'anotherinternship.html' : 'courses.html';
+                const targetUrl = `${targetPage}#card-${cardAnchor}`;
+
+                if (parentLink) {
+                    parentLink.innerText = fromSource === 'bootcamps' ? 'Bootcamps' : 'Training';
+                    parentLink.href = targetUrl;
+                }
+                if (currentText) {
+                    currentText.innerText = course.title;
+                }
+                if (backBtn) {
+                    backBtn.onclick = (e) => {
+                        e.preventDefault();
+                        if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
+                            window.history.back();
+                        } else {
+                            window.location.href = targetUrl;
+                        }
+                    };
+                }
 
                 const heroDesc = document.getElementById('hero-desc');
                 if (heroDesc && course.desc) heroDesc.innerText = course.desc;
@@ -1921,7 +1978,7 @@
                             'ai-agent-internship': 'python',
                             'cyber-security': 'linux',
                             'cyber-security-internship': 'linux',
-                            'digital-marketing': 'googleads',
+                            'digital-marketing': 'meta',
                             'embedded-systems-and-iot': 'cpp',
                             'devops-engineering': 'aws',
                             'cloud-devops-internship': 'aws',
@@ -1932,8 +1989,12 @@
                         };
                         return map[id] || 'react';
                     };
-                    const logoType = getLogoType(slug);
-                    new LogoParticleEngine(heroParticleCanvas, logoType);
+                    const logoType = getLogoType(course.slug || course.id);
+                    if (logoType === 'meta') {
+                        new MetaParticleEngine(heroParticleCanvas, { isDetail: true });
+                    } else {
+                        new LogoParticleEngine(heroParticleCanvas, logoType, { isDetail: true });
+                    }
                 }
 
                 // Initialize 3-Column Interactive Syllabus

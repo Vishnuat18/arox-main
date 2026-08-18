@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad_dark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow_dark" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#FFFFFF" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="800" fill="#0b0c11"/>
+  
+  <!-- Subtle Background Grid -->
+  <g opacity="0.25" stroke="#1E293B" stroke-width="1" stroke-dasharray="4 8">
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="0" y1="150" x2="600" y2="150"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="450" x2="600" y2="450"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+  </g>
+  
+  <!-- Content Area -->
+  
+    <circle cx="300" cy="400" r="230" fill="url(#grad_dark)"/>
+    
+    <!-- Symmetrical Golden-Ratio Construction Axis & Brand Mark Emblem -->
+    <g transform="translate(300, 400)">
+      <!-- Outer Construction Circles -->
+      <circle cx="0" cy="0" r="180" fill="none" stroke="#1E293B" stroke-width="1.5" stroke-dasharray="6 6"/>
+      <circle cx="0" cy="0" r="130" fill="none" stroke="#1E293B" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="80" fill="none" stroke="#2563eb" stroke-width="1" stroke-dasharray="4 4"/>
+      
+      <!-- Axis Lines -->
+      <line x1="-210" y1="0" x2="210" y2="0" stroke="#1E293B" stroke-width="1"/>
+      <line x1="0" y1="-210" x2="0" y2="210" stroke="#1E293B" stroke-width="1"/>
+      <line x1="-150" y1="-150" x2="150" y2="150" stroke="#1E293B" stroke-width="1" opacity="0.5"/>
+      <line x1="-150" y1="150" x2="150" y2="-150" stroke="#1E293B" stroke-width="1" opacity="0.5"/>
+      
+      <!-- Sculpted Emblem / Monogram -->
+      <g filter="url(#shadow_dark)">
+        <path d="M -60 -60 L 60 -60 L 0 60 Z" fill="none" stroke="#2563eb" stroke-width="8" stroke-linejoin="round"/>
+        <circle cx="0" cy="-20" r="28" fill="#2563eb"/>
+        <polygon points="0,-75 22,-30 -22,-30" fill="#161822" stroke="#2563eb" stroke-width="4"/>
+      </g>
+      
+      <!-- Dimension Tick Markers -->
+      <circle cx="0" cy="-180" r="5" fill="#2563eb"/>
+      <circle cx="180" cy="0" r="5" fill="#2563eb"/>
+      <circle cx="0" cy="180" r="5" fill="#2563eb"/>
+      <circle cx="-180" cy="0" r="5" fill="#2563eb"/>
+    </g>
+    
+</svg>

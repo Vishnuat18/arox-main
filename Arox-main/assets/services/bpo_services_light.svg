@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="100%" height="100%">
+  <defs>
+    <linearGradient id="grad_light" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155EEF" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#155EEF" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="shadow_light" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0A1B3F" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="600" height="800" fill="#FFFFFF"/>
+  
+  <!-- Subtle Background Grid -->
+  <g opacity="0.4" stroke="#D6E0EF" stroke-width="1" stroke-dasharray="4 8">
+    <line x1="100" y1="0" x2="100" y2="800"/>
+    <line x1="200" y1="0" x2="200" y2="800"/>
+    <line x1="300" y1="0" x2="300" y2="800"/>
+    <line x1="400" y1="0" x2="400" y2="800"/>
+    <line x1="500" y1="0" x2="500" y2="800"/>
+    <line x1="0" y1="150" x2="600" y2="150"/>
+    <line x1="0" y1="300" x2="600" y2="300"/>
+    <line x1="0" y1="450" x2="600" y2="450"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+  </g>
+  
+  <!-- Content Area -->
+  
+    <circle cx="300" cy="400" r="220" fill="url(#grad_light)"/>
+    
+    <!-- Central Circular Workflow Process Ring -->
+    <g transform="translate(300, 400)">
+      <!-- Outer Rotating Process Arrows -->
+      <circle cx="0" cy="0" r="170" fill="none" stroke="#D6E0EF" stroke-width="2"/>
+      <path d="M -120 -120 A 170 170 0 0 1 120 -120" fill="none" stroke="#155EEF" stroke-width="5" stroke-linecap="round"/>
+      <polygon points="125,-130 138,-108 112,-112" fill="#155EEF"/>
+      
+      <path d="M 120 120 A 170 170 0 0 1 -120 120" fill="none" stroke="#155EEF" stroke-width="5" stroke-linecap="round"/>
+      <polygon points="-125,130 -138,108 -112,112" fill="#155EEF"/>
+      
+      <!-- Inner Support & Communications Badge -->
+      <g filter="url(#shadow_light)">
+        <rect x="-90" y="-90" width="180" height="180" rx="28" fill="#F8F9FA" stroke="#155EEF" stroke-width="2.5"/>
+        
+        <!-- Headset / Support Node Icon -->
+        <path d="M -40 0 A 40 40 0 0 1 40 0 V 20 H 30 V 0 A 30 30 0 0 0 -30 0 V 20 H -40 Z" fill="#155EEF"/>
+        <rect x="-48" y="10" width="16" height="30" rx="6" fill="#155EEF"/>
+        <rect x="32" y="10" width="16" height="30" rx="6" fill="#155EEF"/>
+        <path d="M 32 30 H 10 A 10 10 0 0 1 0 20" fill="none" stroke="#155EEF" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="0" cy="20" r="5" fill="#155EEF"/>
+      </g>
+    </g>
+    
+</svg>
