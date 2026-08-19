@@ -47,6 +47,8 @@
     <!-- GSAP & ScrollTrigger -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
     
     <!-- Framer Motion -->
     <script src="https://unpkg.com/framer-motion@10.12.16/dist/framer-motion.js"></script>
@@ -495,6 +497,7 @@
                     <div 
                         className="w-full h-full overflow-x-auto hide-scroll snap-x snap-mandatory flex items-center gap-8 px-4"
                         style={{ justifyContent: 'safe center' }}
+                        data-lenis-prevent
                     >
                         {services.map((svc, i) => (
                             <ServiceCard key={i} service={svc} color={color} />
@@ -601,7 +604,7 @@
                         start: "top top", 
                         end: `+=${cards.length * 100}%`, // Scroll duration perfectly matches cards
                         pin: true,
-                        scrub: 1,
+                        scrub: 0.5,
                         onUpdate: (self) => {
                             const progress = self.progress;
                             const step = 1 / cards.length;
@@ -688,11 +691,15 @@
                                         onClick={() => {
                                             const section = document.getElementById('pinned-section');
                                             if (section) {
-                                                const offsetTop = section.offsetTop;
-                                                window.scrollTo({
-                                                    top: offsetTop + (i * window.innerHeight),
-                                                    behavior: 'smooth'
-                                                });
+                                                const targetScroll = section.offsetTop + (i * window.innerHeight);
+                                                if (window.lenis) {
+                                                    window.lenis.scrollTo(targetScroll, { duration: 1.2 });
+                                                } else {
+                                                    window.scrollTo({
+                                                        top: targetScroll,
+                                                        behavior: 'smooth'
+                                                    });
+                                                }
                                             }
                                         }}
                                     >
@@ -722,7 +729,11 @@
                                     <button className="btn-primary" onClick={() => {
                                         const section = document.getElementById('pinned-section');
                                         if (section) {
-                                            section.scrollIntoView({ behavior: 'smooth' });
+                                            if (window.lenis) {
+                                                window.lenis.scrollTo(section, { duration: 1.2 });
+                                            } else {
+                                                section.scrollIntoView({ behavior: 'smooth' });
+                                            }
                                         }
                                     }}>
                                         Explore Solutions
@@ -894,7 +905,7 @@
                   stroke="currentColor" stroke-width="2">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
-                </svg>Salem, Tamil Nadu, India</div>
+                </svg>Near New Bus Stand, Salem, Tamil Nadu, India</div>
               <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2">
                   <path

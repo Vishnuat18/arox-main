@@ -652,35 +652,47 @@
   });
 
   /* ── LENIS SMOOTH INERTIA SCROLLING ── */
-  const lenisScript = document.createElement('script');
-  lenisScript.src = "https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js";
-  lenisScript.onload = () => {
+  function initLenis() {
+    if (window.lenis) return;
+    if (typeof Lenis === 'undefined') return;
+
     const lenis = new Lenis({
-      duration: 1.0,
+      duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       gestureOrientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1,
       smoothTouch: false,
+      touchMultiplier: 1.5,
     });
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+    window.lenis = lenis;
 
-    // Synchronize Lenis scrolling updates with GSAP ScrollTrigger
     if (window.ScrollTrigger) {
       lenis.on('scroll', ScrollTrigger.update);
     }
+
     if (window.gsap) {
       gsap.ticker.add((time) => {
         lenis.raf(time * 1000);
       });
       gsap.ticker.lagSmoothing(0);
+    } else {
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
     }
-  };
-  document.head.appendChild(lenisScript);
+  }
+
+  if (typeof Lenis !== 'undefined') {
+    initLenis();
+  } else {
+    const lenisScript = document.createElement('script');
+    lenisScript.src = "https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js";
+    lenisScript.onload = initLenis;
+    document.head.appendChild(lenisScript);
+  }
 })();

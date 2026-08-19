@@ -176,8 +176,8 @@ button{cursor:pointer;border:none;background:none;font-family:inherit;}
 .section-eyebrow{color:var(--primary);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600;font-family:var(--font-display);display:block;margin-bottom:.5rem;}
 .section-title{color:var(--heading);}
 .services-header{text-align:center;margin-bottom:4rem;}
-.card-grid{display:grid;gap:0;padding:0;max-width:1400px;margin:0 auto;font-size:clamp(1rem,.9rem + .5vw,1.5rem);border:1px solid var(--bento-border);border-radius:16px;overflow:hidden;}
-.magic-bento-card{display:flex;flex-direction:column;justify-content:space-between;position:relative;min-height:220px;width:auto;max-width:100%;padding:1.5em;border-radius:0;border:1px solid var(--bento-border);margin-right:-1px;margin-bottom:-1px;font-weight:300;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;--glow-x:50%;--glow-y:50%;--glow-intensity:0;--glow-radius:200px;}
+.card-grid{display:grid;gap:1.25rem;padding:0;max-width:1400px;margin:0 auto;font-size:clamp(1rem,.9rem + .5vw,1.5rem);}
+.magic-bento-card{display:flex;flex-direction:column;justify-content:space-between;position:relative;min-height:220px;width:auto;max-width:100%;padding:1.5em;border-radius:16px;border:1px solid var(--bento-border);font-weight:300;overflow:hidden;transition:transform .3s ease,box-shadow .3s ease;cursor:pointer;--glow-x:50%;--glow-y:50%;--glow-intensity:0;--glow-radius:200px;}
 .magic-bento-card.bento-primary{background:var(--bento-bg-1);}
 .magic-bento-card.bento-secondary{background:var(--bento-bg-2);}
 .magic-bento-card:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 15px 35px rgba(0,0,0,.08);z-index:10;}
