@@ -49,22 +49,21 @@
             min-height: 420px;
             position: relative;
             z-index: 10;
-            border-radius: 1.75rem;
-            background: rgba(255, 255, 255, 0.20);
-            border: 1px solid rgba(255, 255, 255, 0.45);
-            box-shadow: 0 20px 50px -10px rgba(31, 38, 135, 0.10);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            overflow: hidden;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            overflow: visible;
             cursor: grab;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         .theme-dark #hero-particle-canvas {
-            background: radial-gradient(circle at 50% 50%, rgba(32, 34, 64, 0.85) 0%, rgba(18, 18, 38, 0.90) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5);
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
         }
         #hero-particle-canvas:active {
             cursor: grabbing;
@@ -732,90 +731,256 @@
             line-height: 1.5;
         }
 
-        /* ─── Project cards ─── */
+        /* ─── Project cards (Hotstar Style) ─── */
         .project-card {
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 1rem;
-            background: var(--surface);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            cursor: pointer;
-            transition: all 300ms;
-        }
-        .project-card:hover { box-shadow: 0 4px 20px -2px rgba(0,0,0,0.08); }
-        .project-img {
-            width: 100%;
-            aspect-ratio: 4/3;
-            background: var(--border);
-            border-radius: 0.75rem;
-            margin-bottom: 1rem;
             position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            border-radius: 1rem;
             overflow: hidden;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            cursor: pointer;
+            transition: transform 300ms ease, box-shadow 300ms ease, border-color 300ms ease;
+            padding: 0;
+            display: block;
         }
-        .project-img img {
+        .project-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+            z-index: 10;
+        }
+        .project-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 500ms;
+            display: block;
+            transition: transform 500ms ease;
         }
-        .project-card:hover .project-img img { transform: scale(1.05); }
+        .project-card:hover img {
+            transform: scale(1.08);
+        }
         .project-img-light { display: block; }
         .project-img-dark { display: none; }
         .theme-dark .project-img-light { display: none; }
         .theme-dark .project-img-dark { display: block; }
-        .project-icon {
+
+        .project-overlay {
             position: absolute;
-            bottom: -1rem;
-            right: 1rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 50%;
-            color: white;
+            inset: 0;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 4px solid var(--surface);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            z-index: 10;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.25rem 1rem 1rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 100%);
+            opacity: 0.9;
+            transition: opacity 300ms ease, background 300ms ease;
+            z-index: 5;
+        }
+        .project-card:hover .project-overlay {
+            opacity: 1;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.55) 60%, transparent 100%);
         }
         .project-title {
             font-weight: 700;
-            color: var(--heading);
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
+            color: #ffffff !important;
+            font-size: 1rem;
+            line-height: 1.2;
+            margin: 0 0 0.25rem 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            text-align: left;
         }
-        .project-subtitle { font-weight: 500; color: var(--body); font-size: 0.875rem; }
+        .project-subtitle {
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+            text-align: left;
+        }
 
-        /* ─── Review cards ─── */
-        .review-card {
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 1.5rem;
+        /* ─── 3-Column Auto-Scroll Marquee Reviews (Free Section) ─── */
+        .reviews-marquee-section {
             position: relative;
-            background: var(--surface);
-            transition: background-color 300ms, border-color 300ms;
+            padding: 5rem 0;
+            overflow: hidden;
+            background: var(--background);
         }
-        .review-card .quote { color: #5d4cf7; font-size: 1.5rem; margin-bottom: 1rem; opacity: 0.8; }
-        .theme-dark .review-card .quote { color: #a29bfe; }
-        .review-text { font-size: 0.875rem; color: var(--body); margin-bottom: 1.5rem; font-weight: 500; line-height: 1.6; }
-        .reviewer-name { font-weight: 700; color: var(--heading); font-size: 0.875rem; }
-        .reviewer-role { font-size: 0.75rem; color: var(--body); }
-        .review-stars { display: flex; gap: 0.125rem; color: #5d4cf7; font-size: 0.75rem; margin-top: 0.25rem; }
-        .theme-dark .review-stars { color: #a29bfe; }
-        .reviewer-avatar {
+
+        .reviews-header-center {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 3rem;
+            padding: 0 1.5rem;
+        }
+
+        .reviews-eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #5d4cf7;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .theme-dark .reviews-eyebrow { color: #a29bfe; }
+
+        .reviews-marquee-container {
+            position: relative;
+            height: 560px;
+            overflow: hidden;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Top & Bottom Fade Overlay Masks */
+        .reviews-marquee-container::before,
+        .reviews-marquee-container::after {
+            content: '';
             position: absolute;
-            bottom: -1rem;
-            right: 1rem;
-            width: 4rem;
-            height: 4rem;
+            left: 0; right: 0;
+            height: 90px;
+            z-index: 15;
+            pointer-events: none;
+        }
+        .reviews-marquee-container::before {
+            top: 0;
+            background: linear-gradient(to bottom, var(--background), transparent);
+        }
+        .reviews-marquee-container::after {
+            bottom: 0;
+            background: linear-gradient(to top, var(--background), transparent);
+        }
+
+        /* 3-Column Grid Layout */
+        .reviews-marquee-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            height: 100%;
+        }
+        @media (min-width: 768px) {
+            .reviews-marquee-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .marquee-column {
+            overflow: hidden;
+            position: relative;
+            height: 100%;
+        }
+
+        .marquee-track {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            will-change: transform;
+        }
+
+        .marquee-track-up {
+            animation: marqueeScrollUp 32s linear infinite;
+        }
+        .marquee-track-down {
+            animation: marqueeScrollDown 32s linear infinite;
+        }
+
+        .reviews-marquee-container:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes marqueeScrollUp {
+            0% { transform: translateY(0%); }
+            100% { transform: translateY(-50%); }
+        }
+
+        @keyframes marqueeScrollDown {
+            0% { transform: translateY(-50%); }
+            100% { transform: translateY(0%); }
+        }
+
+        /* Review Card Styling */
+        .marquee-review-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1.25rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+            cursor: default;
+        }
+        .theme-dark .marquee-review-card {
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.35);
+        }
+        .marquee-review-card:hover {
+            border-color: #5d4cf7;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -5px rgba(93, 76, 247, 0.15);
+        }
+        .theme-dark .marquee-review-card:hover {
+            border-color: #a29bfe;
+        }
+
+        .review-stars-row {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            color: #eab308;
+            font-size: 0.85rem;
+            margin-bottom: 0.875rem;
+        }
+
+        .review-quote-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--body);
+            font-weight: 400;
+            margin-bottom: 1.25rem;
+        }
+
+        .reviewer-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            margin-top: auto;
+            padding-top: 0.875rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .reviewer-avatar-badge {
+            width: 2.5rem;
+            height: 2.5rem;
             border-radius: 50%;
-            border: 4px solid var(--surface);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            object-fit: cover;
-            background: var(--border);
+            background: linear-gradient(135deg, #5d4cf7, #a29bfe);
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(93, 76, 247, 0.25);
+        }
+
+        .reviewer-info-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--heading);
+            line-height: 1.2;
+        }
+
+        .reviewer-info-role {
+            font-size: 0.75rem;
+            color: var(--body);
+            opacity: 0.8;
+            font-weight: 500;
+            margin-top: 2px;
         }
 
         /* ─── FAQ ─── */
@@ -974,8 +1139,6 @@
 
     <!-- ─── HERO SECTION ─── -->
     <main class="detail-hero">
-        <div class="grid-lines-bg" aria-hidden="true"></div>
-
         <div class="detail-container">
             <div class="hero-grid">
                 <!-- Left Content -->
@@ -1031,31 +1194,6 @@
                 <!-- Right Illustration -->
                 <div class="hero-illustration" data-aos="fade-left" data-aos-duration="1200">
                     <div id="hero-particle-canvas"></div>
-
-                    <!-- Floating Elements -->
-                    <div class="floating-el float-slow" style="top:10%;left:5%;padding:0.75rem;gap:0.5rem;">
-                        <div style="width:2rem;height:2rem;border-radius:50%;background:rgba(59,130,246,0.1);color:#3b82f6;display:flex;align-items:center;justify-content:center;">
-                            <i class="fa-solid fa-code"></i>
-                        </div>
-                        <div style="height:0.5rem;width:4rem;background:var(--border);border-radius:9999px;"></div>
-                    </div>
-
-                    <div class="floating-el float-fast" style="top:20%;right:-5%;padding:1rem;">
-                        <span style="color:#5d4cf7;font-weight:700;font-size:1.25rem;">&lt;/&gt;</span>
-                    </div>
-
-                    <div class="floating-el float-fast" style="top:45%;left:-10%;padding:0.75rem;">
-                        <span style="color:#5d4cf7;font-weight:700;font-size:1.25rem;">{ }</span>
-                    </div>
-
-                    <!-- Certificate -->
-                    <div class="certificate-el float-slow" style="top:30%;right:5%;">
-                        <div style="font-size:0.5rem;font-weight:700;color:var(--heading);text-align:center;margin-bottom:0.25rem;">TRAINING<br>CERTIFICATE</div>
-                        <div style="width:5rem;height:2px;background:var(--border);margin-bottom:0.5rem;"></div>
-                        <div style="width:4rem;height:2px;background:var(--border);margin-bottom:0.25rem;"></div>
-                        <div style="width:6rem;height:2px;background:var(--border);margin-bottom:1rem;"></div>
-                        <i class="fa-solid fa-award" style="color:#eab308;font-size:1.5rem;margin-top:auto;"></i>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1129,51 +1267,39 @@
 
                 <div class="grid-4">
                     <div class="project-card">
-                        <div class="project-img">
-                            <img src="assets/projects/ecommerce-light.png" class="project-img-light" alt="E-Commerce App Light">
-                            <img src="assets/projects/ecommerce-dark.png" class="project-img-dark" alt="E-Commerce App Dark">
-                            <div class="project-icon" style="background:#5d4cf7;">
-                                <i class="fa-solid fa-cart-shopping" style="font-size:0.875rem;"></i>
-                            </div>
+                        <img src="assets/projects/ecommerce-light.png" class="project-img-light" alt="E-Commerce App Light">
+                        <img src="assets/projects/ecommerce-dark.png" class="project-img-dark" alt="E-Commerce App Dark">
+                        <div class="project-overlay">
+                            <h3 class="project-title">E-Commerce</h3>
+                            <span class="project-subtitle">Web Application</span>
                         </div>
-                        <h3 class="project-title">E-Commerce</h3>
-                        <span class="project-subtitle">Web Application</span>
                     </div>
 
                     <div class="project-card">
-                        <div class="project-img">
-                            <img src="assets/projects/chat-light.png" class="project-img-light" alt="Chat App Light">
-                            <img src="assets/projects/chat-dark.png" class="project-img-dark" alt="Chat App Dark">
-                            <div class="project-icon" style="background:#22c55e;">
-                                <i class="fa-solid fa-comment-dots" style="font-size:0.875rem;"></i>
-                            </div>
+                        <img src="assets/projects/chat-light.png" class="project-img-light" alt="Chat App Light">
+                        <img src="assets/projects/chat-dark.png" class="project-img-dark" alt="Chat App Dark">
+                        <div class="project-overlay">
+                            <h3 class="project-title">Chat</h3>
+                            <span class="project-subtitle">Application</span>
                         </div>
-                        <h3 class="project-title">Chat</h3>
-                        <span class="project-subtitle">Application</span>
                     </div>
 
                     <div class="project-card">
-                        <div class="project-img">
-                            <img src="assets/projects/billing-light.png" class="project-img-light" alt="Billing Dashboard Light">
-                            <img src="assets/projects/billing-dark.png" class="project-img-dark" alt="Billing Dashboard Dark">
-                            <div class="project-icon" style="background:#3b82f6;">
-                                <i class="fa-solid fa-file-invoice" style="font-size:0.875rem;"></i>
-                            </div>
+                        <img src="assets/projects/billing-light.png" class="project-img-light" alt="Billing Dashboard Light">
+                        <img src="assets/projects/billing-dark.png" class="project-img-dark" alt="Billing Dashboard Dark">
+                        <div class="project-overlay">
+                            <h3 class="project-title">Billing</h3>
+                            <span class="project-subtitle">Dashboard</span>
                         </div>
-                        <h3 class="project-title">Billing</h3>
-                        <span class="project-subtitle">Dashboard</span>
                     </div>
 
                     <div class="project-card">
-                        <div class="project-img">
-                            <img src="assets/projects/portfolio-light.png" class="project-img-light" alt="Portfolio Website Light">
-                            <img src="assets/projects/portfolio-dark.png" class="project-img-dark" alt="Portfolio Website Dark">
-                            <div class="project-icon" style="background:#f97316;">
-                                <i class="fa-solid fa-user" style="font-size:0.875rem;"></i>
-                            </div>
+                        <img src="assets/projects/portfolio-light.png" class="project-img-light" alt="Portfolio Website Light">
+                        <img src="assets/projects/portfolio-dark.png" class="project-img-dark" alt="Portfolio Website Dark">
+                        <div class="project-overlay">
+                            <h3 class="project-title">Portfolio</h3>
+                            <span class="project-subtitle">Website</span>
                         </div>
-                        <h3 class="project-title">Portfolio</h3>
-                        <span class="project-subtitle">Website</span>
                     </div>
                 </div>
 
@@ -1189,55 +1315,287 @@
         </div>
     </section>
 
-    <!-- ─── REVIEWS SECTION ─── -->
-    <section class="detail-section">
-        <div class="detail-container">
-            <div class="detail-card" data-aos="fade-up">
-                <h2 class="section-heading">What Our Students Say</h2>
+    <!-- ─── REVIEWS SECTION (FREE 3-COLUMN AUTO-SCROLL MARQUEE) ─── -->
+    <section class="reviews-marquee-section" id="reviews-section">
+        <div class="reviews-header-center" data-aos="fade-up">
+            <span class="reviews-eyebrow">STUDENT SUCCESS & FEEDBACK</span>
+            <h2 class="section-heading" style="margin-bottom:0.5rem;">What Our Students Say</h2>
+            <p class="section-subtext">Real experiences from students and interns who transformed their tech careers with AROX Tech.</p>
+        </div>
 
-                <div class="grid-3" style="margin-bottom:2rem;">
-                    <div class="review-card">
-                        <i class="fa-solid fa-quote-left quote"></i>
-                        <p class="review-text">The AROX Tech training gave me real-world experience and confidence to build live applications from scratch.</p>
-                        <div style="padding-bottom:0.5rem;">
-                            <p class="reviewer-name">— Aravind K.</p>
-                            <p class="reviewer-role">Full Stack Trainee</p>
-                            <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <div class="reviews-marquee-container">
+            <div class="reviews-marquee-grid">
+                
+                <!-- COL 1 (UP) -->
+                <div class="marquee-column">
+                    <div class="marquee-track marquee-track-up">
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Building live production apps during the training was a game-changer. The mentor code reviews pushed my coding standards to enterprise level."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">RS</div>
+                                <div>
+                                    <div class="reviewer-info-name">Rohan Sharma</div>
+                                    <div class="reviewer-info-role">Full Stack Web Developer</div>
+                                </div>
+                            </div>
                         </div>
-                        <img src="https://placehold.co/100x100/e2e8f0/475569?text=AK" alt="Student" class="reviewer-avatar">
-                    </div>
 
-                    <div class="review-card">
-                        <i class="fa-solid fa-quote-left quote"></i>
-                        <p class="review-text">Mentors here are super supportive and the projects helped me boost my placement skills.</p>
-                        <div style="padding-bottom:0.5rem;">
-                            <p class="reviewer-name">— Kaviya S.</p>
-                            <p class="reviewer-role">Frontend Trainee</p>
-                            <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Figma auto-layout and design tokenization clicked for me here. I built a complete 40+ screen design system that landed me my first product design job!"</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">AP</div>
+                                <div>
+                                    <div class="reviewer-info-name">Ananya Patel</div>
+                                    <div class="reviewer-info-role">UI/UX Product Designer</div>
+                                </div>
+                            </div>
                         </div>
-                        <img src="https://placehold.co/100x100/e2e8f0/475569?text=KS" alt="Student" class="reviewer-avatar">
-                    </div>
 
-                    <div class="review-card">
-                        <i class="fa-solid fa-quote-left quote"></i>
-                        <p class="review-text">Best training program I've ever joined. Learned a lot and improved my problem-solving skills.</p>
-                        <div style="padding-bottom:0.5rem;">
-                            <p class="reviewer-name">— Vignesh R.</p>
-                            <p class="reviewer-role">Backend Trainee</p>
-                            <div class="review-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"The hands-on REST API integration and PostgreSQL query optimization modules were extremely thorough. Zero fluff, pure practical learning."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">KR</div>
+                                <div>
+                                    <div class="reviewer-info-name">Karthik Raja</div>
+                                    <div class="reviewer-info-role">Python & Django Trainee</div>
+                                </div>
+                            </div>
                         </div>
-                        <img src="https://placehold.co/100x100/e2e8f0/475569?text=VR" alt="Student" class="reviewer-avatar">
+
+                        <!-- Duplicate Set 1 -->
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Building live production apps during the training was a game-changer. The mentor code reviews pushed my coding standards to enterprise level."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">RS</div>
+                                <div>
+                                    <div class="reviewer-info-name">Rohan Sharma</div>
+                                    <div class="reviewer-info-role">Full Stack Web Developer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Figma auto-layout and design tokenization clicked for me here. I built a complete 40+ screen design system that landed me my first product design job!"</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">AP</div>
+                                <div>
+                                    <div class="reviewer-info-name">Ananya Patel</div>
+                                    <div class="reviewer-info-role">UI/UX Product Designer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"The hands-on REST API integration and PostgreSQL query optimization modules were extremely thorough. Zero fluff, pure practical learning."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">KR</div>
+                                <div>
+                                    <div class="reviewer-info-name">Karthik Raja</div>
+                                    <div class="reviewer-info-role">Python & Django Trainee</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div style="display:flex;justify-content:center;margin-top:1.5rem;">
-                    <a href="#" class="btn-outline" style="padding:0.5rem 1.5rem;font-size:0.875rem;">
-                        View All Reviews <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 6px; display: inline-block; vertical-align: middle;">
-                          <line x1="5" y1="12" x2="19" y2="12"></line>
-                          <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
+                <!-- COL 2 (DOWN) -->
+                <div class="marquee-column">
+                    <div class="marquee-track marquee-track-down">
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Deploying microservices on AWS EC2 with Docker containers gave me the exact hands-on skills recruiters were asking for in technical interviews."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">PN</div>
+                                <div>
+                                    <div class="reviewer-info-name">Priya Nair</div>
+                                    <div class="reviewer-info-role">Cloud & DevOps Engineer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"The code reviews and debugging sessions felt like working in an actual tech startup. Learned React hooks, Next.js routing, and Zustand state management."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">AV</div>
+                                <div>
+                                    <div class="reviewer-info-name">Aditya Verma</div>
+                                    <div class="reviewer-info-role">MERN Stack Developer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Building real RAG pipelines and vector database search engines with LangChain was incredible. The mentors break down complex AI concepts easily."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">SR</div>
+                                <div>
+                                    <div class="reviewer-info-name">Snigdha Roy</div>
+                                    <div class="reviewer-info-role">AI Agent & Data Science Trainee</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Set 2 -->
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Deploying microservices on AWS EC2 with Docker containers gave me the exact hands-on skills recruiters were asking for in technical interviews."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">PN</div>
+                                <div>
+                                    <div class="reviewer-info-name">Priya Nair</div>
+                                    <div class="reviewer-info-role">Cloud & DevOps Engineer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"The code reviews and debugging sessions felt like working in an actual tech startup. Learned React hooks, Next.js routing, and Zustand state management."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">AV</div>
+                                <div>
+                                    <div class="reviewer-info-name">Aditya Verma</div>
+                                    <div class="reviewer-info-role">MERN Stack Developer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Building real RAG pipelines and vector database search engines with LangChain was incredible. The mentors break down complex AI concepts easily."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">SR</div>
+                                <div>
+                                    <div class="reviewer-info-name">Snigdha Roy</div>
+                                    <div class="reviewer-info-role">AI Agent & Data Science Trainee</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- COL 3 (UP) -->
+                <div class="marquee-column">
+                    <div class="marquee-track marquee-track-up">
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Spring Boot microservices & database architecture modules prepared me for real enterprise backend challenges. Cleared 3 interview rounds seamlessly!"</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">VK</div>
+                                <div>
+                                    <div class="reviewer-info-name">Venkatesh Kumar</div>
+                                    <div class="reviewer-info-role">Java Full Stack Developer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"React Native & Expo cross-platform development was taught from absolute scratch. Built a complete food delivery mobile app with live tracking."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">MR</div>
+                                <div>
+                                    <div class="reviewer-info-name">Meera Reddy</div>
+                                    <div class="reviewer-info-role">Mobile App Trainee</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"The Kali Linux labs and network vulnerability assessments were super engaging. Real practical experience instead of just theory textbook notes."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">RS</div>
+                                <div>
+                                    <div class="reviewer-info-name">Ruhan Sengupta</div>
+                                    <div class="reviewer-info-role">Cyber Security & Linux Trainee</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Duplicate Set 3 -->
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"Spring Boot microservices & database architecture modules prepared me for real enterprise backend challenges. Cleared 3 interview rounds seamlessly!"</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">VK</div>
+                                <div>
+                                    <div class="reviewer-info-name">Venkatesh Kumar</div>
+                                    <div class="reviewer-info-role">Java Full Stack Developer</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"React Native & Expo cross-platform development was taught from absolute scratch. Built a complete food delivery mobile app with live tracking."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">MR</div>
+                                <div>
+                                    <div class="reviewer-info-name">Meera Reddy</div>
+                                    <div class="reviewer-info-role">Mobile App Trainee</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="marquee-review-card">
+                            <div class="review-stars-row">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="review-quote-text">"The Kali Linux labs and network vulnerability assessments were super engaging. Real practical experience instead of just theory textbook notes."</p>
+                            <div class="reviewer-profile">
+                                <div class="reviewer-avatar-badge">RS</div>
+                                <div>
+                                    <div class="reviewer-info-name">Ruhan Sengupta</div>
+                                    <div class="reviewer-info-role">Cyber Security & Linux Trainee</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>

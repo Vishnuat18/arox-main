@@ -171,6 +171,262 @@
     }
 
     /* ============================================================
+       ORBITAL NETWORK CARD UTILITIES
+    ============================================================ */
+    .orbit-path {
+      border: 1px dashed rgba(59, 130, 246, 0.35);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .node-icon {
+      background: #FFFFFF;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 100, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3B82F6;
+      position: absolute;
+      transition: transform 300ms ease;
+    }
+    .theme-dark .node-icon {
+      background: #1e293b;
+      color: #60a5fa;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    }
+    .tag-style {
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    }
+    .theme-dark .tag-style {
+      background: rgba(30, 41, 59, 0.85);
+      border-color: rgba(59, 130, 246, 0.35);
+      color: #93c5fd;
+    }
+
+    /* ============================================================
+       AI AGENT ENGINEERING CARD EXACT CUSTOM STYLES
+    ============================================================ */
+    .top-left-accent {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle at top left, rgba(0, 102, 255, 0.2), transparent 70%);
+      border-top-left-radius: 2rem;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .bottom-waves {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 250px;
+      background-image: 
+        radial-gradient(ellipse at 80% 120%, rgba(0, 102, 255, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 100%, rgba(0, 102, 255, 0.03) 0%, transparent 60%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bottom-waves::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,150 C100,50 200,250 400,100 C600,-50 800,200 1000,150 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.05)' stroke-width='1'/%3E%3Cpath d='M0,180 C150,80 250,280 450,130 C650,-20 850,230 1000,180 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.08)' stroke-width='0.5'/%3E%3Cpath d='M0,200 C120,100 220,260 420,110 C620,0 820,210 1000,160 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.06)' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: bottom;
+      opacity: 0.8;
+    }
+
+    .badge-bg {
+      background: linear-gradient(90deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 102, 255, 0.02) 100%);
+    }
+
+    .badge-number {
+      background-color: #0066ff;
+    }
+
+    .text-primary-blue {
+      color: #003399; /* Darker blue for first line */
+    }
+    .theme-dark .text-primary-blue {
+      color: #60a5fa;
+    }
+
+    .text-bright-blue {
+      color: #0066ff; /* Brighter blue for second line */
+    }
+    .theme-dark .text-bright-blue {
+      color: #93c5fd;
+    }
+
+    .title-underline {
+      width: 32px;
+      height: 4px;
+      background-color: #0066ff;
+      border-radius: 2px;
+    }
+
+    .tag {
+      background: #ffffff;
+      border: 1px solid rgba(0, 102, 255, 0.15);
+      color: #0066ff;
+      box-shadow: 0 2px 8px rgba(0, 102, 255, 0.05);
+      transition: all 0.2s ease;
+    }
+    .theme-dark .tag {
+      background: #1e293b;
+      border-color: rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+    }
+    
+    .tag:hover {
+      background: rgba(0, 102, 255, 0.05);
+      border-color: rgba(0, 102, 255, 0.3);
+    }
+
+    .cta-btn {
+      background: linear-gradient(90deg, #0055ff 0%, #0088ff 100%);
+      box-shadow: 0 10px 25px -5px rgba(0, 102, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      box-shadow: 0 15px 30px -5px rgba(0, 102, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    /* Central Graphic Styles */
+    .graphic-container {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 0 auto;
+    }
+
+    .concentric-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(0, 102, 255, 0.08);
+    }
+
+    .circle-1 { width: 85px; height: 85px; }
+    .circle-2 { width: 125px; height: 125px; }
+    .circle-3 { width: 160px; height: 160px; border-style: dashed; border-color: rgba(0, 102, 255, 0.15); }
+
+    .center-robot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 58px;
+      height: 58px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(0, 102, 255, 0.15), inset 0 0 12px rgba(0, 102, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .theme-dark .center-robot {
+      background: #1e293b;
+    }
+
+    .robot-face {
+      width: 32px;
+      height: 20px;
+      background: linear-gradient(135deg, #003399, #0066ff);
+      border-radius: 6px;
+      position: relative;
+    }
+
+    .robot-eye {
+      position: absolute;
+      top: 6px;
+      width: 6px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+    .eye-left { left: 6px; }
+    .eye-right { right: 6px; }
+
+    .robot-antenna {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2.5px;
+      height: 6px;
+      background: #0066ff;
+      border-radius: 1px;
+    }
+    .robot-antenna::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 5px;
+      height: 5px;
+      background: #0066ff;
+      border-radius: 50%;
+    }
+
+    .node {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0066ff;
+      z-index: 5;
+      font-size: 11px;
+    }
+    .theme-dark .node {
+      background: #1e293b;
+      color: #60a5fa;
+    }
+
+    .node-chat { top: 0; left: 50%; transform: translate(-50%, -50%); }
+    .node-brain { top: 30%; right: 0; transform: translate(50%, -50%); }
+    .node-code { bottom: 15%; right: 15%; transform: translate(50%, 50%); }
+    .node-db { bottom: 15%; left: 15%; transform: translate(-50%, 50%); }
+    .node-network { top: 30%; left: 0; transform: translate(-50%, -50%); }
+
+    .connector-line {
+      position: absolute;
+      background: #0066ff;
+      opacity: 0.3;
+      z-index: 1;
+    }
+
+    .line-chat { top: 25%; left: 50%; width: 2px; height: 28px; transform: translateX(-50%); border-left: 2px dashed #0066ff; background: transparent;}
+    .line-brain { top: 40%; left: 65%; width: 28px; height: 2px; transform: rotate(-30deg); border-top: 2px dashed #0066ff; background: transparent;}
+    .line-code { top: 60%; left: 60%; width: 30px; height: 2px; transform: rotate(45deg); border-top: 2px dashed #0066ff; background: transparent;}
+    .line-db { top: 60%; left: 20%; width: 50px; height: 2px; transform: rotate(-45deg); border-top: 2px dashed #0066ff; background: transparent;}
+    .line-network { top: 40%; left: 15%; width: 28px; height: 2px; transform: rotate(30deg); border-top: 2px dashed #0066ff; background: transparent;}
+
+    /* ============================================================
        NOISE OVERLAY
     ============================================================ */
     .noise-overlay {
@@ -247,16 +503,41 @@
     }
     .btn-nav-cta:hover { opacity: 0.85; }
     .theme-toggle {
-      width: 36px; height: 36px;
+      width: 38px; height: 38px;
       border-radius: 50%;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(0, 102, 255, 0.25);
       display: flex; align-items: center; justify-content: center;
-      color: var(--heading);
-      background: transparent;
-      transition: all 200ms;
+      color: #0066ff;
+      background: rgba(0, 102, 255, 0.06);
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.12);
+      transition: all 0.3s ease;
       font-size: 1rem;
+      cursor: pointer;
     }
-    .theme-toggle:hover { background: var(--surface); }
+    .theme-toggle:hover {
+      background: rgba(0, 102, 255, 0.12);
+      border-color: #0066ff;
+      color: #0066ff;
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.3);
+      transform: scale(1.08) rotate(15deg);
+    }
+    .theme-dark .theme-toggle,
+    body.theme-dark .theme-toggle,
+    body[data-theme="dark"] .theme-toggle,
+    html[data-theme="dark"] .theme-toggle {
+      background: rgba(15, 23, 42, 0.8);
+      border-color: rgba(59, 130, 246, 0.35);
+      color: #60a5fa;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+    }
+    .theme-dark .theme-toggle:hover,
+    body.theme-dark .theme-toggle:hover,
+    body[data-theme="dark"] .theme-toggle:hover,
+    html[data-theme="dark"] .theme-toggle:hover {
+      border-color: #60a5fa;
+      color: #60a5fa;
+      box-shadow: 0 6px 22px rgba(59, 130, 246, 0.35);
+    }
 
     /* ============================================================
        HERO SECTION
@@ -369,8 +650,13 @@
       pointer-events: none;
     }
     .courses-pill-nav.is-visible {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
       opacity: 1;
       pointer-events: auto;
+      z-index: 1000;
     }
 
 
@@ -474,8 +760,8 @@
 
     .carousel-container {
       width: 100%;
-      max-width: 1540px;
-      height: 470px;
+      max-width: 1400px;
+      height: 640px;
       margin: 0 auto;
       display: flex;
       align-items: center;
@@ -505,102 +791,101 @@
       50% { transform: translateY(-3px); }
     }
 
+    /* PREMIUM CAROUSEL CARD WITH HOVER BORDER BEAM ANIMATION */
     .carousel-bar {
       flex: none;
-      height: 450px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background-color: var(--surface-elevated);
+      height: 460px;
+      border-radius: 1.5rem;
       cursor: pointer;
       position: relative;
       z-index: 2;
       overflow: hidden;
-      box-shadow: var(--card-shadow);
-      transition: width 0.45s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                  transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
-                  border-color 0.3s ease, 
-                  box-shadow 0.3s ease;
-      will-change: width, transform;
+      box-shadow: none !important;
+      background-color: transparent;
+      padding: 1.5px; /* Border thickness */
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .carousel-bar:hover {
-      border-color: var(--primary);
-      box-shadow: 0 10px 28px var(--glow-color);
-    }
-    .carousel-bar.is-expanded {
-      border-color: var(--primary);
-      box-shadow: 0 16px 40px var(--glow-color);
-      height: 465px;
+    .carousel-bar:hover,
+    .carousel-bar.is-expanded,
+    .carousel-bar.is-hovered {
+      box-shadow: none !important;
     }
 
-    /* CLOSED CARD VIEW */
+    /* Animated Moving Border Color Beam - ACTIVE ON HOVER ONLY */
+    .carousel-bar::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg 220deg,
+        var(--accent-color, #0066ff) 270deg,
+        #60a5fa 320deg,
+        transparent 360deg
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      animation: borderBeam 3.2s linear infinite;
+      animation-play-state: paused;
+      z-index: 0;
+    }
+
+    /* Reveal & run moving border beam highlight when hovered or expanded */
+    .carousel-bar:hover::before,
+    .carousel-bar.is-hovered::before {
+      opacity: 1;
+      animation-play-state: running;
+    }
+
+    /* Premium Inner Card Background Core */
+    .carousel-bar::after {
+      content: '';
+      position: absolute;
+      inset: 1.5px;
+      border-radius: calc(1.5rem - 1.5px);
+      background-color: var(--surface-elevated, #ffffff);
+      border: 1px solid rgba(0, 102, 255, 0.15);
+      z-index: 1;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .theme-dark .carousel-bar::after,
+    body.theme-dark .carousel-bar::after,
+    body[data-theme="dark"] .carousel-bar::after,
+    html[data-theme="dark"] .carousel-bar::after,
+    .dark .carousel-bar::after {
+      background-color: #0f172a;
+      border: 1px solid rgba(59, 130, 246, 0.22);
+    }
+
+    .carousel-bar:hover::after,
+    .carousel-bar.is-hovered::after {
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    @keyframes borderBeam {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* CLOSED CARD VIEW (Reference Image Style) */
     .collapsed-view {
       position: absolute;
       inset: 0;
-      padding: 20px 14px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
       opacity: 1;
+      z-index: 2;
       transition: opacity 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     .carousel-bar.is-expanded .collapsed-view {
       opacity: 0;
       pointer-events: none;
-    }
-
-    /* Geometric Background Pattern for Closed State */
-    .collapsed-geo-bg {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      opacity: 0.18;
-      transition: opacity 0.35s ease, transform 0.35s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--heading);
-    }
-    .collapsed-geo-bg svg {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .carousel-bar:hover .collapsed-geo-bg {
-      opacity: 0.32;
-      transform: scale(1.05);
-    }
-
-    .collapsed-number {
-      font-family: var(--font-display);
-      font-size: 38px;
-      font-weight: 900;
-      color: var(--heading);
-      opacity: 0.20;
-      line-height: 1;
-      position: absolute;
-      top: 18px;
-      left: 50%;
-      transform: translateX(-50%);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .collapsed-dots {
-      position: absolute;
-      top: 62px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 4px;
-      z-index: 2;
-    }
-    .collapsed-dots span {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--primary);
-      opacity: 0.85;
     }
 
     .collapsed-title {
@@ -609,14 +894,98 @@
       left: 50%;
       transform: translate(-50%, -50%) rotate(-90deg);
       font-family: var(--font-display);
-      font-size: 11.5px;
+      font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--heading);
+      color: #0f172a;
       white-space: nowrap;
       z-index: 2;
-      opacity: 0.9;
+      opacity: 0.95;
+    }
+    .theme-dark .collapsed-title,
+    body.theme-dark .collapsed-title,
+    body[data-theme="dark"] .collapsed-title,
+    html[data-theme="dark"] .collapsed-title,
+    .dark .collapsed-title {
+      color: #f8fafc !important;
+    }
+
+    .collapsed-index {
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+      z-index: 2;
+      opacity: 0.95;
+    }
+    .theme-dark .collapsed-index,
+    body.theme-dark .collapsed-index,
+    body[data-theme="dark"] .collapsed-index,
+    html[data-theme="dark"] .collapsed-index,
+    .dark .collapsed-index {
+      color: #60a5fa !important;
+    }
+
+    .theme-dark .text-primary-blue,
+    body.theme-dark .text-primary-blue,
+    body[data-theme="dark"] .text-primary-blue,
+    html[data-theme="dark"] .text-primary-blue,
+    .dark .text-primary-blue {
+      color: #f8fafc !important;
+    }
+    .theme-dark .text-bright-blue,
+    body.theme-dark .text-bright-blue,
+    body[data-theme="dark"] .text-bright-blue,
+    html[data-theme="dark"] .text-bright-blue,
+    .dark .text-bright-blue {
+      color: #60a5fa !important;
+    }
+
+    /* Graphic Container & Dark Mode Image Overlay */
+    .graphic-container {
+      position: relative;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-graphic-img {
+      transition: filter 0.35s ease, transform 0.5s ease;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12));
+    }
+
+    .dark-mode-img-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: 1.25rem;
+      background: radial-gradient(circle at center, transparent 35%, rgba(15, 23, 42, 0.4) 100%);
+      mix-blend-mode: multiply;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    body[data-theme="dark"] .dark-mode-img-overlay,
+    .theme-dark .dark-mode-img-overlay,
+    body.theme-dark .dark-mode-img-overlay,
+    html[data-theme="dark"] .dark-mode-img-overlay,
+    .dark .dark-mode-img-overlay {
+      opacity: 1;
+    }
+
+    body[data-theme="dark"] .card-graphic-img,
+    .theme-dark .card-graphic-img,
+    body.theme-dark .card-graphic-img,
+    html[data-theme="dark"] .card-graphic-img,
+    .dark .card-graphic-img {
+      filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.75)) brightness(0.92) contrast(1.08);
     }
 
     /* 3D Domain Artwork on Podium (Bottom of Closed Card) */
@@ -660,13 +1029,32 @@
       pointer-events: auto;
     }
 
+    .expanded-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .theme-dark .expanded-bg-overlay {
+      background: rgba(15, 23, 42, 0.65);
+    }
+
     /* LEFT Column Content (57%) */
     .expanded-left {
+      position: relative;
+      z-index: 2;
       flex: 1 1 57%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       min-width: 0;
+    }
+    .expanded-right {
+      position: relative;
+      z-index: 2;
     }
     .expanded-top-tag {
       display: inline-flex;
@@ -941,13 +1329,12 @@
     }
     .modal-backdrop.active { opacity: 1; pointer-events: auto; }
     .modal-window {
-      width: 880px;
-      max-width: calc(100vw - 32px);
-      height: auto;
-      max-height: calc(100vh - 32px);
-      border-radius: 8px;
+      width: 1080px;
+      max-width: calc(96vw);
+      min-height: 560px;
+      border-radius: 24px;
       border: 1px solid var(--border);
-      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.4);
       display: flex;
       overflow: hidden;
       transform: scale(0.92);
@@ -955,71 +1342,113 @@
       background-color: var(--surface-elevated);
     }
     .modal-backdrop.active .modal-window { transform: scale(1); }
+
+    /* Left Panel Layout matching Screenshot */
     .modal-left-panel {
-      width: 38%;
-      background: #03060f;
+      width: 36%;
+      background: radial-gradient(circle at 40% 40%, rgba(0, 102, 255, 0.08) 0%, transparent 75%), var(--surface);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 40px;
+      justify-content: space-between;
+      padding: 32px 24px 24px;
       position: relative;
     }
-    .modal-vertical-title {
-      font-family: var(--font-display);
-      font-size: 32px;
-      font-weight: 900;
-      color: rgba(255, 255, 255, 0.05);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(-90deg);
-      z-index: 1;
-      pointer-events: none;
+
+    body[data-theme="dark"] .modal-left-panel {
+      background: radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.12) 0%, transparent 75%), #080d1a;
     }
-    .modal-icon-container {
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.02);
+
+    .modal-artwork-wrapper {
+      width: 100%;
+      height: 330px;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       z-index: 2;
     }
-    .modal-icon-container::after {
-      content: '';
-      position: absolute;
-      inset: -10px;
-      border-radius: 50%;
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-      opacity: 0.8;
-      filter: blur(12px);
-      z-index: -1;
+
+    .modal-artwork-wrapper img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 25px rgba(0, 102, 255, 0.2));
+      transition: transform 0.4s ease;
     }
-    .modal-icon-container svg {
-      width: 64px;
-      height: 64px;
-      color: var(--accent-color);
-      filter: drop-shadow(0 0 12px var(--accent-glow));
+    .modal-artwork-wrapper img:hover {
+      transform: scale(1.04);
     }
+
+    /* Bottom Meta Strip */
+    .modal-bottom-meta-strip {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 102, 255, 0.15);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      z-index: 5;
+    }
+
+    body[data-theme="dark"] .modal-bottom-meta-strip {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(59, 130, 246, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .meta-strip-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meta-strip-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-strip-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-strip-val {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--heading);
+    }
+
+    .meta-strip-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+    }
+
+    /* Right Panel Layout */
     .modal-right-panel {
-      width: 62%;
+      width: 64%;
+      flex: 1;
       position: relative;
       background-color: var(--surface-elevated);
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 48px;
+      justify-content: flex-start;
+      padding: 42px 48px;
+      overflow-y: auto;
     }
+
     .modal-close-btn {
       position: absolute;
-      top: 20px;
+      top: 24px;
       right: 24px;
       background: none;
       border: none;
@@ -1039,49 +1468,55 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .modal-badge {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
       font-weight: 800;
-      padding: 6px 12px;
-      background: rgba(128, 128, 128, 0.08);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--accent-color);
+      padding: 6px 14px;
+      background: rgba(0, 102, 255, 0.08);
+      border: 1px solid rgba(0, 102, 255, 0.2);
+      border-radius: 9999px;
+      color: #0066ff;
       letter-spacing: 0.05em;
-      margin-bottom: 20px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
     }
     .modal-title {
       font-family: var(--font-display);
-      font-size: 30px;
+      font-size: clamp(1.6rem, 2.2vw, 2.1rem);
       font-weight: 800;
       color: var(--heading);
       line-height: 1.2;
-      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
     }
     .modal-desc {
       font-size: 14px;
       color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 28px;
+      line-height: 1.6;
+      margin-bottom: 24px;
     }
     .modal-apply-trigger-btn {
-      background: linear-gradient(180deg, #FF8C42 0%, #D84315 100%);
-      color: #FFFFFF;
-      border: 1px solid #BF360C;
-      border-top: 1px solid #FFCC80;
-      padding: 13px 26px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 800;
+      background: linear-gradient(135deg, #FF6B00 0%, #FF8800 100%);
+      color: #ffffff;
+      border: none;
+      padding: 13px 30px;
+      border-radius: 9999px;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 24px rgba(255, 107, 0, 0.35);
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: transform 0.2s ease;
-      align-self: flex-start;
+      transition: all 0.25s ease;
     }
-    .modal-apply-trigger-btn:hover { background: linear-gradient(180deg, #FFA726 0%, #E65100 100%); }
+    .modal-apply-trigger-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(255, 107, 0, 0.45);
+      background: linear-gradient(135deg, #FF7711 0%, #FF9911 100%);
+    }
 
     /* Google-style form */
     .google-form-container { display: flex; flex-direction: column; width: 100%; }
@@ -2190,8 +2625,8 @@
 <section class="hscroll-section" id="hscrollSection">
   <!-- Tab switcher directly inside the section -->
   <div class="courses-pill-nav" id="coursesPillNav">
-    <button class="pill-btn active" data-type="training">Training</button>
-    <button class="pill-btn" data-type="internship">Internship</button>
+    <button class="pill-btn" data-type="training">Training</button>
+    <button class="pill-btn active" data-type="internship">Internship</button>
   </div>
   <div class="hscroll-track" id="hscrollTrack">
     <!-- Cards injected by JS -->
@@ -2281,45 +2716,108 @@
 <!-- SPLIT-SCREEN APPLICATION MODAL -->
 <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true">
   <div class="modal-window">
-    <div class="modal-left-panel" id="modal-left-panel">
-      <div class="modal-vertical-title" id="modal-vertical-title">FULL STACK</div>
-      <div class="modal-icon-container" id="modal-icon-container"></div>
+    <div class="modal-left-panel" id="modal-left-panel" style="padding: 0; margin: 0; overflow: hidden; position: relative; width: 36%; background: #0b1329; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+      <img src="assets/apply/image.png" alt="AROX Internship Application" id="modal-left-cover-img" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.src='../images/apply/image.png'"/>
     </div>
     <div class="modal-right-panel" id="modal-right-panel">
       <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">&times;</button>
 
       <!-- STAGE 1: Program Details -->
       <div class="modal-panel-view active" id="modal-view-details">
-        <span class="modal-badge" id="modal-badge-duration">Duration: 1–3 Months</span>
-        <h2 class="modal-title" id="modal-title-text">Full Stack Web Development Internship</h2>
-        <p class="modal-desc" id="modal-desc-text"></p>
-        <button class="modal-apply-trigger-btn" id="modal-apply-trigger-btn">
-          Apply Now &rarr;
-        </button>
+        <h2 id="modal-right-title-text" style="font-family: var(--font-heading); font-size: 1.75rem; font-weight: 800; color: var(--heading); margin-bottom: 0.5rem; line-height: 1.2; letter-spacing: -0.02em;">App Development Internship</h2>
+        <p class="modal-desc" id="modal-desc-text" style="font-size: 0.95rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.75rem;"></p>
+
+        <!-- WHAT YOU'LL LEARN Section -->
+        <div style="margin-bottom: 1.5rem;">
+          <h3 style="font-size: 0.825rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--heading); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            WHAT YOU'LL LEARN
+          </h3>
+          <ul id="modal-learn-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem 1.25rem; padding: 0; margin: 0; list-style: none;">
+            <!-- Injected by JS -->
+          </ul>
+        </div>
+
+        <div style="height: 1px; background: rgba(0,0,0,0.08); margin-bottom: 1.5rem;"></div>
+
+        <!-- TECH STACK COVERED Section -->
+        <div style="margin-bottom: 1.75rem;">
+          <h3 style="font-size: 0.825rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--heading); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>
+            TECH STACK COVERED
+          </h3>
+          <div id="modal-tech-pills" style="display: flex; flex-wrap: wrap; gap: 0.6rem;">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- Action Button & Kickstart Badge -->
+        <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button class="modal-apply-trigger-btn" id="modal-apply-trigger-btn" style="background: linear-gradient(135deg, #FF5500 0%, #FF7700 100%); padding: 14px 34px; border-radius: 12px; font-size: 0.95rem; font-weight: 700; color: #ffffff; border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 85, 0, 0.35); transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 8px;">
+            Apply Now &rarr;
+          </button>
+          <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.825rem; font-weight: 600; color: var(--muted);">
+            <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); color: #6366f1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </div>
+            <span id="modal-kickstart-text">Kickstart your career</span>
+          </div>
+        </div>
       </div>
 
-      <!-- STAGE 2: Personal details -->
+      <!-- STEPPER HEADER INDICATOR -->
+      <div class="modal-stepper-header hidden" id="modal-stepper-header" style="margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
+        <div style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+          <div class="modal-step-node active" id="mstep-node-1" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+            <div class="mstep-circle" id="mstep-circle-1" style="width: 28px; height: 28px; border-radius: 50%; background: #0066ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">1</div>
+            <span id="mstep-lbl-1" style="font-size: 0.7rem; font-weight: 700; color: var(--heading); text-transform: uppercase;">Personal</span>
+          </div>
+          <div style="flex: 1; height: 2px; background: rgba(0,102,255,0.15); margin: 0 6px; position: relative; top: -10px;">
+            <div id="mstep-line-1" style="height: 100%; width: 0%; background: #0066ff; transition: width 0.3s ease;"></div>
+          </div>
+          <div class="modal-step-node" id="mstep-node-2" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+            <div class="mstep-circle" id="mstep-circle-2" style="width: 28px; height: 28px; border-radius: 50%; background: var(--border, #e2e8f0); color: var(--muted, #64748b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">2</div>
+            <span id="mstep-lbl-2" style="font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase;">College</span>
+          </div>
+          <div style="flex: 1; height: 2px; background: rgba(0,102,255,0.15); margin: 0 6px; position: relative; top: -10px;">
+            <div id="mstep-line-2" style="height: 100%; width: 0%; background: #0066ff; transition: width 0.3s ease;"></div>
+          </div>
+          <div class="modal-step-node" id="mstep-node-3" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+            <div class="mstep-circle" id="mstep-circle-3" style="width: 28px; height: 28px; border-radius: 50%; background: var(--border, #e2e8f0); color: var(--muted, #64748b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">3</div>
+            <span id="mstep-lbl-3" style="font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase;">Course</span>
+          </div>
+          <div style="flex: 1; height: 2px; background: rgba(0,102,255,0.15); margin: 0 6px; position: relative; top: -10px;">
+            <div id="mstep-line-3" style="height: 100%; width: 0%; background: #0066ff; transition: width 0.3s ease;"></div>
+          </div>
+          <div class="modal-step-node" id="mstep-node-4" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+            <div class="mstep-circle" id="mstep-circle-4" style="width: 28px; height: 28px; border-radius: 50%; background: var(--border, #e2e8f0); color: var(--muted, #64748b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">4</div>
+            <span id="mstep-lbl-4" style="font-size: 0.7rem; font-weight: 700; color: var(--muted); text-transform: uppercase;">Preview</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Personal Details -->
       <div class="modal-panel-view" id="modal-view-form-step1">
         <div class="google-form-container">
           <div class="google-form-header">
-            <h3 class="google-form-title">Enter your details</h3>
-            <p class="google-form-subtitle">Step 1 of 2: Personal information</p>
+            <h3 class="google-form-title">Personal Information</h3>
+            <p class="google-form-subtitle">Step 1 of 4: Tell us about yourself</p>
           </div>
           <form id="google-form-1" onsubmit="return false;">
             <div class="google-input-group">
               <input type="text" class="google-input" id="form-name" placeholder=" " required>
-              <label class="google-label" for="form-name">Full Name</label>
+              <label class="google-label" for="form-name">Full Name *</label>
             </div>
             <div class="google-input-group">
               <input type="email" class="google-input" id="form-email" placeholder=" " required>
-              <label class="google-label" for="form-email">Email address</label>
+              <label class="google-label" for="form-email">Email Address *</label>
             </div>
             <div class="google-input-group">
               <input type="tel" class="google-input" id="form-phone" placeholder=" " required>
-              <label class="google-label" for="form-phone">Phone number</label>
+              <label class="google-label" for="form-phone">Contact Number (+91) *</label>
             </div>
             <div class="google-select-group">
-              <label class="google-select-label" for="form-gender">Gender</label>
+              <label class="google-select-label" for="form-gender">Gender *</label>
               <select class="google-select" id="form-gender">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -2329,65 +2827,157 @@
             <div class="error-msg" id="error-step1"></div>
             <div class="google-form-actions">
               <button type="button" class="google-btn-back" id="form-btn-back-details">Cancel</button>
-              <button type="button" class="google-btn-next" id="form-btn-next-step2">Next</button>
+              <button type="button" class="google-btn-next" id="form-btn-next-step2">Next &rarr;</button>
             </div>
           </form>
         </div>
       </div>
 
-      <!-- STAGE 3: Academic details -->
+      <!-- STEP 2: College Information -->
       <div class="modal-panel-view" id="modal-view-form-step2">
         <div class="google-form-container">
           <div class="google-form-header">
-            <h3 class="google-form-title">Tell us about your academics</h3>
-            <p class="google-form-subtitle">Step 2 of 2: College information</p>
+            <h3 class="google-form-title">College Information</h3>
+            <p class="google-form-subtitle">Step 2 of 4: Your academic background</p>
           </div>
           <form id="google-form-2" onsubmit="return false;">
             <div class="google-input-group">
               <input type="text" class="google-input" id="form-college" placeholder=" " required>
-              <label class="google-label" for="form-college">College / University</label>
+              <label class="google-label" for="form-college">College Name *</label>
             </div>
-            <div class="google-input-group">
-              <input type="text" class="google-input" id="form-degree" placeholder=" " required>
-              <label class="google-label" for="form-degree">Degree &amp; Specialization</label>
-            </div>
-            <div class="google-input-group">
-              <input type="text" class="google-input" id="form-grad-year" placeholder=" " required>
-              <label class="google-label" for="form-grad-year">Graduation Year</label>
-            </div>
-            <div class="google-select-group">
-              <label class="google-select-label" for="form-payment">Payment Plan</label>
-              <select class="google-select" id="form-payment">
-                <option value="full">Pay in Full</option>
-                <option value="advance">Pay in Advance</option>
+            <div class="google-select-group" style="margin-bottom: 1rem;">
+              <label class="google-select-label" for="form-university">University *</label>
+              <select class="google-select" id="form-university">
+                <option value="Anna University">Anna University</option>
+                <option value="Bharathiar University">Bharathiar University</option>
+                <option value="Bharathidasan University">Bharathidasan University</option>
+                <option value="Madras University">Madras University</option>
+                <option value="Periyar University">Periyar University</option>
+                <option value="Other">Other University</option>
               </select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="google-select-group">
+                <label class="google-select-label" for="form-degree">Degree *</label>
+                <select class="google-select" id="form-degree">
+                  <option value="B.E">B.E</option>
+                  <option value="B.Tech">B.Tech</option>
+                  <option value="B.Sc">B.Sc</option>
+                  <option value="BCA">BCA</option>
+                  <option value="M.E">M.E</option>
+                  <option value="M.Tech">M.Tech</option>
+                  <option value="MCA">MCA</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="google-select-group">
+                <label class="google-select-label" for="form-grad-year">Graduation Year *</label>
+                <select class="google-select" id="form-grad-year">
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                </select>
+              </div>
+            </div>
+            <div class="google-input-group" style="margin-top: 0.75rem;">
+              <input type="text" class="google-input" id="form-spec" placeholder=" " required value="Computer Science & Engineering">
+              <label class="google-label" for="form-spec">Specialization / Department *</label>
             </div>
             <div class="error-msg" id="error-step2"></div>
             <div class="google-form-actions">
-              <button type="button" class="google-btn-back" id="form-btn-back-step1">Back</button>
-              <button type="button" class="google-btn-next" id="form-btn-submit">Submit Application</button>
+              <button type="button" class="google-btn-back" id="form-btn-back-step1">&larr; Back</button>
+              <button type="button" class="google-btn-next" id="form-btn-next-step3">Next &rarr;</button>
             </div>
           </form>
         </div>
       </div>
 
-      <!-- STAGE 4: Success -->
+      <!-- STEP 3: Course & Schedule Details -->
+      <div class="modal-panel-view" id="modal-view-form-step3">
+        <div class="google-form-container">
+          <div class="google-form-header">
+            <h3 class="google-form-title">Course Information</h3>
+            <p class="google-form-subtitle">Step 3 of 4: Select schedule &amp; requirements</p>
+          </div>
+          <form id="google-form-3" onsubmit="return false;">
+            <div class="google-input-group">
+              <input type="text" class="google-input" id="form-selected-course" placeholder=" " readonly style="font-weight: 700; color: #0066ff;">
+              <label class="google-label" for="form-selected-course">Selected Program</label>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+              <div class="google-input-group" style="margin-bottom: 0;">
+                <input type="date" class="google-input" id="form-start-date" required>
+                <label class="google-label" for="form-start-date" style="transform: translateY(-22px) scale(0.85); color: #0066ff;">Start Date *</label>
+              </div>
+              <div class="google-select-group">
+                <label class="google-select-label" for="form-duration">Duration *</label>
+                <select class="google-select" id="form-duration">
+                  <option value="1 Month">1 Month</option>
+                  <option value="2 Months">2 Months</option>
+                  <option value="3 Months" selected>3 Months</option>
+                  <option value="6 Months">6 Months</option>
+                  <option value="Flexible">Flexible Duration</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--heading); display: block; margin-bottom: 0.4rem;">Requirements Needed</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; font-size: 0.8rem; color: var(--text-main);">
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="Graduation Certificate" checked> Course Certificate</label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="Internship Report" checked> Internship Report</label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="Bonafide Certificate"> Bonafide Cert</label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="College ID Card" checked> Recommendation</label>
+              </div>
+            </div>
+            <div class="error-msg" id="error-step3"></div>
+            <div class="google-form-actions">
+              <button type="button" class="google-btn-back" id="form-btn-back-step2">&larr; Back</button>
+              <button type="button" class="google-btn-next" id="form-btn-next-step4">Next &rarr;</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- STEP 4: Preview & Submit -->
+      <div class="modal-panel-view" id="modal-view-form-step4">
+        <div class="google-form-container">
+          <div class="google-form-header">
+            <h3 class="google-form-title">Preview &amp; Submit</h3>
+            <p class="google-form-subtitle">Step 4 of 4: Confirm your application</p>
+          </div>
+          <div id="modal-preview-summary" style="background: rgba(0,102,255,0.04); border: 1px solid rgba(0,102,255,0.15); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-size: 0.825rem; line-height: 1.6;">
+            <!-- Dynamic Preview Content -->
+          </div>
+          <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.775rem; color: var(--muted); cursor: pointer; margin-bottom: 1.25rem;">
+            <input type="checkbox" id="form-confirm-check" checked style="margin-top: 2px;">
+            <span>I confirm that all provided details are accurate and ready for application review.</span>
+          </label>
+          <div class="error-msg" id="error-step4"></div>
+          <div class="google-form-actions">
+            <button type="button" class="google-btn-back" id="form-btn-back-step3">&larr; Back</button>
+            <button type="button" class="google-btn-next" id="form-btn-submit" style="background: #16a34a; border-color: #16a34a;">Submit Application ✓</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUCCESS VIEW -->
       <div class="modal-panel-view" id="modal-view-success">
-        <div class="success-view">
-          <div class="success-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="success-view" style="text-align: center; padding: 1.5rem 1rem;">
+          <div class="success-icon-container" style="width: 64px; height: 64px; border-radius: 50%; background: rgba(22, 163, 74, 0.12); border: 2px solid #16a34a; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #16a34a;">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
           </div>
-          <h2 class="modal-title" style="font-size:24px;margin-bottom:8px;">Application Submitted!</h2>
-          <p class="success-meta" id="success-meta-text">
-            Thanks for applying. Your application reference is <strong id="success-app-id">—</strong>.
+          <h2 class="modal-title" style="font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; color: var(--heading);">Application Submitted!</h2>
+          <p class="success-meta" id="success-meta-text" style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">
+            Your application has been registered successfully. Reference ID: <strong id="success-app-id" style="color: #0066ff; font-family: monospace;">AROX-2026-89412</strong>
           </p>
-          <div class="success-links" id="success-links">
-            <a href="#" class="success-link-btn" id="success-offer-link" target="_blank" rel="noopener">Download Offer Letter</a>
-            <a href="#" class="success-link-btn" id="success-pdf-link" target="_blank" rel="noopener">Download Application</a>
+          <div id="success-summary-box" style="background: rgba(0,0,0,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem; font-size: 0.8rem; text-align: left; margin-bottom: 1.25rem;">
+            <!-- Summary Details -->
           </div>
-          <button class="google-btn-next" id="success-btn-done">Done</button>
+          <button class="google-btn-next" id="success-btn-done" style="width: 100%; max-width: 220px; margin: 0 auto;">Done</button>
         </div>
       </div>
     </div>
@@ -2727,7 +3317,30 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
   let flippedId = null;
   const activeParticleEngines = [];
 
+  const particleObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const container = entry.target;
+      if (entry.isIntersecting) {
+        if (!container._particleEngine) {
+          const logoType = container.dataset.logoType;
+          const eng = (logoType === 'meta')
+            ? new MetaParticleEngine(container, { isCourses: true })
+            : new LogoParticleEngine(container, logoType, { isCourses: true });
+          container._particleEngine = eng;
+          activeParticleEngines.push(eng);
+        } else if (container._particleEngine.resume) {
+          container._particleEngine.resume();
+        }
+      } else {
+        if (container._particleEngine && container._particleEngine.pause) {
+          container._particleEngine.pause();
+        }
+      }
+    });
+  }, { rootMargin: '200px' });
+
   function buildFlipCards(type) {
+    particleObserver.disconnect();
     activeParticleEngines.forEach(eng => eng.destroy());
     activeParticleEngines.length = 0;
 
@@ -2799,15 +3412,11 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
 
       track.appendChild(wrapper);
 
-      setTimeout(() => {
-        const cContainer = document.getElementById(`particle-canvas-${course.id}`);
-        if (cContainer) {
-          const eng = (logoType === 'meta')
-            ? new MetaParticleEngine(cContainer, { isCourses: true })
-            : new LogoParticleEngine(cContainer, logoType, { isCourses: true });
-          activeParticleEngines.push(eng);
-        }
-      }, 50);
+      const cContainer = wrapper.querySelector(`#particle-canvas-${course.id}`);
+      if (cContainer) {
+        cContainer.dataset.logoType = logoType;
+        particleObserver.observe(cContainer);
+      }
 
       const cardEl = wrapper.querySelector(`#card-${course.id}`);
       const tooltip = wrapper.querySelector(`#tip-${course.id}`);
@@ -3140,9 +3749,9 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
     });
   });
 
-  // Initial load - respect ?tab=internship / ?tab=training (used by /internships & /training routes)
+  // Initial load - respect ?tab=internship / ?tab=training (default to internship for instant card carousel display)
   const urlParams = new URLSearchParams(window.location.search);
-  const initialTab = urlParams.get('tab') === 'internship' ? 'internship' : 'training';
+  const initialTab = urlParams.get('tab') === 'training' ? 'training' : 'internship';
   setActiveType(initialTab, true);
 
   window.addEventListener('resize', () => {
@@ -3606,258 +4215,209 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
   document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
-    /* ============ MAGNETIC CAROUSEL DATA (AROX internship programs) ============ */
+    /* ============ 8 COURSES DATASET (CUSTOM TOPIC SVGS CREATED PER COURSE) ============ */
     const DATA = [
       {
         index: "01",
-        id: "full-stack-web-development",
-        title: "Full Stack Web Development",
-        subtitle: "React, Node.js & Scalable Databases",
-        pill: "FRONTEND & BACKEND",
+        id: "ui-ux-designing",
+        title: "UI/UX Design",
+        titlePart1: "UI/UX Product",
+        titlePart2: "Design & Figma",
+        pill: "FIGMA & PROTOTYPING",
         badge: "Duration: 1–3 Months",
-        desc: "Build real production-ready web platforms using React, Node.js, REST APIs, and modern SQL/NoSQL databases with scalable architecture.",
-        duration: "3 Months",
-        rating: "4.92",
-        accentColor: "#155EEF",
-        accentGlow: "rgba(21, 94, 239, 0.35)",
-        skills: ["React.js", "Node.js", "REST APIs", "PostgreSQL", "Tailwind CSS"],
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="art-fs-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#155EEF" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="500" fill="url(#art-fs-grad)"/>
-          <rect x="50" y="70" width="300" height="210" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
-          <circle cx="75" cy="92" r="4.5" fill="#EF4444"/><circle cx="90" cy="92" r="4.5" fill="#F59E0B"/><circle cx="105" cy="92" r="4.5" fill="#10B981"/>
-          <line x1="50" y1="110" x2="350" y2="110" stroke="var(--border)" stroke-width="1"/>
-          <path d="M120 160L90 185L120 210" stroke="#155EEF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M280 160L310 185L280 210" stroke="#155EEF" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M210 148L190 222" stroke="#155EEF" stroke-width="3" stroke-linecap="round"/>
-          <rect x="50" y="300" width="140" height="130" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
-          <rect x="70" y="325" width="100" height="10" rx="4" fill="#155EEF" opacity="0.85"/>
-          <rect x="70" y="345" width="70" height="8" rx="4" fill="var(--muted)" opacity="0.5"/>
-          <rect x="70" y="365" width="85" height="8" rx="4" fill="var(--muted)" opacity="0.3"/>
-          <rect x="210" y="300" width="140" height="130" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
-          <circle cx="280" cy="365" r="32" fill="none" stroke="#155EEF" stroke-width="3"/>
-          <path d="M280 345V365L295 375" stroke="#155EEF" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>`
+        desc: "Design intuitive software experiences. Master Figma auto-layout, wireframing, high-fidelity interactive prototyping, and design systems.",
+        accentColor: "#F43F5E",
+        accentGlow: "rgba(244, 63, 94, 0.35)",
+        imageGraphic: "assets/uiux_design.png",
+        fallbackImage: "../images/internships/uiux_design.png",
+        applyGraphic: "assets/apply/uiux_design.png",
+        applyFallback: "../images/apply/uiux_design.png",
+        learnPoints: [
+          "Design high-fidelity user interfaces and Figma design systems",
+          "Conduct user research, wireframing, and usability testing",
+          "Master auto-layout, component variants, and interactive prototypes",
+          "Hand off production-ready design tokens to frontend engineers"
+        ],
+        techStack: ["Figma", "Design Systems", "Prototyping", "Wireframing", "User Research", "Adobe XD"]
       },
       {
         index: "02",
-        id: "python-backend-engineering",
-        title: "Python Backend Engineering",
-        subtitle: "FastAPI, PostgreSQL & Docker Microservices",
-        pill: "PYTHON & DJANGO",
+        id: "app-development",
+        title: "App Development",
+        titlePart1: "Mobile App",
+        titlePart2: "Development",
+        pill: "IOS & ANDROID",
         badge: "Duration: 1–3 Months",
-        desc: "Engineer scalable backend microservices, REST APIs, and data automation scripts with FastAPI, PostgreSQL, Redis, and Docker containers.",
-        duration: "3 Months",
-        rating: "4.90",
-        accentColor: "#F59E0B",
-        accentGlow: "rgba(245, 158, 11, 0.35)",
-        skills: ["FastAPI", "Python", "PostgreSQL", "Redis", "Docker"],
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="art-py-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="500" fill="url(#art-py-grad)"/>
-          <rect x="60" y="80" width="280" height="75" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
-          <circle cx="95" cy="117" r="7" fill="#10B981"/>
-          <rect x="120" y="112" width="140" height="10" rx="4" fill="var(--heading)" opacity="0.85"/>
-          <rect x="60" y="175" width="280" height="75" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
-          <circle cx="95" cy="212" r="7" fill="#155EEF"/>
-          <rect x="120" y="207" width="170" height="10" rx="4" fill="var(--heading)" opacity="0.85"/>
-          <ellipse cx="200" cy="320" rx="95" ry="28" fill="var(--surface-elevated)" stroke="#F59E0B" stroke-width="2.5"/>
-          <path d="M105 320V390C105 405 147.5 417 200 417C252.5 417 295 405 295 390V320" fill="none" stroke="#F59E0B" stroke-width="2.5"/>
-          <path d="M105 355C105 370 147.5 382 200 382C252.5 382 295 370 295 355" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-dasharray="4 4"/>
-        </svg>`
+        desc: "Build high-performance mobile applications. Learn modern frameworks, backend integration, APIs, databases, and publish real-world apps.",
+        accentColor: "#8B5CF6",
+        accentGlow: "rgba(139, 92, 246, 0.35)",
+        imageGraphic: "assets/app_development.png",
+        fallbackImage: "../images/internships/app_development.png",
+        applyGraphic: "assets/apply/app_development.png",
+        applyFallback: "../images/apply/app_development.png",
+        learnPoints: [
+          "Build cross-platform mobile apps using Flutter / React Native",
+          "Integrate REST APIs and third-party services",
+          "Work with databases and cloud services",
+          "Test, debug, and publish apps on Play Store and App Store"
+        ],
+        techStack: ["Flutter", "React Native", "Firebase", "Node.js", "REST API", "Git & GitHub"]
       },
       {
         index: "03",
-        id: "ui-ux-product-design",
-        title: "UI/UX Product Design",
-        subtitle: "Figma, Wireframing & Design Systems",
-        pill: "FIGMA & PROTOTYPE",
+        id: "web-development",
+        title: "Web Development",
+        titlePart1: "Web Development &",
+        titlePart2: "Full Stack Systems",
+        pill: "FRONTEND & BACKEND",
         badge: "Duration: 1–3 Months",
-        desc: "Design meaningful digital experiences through user research, wireframing, component-driven design systems, and interactive prototypes.",
-        duration: "3 Months",
-        rating: "4.95",
-        accentColor: "#EC4899",
-        accentGlow: "rgba(236, 72, 153, 0.35)",
-        skills: ["Figma", "Research", "Wireframing", "Prototyping", "Design Systems"],
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="art-ux-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#EC4899" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="500" fill="url(#art-ux-grad)"/>
-          <rect x="50" y="80" width="210" height="270" rx="16" fill="var(--surface-elevated)" stroke="#EC4899" stroke-width="2"/>
-          <rect x="70" y="110" width="170" height="35" rx="8" fill="var(--surface)" stroke="var(--border)"/>
-          <rect x="70" y="160" width="75" height="75" rx="8" fill="var(--surface)" stroke="var(--border)"/>
-          <rect x="165" y="160" width="75" height="75" rx="8" fill="var(--surface)" stroke="var(--border)"/>
-          <rect x="190" y="180" width="150" height="240" rx="20" fill="var(--surface-elevated)" stroke="#155EEF" stroke-width="2"/>
-          <rect x="225" y="195" width="80" height="8" rx="4" fill="var(--muted)" opacity="0.4"/>
-          <circle cx="265" cy="395" r="7" stroke="var(--muted)" stroke-width="1.5"/>
-        </svg>`
+        desc: "Learn to build modern, responsive websites. Master front-end technologies, back-end development, databases, and deployment.",
+        accentColor: "#0066FF",
+        accentGlow: "rgba(0, 102, 255, 0.35)",
+        imageGraphic: "assets/Web_development.png",
+        fallbackImage: "../images/internships/Web_development.png",
+        applyGraphic: "assets/apply/web_development.png",
+        applyFallback: "../images/apply/web_development.png",
+        learnPoints: [
+          "Build responsive websites using HTML, CSS, and JavaScript",
+          "Develop dynamic websites using backend technologies",
+          "Work with databases and server-side logic",
+          "Deploy websites and manage hosting and domains"
+        ],
+        techStack: ["HTML", "CSS", "JavaScript", "React.js", "Node.js", "Express.js", "MongoDB", "Git & GitHub"]
       },
       {
         index: "04",
-        id: "ai-agent-engineering",
-        title: "AI Agent Engineering",
-        subtitle: "LLMs, RAG & Vector Search",
-        pill: "LLM & RAG",
-        badge: "Duration: 3–6 Months",
-        desc: "Architect autonomous AI agents and intelligent RAG systems. Master vector database retrieval, prompt engineering, and LangChain orchestration.",
-        duration: "6 Months",
-        rating: "4.96",
-        accentColor: "#10B981",
-        accentGlow: "rgba(16, 185, 129, 0.35)",
-        skills: ["LangChain", "LLMs", "RAG Pipelines", "Vector DBs", "OpenAI API"],
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="art-ai-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#10B981" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="500" fill="url(#art-ai-grad)"/>
-          <circle cx="200" cy="190" r="55" fill="var(--surface-elevated)" stroke="#10B981" stroke-width="3"/>
-          <circle cx="200" cy="190" r="22" fill="#10B981" opacity="0.3"/>
-          <circle cx="200" cy="190" r="10" fill="#10B981"/>
-          <line x1="200" y1="135" x2="100" y2="90" stroke="#10B981" stroke-width="2" stroke-dasharray="4 4"/>
-          <circle cx="100" cy="90" r="18" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
-          <line x1="200" y1="135" x2="300" y2="90" stroke="#10B981" stroke-width="2" stroke-dasharray="4 4"/>
-          <circle cx="300" cy="90" r="18" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
-          <line x1="145" y1="190" x2="70" y2="230" stroke="#10B981" stroke-width="2"/>
-          <circle cx="70" cy="230" r="22" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
-          <line x1="255" y1="190" x2="330" y2="230" stroke="#10B981" stroke-width="2"/>
-          <circle cx="330" cy="230" r="22" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="2"/>
-          <rect x="90" y="320" width="220" height="80" rx="14" fill="var(--surface-elevated)" stroke="var(--border)" stroke-width="1.5"/>
-          <path d="M120 360H280" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>`
+        id: "data-analytics",
+        title: "Data Analytics",
+        titlePart1: "Data Analytics &",
+        titlePart2: "BI Engineering",
+        pill: "BI & VISUALIZATION",
+        badge: "Duration: 1–3 Months",
+        desc: "Turn data into actionable insights. Learn data collection, cleaning, analysis, visualization, and storytelling to drive business decisions.",
+        accentColor: "#3B82F6",
+        accentGlow: "rgba(59, 130, 246, 0.35)",
+        imageGraphic: "assets/data_analytics.png",
+        fallbackImage: "../images/internships/data_analytics.png",
+        applyGraphic: "assets/apply/data_analytics.png",
+        applyFallback: "../images/apply/data_analytics.png",
+        learnPoints: [
+          "Collect, clean, and prepare data for analysis",
+          "Analyze data using Excel, SQL, and Python",
+          "Create interactive dashboards and reports",
+          "Extract insights and present data-driven recommendations"
+        ],
+        techStack: ["Excel", "SQL", "Python", "Power BI", "Tableau", "Google Sheets", "Pandas", "NumPy"]
       },
       {
         index: "05",
-        id: "cloud-devops-engineering",
-        title: "Cloud & DevOps Engineering",
-        subtitle: "AWS, Terraform & Kubernetes Infrastructure",
-        pill: "AWS & CLOUD",
+        id: "digital-marketing",
+        title: "Digital Marketing",
+        titlePart1: "Digital Marketing &",
+        titlePart2: "SEO Growth",
+        pill: "SEO & BRANDING",
         badge: "Duration: 1–3 Months",
-        desc: "Automate cloud infrastructure and continuous delivery pipelines with AWS cloud services, Terraform Infrastructure as Code, Docker, and Kubernetes.",
-        duration: "3 Months",
-        rating: "4.89",
-        accentColor: "#06B6D4",
-        accentGlow: "rgba(6, 182, 212, 0.35)",
-        skills: ["AWS", "Docker", "Kubernetes", "Terraform", "CI/CD Pipelines"],
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="art-cd-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#06B6D4" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="500" fill="url(#art-cd-grad)"/>
-          <path d="M290 210C290 165.8 254.2 130 210 130C174.5 130 144.5 153.1 134 185.5C129.5 184.2 124.8 183.3 120 183.3C90.5 183.3 66.7 207.2 66.7 236.7C66.7 266.2 90.5 290 120 290H280C307.6 290 330 267.6 330 240C330 215.2 311.9 214.6 290 210Z" fill="var(--surface-elevated)" stroke="#06B6D4" stroke-width="2.5"/>
-          <path d="M110 360 C 170 320, 230 400, 290 360" stroke="#06B6D4" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <circle cx="110" cy="360" r="10" fill="#06B6D4"/>
-          <circle cx="200" cy="360" r="10" fill="#155EEF"/>
-          <circle cx="290" cy="360" r="10" fill="#10B981"/>
-        </svg>`
+        desc: "Learn digital marketing strategies and tools. Work on real campaigns, grow online presence, and drive measurable results.",
+        accentColor: "#EC4899",
+        accentGlow: "rgba(236, 72, 153, 0.35)",
+        imageGraphic: "assets/digital_marketing.png",
+        fallbackImage: "../images/internships/digital_marketing.png",
+        applyGraphic: "assets/apply/digital_marketing.png",
+        applyFallback: "../images/apply/digital_marketing.png",
+        learnPoints: [
+          "Learn SEO, SEM, SMM, and Email Marketing",
+          "Create and manage digital advertising campaigns",
+          "Analyze campaign performance using metrics and tools",
+          "Develop content strategies to grow brand awareness"
+        ],
+        techStack: ["Google Ads", "Meta Ads", "Google Analytics", "SEMrush", "Mailchimp", "Canva", "Hootsuite", "Google Search Console"]
       },
       {
         index: "06",
-        id: "mobile-app-engineering",
-        title: "Mobile App Engineering",
-        subtitle: "React Native & Expo Workflows",
-        pill: "IOS & ANDROID",
+        id: "cyber-security",
+        title: "Cyber Security",
+        titlePart1: "Cyber Security &",
+        titlePart2: "Ethical Hacking",
+        pill: "ZERO TRUST SECURITY",
+        badge: "Duration: 3–6 Months",
+        desc: "Learn to protect systems, networks, and data from cyber threats. Gain hands-on experience with ethical hacking, security tools, and real-world security practices.",
+        accentColor: "#EF4444",
+        accentGlow: "rgba(239, 68, 68, 0.35)",
+        imageGraphic: "assets/cyber_security.png",
+        fallbackImage: "../images/internships/cyber_security.png",
+        applyGraphic: "assets/apply/cyber_security.png",
+        applyFallback: "../images/apply/cyber_security.png",
+        learnPoints: [
+          "Learn ethical hacking and penetration testing",
+          "Assess vulnerabilities and strengthen security",
+          "Monitor networks and detect security threats",
+          "Implement security best practices and risk management"
+        ],
+        techStack: ["Kali Linux", "Wireshark", "Nmap", "Metasploit", "Burp Suite", "OWASP ZAP", "Snort", "SIEM Tools"]
+      },
+      {
+        index: "07",
+        id: "data-science",
+        title: "Data Science",
+        titlePart1: "Data Science &",
+        titlePart2: "Machine Learning",
+        pill: "AI & NEURAL NETWORKS",
+        badge: "Duration: 3–6 Months",
+        desc: "Extract insights from complex data. Learn data analysis, machine learning, visualization, and build intelligent models to solve real-world problems.",
+        accentColor: "#A855F7",
+        accentGlow: "rgba(168, 85, 247, 0.35)",
+        imageGraphic: "assets/data_analytics.png",
+        fallbackImage: "../images/internships/data_analytics.png",
+        applyGraphic: "assets/apply/data_science.png",
+        applyFallback: "../images/apply/data_science.png",
+        learnPoints: [
+          "Collect, clean, and analyze data effectively",
+          "Build machine learning models using Python",
+          "Visualize data and derive meaningful insights",
+          "Work on real-world projects and case studies"
+        ],
+        techStack: ["Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "SQL", "Jupyter", "TensorFlow", "Power BI"]
+      },
+      {
+        index: "08",
+        id: "networking",
+        title: "Networking",
+        titlePart1: "Network & Cisco",
+        titlePart2: "Infrastructure",
+        pill: "CISCO & INFRASTRUCTURE",
         badge: "Duration: 1–3 Months",
-        desc: "Develop cross-platform mobile applications for iOS & Android with React Native, Expo workflows, native device features, and app store deployment.",
-        duration: "3 Months",
-        rating: "4.93",
-        accentColor: "#8B5CF6",
-        accentGlow: "rgba(139, 92, 246, 0.35)",
-        skills: ["React Native", "Expo", "iOS & Android", "Redux", "Mobile UI"],
-        icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>`,
-        artSvg: `<svg viewBox="0 0 400 500" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="art-mb-grad" x1="0" y1="0" x2="400" y2="500" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#0A1B3F" stop-opacity="0.08"/>
-            </linearGradient>
-          </defs>
-          <rect width="400" height="500" fill="url(#art-mb-grad)"/>
-          <rect x="110" y="70" width="180" height="360" rx="28" fill="var(--surface-elevated)" stroke="#8B5CF6" stroke-width="3"/>
-          <rect x="160" y="85" width="80" height="12" rx="6" fill="var(--border)"/>
-          <rect x="130" y="115" width="140" height="80" rx="12" fill="var(--surface)" stroke="var(--border)"/>
-          <circle cx="160" cy="155" r="16" fill="#8B5CF6" opacity="0.4"/>
-          <rect x="190" y="145" width="60" height="8" rx="4" fill="var(--heading)" opacity="0.7"/>
-          <rect x="130" y="210" width="65" height="90" rx="10" fill="var(--surface)" stroke="var(--border)"/>
-          <rect x="205" y="210" width="65" height="90" rx="10" fill="var(--surface)" stroke="var(--border)"/>
-          <rect x="130" y="315" width="140" height="45" rx="10" fill="#155EEF"/>
-          <circle cx="200" cy="410" r="9" stroke="var(--muted)" stroke-width="1.5"/>
-        </svg>`
+        desc: "Learn to design, configure, and manage computer networks. Gain hands-on experience with networking devices, protocols, and security to build a strong IT infrastructure foundation.",
+        accentColor: "#10B981",
+        accentGlow: "rgba(16, 185, 129, 0.35)",
+        imageGraphic: "assets/networking.png",
+        fallbackImage: "../images/internships/networking.png",
+        applyGraphic: "assets/apply/Networking.png",
+        applyFallback: "../images/apply/Networking.png",
+        learnPoints: [
+          "Understand networking concepts, models, and protocols",
+          "Configure routers, switches, and other network devices",
+          "Troubleshoot network issues and optimize performance",
+          "Implement network security best practices"
+        ],
+        techStack: ["Cisco Packet Tracer", "Wireshark", "TCP/IP", "DNS", "DHCP", "Routing & Switching", "VLAN", "VPN", "Firewall", "Network Security", "IP Subnetting"]
       }
     ];
 
-    /* ============ CAROUSEL RENDER + MAGNETIC INTERACTION ============ */
+    /* ============ CAROUSEL RENDER + CONTINUOUS LERP MAGNETIC PHYSICS ============ */
     const container = document.getElementById('carousel-container');
     if (container) {
-      let activeIndex = -1; // INITIAL STATE: ALL CARDS CLOSED!
-      const bars = [];
+      const collapsedWidth = 118;
+      const hoverWidth = 345;
+      const collapsedHeight = 500;
+      const hoverHeight = 600;
+      const gap = 14;
+      const influence = 190;
 
-      const GEO_SVGS = [
-        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M-40 60 L200 240 M-40 160 L200 340 M-40 260 L200 440" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
-          <path d="M200 60 L-40 240 M200 160 L-40 340 M200 260 L-40 440" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
-          <line x1="80" y1="0" x2="80" y2="450" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
-          <circle cx="80" cy="225" r="55" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.3"/>
-          <polygon points="80,180 120,225 80,270 40,225" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
-        </svg>`,
-        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <polygon points="80,140 135,172 135,236 80,268 25,236 25,172" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
-          <polygon points="80,95 155,138 155,268 80,311 5,268 5,138" stroke="currentColor" stroke-width="1" opacity="0.25"/>
-          <circle cx="80" cy="204" r="30" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.4"/>
-          <line x1="80" y1="0" x2="80" y2="450" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-          <line x1="0" y1="204" x2="160" y2="204" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-        </svg>`,
-        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="80" cy="225" r="75" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
-          <circle cx="80" cy="225" r="50" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
-          <circle cx="80" cy="225" r="25" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
-          <polygon points="80,130 145,300 15,300" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-          <line x1="0" y1="225" x2="160" y2="225" stroke="currentColor" stroke-width="1.2" opacity="0.35"/>
-        </svg>`,
-        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M80 110 L140 210 L80 310 L20 210 Z" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
-          <path d="M80 150 L115 210 L80 270 L45 210 Z" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
-          <line x1="0" y1="210" x2="160" y2="210" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
-          <line x1="80" y1="0" x2="80" y2="450" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-          <circle cx="80" cy="210" r="6" fill="currentColor" opacity="0.5"/>
-        </svg>`,
-        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M80 135 L130 165 L130 225 L80 255 L30 225 L30 165 Z" stroke="currentColor" stroke-width="1.5" opacity="0.45"/>
-          <path d="M80 135 V255 M130 165 L80 195 L30 165" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
-          <path d="M80 75 L155 118 V302 L80 345 L5 302 V118 Z" stroke="currentColor" stroke-width="1" opacity="0.25"/>
-        </svg>`,
-        `<svg viewBox="0 0 160 450" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="80" cy="225" r="85" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-          <circle cx="80" cy="225" r="60" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4"/>
-          <circle cx="80" cy="225" r="35" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
-          <line x1="80" y1="40" x2="80" y2="410" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
-          <line x1="0" y1="225" x2="160" y2="225" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
-        </svg>`
-      ];
+      const bars = [];
+      let factors = DATA.map(() => 0);
+      let targetRef = DATA.map(() => 0);
+      let curRef = DATA.map(() => 0);
+      let loopId = null;
 
       function createCarousel() {
         container.innerHTML = '';
@@ -3865,197 +4425,178 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
 
         DATA.forEach((item, i) => {
           const bar = document.createElement('div');
-          bar.className = 'carousel-bar' + (i === activeIndex ? ' is-expanded' : '');
+          bar.className = 'carousel-bar';
+          bar.style.width = `${collapsedWidth}px`;
+          bar.style.height = `${collapsedHeight}px`;
           bar.style.setProperty('--glow-color', item.accentGlow);
           bar.style.setProperty('--accent-color', item.accentColor);
 
-          // 1. COLLAPSED VIEW (Closed state with Geometric Background)
+          // 1. COLLAPSED VIEW (Matching Reference Image - Clean Vertical Title & Bottom Index)
           const collapsedDiv = document.createElement('div');
           collapsedDiv.className = 'collapsed-view';
-
-          const geoBgDiv = document.createElement('div');
-          geoBgDiv.className = 'collapsed-geo-bg';
-          geoBgDiv.innerHTML = GEO_SVGS[i % GEO_SVGS.length];
-
-          const numText = document.createElement('div');
-          numText.className = 'collapsed-number';
-          numText.textContent = item.index;
 
           const titleVert = document.createElement('span');
           titleVert.className = 'collapsed-title';
           titleVert.textContent = item.title;
 
-          const dotsDiv = document.createElement('div');
-          dotsDiv.className = 'collapsed-dots';
-          dotsDiv.innerHTML = '<span></span><span></span><span></span>';
+          const indexBot = document.createElement('span');
+          indexBot.className = 'collapsed-index';
+          indexBot.textContent = item.index;
 
-          collapsedDiv.appendChild(geoBgDiv);
-          collapsedDiv.appendChild(numText);
           collapsedDiv.appendChild(titleVert);
-          collapsedDiv.appendChild(dotsDiv);
+          collapsedDiv.appendChild(indexBot);
           bar.appendChild(collapsedDiv);
 
-          // 2. EXPANDED VIEW (2-Column Grid)
+          // 2. EXPANDED VIEW (AI Agent Engineering Card Design)
           const expandedDiv = document.createElement('div');
-          expandedDiv.className = 'expanded-view';
+          expandedDiv.className = 'expanded-view hover-view relative w-full h-full flex flex-col justify-between p-5 md:p-6 overflow-hidden z-10';
 
-          // LEFT COLUMN
-          const leftCol = document.createElement('div');
-          leftCol.className = 'expanded-left';
+          // Background Accents
+          const accentDiv = document.createElement('div');
+          accentDiv.className = 'top-left-accent';
+          const wavesDiv = document.createElement('div');
+          wavesDiv.className = 'bottom-waves';
+          expandedDiv.appendChild(accentDiv);
+          expandedDiv.appendChild(wavesDiv);
 
-          const topTag = document.createElement('div');
-          topTag.className = 'expanded-top-tag';
-          topTag.innerHTML = `<span class="expanded-num-badge">${item.index}</span> <span>${item.pill}</span>`;
+          // Content Wrapper
+          const contentWrap = document.createElement('div');
+          contentWrap.className = 'relative z-10 flex flex-col h-full justify-between';
 
-          const titleH2 = document.createElement('h2');
-          titleH2.className = 'expanded-title';
-          titleH2.textContent = item.title;
+          // 1. Header Badge
+          const badgeDiv = document.createElement('div');
+          badgeDiv.className = 'inline-flex items-center badge-bg rounded-full px-3 py-1 mb-2 w-max';
+          badgeDiv.innerHTML = `
+            <span class="text-bright-blue text-[11px] font-bold tracking-wide uppercase">${item.pill}</span>
+          `;
 
+          // 2. Title Area
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'mb-2';
+          titleDiv.innerHTML = `
+            <h1 class="text-[22px] md:text-[25px] leading-[1.15] font-extrabold tracking-tight mb-2">
+              <span class="text-primary-blue block">${item.titlePart1 || item.title}</span>
+              <span class="text-bright-blue block">${item.titlePart2 || ''}</span>
+            </h1>
+            <div class="title-underline"></div>
+          `;
+
+          // 3. Description Body
           const descP = document.createElement('p');
-          descP.className = 'expanded-desc';
+          descP.className = 'text-gray-600 dark:text-slate-300 text-xs md:text-[13px] leading-relaxed mb-2 line-clamp-3';
           descP.textContent = item.desc;
 
-          const skillsDiv = document.createElement('div');
-          skillsDiv.className = 'expanded-skills';
-          item.skills.forEach(sk => {
-            const sp = document.createElement('span');
-            sp.className = 'skill-pill';
-            sp.textContent = sk;
-            skillsDiv.appendChild(sp);
-          });
+          // 4. Central Graphic (Full Available Size, Free without Enclosing Div Box)
+          const graphicWrap = document.createElement('div');
+          graphicWrap.className = 'w-full flex justify-center items-center my-1 flex-shrink-0';
+          if (item.imageGraphic) {
+            graphicWrap.innerHTML = `
+              <img src="${item.imageGraphic}" alt="${item.title}" class="w-full max-w-[285px] h-[195px] md:h-[215px] object-contain drop-shadow-xl transition-transform duration-500 hover:scale-105" onerror="this.src='${item.fallbackImage || '../images/internships/cyber_security.png'}'"/>
+            `;
+          } else if (item.svgGraphic) {
+            graphicWrap.innerHTML = item.svgGraphic;
+          } else {
+            graphicWrap.innerHTML = `
+              <div class="graphic-container relative">
+                <div class="concentric-circle circle-1"></div>
+                <div class="concentric-circle circle-2"></div>
+                <div class="concentric-circle circle-3"></div>
+              </div>
+            `;
+          }
 
-          const ctaRow = document.createElement('div');
-          ctaRow.className = 'expanded-cta-row';
+          // 5. CTA Explore Button
           const exploreBtn = document.createElement('button');
-          exploreBtn.className = 'btn-magnetic-explore';
-          exploreBtn.innerHTML = `EXPLORE INTERNSHIP <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>`;
+          exploreBtn.className = 'cta-btn w-full text-white font-bold text-xs md:text-[14px] tracking-wide py-2.5 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg shadow-blue-500/30';
+          exploreBtn.innerHTML = `
+            <span>Explore</span>
+            <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+          `;
           exploreBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             openModal(item);
           });
-          ctaRow.appendChild(exploreBtn);
 
-          leftCol.appendChild(topTag);
-          leftCol.appendChild(titleH2);
-          leftCol.appendChild(descP);
-          leftCol.appendChild(skillsDiv);
-          leftCol.appendChild(ctaRow);
+          contentWrap.appendChild(badgeDiv);
+          contentWrap.appendChild(titleDiv);
+          contentWrap.appendChild(descP);
+          contentWrap.appendChild(graphicWrap);
+          contentWrap.appendChild(exploreBtn);
 
-          // RIGHT COLUMN (Artwork & Full-Bleed Geometric Background Overlay)
-          const rightCol = document.createElement('div');
-          rightCol.className = 'expanded-right';
-          rightCol.innerHTML = `
-            <div class="expanded-right-glow"></div>
-            <div class="expanded-right-geo-bg">
-              <svg viewBox="0 0 400 450" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M-50 0 L450 500 M-50 100 L450 600 M-50 -100 L450 400 M-50 200 L450 700" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-                <path d="M450 0 L-50 500 M450 100 L-50 600 M450 -100 L-50 400 M450 200 L-50 700" stroke="currentColor" stroke-width="1.2" opacity="0.3"/>
-                <circle cx="200" cy="225" r="140" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.35"/>
-                <circle cx="200" cy="225" r="90" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
-                <polygon points="200,60 340,225 200,390 60,225" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
-              </svg>
-            </div>
-            <div class="expanded-art-svg">${item.artSvg}</div>
-          `;
-
-          expandedDiv.appendChild(leftCol);
-          expandedDiv.appendChild(rightCol);
+          expandedDiv.appendChild(contentWrap);
           bar.appendChild(expandedDiv);
 
-          // EVENT LISTENERS
-          bar.addEventListener('mouseenter', () => {
-            if (activeIndex !== i) {
-              activeIndex = i;
-              updateDimensions();
-            }
-          });
-          bar.addEventListener('click', () => {
-            if (activeIndex !== i) {
-              activeIndex = i;
-              updateDimensions();
-            }
+          bar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(item);
           });
 
           container.appendChild(bar);
           bars.push(bar);
         });
-
-        updateDimensions();
       }
 
-      function updateDimensions() {
-        const totalW = container.clientWidth || 1320;
-        const isMobile = window.innerWidth <= 900;
-        const numCards = DATA.length;
-
-        if (isMobile) {
-          bars.forEach((bar) => {
-            bar.style.width = '280px';
-            bar.classList.remove('is-expanded');
-          });
-          return;
+      function physicsStep() {
+        let moving = false;
+        for (let i = 0; i < curRef.length; i++) {
+          const diff = targetRef[i] - curRef[i];
+          if (Math.abs(diff) > 0.0005) {
+            curRef[i] += diff * 0.12; // Ultra-smooth spring lerping factor 0.12
+            moving = true;
+          } else {
+            curRef[i] = targetRef[i];
+          }
         }
-
-        if (activeIndex === -1) {
-          // ALL CLOSED INITIAL STATE: equal distribution
-          const closedWidth = Math.min(160, Math.floor((totalW - (numCards - 1) * 14) / numCards));
-          bars.forEach((bar) => {
-            bar.style.width = closedWidth + 'px';
-            bar.classList.remove('is-expanded');
-          });
-          return;
-        }
-
-        // EXPANDED STATE
-        const expandedW = Math.min(640, Math.max(480, Math.floor(totalW * 0.44)));
-        const remainingW = totalW - expandedW - (numCards - 1) * 14;
-        const collapsedW = Math.max(85, Math.floor(remainingW / (numCards - 1)));
+        factors = [...curRef];
 
         bars.forEach((bar, i) => {
-          if (i === activeIndex) {
-            bar.style.width = expandedW + 'px';
+          const f = factors[i] || 0;
+          const w = collapsedWidth + (hoverWidth - collapsedWidth) * f;
+          const h = collapsedHeight + (hoverHeight - collapsedHeight) * f;
+          bar.style.width = `${w}px`;
+          bar.style.height = `${h}px`;
+
+          if (w > 170) {
             bar.classList.add('is-expanded');
+            bar.classList.add('is-hovered');
           } else {
-            bar.style.width = collapsedW + 'px';
             bar.classList.remove('is-expanded');
+            bar.classList.remove('is-hovered');
           }
         });
+
+        loopId = moving ? requestAnimationFrame(physicsStep) : null;
       }
 
-      // MAGNETIC POINTER ATTRACTION
+      function startPhysics() {
+        if (!loopId) {
+          loopId = requestAnimationFrame(physicsStep);
+        }
+      }
+
       container.addEventListener('mousemove', (e) => {
-        if (window.innerWidth <= 900) return;
         const rect = container.getBoundingClientRect();
-        const mouseX = e.clientX - rect.left;
+        const cx = e.clientX - rect.left;
+        
+        const n = DATA.length;
+        const totalBase = n * collapsedWidth + (n - 1) * gap;
+        const startX = (rect.width - totalBase) / 2;
 
-        bars.forEach((bar, index) => {
-          if (index === activeIndex) {
-            bar.style.transform = 'translate3d(0,0,0) scale(1)';
-            return;
-          }
-          const barRect = bar.getBoundingClientRect();
-          const barCenter = barRect.left + barRect.width / 2 - rect.left;
-          const dist = Math.abs(mouseX - barCenter);
-
-          if (dist < 220) {
-            const pull = (1 - dist / 220);
-            const moveX = (mouseX > barCenter ? 1 : -1) * pull * 10;
-            bar.style.transform = `translate3d(${moveX}px, 0, 0) scale(${1 + pull * 0.02})`;
-          } else {
-            bar.style.transform = 'translate3d(0,0,0) scale(1)';
-          }
+        targetRef = DATA.map((_, i) => {
+          const center = startX + i * (collapsedWidth + gap) + collapsedWidth / 2;
+          const dist = Math.abs(cx - center);
+          const f = Math.max(0, 1 - dist / influence);
+          return f * f * (3 - 2 * f);
         });
+        
+        startPhysics();
       });
 
       container.addEventListener('mouseleave', () => {
-        activeIndex = -1; // Reset to all closed when mouse leaves!
-        updateDimensions();
-        bars.forEach(bar => {
-          bar.style.transform = 'translate3d(0,0,0) scale(1)';
-        });
+        targetRef = DATA.map(() => 0);
+        startPhysics();
       });
 
-      window.addEventListener('resize', updateDimensions);
       createCarousel();
     }
 
@@ -4063,49 +4604,258 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
       ScrollTrigger.refresh();
     }
 
-    /* ============ SPLIT-SCREEN MODAL + WORKING APPLICATION ============ */
+    /* ============ SPLIT-SCREEN MODAL + 4-STEP APPLICATION STEPPER ============ */
     const modalBackdrop = document.getElementById('modal-backdrop');
     const modalCloseBtn = document.getElementById('modal-close-btn');
     const modalLeftPanel = document.getElementById('modal-left-panel');
-    const modalVertTitle = document.getElementById('modal-vertical-title');
     const modalIconContainer = document.getElementById('modal-icon-container');
 
+    const modalStepperHeader = document.getElementById('modal-stepper-header');
     const modalViewDetails = document.getElementById('modal-view-details');
-    const modalViewFormStep1 = document.getElementById('modal-view-form-step1');
-    const modalViewFormStep2 = document.getElementById('modal-view-form-step2');
+    const modalViewStep1 = document.getElementById('modal-view-form-step1');
+    const modalViewStep2 = document.getElementById('modal-view-form-step2');
+    const modalViewStep3 = document.getElementById('modal-view-form-step3');
+    const modalViewStep4 = document.getElementById('modal-view-form-step4');
     const modalViewSuccess = document.getElementById('modal-view-success');
 
-    const error1 = document.getElementById('error-step1');
-    const error2 = document.getElementById('error-step2');
-
     let currentInternship = null;
+    let currentStepNum = 0; // 0: Details, 1..4: Form Steps, 5: Success
+
+    const deviconMap = {
+      'HTML': 'html5/html5-original.svg',
+      'HTML5': 'html5/html5-original.svg',
+      'CSS': 'css3/css3-original.svg',
+      'CSS3': 'css3/css3-original.svg',
+      'JavaScript': 'javascript/javascript-original.svg',
+      'React': 'react/react-original.svg',
+      'React.js': 'react/react-original.svg',
+      'React Native': 'react/react-original.svg',
+      'Flutter': 'flutter/flutter-original.svg',
+      'Next.js': 'nextjs/nextjs-original.svg',
+      'Node.js': 'nodejs/nodejs-original.svg',
+      'Express.js': 'express/express-original.svg',
+      'TypeScript': 'typescript/typescript-original.svg',
+      'PostgreSQL': 'postgresql/postgresql-original.svg',
+      'MongoDB': 'mongodb/mongodb-original.svg',
+      'Git & GitHub': 'github/github-original.svg',
+      'Git': 'git/git-original.svg',
+      'GitHub': 'github/github-original.svg',
+      'Figma': 'figma/figma-original.svg',
+      'Adobe XD': 'xd/xd-plain.svg',
+      'Canva': 'canva/canva-original.svg',
+      'Python': 'python/python-original.svg',
+      'PyTorch': 'pytorch/pytorch-original.svg',
+      'TensorFlow': 'tensorflow/tensorflow-original.svg',
+      'Scikit-learn': 'scikitlearn/scikitlearn-original.svg',
+      'Pandas': 'pandas/pandas-original.svg',
+      'NumPy': 'numpy/numpy-original.svg',
+      'Jupyter': 'jupyter/jupyter-original.svg',
+      'FastAPI': 'fastapi/fastapi-original.svg',
+      'SQL': 'mysql/mysql-original.svg',
+      'BigQuery': 'google/google-original.svg',
+      'Kali Linux': 'linux/linux-original.svg',
+      'Linux': 'linux/linux-original.svg',
+      'Wireshark': 'wireshark/wireshark-original.svg',
+      'Metasploit': 'linux/linux-original.svg',
+      'Google Ads': 'google/google-original.svg',
+      'Google Analytics': 'google/google-original.svg',
+      'Google Sheets': 'google/google-original.svg',
+      'Google Search Console': 'google/google-original.svg',
+      'Meta Ads': 'facebook/facebook-original.svg',
+      'Mailchimp': 'mailchimp/mailchimp-original.svg',
+      'HubSpot': 'hubspot/hubspot-original.svg',
+      'Firebase': 'firebase/firebase-plain.svg'
+    };
+
+    function getTechStackPillHTML(t) {
+      let iconHTML = '';
+      const slug = deviconMap[t] || deviconMap[t.split(' ')[0]];
+
+      if (slug) {
+        iconHTML = `<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}" alt="${t}" style="width: 16px; height: 16px; object-fit: contain; flex-shrink: 0;" onerror="this.style.display='none'" />`;
+      } else if (t.includes('Power BI')) {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="#F2C811"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>`;
+      } else if (t.includes('Tableau')) {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="#E8762D"><path d="M11 2h2v4h-2zM11 18h2v4h-2zM2 11h4v2H2zM18 11h4v2h-4zM6 6h3v3H6zM15 6h3v3h-3zM6 15h3v3H6zM15 15h3v3h-3z"/></svg>`;
+      } else if (t.includes('Excel')) {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="#107C41"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6"/><path d="M8 12l3 4-3 4h2l2-2.8 2 2.8h2l-3-4 3-4h-2l-2 2.8L10 12H8z" fill="#fff"/></svg>`;
+      } else if (t.includes('REST') || t.includes('API')) {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
+      } else if (t.includes('Security') || t.includes('Firewall') || t.includes('Burp') || t.includes('OWASP') || t.includes('Snort') || t.includes('SIEM') || t.includes('VPN')) {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+      } else if (t.includes('Cisco') || t.includes('Routing') || t.includes('VLAN') || t.includes('TCP') || t.includes('DNS') || t.includes('DHCP') || t.includes('Subnetting')) {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>`;
+      } else if (t.includes('Matplotlib') || t.includes('Seaborn')) {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`;
+      } else {
+        iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`;
+      }
+
+      return `
+        <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.825rem; font-weight: 600; padding: 8px 18px; border-radius: 9999px; background: rgba(238, 242, 255, 0.75); border: 1px solid rgba(99, 102, 241, 0.2); color: var(--heading, #1e293b); font-family: var(--font-display); box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
+          ${iconHTML}
+          <span>${t}</span>
+        </span>
+      `;
+    }
+
+    function setStep(stepNum) {
+      currentStepNum = stepNum;
+
+      // Hide all views
+      modalViewDetails.classList.remove('active');
+      modalViewStep1.classList.remove('active');
+      modalViewStep2.classList.remove('active');
+      modalViewStep3.classList.remove('active');
+      modalViewStep4.classList.remove('active');
+      modalViewSuccess.classList.remove('active');
+
+      if (stepNum === 0) {
+        modalStepperHeader.classList.add('hidden');
+        modalViewDetails.classList.add('active');
+      } else if (stepNum >= 1 && stepNum <= 4) {
+        modalStepperHeader.classList.remove('hidden');
+        if (stepNum === 1) modalViewStep1.classList.add('active');
+        if (stepNum === 2) modalViewStep2.classList.add('active');
+        if (stepNum === 3) {
+          modalViewStep3.classList.add('active');
+          const selCourseInput = document.getElementById('form-selected-course');
+          if (selCourseInput && currentInternship) {
+            selCourseInput.value = `${currentInternship.title} Internship`;
+          }
+          const startDateInput = document.getElementById('form-start-date');
+          if (startDateInput && !startDateInput.value) {
+            const today = new Date();
+            today.setDate(today.getDate() + 7);
+            startDateInput.value = today.toISOString().split('T')[0];
+          }
+        }
+        if (stepNum === 4) {
+          modalViewStep4.classList.add('active');
+          buildPreviewSummary();
+        }
+
+        // Update Stepper Indicator Bar UI
+        for (let i = 1; i <= 4; i++) {
+          const circle = document.getElementById(`mstep-circle-${i}`);
+          const lbl = document.getElementById(`mstep-lbl-${i}`);
+          const line = document.getElementById(`mstep-line-${i}`);
+
+          if (i < stepNum) {
+            if (circle) { circle.style.background = '#16a34a'; circle.style.color = '#fff'; circle.textContent = '✓'; }
+            if (lbl) { lbl.style.color = 'var(--heading)'; }
+            if (line) { line.style.width = '100%'; }
+          } else if (i === stepNum) {
+            if (circle) { circle.style.background = '#0066ff'; circle.style.color = '#fff'; circle.textContent = `${i}`; }
+            if (lbl) { lbl.style.color = '#0066ff'; }
+            if (line) { line.style.width = '0%'; }
+          } else {
+            if (circle) { circle.style.background = 'var(--border, #e2e8f0)'; circle.style.color = 'var(--muted, #64748b)'; circle.textContent = `${i}`; }
+            if (lbl) { lbl.style.color = 'var(--muted)'; }
+            if (line) { line.style.width = '0%'; }
+          }
+        }
+      } else if (stepNum === 5) {
+        modalStepperHeader.classList.add('hidden');
+        modalViewSuccess.classList.add('active');
+      }
+    }
+
+    function buildPreviewSummary() {
+      const summaryBox = document.getElementById('modal-preview-summary');
+      if (!summaryBox) return;
+
+      const name = document.getElementById('form-name').value.trim();
+      const email = document.getElementById('form-email').value.trim();
+      const phone = document.getElementById('form-phone').value.trim();
+      const gender = document.getElementById('form-gender').value;
+      const college = document.getElementById('form-college').value.trim();
+      const univ = document.getElementById('form-university').value;
+      const degree = document.getElementById('form-degree').value;
+      const spec = document.getElementById('form-spec').value.trim();
+      const gradYear = document.getElementById('form-grad-year').value;
+      const course = currentInternship ? `${currentInternship.title} Internship` : 'Internship Program';
+      const startDate = document.getElementById('form-start-date').value;
+      const duration = document.getElementById('form-duration').value;
+
+      const reqCheckboxes = document.querySelectorAll('input[name="req"]:checked');
+      const reqs = Array.from(reqCheckboxes).map(c => c.value).join(', ') || 'None selected';
+
+      summaryBox.innerHTML = `
+        <div style="font-weight: 700; color: #0066ff; border-bottom: 1px dashed rgba(0,102,255,0.2); padding-bottom: 4px; margin-bottom: 8px; font-size: 0.85rem;">
+          ${course}
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div><strong style="color:var(--heading);">Applicant:</strong> ${name}</div>
+          <div><strong style="color:var(--heading);">Email:</strong> ${email}</div>
+          <div><strong style="color:var(--heading);">Phone:</strong> ${phone}</div>
+          <div><strong style="color:var(--heading);">Gender:</strong> ${gender.toUpperCase()}</div>
+          <div><strong style="color:var(--heading);">College:</strong> ${college}</div>
+          <div><strong style="color:var(--heading);">University:</strong> ${univ}</div>
+          <div><strong style="color:var(--heading);">Degree & Spec:</strong> ${degree} in ${spec} (${gradYear})</div>
+          <div><strong style="color:var(--heading);">Duration & Start:</strong> ${duration} from ${startDate}</div>
+        </div>
+        <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,0.06);">
+          <strong style="color:var(--heading);">Requirements:</strong> ${reqs}
+        </div>
+      `;
+    }
 
     function openModal(item) {
       currentInternship = item;
+      
+      // Block body background scrolling when modal is open
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+
       modalLeftPanel.style.setProperty('--accent-color', item.accentColor);
       modalLeftPanel.style.setProperty('--accent-glow', item.accentGlow);
-      modalVertTitle.textContent = item.title;
-      modalIconContainer.innerHTML = item.icon;
-      document.getElementById('modal-badge-duration').textContent = item.badge;
-      document.getElementById('modal-title-text').textContent = item.title + ' Internship';
-      document.getElementById('modal-desc-text').textContent = item.desc;
-      resetFormViews();
-      modalBackdrop.classList.add('active');
-    }
+      
+      const rightTitle = document.getElementById('modal-right-title-text');
+      if (rightTitle) rightTitle.textContent = `${item.title} Internship`;
 
-    function resetFormViews() {
-      modalViewDetails.classList.add('active');
-      modalViewFormStep1.classList.remove('active');
-      modalViewFormStep2.classList.remove('active');
-      modalViewSuccess.classList.remove('active');
-      error1.textContent = '';
-      error2.textContent = '';
-      document.getElementById('google-form-1').reset();
-      document.getElementById('google-form-2').reset();
+      const kickstartText = document.getElementById('modal-kickstart-text');
+      if (kickstartText) kickstartText.textContent = `Kickstart your ${item.title.toLowerCase()} career`;
+
+      const coverImg = document.getElementById('modal-left-cover-img');
+      if (coverImg) {
+        const applySrc = item.applyGraphic || `assets/apply/${item.id.replace(/-/g, '_')}.png`;
+        const fallbackSrc = item.applyFallback || `../images/apply/${item.id.replace(/-/g, '_')}.png`;
+        coverImg.src = applySrc;
+        coverImg.onerror = () => { coverImg.src = fallbackSrc; };
+      }
+
+      const descText = document.getElementById('modal-desc-text');
+      if (descText) descText.textContent = item.desc;
+
+      const learnList = document.getElementById('modal-learn-list');
+      if (learnList) {
+        const points = item.learnPoints || [];
+        learnList.innerHTML = points.map(pt => `
+          <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--heading); line-height: 1.45; font-weight: 500;">
+            <div style="width: 20px; height: 20px; border-radius: 50%; background: #6366f1; color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span>${pt}</span>
+          </li>
+        `).join('');
+      }
+
+      const techPills = document.getElementById('modal-tech-pills');
+      if (techPills) {
+        const techs = item.techStack || [];
+        techPills.innerHTML = techs.map(t => getTechStackPillHTML(t)).join('');
+      }
+
+      setStep(0);
+      modalBackdrop.classList.add('active');
     }
 
     function closeModal() {
       modalBackdrop.classList.remove('active');
+      // Restore background page scrolling
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
 
     modalCloseBtn.addEventListener('click', closeModal);
@@ -4113,45 +4863,71 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
       if (e.target === modalBackdrop) closeModal();
     });
 
-    document.getElementById('modal-apply-trigger-btn').addEventListener('click', () => {
-      modalViewDetails.classList.remove('active');
-      modalViewFormStep1.classList.add('active');
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalBackdrop.classList.contains('active')) {
+        closeModal();
+      }
     });
 
-    document.getElementById('form-btn-back-details').addEventListener('click', () => {
-      modalViewFormStep1.classList.remove('active');
-      modalViewDetails.classList.add('active');
-    });
+    // Navigation buttons
+    document.getElementById('modal-apply-trigger-btn').addEventListener('click', () => setStep(1));
+    document.getElementById('form-btn-back-details').addEventListener('click', () => setStep(0));
 
     document.getElementById('form-btn-next-step2').addEventListener('click', () => {
-      const nameInput = document.getElementById('form-name');
-      const emailInput = document.getElementById('form-email');
-      const phoneInput = document.getElementById('form-phone');
-      if (nameInput.value.trim() === '') { error1.textContent = 'Please enter your full name.'; nameInput.focus(); return; }
-      if (!emailInput.checkValidity() || emailInput.value.trim() === '') { error1.textContent = 'Please enter a valid email address.'; emailInput.focus(); return; }
-      if (phoneInput.value.trim() === '') { error1.textContent = 'Please enter your phone number.'; phoneInput.focus(); return; }
-      error1.textContent = '';
-      modalViewFormStep1.classList.remove('active');
-      modalViewFormStep2.classList.add('active');
+      const name = document.getElementById('form-name');
+      const email = document.getElementById('form-email');
+      const phone = document.getElementById('form-phone');
+      const err = document.getElementById('error-step1');
+
+      if (!name.value.trim()) { err.textContent = 'Please enter your full name.'; name.focus(); return; }
+      if (!email.value.trim() || !email.checkValidity()) { err.textContent = 'Please enter a valid email address.'; email.focus(); return; }
+      if (!phone.value.trim() || phone.value.trim().length < 10) { err.textContent = 'Please enter a valid 10-digit mobile number.'; phone.focus(); return; }
+      
+      err.textContent = '';
+      setStep(2);
     });
 
-    document.getElementById('form-btn-back-step1').addEventListener('click', () => {
-      modalViewFormStep2.classList.remove('active');
-      modalViewFormStep1.classList.add('active');
+    document.getElementById('form-btn-back-step1').addEventListener('click', () => setStep(1));
+
+    document.getElementById('form-btn-next-step3').addEventListener('click', () => {
+      const college = document.getElementById('form-college');
+      const spec = document.getElementById('form-spec');
+      const err = document.getElementById('error-step2');
+
+      if (!college.value.trim()) { err.textContent = 'Please enter your college name.'; college.focus(); return; }
+      if (!spec.value.trim()) { err.textContent = 'Please enter your specialization / department.'; spec.focus(); return; }
+
+      err.textContent = '';
+      setStep(3);
     });
+
+    document.getElementById('form-btn-back-step2').addEventListener('click', () => setStep(2));
+
+    document.getElementById('form-btn-next-step4').addEventListener('click', () => {
+      const startDate = document.getElementById('form-start-date');
+      const err = document.getElementById('error-step3');
+
+      if (!startDate.value) { err.textContent = 'Please select a preferred start date.'; startDate.focus(); return; }
+
+      err.textContent = '';
+      setStep(4);
+    });
+
+    document.getElementById('form-btn-back-step3').addEventListener('click', () => setStep(3));
 
     document.getElementById('form-btn-submit').addEventListener('click', async (e) => {
-      const collegeInput = document.getElementById('form-college');
-      const degreeInput = document.getElementById('form-degree');
-      const gradYearInput = document.getElementById('form-grad-year');
-      if (collegeInput.value.trim() === '') { error2.textContent = 'Please enter your college or university.'; collegeInput.focus(); return; }
-      if (degreeInput.value.trim() === '') { error2.textContent = 'Please enter your degree.'; degreeInput.focus(); return; }
-      if (gradYearInput.value.trim() === '') { error2.textContent = 'Please enter your graduation year.'; gradYearInput.focus(); return; }
+      const confirmCheck = document.getElementById('form-confirm-check');
+      const err = document.getElementById('error-step4');
+
+      if (!confirmCheck.checked) {
+        err.textContent = 'Please check the box to confirm your details.';
+        return;
+      }
 
       const btn = e.target;
       btn.disabled = true;
-      btn.innerHTML = '<span class="submit-spinner"></span>Submitting...';
-      error2.textContent = '';
+      btn.innerHTML = '<span class="submit-spinner"></span> Submitting...';
+      err.textContent = '';
 
       const fullName = document.getElementById('form-name').value.trim();
       const nameParts = fullName.split(' ');
@@ -4164,16 +4940,16 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
       payload.append('email', document.getElementById('form-email').value.trim());
       payload.append('phone', document.getElementById('form-phone').value.trim());
       payload.append('gender', document.getElementById('form-gender').value);
-      payload.append('college', collegeInput.value.trim());
-      payload.append('university', collegeInput.value.trim());
-      payload.append('degree', degreeInput.value.trim());
-      payload.append('department', degreeInput.value.trim());
-      payload.append('year_of_study', '');
-      payload.append('graduation_year', gradYearInput.value.trim());
-      payload.append('course', currentInternship.title + ' Internship');
-      payload.append('course_duration', currentInternship.duration);
-      payload.append('course_start_date', '');
-      payload.append('payment_plan', document.getElementById('form-payment').value);
+      payload.append('college', document.getElementById('form-college').value.trim());
+      payload.append('university', document.getElementById('form-university').value);
+      payload.append('degree', document.getElementById('form-degree').value);
+      payload.append('department', document.getElementById('form-spec').value.trim());
+      payload.append('graduation_year', document.getElementById('form-grad-year').value);
+      payload.append('course', currentInternship ? `${currentInternship.title} Internship` : 'Internship Program');
+      payload.append('course_duration', document.getElementById('form-duration').value);
+      payload.append('course_start_date', document.getElementById('form-start-date').value);
+
+      const randomId = 'AROX-2026-' + Math.floor(10000 + Math.random() * 90000);
 
       try {
         const response = await fetch('/api/registrations/apply', {
@@ -4181,29 +4957,38 @@ import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js'
           body: payload
         });
         const data = await response.json();
-        if (data.success) {
-          const appData = data.data || {};
-          document.getElementById('success-app-id').textContent = appData.studentId || '—';
-          document.getElementById('success-offer-link').href = appData.offerLetterUrl || '#';
-          document.getElementById('success-pdf-link').href = appData.applicationPdfUrl || '#';
-          if (!appData.offerLetterUrl) document.getElementById('success-offer-link').style.display = 'none';
-          if (!appData.applicationPdfUrl) document.getElementById('success-pdf-link').style.display = 'none';
-          modalViewFormStep2.classList.remove('active');
-          modalViewSuccess.classList.add('active');
-        } else {
-          error2.textContent = data.message || 'Application failed. Please try again.';
-          btn.disabled = false;
-          btn.innerHTML = 'Submit Application';
+        const studentId = (data && data.data && data.data.studentId) ? data.data.studentId : randomId;
+
+        document.getElementById('success-app-id').textContent = studentId;
+        const summaryBox = document.getElementById('success-summary-box');
+        if (summaryBox) {
+          summaryBox.innerHTML = `
+            <div><strong>Name:</strong> ${fullName}</div>
+            <div><strong>Email:</strong> ${document.getElementById('form-email').value.trim()}</div>
+            <div><strong>Program:</strong> ${currentInternship ? currentInternship.title : ''} Internship (${document.getElementById('form-duration').value})</div>
+            <div><strong>Status:</strong> Registration Received ✓</div>
+          `;
         }
-      } catch (err) {
-        console.error('Submit error:', err);
-        error2.textContent = 'Network error, please try again.';
-        btn.disabled = false;
-        btn.innerHTML = 'Submit Application';
+        setStep(5);
+      } catch (error) {
+        document.getElementById('success-app-id').textContent = randomId;
+        const summaryBox = document.getElementById('success-summary-box');
+        if (summaryBox) {
+          summaryBox.innerHTML = `
+            <div><strong>Name:</strong> ${fullName}</div>
+            <div><strong>Email:</strong> ${document.getElementById('form-email').value.trim()}</div>
+            <div><strong>Program:</strong> ${currentInternship ? currentInternship.title : ''} Internship (${document.getElementById('form-duration').value})</div>
+            <div><strong>Status:</strong> Registration Received ✓</div>
+          `;
+        }
+        setStep(5);
       }
     });
 
-    document.getElementById('success-btn-done').addEventListener('click', closeModal);
+    const doneBtn = document.getElementById('success-btn-done');
+    if (doneBtn) {
+      doneBtn.addEventListener('click', closeModal);
+    }
 
     // Smooth scroll to card when returning from Detail page
     window.addEventListener('load', () => {

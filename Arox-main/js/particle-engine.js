@@ -336,7 +336,8 @@ export class LogoParticleEngine {
         react: 23 / 20.46,
         figma: 200 / 300,
         python: 1.0,
-        linux: 300 / 150,
+        linux: 1.0,
+        kali: 1.0,
         meta: 300 / 200,
         cpp: 1.0,
         aws: 304 / 182,
@@ -565,6 +566,21 @@ export class LogoParticleEngine {
 
     this.renderer.setRenderTarget(null);
     this.renderer.render(this.scene, this.camera);
+  }
+
+  pause() {
+    this.isRunning = false;
+    if (this.animId) {
+      cancelAnimationFrame(this.animId);
+      this.animId = null;
+    }
+  }
+
+  resume() {
+    if (!this.isRunning) {
+      this.isRunning = true;
+      this.animate();
+    }
   }
 
   destroy() {
@@ -897,6 +913,21 @@ export class MetaParticleEngine {
     this.points.rotation.y = this.currentRotation.y + uTime * 0.04;
 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  pause() {
+    this.isRunning = false;
+    if (this.animId) {
+      cancelAnimationFrame(this.animId);
+      this.animId = null;
+    }
+  }
+
+  resume() {
+    if (!this.isRunning) {
+      this.isRunning = true;
+      this.animate();
+    }
   }
 
   destroy() {

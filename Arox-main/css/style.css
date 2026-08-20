@@ -786,14 +786,13 @@ html.lenis {
   justify-content: center;
   padding: 3rem 1.5rem 4rem;
   box-sizing: border-box;
-  background-image: url('../public/assets/hero/courses_light.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-image: none !important;
+  background: transparent !important;
   margin-top: 100px !important;
 }
 .theme-dark .detail-hero {
-  background-image: url('../public/assets/hero/courses_dark.png');
+  background-image: none !important;
+  background: transparent !important;
 }
 
 .about-hero {

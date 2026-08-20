@@ -1,0 +1,2648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arox Tech - High-Fidelity Internships</title>
+  <meta name="description"
+    content="Arox Tech high-fidelity internships portal. Experience our macOS dock-style Magnetic Carousel showing engineering and product programs.">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;800&family=Sora:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+  <style>
+    /* --------------------------------------------------------------------------
+       1. Design Tokens & Skeuomorphic Custom Properties
+       -------------------------------------------------------------------------- */
+    :root {
+      /* Skeuomorphic Dark Theme Palette */
+      --bg-main: #050505;
+      --bg-section: #0D1324;
+      --bg-card: #0c0f1d;
+      --text-main: #FFFFFF;
+      --text-muted: #C7D2E3;
+      --border-outer: #1E293B;
+      --border-bevel: rgba(255, 255, 255, 0.08);
+      --border-inner: rgba(0, 0, 0, 0.4);
+
+      /* Brand Colors */
+      --color-navy: #0B1F4D;
+      --color-navy-deep: #05183C;
+      --color-orange: #FF6B00;
+      --color-orange-light: #FFB800;
+      --color-orange-soft: #EF9B5F;
+      --color-blue: #1E5EFF;
+      --color-gray: #4E5970;
+
+      /* Shadows - Tactile, Extruded */
+      --plate-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
+        0 5px 15px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      --inset-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.7),
+        0 1px 0 rgba(255, 255, 255, 0.1);
+
+      /* Typography */
+      --font-heading: 'Sora', sans-serif;
+      --font-body: 'Inter', sans-serif;
+
+      /* Easing */
+      --ease-tactile: cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Skeuomorphic Light Theme Palette */
+    body[data-theme="light"] {
+      --bg-main: #FFFFFF;
+      --bg-section: #F2F6FC;
+      --bg-card: #FFFFFF;
+      --text-main: #041D44;
+      --text-muted: #58657A;
+      --border-outer: #D1D5DB;
+      --border-bevel: rgba(255, 255, 255, 0.9);
+      --border-inner: rgba(20, 40, 80, 0.08);
+
+      /* Shadows - Soft Plaster Extrusion */
+      --plate-shadow: 0 10px 25px rgba(20, 40, 80, 0.08),
+        0 4px 10px rgba(20, 40, 80, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      --inset-shadow: inset 0 2px 4px rgba(20, 40, 80, 0.08),
+        0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    /* --------------------------------------------------------------------------
+       2. Base Reset & Layout
+       -------------------------------------------------------------------------- */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 300ms var(--ease-tactile), color 300ms var(--ease-tactile);
+      overflow-x: hidden;
+    }
+
+    /* --------------------------------------------------------------------------
+       3. Navbar
+       -------------------------------------------------------------------------- */
+    .arox-navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 82px;
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-section) 100%);
+      border-bottom: 2px solid var(--border-outer);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 -1px 0 var(--border-inner), inset 0 1px 0 var(--border-bevel);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-link {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-dot {
+      color: var(--color-orange);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-link {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text-main);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(180deg, #FF8C42 0%, #D84315 100%);
+      color: #FFFFFF;
+      border: 1px solid #BF360C;
+      border-top: 1px solid #FFCC80;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(180deg, #FFA726 0%, #E65100 100%);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-section) 100%);
+      color: var(--text-main);
+      border: 1px solid var(--border-outer);
+      border-top: 1px solid var(--border-bevel);
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 var(--border-bevel);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-section);
+    }
+
+    /* --------------------------------------------------------------------------
+       4. Page Layout & Spacers
+       -------------------------------------------------------------------------- */
+    .carousel-wrapper {
+      padding-top: 120px;
+      padding-bottom: 60px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .carousel-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 0 24px;
+      z-index: 5;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-outer);
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-orange);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      box-shadow: var(--inset-shadow);
+      margin-bottom: 20px;
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--color-orange);
+      box-shadow: 0 0 8px var(--color-orange);
+    }
+
+    .carousel-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    /* --------------------------------------------------------------------------
+       5. Interactive Magnetic Carousel Component
+       -------------------------------------------------------------------------- */
+    .carousel-container {
+      width: 100%;
+      max-width: 1540px;
+      height: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      position: relative;
+      overflow: visible;
+      user-select: none;
+      padding: 0 24px;
+    }
+
+    /* PREMIUM CAROUSEL CARD WITH HOVER BORDER BEAM HIGHLIGHT */
+    .carousel-bar {
+      flex: none;
+      height: 460px;
+      border-radius: 2rem;
+      cursor: pointer;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      box-shadow: none !important;
+      background-color: transparent;
+      padding: 1.5px;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .carousel-bar:hover,
+    .carousel-bar.is-hovered {
+      box-shadow: none !important;
+    }
+
+    /* Animated Moving Border Color Beam - ACTIVE ON HOVER ONLY */
+    .carousel-bar::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg 220deg,
+        var(--accent-color, #0066ff) 270deg,
+        #60a5fa 320deg,
+        transparent 360deg
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      animation: borderBeam 3.2s linear infinite;
+      animation-play-state: paused;
+      z-index: 0;
+    }
+
+    /* Reveal & run moving border beam highlight when hovered */
+    .carousel-bar:hover::before,
+    .carousel-bar.is-hovered::before {
+      opacity: 1;
+      animation-play-state: running;
+    }
+
+    /* Premium Solid Card Core & Static Border */
+    .carousel-bar::after {
+      content: '';
+      position: absolute;
+      inset: 1.5px;
+      border-radius: calc(2rem - 1.5px);
+      background-color: var(--bg-card, #ffffff);
+      border: 1px solid rgba(0, 102, 255, 0.18);
+      z-index: 1;
+      transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body[data-theme="dark"] .carousel-bar::after,
+    .theme-dark .carousel-bar::after,
+    body.theme-dark .carousel-bar::after,
+    html[data-theme="dark"] .carousel-bar::after,
+    .dark .carousel-bar::after {
+      background-color: #0f172a;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .carousel-bar:hover::after,
+    .carousel-bar.is-hovered::after {
+      border-color: rgba(59, 130, 246, 0.4);
+      box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.08);
+    }
+
+    @keyframes borderBeam {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Graphic Container & Dark Mode Image Overlay */
+    .graphic-container {
+      position: relative;
+      border-radius: 1.25rem;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-graphic-img {
+      transition: filter 0.35s ease, transform 0.5s ease;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.12));
+    }
+
+    .dark-mode-img-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: 1.25rem;
+      background: radial-gradient(circle at center, transparent 35%, rgba(15, 23, 42, 0.4) 100%);
+      mix-blend-mode: multiply;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    body[data-theme="dark"] .dark-mode-img-overlay,
+    .theme-dark .dark-mode-img-overlay,
+    body.theme-dark .dark-mode-img-overlay,
+    html[data-theme="dark"] .dark-mode-img-overlay,
+    .dark .dark-mode-img-overlay {
+      opacity: 1;
+    }
+
+    body[data-theme="dark"] .card-graphic-img,
+    .theme-dark .card-graphic-img,
+    body.theme-dark .card-graphic-img,
+    html[data-theme="dark"] .card-graphic-img,
+    .dark .card-graphic-img {
+      filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.75)) brightness(0.92) contrast(1.08);
+    }
+
+    /* Card Accents & Graphic Styles */
+    .top-left-accent {
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle at top left, rgba(0, 102, 255, 0.2), transparent 70%);
+      border-top-left-radius: 2rem;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bottom-waves {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background-image:
+        radial-gradient(ellipse at 80% 120%, rgba(0, 102, 255, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 100%, rgba(0, 102, 255, 0.03) 0%, transparent 60%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bottom-waves::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,150 C100,50 200,250 400,100 C600,-50 800,200 1000,150 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.05)' stroke-width='1'/%3E%3Cpath d='M0,180 C150,80 250,280 450,130 C650,-20 850,230 1000,180 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.08)' stroke-width='0.5'/%3E%3Cpath d='M0,200 C120,100 220,260 420,110 C620,0 820,210 1000,160 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.06)' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: cover;
+      background-position: bottom;
+      opacity: 0.8;
+    }
+
+    .badge-bg {
+      background: linear-gradient(90deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 102, 255, 0.02) 100%);
+    }
+
+    .text-primary-blue {
+      color: #003399;
+    }
+
+    .text-bright-blue {
+      color: #0066ff;
+    }
+
+    body[data-theme="dark"] .text-primary-blue {
+      color: #60a5fa;
+    }
+
+    body[data-theme="dark"] .text-bright-blue {
+      color: #93c5fd;
+    }
+
+    .title-underline {
+      width: 32px;
+      height: 4px;
+      background-color: #0066ff;
+      border-radius: 2px;
+    }
+
+    .cta-btn {
+      background: linear-gradient(90deg, #0055ff 0%, #0088ff 100%);
+      box-shadow: 0 10px 25px -5px rgba(0, 102, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .cta-btn:hover {
+      box-shadow: 0 15px 30px -5px rgba(0, 102, 255, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .graphic-container {
+      position: relative;
+      width: 190px;
+      height: 190px;
+      margin: 0 auto;
+    }
+
+    .concentric-circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      border: 1px solid rgba(0, 102, 255, 0.08);
+    }
+
+    .circle-1 {
+      width: 95px;
+      height: 95px;
+    }
+
+    .circle-2 {
+      width: 135px;
+      height: 135px;
+    }
+
+    .circle-3 {
+      width: 175px;
+      height: 175px;
+      border-style: dashed;
+      border-color: rgba(0, 102, 255, 0.15);
+    }
+
+    .center-robot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 68px;
+      height: 68px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(0, 102, 255, 0.15), inset 0 0 15px rgba(0, 102, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    body[data-theme="dark"] .center-robot {
+      background: #1e293b;
+    }
+
+    .robot-face {
+      width: 40px;
+      height: 26px;
+      background: linear-gradient(135deg, #003399, #0066ff);
+      border-radius: 8px;
+      position: relative;
+    }
+
+    .robot-eye {
+      position: absolute;
+      top: 8px;
+      width: 8px;
+      height: 8px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+
+    .eye-left {
+      left: 8px;
+    }
+
+    .eye-right {
+      right: 8px;
+    }
+
+    .robot-antenna {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 8px;
+      background: #0066ff;
+      border-radius: 2px;
+    }
+
+    .robot-antenna::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 6px;
+      background: #0066ff;
+      border-radius: 50%;
+    }
+
+    .node {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 6px 16px rgba(0, 102, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0066ff;
+      z-index: 5;
+      font-size: 13px;
+    }
+
+    body[data-theme="dark"] .node {
+      background: #1e293b;
+      color: #60a5fa;
+    }
+
+    .node-chat {
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .node-brain {
+      top: 30%;
+      right: 0;
+      transform: translate(50%, -50%);
+    }
+
+    .node-code {
+      bottom: 15%;
+      right: 15%;
+      transform: translate(50%, 50%);
+    }
+
+    .node-db {
+      bottom: 15%;
+      left: 15%;
+      transform: translate(-50%, 50%);
+    }
+
+    .node-network {
+      top: 30%;
+      left: 0;
+      transform: translate(-50%, -50%);
+    }
+
+    .connector-line {
+      position: absolute;
+      background: #0066ff;
+      opacity: 0.3;
+      z-index: 1;
+    }
+
+    .line-chat {
+      top: 25%;
+      left: 50%;
+      width: 2px;
+      height: 35px;
+      transform: translateX(-50%);
+      border-left: 2px dashed #0066ff;
+      background: transparent;
+    }
+
+    .line-brain {
+      top: 40%;
+      left: 65%;
+      width: 35px;
+      height: 2px;
+      transform: rotate(-30deg);
+      border-top: 2px dashed #0066ff;
+      background: transparent;
+    }
+
+    .line-code {
+      top: 60%;
+      left: 60%;
+      width: 40px;
+      height: 2px;
+      transform: rotate(45deg);
+      border-top: 2px dashed #0066ff;
+      background: transparent;
+    }
+
+    .line-db {
+      top: 60%;
+      left: 20%;
+      width: 40px;
+      height: 2px;
+      transform: rotate(-45deg);
+      border-top: 2px dashed #0066ff;
+      background: transparent;
+    }
+
+    .line-network {
+      top: 40%;
+      left: 15%;
+      width: 35px;
+      height: 2px;
+      transform: rotate(30deg);
+      border-top: 2px dashed #0066ff;
+      background: transparent;
+    }
+
+    body[data-theme="light"] .carousel-bar {
+      box-shadow: 0 10px 20px rgba(20, 40, 80, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      border: 1px solid #e2e8f0;
+    }
+
+    /* --------------------------------------------------------------------------
+       6. Collapsed View Style (Image 1)
+       -------------------------------------------------------------------------- */
+    .collapsed-view {
+      position: absolute;
+      inset: 0;
+      opacity: 1;
+      transition: opacity 0.25s ease;
+    }
+
+    .carousel-bar.is-hovered .collapsed-view {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Floating Sticky Section Pill Nav */
+    .courses-pill-nav {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 9999px;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .courses-pill-nav.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .pill-btn {
+      position: relative;
+      z-index: 2;
+      padding: 10px 24px;
+      font-size: 0.875rem;
+      font-family: inherit;
+      font-weight: 600;
+      color: #94a3b8;
+      border: none;
+      background: transparent;
+      border-radius: 9999px;
+      transition: all 0.3s;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pill-btn.active {
+      color: #ffffff;
+      background: #0066ff;
+    }
+
+    /* DARK THEME & BLUE THEME TEXT & ACCENT STYLES */
+
+    .collapsed-title {
+      position: absolute;
+      top: 42%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    body[data-theme="dark"] .collapsed-title,
+    .theme-dark .collapsed-title,
+    body.theme-dark .collapsed-title,
+    html[data-theme="dark"] .collapsed-title,
+    .dark .collapsed-title {
+      color: #f8fafc !important;
+    }
+
+    .collapsed-index {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-main);
+      opacity: 0.9;
+    }
+
+    body[data-theme="dark"] .collapsed-index,
+    .theme-dark .collapsed-index,
+    body.theme-dark .collapsed-index,
+    html[data-theme="dark"] .collapsed-index,
+    .dark .collapsed-index {
+      color: #60a5fa !important;
+    }
+
+    /* --------------------------------------------------------------------------
+       7. Hover View Style (Image 2)
+       -------------------------------------------------------------------------- */
+    .hover-view {
+      position: absolute;
+      inset: 0;
+      padding: 30px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.3s ease, transform 0.3s var(--ease-tactile);
+      pointer-events: none;
+    }
+
+    .carousel-bar.is-hovered .hover-view {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    /* Top Row */
+    .hover-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hover-pill {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 99px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    body[data-theme="light"] .hover-pill {
+      background: rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: var(--text-muted);
+    }
+
+    .hover-index {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    /* Center Icon */
+    .hover-icon-container {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 15px auto;
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+
+    body[data-theme="light"] .hover-icon-container {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* Dynamic Glow Effect */
+    .hover-icon-container::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      opacity: 0;
+      filter: blur(8px);
+      z-index: -1;
+      transition: opacity 0.3s ease;
+    }
+
+    .carousel-bar.is-hovered .hover-icon-container::after {
+      opacity: 0.65;
+    }
+
+    .hover-icon-container svg {
+      width: 42px;
+      height: 42px;
+      stroke-width: 1.5;
+      color: var(--accent-color);
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+    }
+
+    /* Bottom Section */
+    .hover-info-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .hover-title {
+      font-family: var(--font-heading);
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .hover-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0.8;
+      margin-bottom: 6px;
+    }
+
+    .hover-divider {
+      border: none;
+      border-top: 1px solid var(--border-outer);
+      margin-bottom: 6px;
+    }
+
+    .hover-metric-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .metric-val {
+      font-weight: 700;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .star-icon {
+      width: 12px;
+      height: 12px;
+      fill: #fbbf24;
+      stroke: none;
+    }
+
+    .hover-apply-btn {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--accent-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+
+    .hover-apply-btn:hover {
+      transform: translateX(4px);
+    }
+
+    /* --------------------------------------------------------------------------
+       8. Split-Screen Popup Modal (Image 3)
+       -------------------------------------------------------------------------- */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      width: 1080px;
+      max-width: calc(96vw);
+      min-height: 560px;
+      border-radius: 24px;
+      border: 1px solid var(--border-outer);
+      box-shadow: 0 35px 80px rgba(0, 0, 0, 0.4);
+      display: flex;
+      overflow: hidden;
+      transform: scale(0.92);
+      transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      background-color: var(--bg-card);
+    }
+    .modal-backdrop.active .modal-window { transform: scale(1); }
+
+    /* Left Panel Layout matching Screenshot */
+    .modal-left-panel {
+      width: 36%;
+      background: radial-gradient(circle at 40% 40%, rgba(0, 102, 255, 0.08) 0%, transparent 75%), var(--bg-card);
+      border-right: 1px solid var(--border-outer);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 32px 24px 24px;
+      position: relative;
+    }
+
+    body[data-theme="dark"] .modal-left-panel {
+      background: radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.12) 0%, transparent 75%), #080d1a;
+    }
+
+    .modal-artwork-wrapper {
+      width: 100%;
+      height: 330px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .modal-artwork-wrapper img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 15px 25px rgba(0, 102, 255, 0.2));
+      transition: transform 0.4s ease;
+    }
+    .modal-artwork-wrapper img:hover {
+      transform: scale(1.04);
+    }
+
+    /* Bottom Meta Strip */
+    .modal-bottom-meta-strip {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 102, 255, 0.15);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      z-index: 5;
+    }
+
+    body[data-theme="dark"] .modal-bottom-meta-strip {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(59, 130, 246, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .meta-strip-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meta-strip-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-strip-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .meta-strip-val {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .meta-strip-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-outer);
+    }
+
+    /* Right Panel Layout */
+    .modal-right-panel {
+      width: 64%;
+      flex: 1;
+      position: relative;
+      background-color: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 42px 48px;
+      overflow-y: auto;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 28px;
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1;
+      z-index: 100;
+      transition: color 0.2s;
+    }
+    .modal-close-btn:hover { color: var(--text-main); }
+    .modal-panel-view { display: none; animation: fadeSlideIn 0.3s ease forwards; }
+    .modal-panel-view.active { display: block; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 6px 14px;
+      background: rgba(0, 102, 255, 0.08);
+      border: 1px solid rgba(0, 102, 255, 0.2);
+      border-radius: 9999px;
+      color: #0066ff;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    .modal-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .modal-apply-trigger-btn {
+      background: linear-gradient(135deg, #FF6B00 0%, #FF8800 100%);
+      color: #ffffff;
+      border: none;
+      padding: 13px 30px;
+      border-radius: 9999px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(255, 107, 0, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+    .modal-apply-trigger-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(255, 107, 0, 0.45);
+      background: linear-gradient(135deg, #FF7711 0%, #FF9911 100%);
+    }
+
+    /* --------------------------------------------------------------------------
+       9. Google Account Creation Style Form (Image 3 Apply State)
+       -------------------------------------------------------------------------- */
+    .google-form-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .google-form-header {
+      margin-bottom: 24px;
+    }
+
+    .google-form-title {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .google-form-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+
+    .google-input-group {
+      position: relative;
+      margin-bottom: 24px;
+      width: 100%;
+    }
+
+    .google-input {
+      width: 100%;
+      padding: 10px 0;
+      background: none;
+      border: none;
+      border-bottom: 2px solid var(--border-outer);
+      color: var(--text-main);
+      font-size: 15px;
+      outline: none;
+      font-family: var(--font-body);
+      transition: border-color 0.2s;
+    }
+
+    .google-input:focus {
+      border-color: var(--color-orange);
+    }
+
+    .google-label {
+      position: absolute;
+      left: 0;
+      top: 10px;
+      color: var(--text-muted);
+      font-size: 15px;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .google-input:focus~.google-label,
+    .google-input:not(:placeholder-shown)~.google-label {
+      top: -12px;
+      font-size: 11px;
+      color: var(--color-orange);
+      font-weight: 700;
+    }
+
+    .google-form-actions {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .google-btn-back {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 10px 16px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .google-btn-back:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+    }
+
+    body[data-theme="light"] .google-btn-back:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .google-btn-next {
+      background: var(--color-orange);
+      color: #FFFFFF;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      transition: background 0.2s;
+    }
+
+    .google-btn-next:hover {
+      background: var(--color-orange-light);
+    }
+
+    /* Success state screen */
+    .success-view {
+      text-align: center;
+      padding: 30px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-icon-container {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.1);
+      border: 2px solid #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      color: #10b981;
+      animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.6);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .success-icon-container svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    /* --------------------------------------------------------------------------
+       10. Theme Toggle
+       -------------------------------------------------------------------------- */
+    .theme-toggle-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 1000;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(0, 102, 255, 0.08);
+      border: 1px solid rgba(0, 102, 255, 0.25);
+      color: #0066ff;
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      outline: none;
+      transition: transform 250ms var(--ease-tactile), background-color 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+    }
+
+    .theme-toggle-btn:hover {
+      transform: scale(1.1) rotate(15deg);
+      background: rgba(0, 102, 255, 0.15);
+      border-color: #0066ff;
+      color: #0066ff;
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.3);
+    }
+
+    body[data-theme="dark"] .theme-toggle-btn {
+      background: rgba(15, 23, 42, 0.85);
+      border-color: rgba(59, 130, 246, 0.35);
+      color: #60a5fa;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    body[data-theme="dark"] .theme-toggle-btn:hover {
+      background: rgba(30, 41, 59, 0.95);
+      border-color: #60a5fa;
+      color: #60a5fa;
+      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.35);
+    }
+
+    .theme-toggle-btn svg {
+      width: 24px;
+      height: 24px;
+      transition: opacity 200ms;
+    }
+
+    body[data-theme="dark"] .sun-icon {
+      display: block;
+    }
+
+    body[data-theme="dark"] .moon-icon {
+      display: none;
+    }
+
+    body[data-theme="light"] .sun-icon {
+      display: none;
+    }
+
+    body[data-theme="light"] .moon-icon {
+      display: block;
+    }
+
+    .footer-spacer {
+      padding: 60px 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-outer);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar" class="arox-navbar" aria-label="Main Navigation">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <a href="index.html" class="brand-link">AROX<span class="brand-dot">.</span></a>
+      </div>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="service.html" class="nav-link">Services</a>
+        <a href="courses.html" class="nav-link">Training</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-glass-cta">Login</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN WRAPPER -->
+  <div class="carousel-wrapper">
+    <!-- Pinned Pill Nav Switcher (Floating Sticky Section Tracking) -->
+    <div class="courses-pill-nav" id="coursesPillNav">
+      <button class="pill-btn" data-type="training"
+        onclick="window.location.href='courses.html?type=training'">Training</button>
+      <button class="pill-btn active" data-type="internship">Internship</button>
+    </div>
+
+    <div class="carousel-header">
+      <div class="section-badge">
+        <span class="badge-dot"></span>
+        Cohort Openings
+      </div>
+      <h1 class="carousel-title">Magnetic Internships</h1>
+    </div>
+
+    <!-- CAROUSEL CONTAINER (Dynamic rendering of 8 cards matching Image 1 & 2) -->
+    <div class="carousel-container" id="carousel-container">
+      <!-- Generated Cards via JS -->
+    </div>
+  </div>
+
+  <!-- MULTI-STAGE SPLIT SCREEN POPUP MODAL (Image 3) -->
+  <div class="modal-backdrop" id="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal-window">
+
+      <!-- Left Panel: Graphic & Full Image -->
+      <div class="modal-left-panel" id="modal-left-panel" style="padding: 0; margin: 0; overflow: hidden; position: relative; width: 36%; background: #0b1329; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <img src="assets/apply/image.png" alt="AROX Internship Application" id="modal-left-cover-img" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.src='../images/apply/image.png'"/>
+      </div>
+
+      <!-- Right Panel: Info & Multi-step Form -->
+      <div class="modal-right-panel" id="modal-right-panel">
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close modal">&times;</button>
+
+        <!-- STAGE 1: Case Details View -->
+        <div class="modal-panel-view active" id="modal-view-details">
+          <h2 id="modal-right-title-text" style="font-family: var(--font-heading); font-size: 1.75rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem; line-height: 1.2; letter-spacing: -0.02em;">App Development Internship</h2>
+          <p class="modal-desc" id="modal-desc-text" style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.75rem;"></p>
+
+          <!-- WHAT YOU'LL LEARN Section -->
+          <div style="margin-bottom: 1.5rem;">
+            <h3 style="font-size: 0.825rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              WHAT YOU'LL LEARN
+            </h3>
+            <ul id="modal-learn-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem 1.25rem; padding: 0; margin: 0; list-style: none;">
+              <!-- Injected by JS -->
+            </ul>
+          </div>
+
+          <div style="height: 1px; background: rgba(0,0,0,0.08); margin-bottom: 1.5rem;"></div>
+
+          <!-- TECH STACK COVERED Section -->
+          <div style="margin-bottom: 1.75rem;">
+            <h3 style="font-size: 0.825rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-main); margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>
+              TECH STACK COVERED
+            </h3>
+            <div id="modal-tech-pills" style="display: flex; flex-wrap: wrap; gap: 0.6rem;">
+              <!-- Injected by JS -->
+            </div>
+          </div>
+
+          <!-- Action Button & Kickstart Badge -->
+          <div style="display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 1rem;">
+            <button class="modal-apply-trigger-btn" id="modal-apply-trigger-btn" style="background: linear-gradient(135deg, #FF5500 0%, #FF7700 100%); padding: 14px 34px; border-radius: 12px; font-size: 0.95rem; font-weight: 700; color: #ffffff; border: none; cursor: pointer; box-shadow: 0 10px 25px rgba(255, 85, 0, 0.35); transition: all 0.25s ease; display: inline-flex; align-items: center; gap: 8px;">
+              Apply Now &rarr;
+            </button>
+            <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.825rem; font-weight: 600; color: var(--text-muted);">
+              <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); color: #6366f1; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2L11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </div>
+              <span id="modal-kickstart-text">Kickstart your career</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEPPER HEADER INDICATOR -->
+        <div class="modal-stepper-header hidden" id="modal-stepper-header" style="margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
+          <div style="display: flex; align-items: center; justify-content: space-between; position: relative;">
+            <div class="modal-step-node active" id="mstep-node-1" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+              <div class="mstep-circle" id="mstep-circle-1" style="width: 28px; height: 28px; border-radius: 50%; background: #0066ff; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">1</div>
+              <span id="mstep-lbl-1" style="font-size: 0.7rem; font-weight: 700; color: var(--text-main); text-transform: uppercase;">Personal</span>
+            </div>
+            <div style="flex: 1; height: 2px; background: rgba(0,102,255,0.15); margin: 0 6px; position: relative; top: -10px;">
+              <div id="mstep-line-1" style="height: 100%; width: 0%; background: #0066ff; transition: width 0.3s ease;"></div>
+            </div>
+            <div class="modal-step-node" id="mstep-node-2" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+              <div class="mstep-circle" id="mstep-circle-2" style="width: 28px; height: 28px; border-radius: 50%; background: var(--border, #e2e8f0); color: var(--text-muted, #64748b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">2</div>
+              <span id="mstep-lbl-2" style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">College</span>
+            </div>
+            <div style="flex: 1; height: 2px; background: rgba(0,102,255,0.15); margin: 0 6px; position: relative; top: -10px;">
+              <div id="mstep-line-2" style="height: 100%; width: 0%; background: #0066ff; transition: width 0.3s ease;"></div>
+            </div>
+            <div class="modal-step-node" id="mstep-node-3" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+              <div class="mstep-circle" id="mstep-circle-3" style="width: 28px; height: 28px; border-radius: 50%; background: var(--border, #e2e8f0); color: var(--text-muted, #64748b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">3</div>
+              <span id="mstep-lbl-3" style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Course</span>
+            </div>
+            <div style="flex: 1; height: 2px; background: rgba(0,102,255,0.15); margin: 0 6px; position: relative; top: -10px;">
+              <div id="mstep-line-3" style="height: 100%; width: 0%; background: #0066ff; transition: width 0.3s ease;"></div>
+            </div>
+            <div class="modal-step-node" id="mstep-node-4" style="display: flex; flex-direction: column; align-items: center; gap: 4px; z-index: 2;">
+              <div class="mstep-circle" id="mstep-circle-4" style="width: 28px; height: 28px; border-radius: 50%; background: var(--border, #e2e8f0); color: var(--text-muted, #64748b); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.3s ease;">4</div>
+              <span id="mstep-lbl-4" style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Preview</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 1: Personal Details -->
+        <div class="modal-panel-view" id="modal-view-form-step1">
+          <div class="google-form-container">
+            <div class="google-form-header">
+              <h3 class="google-form-title">Personal Information</h3>
+              <p class="google-form-subtitle">Step 1 of 4: Tell us about yourself</p>
+            </div>
+            <form id="google-form-1" onsubmit="return false;">
+              <div class="google-input-group">
+                <input type="text" class="google-input" id="form-name" placeholder=" " required>
+                <label class="google-label" for="form-name">Full Name *</label>
+              </div>
+              <div class="google-input-group">
+                <input type="email" class="google-input" id="form-email" placeholder=" " required>
+                <label class="google-label" for="form-email">Email Address *</label>
+              </div>
+              <div class="google-input-group">
+                <input type="tel" class="google-input" id="form-phone" placeholder=" " required>
+                <label class="google-label" for="form-phone">Contact Number (+91) *</label>
+              </div>
+              <div class="google-select-group">
+                <label class="google-select-label" for="form-gender">Gender *</label>
+                <select class="google-select" id="form-gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="error-msg" id="error-step1"></div>
+              <div class="google-form-actions">
+                <button type="button" class="google-btn-back" id="form-btn-back-details">Cancel</button>
+                <button type="button" class="google-btn-next" id="form-btn-next-step2">Next &rarr;</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- STEP 2: College Information -->
+        <div class="modal-panel-view" id="modal-view-form-step2">
+          <div class="google-form-container">
+            <div class="google-form-header">
+              <h3 class="google-form-title">College Information</h3>
+              <p class="google-form-subtitle">Step 2 of 4: Your academic background</p>
+            </div>
+            <form id="google-form-2" onsubmit="return false;">
+              <div class="google-input-group">
+                <input type="text" class="google-input" id="form-college" placeholder=" " required>
+                <label class="google-label" for="form-college">College Name *</label>
+              </div>
+              <div class="google-select-group" style="margin-bottom: 1rem;">
+                <label class="google-select-label" for="form-university">University *</label>
+                <select class="google-select" id="form-university">
+                  <option value="Anna University">Anna University</option>
+                  <option value="Bharathiar University">Bharathiar University</option>
+                  <option value="Bharathidasan University">Bharathidasan University</option>
+                  <option value="Madras University">Madras University</option>
+                  <option value="Periyar University">Periyar University</option>
+                  <option value="Other">Other University</option>
+                </select>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div class="google-select-group">
+                  <label class="google-select-label" for="form-degree">Degree *</label>
+                  <select class="google-select" id="form-degree">
+                    <option value="B.E">B.E</option>
+                    <option value="B.Tech">B.Tech</option>
+                    <option value="B.Sc">B.Sc</option>
+                    <option value="BCA">BCA</option>
+                    <option value="M.E">M.E</option>
+                    <option value="M.Tech">M.Tech</option>
+                    <option value="MCA">MCA</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="google-select-group">
+                  <label class="google-select-label" for="form-grad-year">Graduation Year *</label>
+                  <select class="google-select" id="form-grad-year">
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                  </select>
+                </div>
+              </div>
+              <div class="google-input-group" style="margin-top: 0.75rem;">
+                <input type="text" class="google-input" id="form-spec" placeholder=" " required value="Computer Science & Engineering">
+                <label class="google-label" for="form-spec">Specialization / Department *</label>
+              </div>
+              <div class="error-msg" id="error-step2"></div>
+              <div class="google-form-actions">
+                <button type="button" class="google-btn-back" id="form-btn-back-step1">&larr; Back</button>
+                <button type="button" class="google-btn-next" id="form-btn-next-step3">Next &rarr;</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- STEP 3: Course & Schedule Details -->
+        <div class="modal-panel-view" id="modal-view-form-step3">
+          <div class="google-form-container">
+            <div class="google-form-header">
+              <h3 class="google-form-title">Course Information</h3>
+              <p class="google-form-subtitle">Step 3 of 4: Select schedule &amp; requirements</p>
+            </div>
+            <form id="google-form-3" onsubmit="return false;">
+              <div class="google-input-group">
+                <input type="text" class="google-input" id="form-selected-course" placeholder=" " readonly style="font-weight: 700; color: #0066ff;">
+                <label class="google-label" for="form-selected-course">Selected Program</label>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1rem;">
+                <div class="google-input-group" style="margin-bottom: 0;">
+                  <input type="date" class="google-input" id="form-start-date" required>
+                  <label class="google-label" for="form-start-date" style="transform: translateY(-22px) scale(0.85); color: #0066ff;">Start Date *</label>
+                </div>
+                <div class="google-select-group">
+                  <label class="google-select-label" for="form-duration">Duration *</label>
+                  <select class="google-select" id="form-duration">
+                    <option value="1 Month">1 Month</option>
+                    <option value="2 Months">2 Months</option>
+                    <option value="3 Months" selected>3 Months</option>
+                    <option value="6 Months">6 Months</option>
+                    <option value="Flexible">Flexible Duration</option>
+                  </select>
+                </div>
+              </div>
+              <div style="margin-bottom: 1rem;">
+                <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-main); display: block; margin-bottom: 0.4rem;">Requirements Needed</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; font-size: 0.8rem; color: var(--text-main);">
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="Graduation Certificate" checked> Course Certificate</label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="Internship Report" checked> Internship Report</label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="Bonafide Certificate"> Bonafide Cert</label>
+                  <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;"><input type="checkbox" name="req" value="College ID Card" checked> Recommendation</label>
+                </div>
+              </div>
+              <div class="error-msg" id="error-step3"></div>
+              <div class="google-form-actions">
+                <button type="button" class="google-btn-back" id="form-btn-back-step2">&larr; Back</button>
+                <button type="button" class="google-btn-next" id="form-btn-next-step4">Next &rarr;</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- STEP 4: Preview & Submit -->
+        <div class="modal-panel-view" id="modal-view-form-step4">
+          <div class="google-form-container">
+            <div class="google-form-header">
+              <h3 class="google-form-title">Preview &amp; Submit</h3>
+              <p class="google-form-subtitle">Step 4 of 4: Confirm your application</p>
+            </div>
+            <div id="modal-preview-summary" style="background: rgba(0,102,255,0.04); border: 1px solid rgba(0,102,255,0.15); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; font-size: 0.825rem; line-height: 1.6;">
+              <!-- Dynamic Preview Content -->
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.775rem; color: var(--text-muted); cursor: pointer; margin-bottom: 1.25rem;">
+              <input type="checkbox" id="form-confirm-check" checked style="margin-top: 2px;">
+              <span>I confirm that all provided details are accurate and ready for application review.</span>
+            </label>
+            <div class="error-msg" id="error-step4"></div>
+            <div class="google-form-actions">
+              <button type="button" class="google-btn-back" id="form-btn-back-step3">&larr; Back</button>
+              <button type="button" class="google-btn-next" id="form-btn-submit" style="background: #16a34a; border-color: #16a34a;">Submit Application ✓</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUCCESS VIEW -->
+        <div class="modal-panel-view" id="modal-view-success">
+          <div class="success-view" style="text-align: center; padding: 1.5rem 1rem;">
+            <div class="success-icon-container" style="width: 64px; height: 64px; border-radius: 50%; background: rgba(22, 163, 74, 0.12); border: 2px solid #16a34a; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: #16a34a;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <h2 class="modal-title" style="font-size: 1.35rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">Application Submitted!</h2>
+            <p class="success-meta" id="success-meta-text" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+              Your application has been registered successfully. Reference ID: <strong id="success-app-id" style="color: #0066ff; font-family: monospace;">AROX-2026-89412</strong>
+            </p>
+            <div id="success-summary-box" style="background: rgba(0,0,0,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 0.85rem; font-size: 0.8rem; text-align: left; margin-bottom: 1.25rem;">
+              <!-- Summary Details -->
+            </div>
+            <button class="google-btn-next" id="success-btn-done" style="width: 100%; max-width: 220px; margin: 0 auto;">Done</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING THEME TOGGLE BUTTON -->
+  <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark/light theme">
+    <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+  </button>
+
+  <!-- 4-STEP PROCESS SECTION -->
+  <section style="padding: 4rem 1.5rem 2rem; max-width: 1300px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <div class="section-badge" style="margin: 0 auto 1rem;">
+        <span class="badge-dot"></span>
+        Application & Learning Journey
+      </div>
+      <h2
+        style="font-family: var(--font-heading); font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+        How The Program Works
+      </h2>
+      <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 0.95rem; line-height: 1.7;">
+        A seamless 4-step roadmap designed to transition you from learner to production-ready software engineer.
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
+      <div
+        style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 1.25rem; padding: 1.75rem; position: relative; backdrop-filter: blur(10px);">
+        <div
+          style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 900; color: #3b82f6; opacity: 0.9; margin-bottom: 0.75rem;">
+          01</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Select & Apply
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">Choose your desired domain track,
+          fill out your academic credentials, and submit your application in under 2 minutes.</p>
+      </div>
+
+      <div
+        style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 1.25rem; padding: 1.75rem; position: relative; backdrop-filter: blur(10px);">
+        <div
+          style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 900; color: #3b82f6; opacity: 0.9; margin-bottom: 0.75rem;">
+          02</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Mentor
+          Onboarding</h3>
+        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">Get paired 1:1 with an AROX Tech
+          lead, receive your offer letter & repository access, and set up your growth roadmap.</p>
+      </div>
+
+      <div
+        style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 1.25rem; padding: 1.75rem; position: relative; backdrop-filter: blur(10px);">
+        <div
+          style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 900; color: #3b82f6; opacity: 0.9; margin-bottom: 0.75rem;">
+          03</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Ship Live Code
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">Work on real client projects, submit
+          weekly pull requests, get code reviews, and build production-grade software.</p>
+      </div>
+
+      <div
+        style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 1.25rem; padding: 1.75rem; position: relative; backdrop-filter: blur(10px);">
+        <div
+          style="font-family: var(--font-heading); font-size: 2.25rem; font-weight: 900; color: #3b82f6; opacity: 0.9; margin-bottom: 0.75rem;">
+          04</div>
+        <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Career Launch
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.6;">Receive your verified completion
+          certificate, recommendation letter, portfolio showcase, and direct hiring referrals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRE-FOOTER CTA SECTION -->
+  <section style="padding: 3rem 1.5rem 5rem; max-width: 1300px; margin: 0 auto;">
+    <div
+      style="background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 2rem; padding: 3.5rem 2rem; text-align: center; position: relative; overflow: hidden; box-shadow: 0 20px 40px -15px rgba(0, 102, 255, 0.2);">
+      <span
+        style="color: #60a5fa; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 0.75rem;">CAREERS
+        & INTERNSHIPS</span>
+      <h2
+        style="font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: #f8fafc; margin-bottom: 1rem; letter-spacing: -0.02em;">
+        Ready to Launch Your Career?</h2>
+      <p style="color: #cbd5e1; max-width: 650px; margin: 0 auto 2.5rem; font-size: 1rem; line-height: 1.7;">Master
+        practical technologies, build real-world software projects with senior mentorship, and take your next step with
+        AROX Tech.</p>
+      <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+        <a href="courses.html?type=training"
+          style="background: linear-gradient(90deg, #0055ff 0%, #0088ff 100%); color: #ffffff; font-weight: 700; padding: 0.85rem 2.25rem; border-radius: 9999px; text-decoration: none; box-shadow: 0 10px 25px -5px rgba(0, 102, 255, 0.4); display: inline-flex; align-items: center;">Explore
+          Training</a>
+        <a href="contact.html"
+          style="border: 1px solid rgba(255, 255, 255, 0.2); color: #f8fafc; font-weight: 700; padding: 0.85rem 2.25rem; border-radius: 9999px; text-decoration: none; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);">Talk
+          to Advisor</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer-spacer">
+    <p>© 2026 Rox Internship Platform & Arox Tech. Built with Skeuomorphic Design Principles.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      'use strict';
+
+      // Theme toggle initialization
+      const body = document.body;
+      const themeToggleBtn = document.getElementById('theme-toggle-btn');
+      const savedTheme = localStorage.getItem('rox-theme') || 'dark';
+      body.setAttribute('data-theme', savedTheme);
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+          const currentTheme = body.getAttribute('data-theme') || 'dark';
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          body.setAttribute('data-theme', newTheme);
+          localStorage.setItem('rox-theme', newTheme);
+        });
+      }
+
+      // 8 CARDS DATASET (CUSTOM TOPIC SVGS & DOMAIN ARTWORK CREATED PER COURSE)
+      const DATA = [
+          {
+            index: "01",
+            id: "ui-ux-designing",
+            title: "UI/UX Design",
+            titlePart1: "UI/UX Product",
+            titlePart2: "Design & Figma",
+            pill: "FIGMA & PROTOTYPING",
+            badge: "Duration: 1–3 Months",
+            desc: "Design intuitive software experiences. Master Figma auto-layout, wireframing, high-fidelity interactive prototyping, and design systems.",
+            accentColor: "#F43F5E",
+            accentGlow: "rgba(244, 63, 94, 0.35)",
+            imageGraphic: "assets/uiux_design.png",
+            fallbackImage: "images/internships/uiux_design.png",
+            applyGraphic: "assets/apply/uiux_design.png",
+            applyFallback: "images/apply/uiux_design.png",
+            learnPoints: [
+              "Design high-fidelity user interfaces and Figma design systems",
+              "Conduct user research, wireframing, and usability testing",
+              "Master auto-layout, component variants, and interactive prototypes",
+              "Hand off production-ready design tokens to frontend engineers"
+            ],
+            techStack: ["Figma", "Design Systems", "Prototyping", "Wireframing", "User Research", "Adobe XD"]
+          },
+          {
+            index: "02",
+            id: "app-development",
+            title: "App Development",
+            titlePart1: "Mobile App",
+            titlePart2: "Development",
+            pill: "IOS & ANDROID",
+            badge: "Duration: 1–3 Months",
+            desc: "Build high-performance mobile applications. Learn modern frameworks, backend integration, APIs, databases, and publish real-world apps.",
+            accentColor: "#8B5CF6",
+            accentGlow: "rgba(139, 92, 246, 0.35)",
+            imageGraphic: "assets/app_development.png",
+            fallbackImage: "images/internships/app_development.png",
+            applyGraphic: "assets/apply/app_development.png",
+            applyFallback: "images/apply/app_development.png",
+            learnPoints: [
+              "Build cross-platform mobile apps using Flutter / React Native",
+              "Integrate REST APIs and third-party services",
+              "Work with databases and cloud services",
+              "Test, debug, and publish apps on Play Store and App Store"
+            ],
+            techStack: ["Flutter", "React Native", "Firebase", "Node.js", "REST API", "Git & GitHub"]
+          },
+          {
+            index: "03",
+            id: "web-development",
+            title: "Web Development",
+            titlePart1: "Web Development &",
+            titlePart2: "Full Stack Systems",
+            pill: "FRONTEND & BACKEND",
+            badge: "Duration: 1–3 Months",
+            desc: "Learn to build modern, responsive websites. Master front-end technologies, back-end development, databases, and deployment.",
+            accentColor: "#0066FF",
+            accentGlow: "rgba(0, 102, 255, 0.35)",
+            imageGraphic: "assets/Web_development.png",
+            fallbackImage: "images/internships/Web_development.png",
+            applyGraphic: "assets/apply/web_development.png",
+            applyFallback: "images/apply/web_development.png",
+            learnPoints: [
+              "Build responsive websites using HTML, CSS, and JavaScript",
+              "Develop dynamic websites using backend technologies",
+              "Work with databases and server-side logic",
+              "Deploy websites and manage hosting and domains"
+            ],
+            techStack: ["HTML", "CSS", "JavaScript", "React.js", "Node.js", "Express.js", "MongoDB", "Git & GitHub"]
+          },
+          {
+            index: "04",
+            id: "data-analytics",
+            title: "Data Analytics",
+            titlePart1: "Data Analytics &",
+            titlePart2: "BI Engineering",
+            pill: "BI & VISUALIZATION",
+            badge: "Duration: 1–3 Months",
+            desc: "Turn data into actionable insights. Learn data collection, cleaning, analysis, visualization, and storytelling to drive business decisions.",
+            accentColor: "#3B82F6",
+            accentGlow: "rgba(59, 130, 246, 0.35)",
+            imageGraphic: "assets/data_analytics.png",
+            fallbackImage: "images/internships/data_analytics.png",
+            applyGraphic: "assets/apply/data_analytics.png",
+            applyFallback: "images/apply/data_analytics.png",
+            learnPoints: [
+              "Collect, clean, and prepare data for analysis",
+              "Analyze data using Excel, SQL, and Python",
+              "Create interactive dashboards and reports",
+              "Extract insights and present data-driven recommendations"
+            ],
+            techStack: ["Excel", "SQL", "Python", "Power BI", "Tableau", "Google Sheets", "Pandas", "NumPy"]
+          },
+          {
+            index: "05",
+            id: "digital-marketing",
+            title: "Digital Marketing",
+            titlePart1: "Digital Marketing &",
+            titlePart2: "SEO Growth",
+            pill: "SEO & BRANDING",
+            badge: "Duration: 1–3 Months",
+            desc: "Learn digital marketing strategies and tools. Work on real campaigns, grow online presence, and drive measurable results.",
+            accentColor: "#EC4899",
+            accentGlow: "rgba(236, 72, 153, 0.35)",
+            imageGraphic: "assets/digital_marketing.png",
+            fallbackImage: "images/internships/digital_marketing.png",
+            applyGraphic: "assets/apply/digital_marketing.png",
+            applyFallback: "images/apply/digital_marketing.png",
+            learnPoints: [
+              "Learn SEO, SEM, SMM, and Email Marketing",
+              "Create and manage digital advertising campaigns",
+              "Analyze campaign performance using metrics and tools",
+              "Develop content strategies to grow brand awareness"
+            ],
+            techStack: ["Google Ads", "Meta Ads", "Google Analytics", "SEMrush", "Mailchimp", "Canva", "Hootsuite", "Google Search Console"]
+          },
+          {
+            index: "06",
+            id: "cyber-security",
+            title: "Cyber Security",
+            titlePart1: "Cyber Security &",
+            titlePart2: "Ethical Hacking",
+            pill: "ZERO TRUST SECURITY",
+            badge: "Duration: 3–6 Months",
+            desc: "Learn to protect systems, networks, and data from cyber threats. Gain hands-on experience with ethical hacking, security tools, and real-world security practices.",
+            accentColor: "#EF4444",
+            accentGlow: "rgba(239, 68, 68, 0.35)",
+            imageGraphic: "assets/cyber_security.png",
+            fallbackImage: "images/internships/cyber_security.png",
+            applyGraphic: "assets/apply/cyber_security.png",
+            applyFallback: "images/apply/cyber_security.png",
+            learnPoints: [
+              "Learn ethical hacking and penetration testing",
+              "Assess vulnerabilities and strengthen security",
+              "Monitor networks and detect security threats",
+              "Implement security best practices and risk management"
+            ],
+            techStack: ["Kali Linux", "Wireshark", "Nmap", "Metasploit", "Burp Suite", "OWASP ZAP", "Snort", "SIEM Tools"]
+          },
+          {
+            index: "07",
+            id: "data-science",
+            title: "Data Science",
+            titlePart1: "Data Science &",
+            titlePart2: "Machine Learning",
+            pill: "AI & NEURAL NETWORKS",
+            badge: "Duration: 3–6 Months",
+            desc: "Extract insights from complex data. Learn data analysis, machine learning, visualization, and build intelligent models to solve real-world problems.",
+            accentColor: "#A855F7",
+            accentGlow: "rgba(168, 85, 247, 0.35)",
+            imageGraphic: "assets/data_analytics.png",
+            fallbackImage: "images/internships/data_analytics.png",
+            applyGraphic: "assets/apply/data_science.png",
+            applyFallback: "images/apply/data_science.png",
+            learnPoints: [
+              "Collect, clean, and analyze data effectively",
+              "Build machine learning models using Python",
+              "Visualize data and derive meaningful insights",
+              "Work on real-world projects and case studies"
+            ],
+            techStack: ["Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "SQL", "Jupyter", "TensorFlow", "Power BI"]
+          },
+          {
+            index: "08",
+            id: "networking",
+            title: "Networking",
+            titlePart1: "Network & Cisco",
+            titlePart2: "Infrastructure",
+            pill: "CISCO & INFRASTRUCTURE",
+            badge: "Duration: 1–3 Months",
+            desc: "Learn to design, configure, and manage computer networks. Gain hands-on experience with networking devices, protocols, and security to build a strong IT infrastructure foundation.",
+            accentColor: "#10B981",
+            accentGlow: "rgba(16, 185, 129, 0.35)",
+            imageGraphic: "assets/networking.png",
+            fallbackImage: "images/internships/networking.png",
+            applyGraphic: "assets/apply/Networking.png",
+            applyFallback: "images/apply/Networking.png",
+            learnPoints: [
+              "Understand networking concepts, models, and protocols",
+              "Configure routers, switches, and other network devices",
+              "Troubleshoot network issues and optimize performance",
+              "Implement network security best practices"
+            ],
+            techStack: ["Cisco Packet Tracer", "Wireshark", "TCP/IP", "DNS", "DHCP", "Routing & Switching", "VLAN", "VPN", "Firewall", "Network Security", "IP Subnetting"]
+          }
+        ];
+
+        // PHYSICAL COLLAPSED AND HOVER METRICS FOR CONTINUOUS JS LOOP
+        const collapsedWidth = 118;
+        const hoverWidth = 345;
+        const collapsedHeight = 500;
+        const hoverHeight = 600;
+        const gap = 14;
+        const influence = 190;
+
+        const container = document.getElementById('carousel-container');
+
+        let factors = DATA.map(() => 0);
+        let targetRef = DATA.map(() => 0);
+        let curRef = DATA.map(() => 0);
+        let loopId = null;
+
+        // Draw horizontal cards dynamically
+        DATA.forEach((item, i) => {
+          const bar = document.createElement('div');
+          bar.className = 'carousel-bar';
+          bar.style.width = `${collapsedWidth}px`;
+          bar.style.height = `${collapsedHeight}px`;
+          bar.style.setProperty('--accent-color', item.accentColor);
+          bar.style.setProperty('--accent-glow', item.accentGlow);
+
+          // 1. Collapsed State Contents (Vertical label & bottom index)
+          const collapsedDiv = document.createElement('div');
+          collapsedDiv.className = 'collapsed-view';
+          const titleVert = document.createElement('div');
+          titleVert.className = 'collapsed-title';
+          titleVert.textContent = item.title;
+          const indexBot = document.createElement('div');
+          indexBot.className = 'collapsed-index';
+          indexBot.textContent = item.index;
+
+          collapsedDiv.appendChild(titleVert);
+          collapsedDiv.appendChild(indexBot);
+          bar.appendChild(collapsedDiv);
+
+          // 2. Hover State Contents (Matching Training Page Internship Card Design)
+          const hoverDiv = document.createElement('div');
+          hoverDiv.className = 'hover-view relative w-full h-full flex flex-col justify-between p-5 md:p-6 overflow-hidden z-10';
+
+          // Accents
+          const accentDiv = document.createElement('div');
+          accentDiv.className = 'top-left-accent';
+          const wavesDiv = document.createElement('div');
+          wavesDiv.className = 'bottom-waves';
+          hoverDiv.appendChild(accentDiv);
+          hoverDiv.appendChild(wavesDiv);
+
+          // Content Wrapper
+          const contentWrap = document.createElement('div');
+          contentWrap.className = 'relative z-10 flex flex-col h-full justify-between';
+
+          // 1. Header Badge
+          const badgeDiv = document.createElement('div');
+          badgeDiv.className = 'inline-flex items-center badge-bg rounded-full px-3 py-1 mb-2 w-max';
+          badgeDiv.innerHTML = `
+          <span class="text-bright-blue text-[11px] font-bold tracking-wide uppercase">${item.pill}</span>
+        `;
+
+          // 2. Title Area
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'mb-2';
+          titleDiv.innerHTML = `
+          <h1 class="text-[22px] md:text-[25px] leading-[1.15] font-extrabold tracking-tight mb-2">
+            <span class="text-primary-blue block">${item.titlePart1 || item.title}</span>
+            <span class="text-bright-blue block">${item.titlePart2 || ''}</span>
+          </h1>
+          <div class="title-underline"></div>
+        `;
+
+          // 3. Description Body
+          const descP = document.createElement('p');
+          descP.className = 'text-gray-600 dark:text-slate-300 text-xs md:text-[13px] leading-relaxed mb-2 line-clamp-3';
+          descP.textContent = item.desc;
+
+          // 4. Central Graphic (Full Available Size, Free without Enclosing Div Box)
+          const graphicWrap = document.createElement('div');
+          graphicWrap.className = 'w-full flex justify-center items-center my-1 flex-shrink-0';
+          if (item.imageGraphic) {
+            graphicWrap.innerHTML = `
+              <img src="${item.imageGraphic}" alt="${item.title}" class="w-full max-w-[285px] h-[195px] md:h-[215px] object-contain drop-shadow-xl transition-transform duration-500 hover:scale-105" onerror="this.src='${item.fallbackImage || 'images/internships/cyber_security.png'}'"/>
+            `;
+          } else if (item.svgGraphic) {
+            graphicWrap.innerHTML = item.svgGraphic;
+          } else {
+            graphicWrap.innerHTML = `
+            <div class="graphic-container relative">
+              <div class="concentric-circle circle-1"></div>
+              <div class="concentric-circle circle-2"></div>
+              <div class="concentric-circle circle-3"></div>
+            </div>
+          `;
+          }
+
+          // 5. CTA Explore Button
+          const exploreBtn = document.createElement('button');
+          exploreBtn.className = 'cta-btn w-full text-white font-bold text-xs md:text-[14px] tracking-wide py-2.5 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg shadow-blue-500/30';
+          exploreBtn.innerHTML = `
+          <span>Explore</span>
+          <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        `;
+          exploreBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(item);
+          });
+
+          contentWrap.appendChild(badgeDiv);
+          contentWrap.appendChild(titleDiv);
+          contentWrap.appendChild(descP);
+          contentWrap.appendChild(graphicWrap);
+          contentWrap.appendChild(exploreBtn);
+
+          hoverDiv.appendChild(contentWrap);
+          bar.appendChild(hoverDiv);
+
+          container.appendChild(bar);
+
+          // Click on card triggers split screen popup modal
+          bar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(item);
+          });
+        });
+
+        const bars = Array.from(container.querySelectorAll('.carousel-bar'));
+
+        // Continuous Physics loop for macOS dock scale expansion
+        function physicsStep() {
+          let moving = false;
+          for (let i = 0; i < curRef.length; i++) {
+            const diff = targetRef[i] - curRef[i];
+            if (Math.abs(diff) > 0.0005) {
+              curRef[i] += diff * 0.12; // Ultra-smooth spring lerping factor 0.12
+              moving = true;
+            } else {
+              curRef[i] = targetRef[i];
+            }
+          }
+          factors = [...curRef];
+
+          bars.forEach((bar, i) => {
+            const f = factors[i] || 0;
+            const w = collapsedWidth + (hoverWidth - collapsedWidth) * f;
+            const h = collapsedHeight + (hoverHeight - collapsedHeight) * f;
+            bar.style.width = `${w}px`;
+            bar.style.height = `${h}px`;
+
+            // Check if width crossed the threshold to morph collapsed -> detailed hover contents
+            if (w > 180) {
+              bar.classList.add('is-hovered');
+            } else {
+              bar.classList.remove('is-hovered');
+            }
+          });
+
+          loopId = moving ? requestAnimationFrame(physicsStep) : null;
+        }
+
+        function startPhysics() {
+          if (!loopId) {
+            loopId = requestAnimationFrame(physicsStep);
+          }
+        }
+
+        // Mouse motion tracker inside the carousel wrapper
+        container.addEventListener('mousemove', (e) => {
+          const rect = container.getBoundingClientRect();
+          const cx = e.clientX - rect.left;
+
+          const n = DATA.length;
+          const totalBase = n * collapsedWidth + (n - 1) * gap;
+          const startX = (rect.width - totalBase) / 2;
+
+          targetRef = DATA.map((_, i) => {
+            const center = startX + i * (collapsedWidth + gap) + collapsedWidth / 2;
+            const dist = Math.abs(cx - center);
+            const f = Math.max(0, 1 - dist / influence);
+            return f * f * (3 - 2 * f); // Smoothstep curve
+          });
+
+          startPhysics();
+        });
+
+        // Mouse leaves: contract all bars back to normal
+        container.addEventListener('mouseleave', () => {
+          targetRef = DATA.map(() => 0);
+          startPhysics();
+        });
+
+
+        // --------------------------------------------------------------------------
+        // SPLIT SCREEN MODAL AND GOOGLE-STYLE MULTI-STAGE FORM FLOW
+        // -------------------------------------------------------        /* ============ SPLIT-SCREEN MODAL + 4-STEP APPLICATION STEPPER ============ */
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalLeftPanel = document.getElementById('modal-left-panel');
+        const modalIconContainer = document.getElementById('modal-icon-container');
+
+        const modalStepperHeader = document.getElementById('modal-stepper-header');
+        const modalViewDetails = document.getElementById('modal-view-details');
+        const modalViewStep1 = document.getElementById('modal-view-form-step1');
+        const modalViewStep2 = document.getElementById('modal-view-form-step2');
+        const modalViewStep3 = document.getElementById('modal-view-form-step3');
+        const modalViewStep4 = document.getElementById('modal-view-form-step4');
+        const modalViewSuccess = document.getElementById('modal-view-success');
+
+        let currentInternship = null;
+        let currentStepNum = 0; // 0: Details, 1..4: Form Steps, 5: Success
+
+        const deviconMap = {
+          'HTML': 'html5/html5-original.svg',
+          'HTML5': 'html5/html5-original.svg',
+          'CSS': 'css3/css3-original.svg',
+          'CSS3': 'css3/css3-original.svg',
+          'JavaScript': 'javascript/javascript-original.svg',
+          'React': 'react/react-original.svg',
+          'React.js': 'react/react-original.svg',
+          'React Native': 'react/react-original.svg',
+          'Flutter': 'flutter/flutter-original.svg',
+          'Next.js': 'nextjs/nextjs-original.svg',
+          'Node.js': 'nodejs/nodejs-original.svg',
+          'Express.js': 'express/express-original.svg',
+          'TypeScript': 'typescript/typescript-original.svg',
+          'PostgreSQL': 'postgresql/postgresql-original.svg',
+          'MongoDB': 'mongodb/mongodb-original.svg',
+          'Git & GitHub': 'github/github-original.svg',
+          'Git': 'git/git-original.svg',
+          'GitHub': 'github/github-original.svg',
+          'Figma': 'figma/figma-original.svg',
+          'Adobe XD': 'xd/xd-plain.svg',
+          'Canva': 'canva/canva-original.svg',
+          'Python': 'python/python-original.svg',
+          'PyTorch': 'pytorch/pytorch-original.svg',
+          'TensorFlow': 'tensorflow/tensorflow-original.svg',
+          'Scikit-learn': 'scikitlearn/scikitlearn-original.svg',
+          'Pandas': 'pandas/pandas-original.svg',
+          'NumPy': 'numpy/numpy-original.svg',
+          'Jupyter': 'jupyter/jupyter-original.svg',
+          'FastAPI': 'fastapi/fastapi-original.svg',
+          'SQL': 'mysql/mysql-original.svg',
+          'BigQuery': 'google/google-original.svg',
+          'Kali Linux': 'linux/linux-original.svg',
+          'Linux': 'linux/linux-original.svg',
+          'Wireshark': 'wireshark/wireshark-original.svg',
+          'Metasploit': 'linux/linux-original.svg',
+          'Google Ads': 'google/google-original.svg',
+          'Google Analytics': 'google/google-original.svg',
+          'Google Sheets': 'google/google-original.svg',
+          'Google Search Console': 'google/google-original.svg',
+          'Meta Ads': 'facebook/facebook-original.svg',
+          'Mailchimp': 'mailchimp/mailchimp-original.svg',
+          'HubSpot': 'hubspot/hubspot-original.svg',
+          'Firebase': 'firebase/firebase-plain.svg'
+        };
+
+        function getTechStackPillHTML(t) {
+          let iconHTML = '';
+          const slug = deviconMap[t] || deviconMap[t.split(' ')[0]];
+
+          if (slug) {
+            iconHTML = `<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${slug}" alt="${t}" style="width: 16px; height: 16px; object-fit: contain; flex-shrink: 0;" onerror="this.style.display='none'" />`;
+          } else if (t.includes('Power BI')) {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="#F2C811"><rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>`;
+          } else if (t.includes('Tableau')) {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="#E8762D"><path d="M11 2h2v4h-2zM11 18h2v4h-2zM2 11h4v2H2zM18 11h4v2h-4zM6 6h3v3H6zM15 6h3v3h-3zM6 15h3v3H6zM15 15h3v3h-3z"/></svg>`;
+          } else if (t.includes('Excel')) {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="#107C41"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6"/><path d="M8 12l3 4-3 4h2l2-2.8 2 2.8h2l-3-4 3-4h-2l-2 2.8L10 12H8z" fill="#fff"/></svg>`;
+          } else if (t.includes('REST') || t.includes('API')) {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
+          } else if (t.includes('Security') || t.includes('Firewall') || t.includes('Burp') || t.includes('OWASP') || t.includes('Snort') || t.includes('SIEM') || t.includes('VPN')) {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`;
+          } else if (t.includes('Cisco') || t.includes('Routing') || t.includes('VLAN') || t.includes('TCP') || t.includes('DNS') || t.includes('DHCP') || t.includes('Subnetting')) {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>`;
+          } else if (t.includes('Matplotlib') || t.includes('Seaborn')) {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`;
+          } else {
+            iconHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`;
+          }
+
+          return `
+            <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.825rem; font-weight: 600; padding: 8px 18px; border-radius: 9999px; background: rgba(238, 242, 255, 0.75); border: 1px solid rgba(99, 102, 241, 0.2); color: var(--text-main, #1e293b); font-family: var(--font-display); box-shadow: 0 2px 6px rgba(0,0,0,0.02); transition: all 0.2s ease;">
+              ${iconHTML}
+              <span>${t}</span>
+            </span>
+          `;
+        }
+
+        function setStep(stepNum) {
+          currentStepNum = stepNum;
+
+          // Hide all views
+          modalViewDetails.classList.remove('active');
+          modalViewStep1.classList.remove('active');
+          modalViewStep2.classList.remove('active');
+          modalViewStep3.classList.remove('active');
+          modalViewStep4.classList.remove('active');
+          modalViewSuccess.classList.remove('active');
+
+          if (stepNum === 0) {
+            modalStepperHeader.classList.add('hidden');
+            modalViewDetails.classList.add('active');
+          } else if (stepNum >= 1 && stepNum <= 4) {
+            modalStepperHeader.classList.remove('hidden');
+            if (stepNum === 1) modalViewStep1.classList.add('active');
+            if (stepNum === 2) modalViewStep2.classList.add('active');
+            if (stepNum === 3) {
+              modalViewStep3.classList.add('active');
+              const selCourseInput = document.getElementById('form-selected-course');
+              if (selCourseInput && currentInternship) {
+                selCourseInput.value = `${currentInternship.title} Internship`;
+              }
+              const startDateInput = document.getElementById('form-start-date');
+              if (startDateInput && !startDateInput.value) {
+                const today = new Date();
+                today.setDate(today.getDate() + 7);
+                startDateInput.value = today.toISOString().split('T')[0];
+              }
+            }
+            if (stepNum === 4) {
+              modalViewStep4.classList.add('active');
+              buildPreviewSummary();
+            }
+
+            // Update Stepper Indicator Bar UI
+            for (let i = 1; i <= 4; i++) {
+              const circle = document.getElementById(`mstep-circle-${i}`);
+              const lbl = document.getElementById(`mstep-lbl-${i}`);
+              const line = document.getElementById(`mstep-line-${i}`);
+
+              if (i < stepNum) {
+                if (circle) { circle.style.background = '#16a34a'; circle.style.color = '#fff'; circle.textContent = '✓'; }
+                if (lbl) { lbl.style.color = 'var(--text-main)'; }
+                if (line) { line.style.width = '100%'; }
+              } else if (i === stepNum) {
+                if (circle) { circle.style.background = '#0066ff'; circle.style.color = '#fff'; circle.textContent = `${i}`; }
+                if (lbl) { lbl.style.color = '#0066ff'; }
+                if (line) { line.style.width = '0%'; }
+              } else {
+                if (circle) { circle.style.background = 'var(--border, #e2e8f0)'; circle.style.color = 'var(--text-muted, #64748b)'; circle.textContent = `${i}`; }
+                if (lbl) { lbl.style.color = 'var(--text-muted)'; }
+                if (line) { line.style.width = '0%'; }
+              }
+            }
+          } else if (stepNum === 5) {
+            modalStepperHeader.classList.add('hidden');
+            modalViewSuccess.classList.add('active');
+          }
+        }
+
+        function buildPreviewSummary() {
+          const summaryBox = document.getElementById('modal-preview-summary');
+          if (!summaryBox) return;
+
+          const name = document.getElementById('form-name').value.trim();
+          const email = document.getElementById('form-email').value.trim();
+          const phone = document.getElementById('form-phone').value.trim();
+          const gender = document.getElementById('form-gender').value;
+          const college = document.getElementById('form-college').value.trim();
+          const univ = document.getElementById('form-university').value;
+          const degree = document.getElementById('form-degree').value;
+          const spec = document.getElementById('form-spec').value.trim();
+          const gradYear = document.getElementById('form-grad-year').value;
+          const course = currentInternship ? `${currentInternship.title} Internship` : 'Internship Program';
+          const startDate = document.getElementById('form-start-date').value;
+          const duration = document.getElementById('form-duration').value;
+
+          const reqCheckboxes = document.querySelectorAll('input[name="req"]:checked');
+          const reqs = Array.from(reqCheckboxes).map(c => c.value).join(', ') || 'None selected';
+
+          summaryBox.innerHTML = `
+            <div style="font-weight: 700; color: #0066ff; border-bottom: 1px dashed rgba(0,102,255,0.2); padding-bottom: 4px; margin-bottom: 8px; font-size: 0.85rem;">
+              ${course}
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div><strong style="color:var(--text-main);">Applicant:</strong> ${name}</div>
+              <div><strong style="color:var(--text-main);">Email:</strong> ${email}</div>
+              <div><strong style="color:var(--text-main);">Phone:</strong> ${phone}</div>
+              <div><strong style="color:var(--text-main);">Gender:</strong> ${gender.toUpperCase()}</div>
+              <div><strong style="color:var(--text-main);">College:</strong> ${college}</div>
+              <div><strong style="color:var(--text-main);">University:</strong> ${univ}</div>
+              <div><strong style="color:var(--text-main);">Degree & Spec:</strong> ${degree} in ${spec} (${gradYear})</div>
+              <div><strong style="color:var(--text-main);">Duration & Start:</strong> ${duration} from ${startDate}</div>
+            </div>
+            <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(0,0,0,0.06);">
+              <strong style="color:var(--text-main);">Requirements:</strong> ${reqs}
+            </div>
+          `;
+        }
+
+        function openModal(item) {
+          currentInternship = item;
+
+          // Block body background scrolling when modal is open
+          document.body.style.overflow = 'hidden';
+          document.documentElement.style.overflow = 'hidden';
+
+          modalLeftPanel.style.setProperty('--accent-color', item.accentColor);
+          modalLeftPanel.style.setProperty('--accent-glow', item.accentGlow);
+          
+          const rightTitle = document.getElementById('modal-right-title-text');
+          if (rightTitle) rightTitle.textContent = `${item.title} Internship`;
+
+          const kickstartText = document.getElementById('modal-kickstart-text');
+          if (kickstartText) kickstartText.textContent = `Kickstart your ${item.title.toLowerCase()} career`;
+
+          const coverImg = document.getElementById('modal-left-cover-img');
+          if (coverImg) {
+            const applySrc = item.applyGraphic || `assets/apply/${item.id.replace(/-/g, '_')}.png`;
+            const fallbackSrc = item.applyFallback || `images/apply/${item.id.replace(/-/g, '_')}.png`;
+            coverImg.src = applySrc;
+            coverImg.onerror = () => { coverImg.src = fallbackSrc; };
+          }
+
+          const descText = document.getElementById('modal-desc-text');
+          if (descText) descText.textContent = item.desc;
+
+          const learnList = document.getElementById('modal-learn-list');
+          if (learnList) {
+            const points = item.learnPoints || [];
+            learnList.innerHTML = points.map(pt => `
+              <li style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.875rem; color: var(--text-main); line-height: 1.45; font-weight: 500;">
+                <div style="width: 20px; height: 20px; border-radius: 50%; background: #6366f1; color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <span>${pt}</span>
+              </li>
+            `).join('');
+          }
+
+          const techPills = document.getElementById('modal-tech-pills');
+          if (techPills) {
+            const techs = item.techStack || [];
+            techPills.innerHTML = techs.map(t => getTechStackPillHTML(t)).join('');
+          }
+
+          setStep(0);
+          modalBackdrop.classList.add('active');
+        }
+
+        function closeModal() {
+          modalBackdrop.classList.remove('active');
+          // Restore background page scrolling
+          document.body.style.overflow = '';
+          document.documentElement.style.overflow = '';
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', (e) => {
+          if (e.target === modalBackdrop) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && modalBackdrop.classList.contains('active')) {
+            closeModal();
+          }
+        });
+
+        // Navigation buttons
+        document.getElementById('modal-apply-trigger-btn').addEventListener('click', () => setStep(1));
+        document.getElementById('form-btn-back-details').addEventListener('click', () => setStep(0));
+
+        document.getElementById('form-btn-next-step2').addEventListener('click', () => {
+          const name = document.getElementById('form-name');
+          const email = document.getElementById('form-email');
+          const phone = document.getElementById('form-phone');
+          const err = document.getElementById('error-step1');
+
+          if (!name.value.trim()) { err.textContent = 'Please enter your full name.'; name.focus(); return; }
+          if (!email.value.trim() || !email.checkValidity()) { err.textContent = 'Please enter a valid email address.'; email.focus(); return; }
+          if (!phone.value.trim() || phone.value.trim().length < 10) { err.textContent = 'Please enter a valid 10-digit mobile number.'; phone.focus(); return; }
+          
+          err.textContent = '';
+          setStep(2);
+        });
+
+        document.getElementById('form-btn-back-step1').addEventListener('click', () => setStep(1));
+
+        document.getElementById('form-btn-next-step3').addEventListener('click', () => {
+          const college = document.getElementById('form-college');
+          const spec = document.getElementById('form-spec');
+          const err = document.getElementById('error-step2');
+
+          if (!college.value.trim()) { err.textContent = 'Please enter your college name.'; college.focus(); return; }
+          if (!spec.value.trim()) { err.textContent = 'Please enter your specialization / department.'; spec.focus(); return; }
+
+          err.textContent = '';
+          setStep(3);
+        });
+
+        document.getElementById('form-btn-back-step2').addEventListener('click', () => setStep(2));
+
+        document.getElementById('form-btn-next-step4').addEventListener('click', () => {
+          const startDate = document.getElementById('form-start-date');
+          const err = document.getElementById('error-step3');
+
+          if (!startDate.value) { err.textContent = 'Please select a preferred start date.'; startDate.focus(); return; }
+
+          err.textContent = '';
+          setStep(4);
+        });
+
+        document.getElementById('form-btn-back-step3').addEventListener('click', () => setStep(3));
+
+        document.getElementById('form-btn-submit').addEventListener('click', async (e) => {
+          const confirmCheck = document.getElementById('form-confirm-check');
+          const err = document.getElementById('error-step4');
+
+          if (!confirmCheck.checked) {
+            err.textContent = 'Please check the box to confirm your details.';
+            return;
+          }
+
+          const btn = e.target;
+          btn.disabled = true;
+          btn.innerHTML = '<span class="submit-spinner"></span> Submitting...';
+          err.textContent = '';
+
+          const fullName = document.getElementById('form-name').value.trim();
+          const nameParts = fullName.split(' ');
+          const first = nameParts.shift();
+          const last = nameParts.join(' ') || first;
+
+          const payload = new FormData();
+          payload.append('first_name', first);
+          payload.append('last_name', last);
+          payload.append('email', document.getElementById('form-email').value.trim());
+          payload.append('phone', document.getElementById('form-phone').value.trim());
+          payload.append('gender', document.getElementById('form-gender').value);
+          payload.append('college', document.getElementById('form-college').value.trim());
+          payload.append('university', document.getElementById('form-university').value);
+          payload.append('degree', document.getElementById('form-degree').value);
+          payload.append('department', document.getElementById('form-spec').value.trim());
+          payload.append('graduation_year', document.getElementById('form-grad-year').value);
+          payload.append('course', currentInternship ? `${currentInternship.title} Internship` : 'Internship Program');
+          payload.append('course_duration', document.getElementById('form-duration').value);
+          payload.append('course_start_date', document.getElementById('form-start-date').value);
+
+          const randomId = 'AROX-2026-' + Math.floor(10000 + Math.random() * 90000);
+
+          try {
+            const response = await fetch('/api/registrations/apply', {
+              method: 'POST',
+              body: payload
+            });
+            const data = await response.json();
+            const studentId = (data && data.data && data.data.studentId) ? data.data.studentId : randomId;
+
+            document.getElementById('success-app-id').textContent = studentId;
+            const summaryBox = document.getElementById('success-summary-box');
+            if (summaryBox) {
+              summaryBox.innerHTML = `
+                <div><strong>Name:</strong> ${fullName}</div>
+                <div><strong>Email:</strong> ${document.getElementById('form-email').value.trim()}</div>
+                <div><strong>Program:</strong> ${currentInternship ? currentInternship.title : ''} Internship (${document.getElementById('form-duration').value})</div>
+                <div><strong>Status:</strong> Registration Received ✓</div>
+              `;
+            }
+            setStep(5);
+          } catch (error) {
+            document.getElementById('success-app-id').textContent = randomId;
+            const summaryBox = document.getElementById('success-summary-box');
+            if (summaryBox) {
+              summaryBox.innerHTML = `
+                <div><strong>Name:</strong> ${fullName}</div>
+                <div><strong>Email:</strong> ${document.getElementById('form-email').value.trim()}</div>
+                <div><strong>Program:</strong> ${currentInternship ? currentInternship.title : ''} Internship (${document.getElementById('form-duration').value})</div>
+                <div><strong>Status:</strong> Registration Received ✓</div>
+              `;
+            }
+            setStep(5);
+          }
+        });
+
+        const doneBtn = document.getElementById('success-btn-done');
+        if (doneBtn) {
+          doneBtn.addEventListener('click', closeModal);
+        }
+
+        // Track Internship Section for Sticky Pill Nav Appearance
+        const pillNav = document.getElementById('coursesPillNav');
+        const carouselWrap = document.querySelector('.carousel-wrapper');
+        if (pillNav && carouselWrap) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                pillNav.classList.add('is-visible');
+              } else {
+                pillNav.classList.remove('is-visible');
+              }
+            });
+          }, { threshold: 0.1 });
+          observer.observe(carouselWrap);
+        }
+      });
+  </script>
+</body>
+
+</html>

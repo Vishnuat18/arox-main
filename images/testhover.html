@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>AI Agent Engineering Card</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style data-purpose="custom-fonts">
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+    <style data-purpose="custom-styles">
+        .card-container {
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -10px rgba(0, 102, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 102, 255, 0.1);
+        }
+
+        .top-left-accent {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at top left, rgba(0, 102, 255, 0.2), transparent 70%);
+            border-top-left-radius: 2rem;
+            z-index: 0;
+        }
+
+        .bottom-waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            background-image:
+                radial-gradient(ellipse at 80% 120%, rgba(0, 102, 255, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 100%, rgba(0, 102, 255, 0.03) 0%, transparent 60%);
+            z-index: 0;
+        }
+
+        /* Simulate the wave lines with SVG as a background image for better control */
+        .bottom-waves::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,150 C100,50 200,250 400,100 C600,-50 800,200 1000,150 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.05)' stroke-width='1'/%3E%3Cpath d='M0,180 C150,80 250,280 450,130 C650,-20 850,230 1000,180 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.08)' stroke-width='0.5'/%3E%3Cpath d='M0,200 C120,100 220,260 420,110 C620,0 820,210 1000,160 L1000,300 L0,300 Z' fill='none' stroke='rgba(0, 102, 255, 0.06)' stroke-width='0.8'/%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: bottom;
+            opacity: 0.8;
+        }
+
+        .badge-bg {
+            background: linear-gradient(90deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 102, 255, 0.02) 100%);
+        }
+
+        .badge-number {
+            background-color: #0066ff;
+        }
+
+        .text-primary-blue {
+            color: #003399;
+            /* Darker blue for "AI Agent" */
+        }
+
+        .text-bright-blue {
+            color: #0066ff;
+            /* Brighter blue for "Engineering" */
+        }
+
+        .title-underline {
+            width: 32px;
+            height: 4px;
+            background-color: #0066ff;
+            border-radius: 2px;
+        }
+
+        .tag {
+            background: #ffffff;
+            border: 1px solid rgba(0, 102, 255, 0.15);
+            color: #0066ff;
+            box-shadow: 0 2px 8px rgba(0, 102, 255, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            background: rgba(0, 102, 255, 0.05);
+            border-color: rgba(0, 102, 255, 0.3);
+        }
+
+        .cta-btn {
+            background: linear-gradient(90deg, #0055ff 0%, #0088ff 100%);
+            box-shadow: 0 10px 25px -5px rgba(0, 102, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            box-shadow: 0 15px 30px -5px rgba(0, 102, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Central Graphic Styles */
+        .graphic-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0 auto;
+        }
+
+        .concentric-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid rgba(0, 102, 255, 0.08);
+        }
+
+        .circle-1 {
+            width: 140px;
+            height: 140px;
+        }
+
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+        }
+
+        .circle-3 {
+            width: 260px;
+            height: 260px;
+            border-style: dashed;
+            border-color: rgba(0, 102, 255, 0.15);
+        }
+
+        .center-robot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 15px 35px rgba(0, 102, 255, 0.15), inset 0 0 20px rgba(0, 102, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .robot-face {
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(135deg, #003399, #0066ff);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .robot-eye {
+            position: absolute;
+            top: 12px;
+            width: 12px;
+            height: 12px;
+            background: #ffffff;
+            border-radius: 50%;
+        }
+
+        .eye-left {
+            left: 12px;
+        }
+
+        .eye-right {
+            right: 12px;
+        }
+
+        .robot-antenna {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 12px;
+            background: #0066ff;
+            border-radius: 2px;
+        }
+
+        .robot-antenna::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: #0066ff;
+            border-radius: 50%;
+        }
+
+        .node {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(0, 102, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0066ff;
+            z-index: 5;
+        }
+
+        .node-chat {
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .node-brain {
+            top: 30%;
+            right: 0;
+            transform: translate(50%, -50%);
+        }
+
+        .node-code {
+            bottom: 15%;
+            right: 15%;
+            transform: translate(50%, 50%);
+        }
+
+        .node-db {
+            bottom: 15%;
+            left: 15%;
+            transform: translate(-50%, 50%);
+        }
+
+        .node-network {
+            top: 30%;
+            left: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        .connector-line {
+            position: absolute;
+            background: #0066ff;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        /* Approximating connection lines from center to nodes */
+        .line-chat {
+            top: 25%;
+            left: 50%;
+            width: 2px;
+            height: 50px;
+            transform: translateX(-50%);
+            border-left: 2px dashed #0066ff;
+            background: transparent;
+        }
+
+        .line-brain {
+            top: 40%;
+            left: 65%;
+            width: 50px;
+            height: 2px;
+            transform: rotate(-30deg);
+            border-top: 2px dashed #0066ff;
+            background: transparent;
+        }
+
+        .line-code {
+            top: 60%;
+            left: 60%;
+            width: 60px;
+            height: 2px;
+            transform: rotate(45deg);
+            border-top: 2px dashed #0066ff;
+            background: transparent;
+        }
+
+        .line-db {
+            top: 60%;
+            left: 20%;
+            width: 60px;
+            height: 2px;
+            transform: rotate(-45deg);
+            border-top: 2px dashed #0066ff;
+            background: transparent;
+        }
+
+        .line-network {
+            top: 40%;
+            left: 15%;
+            width: 50px;
+            height: 2px;
+            transform: rotate(30deg);
+            border-top: 2px dashed #0066ff;
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-8 font-sans antialiased text-gray-800">
+    <!-- BEGIN: MainCard -->
+    <main class="card-container w-full max-w-[390px] mx-auto pb-10 flex flex-col relative"
+        data-purpose="ai-agent-engineering-card">
+        <!-- Background Accents -->
+        <div class="top-left-accent"></div>
+        <div class="bottom-waves"></div>
+        <div class="relative z-10 px-8 pt-10">
+            <!-- BEGIN: Header Badge -->
+            <div class="inline-flex items-center badge-bg rounded-full p-1 pr-4 mb-6">
+
+                <span class="text-bright-blue text-xs font-bold tracking-wide uppercase">LLM &amp; RAG</span>
+            </div>
+            <!-- END: Header Badge -->
+            <!-- BEGIN: Title Area -->
+            <div class="mb-6">
+                <h1 class="text-[34px] leading-[1.1] font-extrabold tracking-tight mb-4">
+                    <span class="text-primary-blue block">AI Agent</span>
+                    <span class="text-bright-blue block">Engineering</span>
+                </h1>
+                <div class="title-underline"></div>
+            </div>
+            <!-- END: Title Area -->
+            <!-- BEGIN: Description Body -->
+            <p class="text-gray-600 text-[15px] leading-relaxed mb-10">
+                Architect autonomous AI agents and intelligent RAG systems. Master vector database retrieval, prompt
+                engineering, and LangChain orchestration.
+            </p>
+            <!-- END: Description Body -->
+            <!-- BEGIN: Central Graphic -->
+            <div class="graphic-container mb-10">
+                <!-- Concentric Circles -->
+                <div class="concentric-circle circle-1"></div>
+                <div class="concentric-circle circle-2"></div>
+                <div class="concentric-circle circle-3"></div>
+                <!-- Connection Lines -->
+                <div class="connector-line line-chat"></div>
+                <div class="connector-line line-brain"></div>
+                <div class="connector-line line-code"></div>
+                <div class="connector-line line-db"></div>
+                <div class="connector-line line-network"></div>
+                <!-- Center Robot -->
+                <div class="center-robot">
+                    <div class="robot-face">
+                        <div class="robot-antenna"></div>
+                        <div class="robot-eye eye-left"></div>
+                        <div class="robot-eye eye-right"></div>
+                    </div>
+                </div>
+                <!-- Satellite Nodes -->
+                <!-- Chat Node -->
+                <div class="node node-chat">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z">
+                        </path>
+                    </svg>
+                </div>
+                <!-- Brain Node -->
+                <div class="node node-brain">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+                    </svg>
+                </div>
+                <!-- Code Node -->
+                <div class="node node-code">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2"></path>
+                    </svg>
+                </div>
+                <!-- Database Node -->
+                <div class="node node-db">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </div>
+                <!-- Network Node -->
+                <div class="node node-network">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                </div>
+            </div>
+            <!-- END: Central Graphic -->
+            <!-- BEGIN: Tags Section -->
+
+            <!-- END: Tags Section -->
+            <!-- BEGIN: CTA Button -->
+            <button
+                class="cta-btn w-full text-white font-bold text-[15px] tracking-wide py-4 rounded-full flex items-center justify-center">
+                EXPLORE INTERNSHIP
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    </path>
+                </svg>
+            </button>
+            <!-- END: CTA Button -->
+        </div>
+    </main>
+    <!-- END: MainCard -->
+
+
+</body>
+
+</html>
