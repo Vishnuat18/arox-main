@@ -37,9 +37,11 @@ exports.index = (req, res) => {
   } catch (error) {
     logger.error('Student Courses List Error:', error);
     res.status(500).render('website/error', {
-      layout: 'layouts/main',
+      layout: 'layouts/student',
+      title: 'Error - Student Portal',
       code: 500,
-      message: 'Failed to load courses.'
+      message: 'Something went wrong loading courses. Please try again later.',
+      user: req.user
     });
   }
 };
@@ -68,6 +70,7 @@ exports.show = (req, res) => {
     if (!registration) {
       return res.status(404).render('website/error', {
         layout: 'layouts/student',
+        title: 'Not Found - Student Portal',
         code: 404,
         message: 'Registration not found or access denied.',
         user: req.user
@@ -156,9 +159,11 @@ exports.show = (req, res) => {
   } catch (error) {
     logger.error('Student Course Details Error:', error);
     res.status(500).render('website/error', {
-      layout: 'layouts/main',
+      layout: 'layouts/student',
+      title: 'Error - Student Portal',
       code: 500,
-      message: 'Failed to load course details.'
+      message: 'Something went wrong loading course details. Please try again later.',
+      user: req.user
     });
   }
 };

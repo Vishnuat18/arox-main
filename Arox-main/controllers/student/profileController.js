@@ -18,9 +18,11 @@ exports.index = (req, res) => {
   } catch (error) {
     logger.error('Student Profile Load Error:', error);
     res.status(500).render('website/error', {
-      layout: 'layouts/main',
+      layout: 'layouts/student',
+      title: 'Error - Student Portal',
       code: 500,
-      message: 'Failed to load profile settings.'
+      message: 'Something went wrong loading your profile. Please try again later.',
+      user: req.user
     });
   }
 };

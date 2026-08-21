@@ -1,20 +1,30 @@
 <section style="min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 20px;">
   <div class="animate-scale-in">
-    <div style="font-size: 6rem; margin-bottom: 16px; opacity: 0.3;">
-      <%= typeof code !== 'undefined' && code === 404 ? '<i data-lucide="search"></i>' : '<i data-lucide="alert-triangle"></i>' %>
+    <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: <%= typeof code !== 'undefined' && code === 404 ? '#EFF6FF' : '#FEF2F2' %>; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+      <% if (typeof code !== 'undefined' && code === 404) { %>
+        <i data-lucide="search" style="width: 36px; height: 36px; color: #2563EB;"></i>
+      <% } else if (typeof code !== 'undefined' && code === 501) { %>
+        <i data-lucide="construction" style="width: 36px; height: 36px; color: #D97706;"></i>
+      <% } else { %>
+        <i data-lucide="alert-triangle" style="width: 36px; height: 36px; color: #DC2626;"></i>
+      <% } %>
     </div>
-    <h1 style="font-size: 5rem; font-weight: 900; color: var(--primary); margin-bottom: 8px;">
+    <h1 style="font-size: 4rem; font-weight: 900; color: var(--erp-primary, #155EEF); margin-bottom: 8px;">
       <%= typeof code !== 'undefined' ? code : 404 %>
     </h1>
-    <h2 style="margin-bottom: 12px; font-weight: 600;">
-      <%= typeof code !== 'undefined' && code === 404 ? 'Page Not Found' : 'Something Went Wrong' %>
+    <h2 style="margin-bottom: 12px; font-weight: 600; font-size: 1.25rem; color: var(--erp-text-primary, #0A1B3F);">
+      <%= typeof code !== 'undefined' && code === 404 ? 'Page Not Found' : (typeof code !== 'undefined' && code === 501 ? 'Coming Soon' : 'Something Went Wrong') %>
     </h2>
-    <p style="color: var(--text-secondary); max-width: 400px; margin: 0 auto 32px;">
+    <p style="color: var(--erp-text-secondary, #5A6E8A); max-width: 400px; margin: 0 auto 32px; font-size: 14px; line-height: 1.6;">
       <%= typeof message !== 'undefined' ? message : "The page you're looking for doesn't exist or has been moved." %>
     </p>
     <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-      <a href="/" class="btn btn-primary btn-lg">← Back to Home</a>
-      <a href="/contact" class="btn btn-secondary btn-lg">Contact Support</a>
+      <a href="/" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--erp-primary, #155EEF); color: #fff; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background 0.2s;">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> Back to Home
+      </a>
+      <a href="javascript:history.back()" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--erp-bg, #fff); color: var(--erp-text-primary, #0A1B3F); border: 1px solid var(--erp-border, #D6E0EF); border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; transition: background 0.2s;">
+        <i data-lucide="rotate-ccw" style="width: 16px; height: 16px;"></i> Go Back
+      </a>
     </div>
   </div>
 </section>

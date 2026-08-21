@@ -20,9 +20,11 @@ const pageController = {
   /** Error page */
   error(req, res) {
     res.status(404).render('website/error', {
-      title: 'Page Not Found',
+      layout: 'layouts/main',
+      title: 'Page Not Found - AROX ERP',
       code: 404,
-      message: 'The page you are looking for does not exist.'
+      message: 'The page you are looking for does not exist or has been moved.',
+      user: req.user || { first_name: 'User', last_name: '', role: 'guest' }
     });
   }
 };

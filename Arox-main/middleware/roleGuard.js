@@ -22,9 +22,11 @@ function roleGuard(...allowedRoles) {
         });
       }
       return res.status(403).render('website/error', {
-        title: 'Access Denied',
+        layout: 'layouts/main',
+        title: 'Access Denied - AROX ERP',
         code: 403,
-        message: 'You do not have permission to access this page.'
+        message: 'You do not have permission to access this page. Please log in with the appropriate credentials.',
+        user: req.user || { first_name: 'User', last_name: '', role: 'guest' }
       });
     }
 

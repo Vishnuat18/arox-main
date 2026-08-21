@@ -1,81 +1,149 @@
-<div class="erp-h1">Offer Letter Generator</div>
+<%- include('../../partials/generator-nav', { currentGenerator: 'offerletter' }) %>
 
-<div class="erp-grid-2">
+<div style="display: grid; grid-template-columns: 2fr 3fr; gap: 24px;">
   
   <!-- Left Side: Control Panel -->
-  <div class="erp-card" style="height: calc(100vh - 200px); overflow-y: auto;">
-    <h3 class="erp-h3">Offer Details</h3>
-    
-    <div id="erpFormFields">
-      <div class="erp-form-group">
-        <label class="erp-label">Candidate Name</label>
-        <input type="text" id="candidateName" class="erp-input" value="S. Kavin">
-      </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Address / College</label>
-        <textarea id="candidateAddress" class="erp-input" rows="2">KSR College of Engineering,
-Tiruchengode.</textarea>
-      </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Role Title</label>
-        <input type="text" id="roleTitle" class="erp-input" value="Data Science & AI Intern">
-      </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Location</label>
-        <input type="text" id="location" class="erp-input" value="Salem">
-      </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        <div class="erp-form-group">
-          <label class="erp-label">Start Date</label>
-          <input type="date" id="startDate" class="erp-input">
-        </div>
-        <div class="erp-form-group">
-          <label class="erp-label">End Date</label>
-          <input type="date" id="endDate" class="erp-input">
-        </div>
-      </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Stipend Amount</label>
-        <input type="text" id="stipendAmount" class="erp-input" value="₹5,000 – ₹8,000 per month (Performance Based)">
-      </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Signatory Name</label>
-        <input type="text" id="signatoryName" class="erp-input" value="R. Kavitha">
-      </div>
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); padding: 24px; overflow-y: auto; max-height: calc(100vh - 220px); box-shadow: var(--erp-shadow-subtle);">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--erp-divider);">
+      <i data-lucide="file-text" style="width: 18px; height: 18px; color: var(--erp-primary);"></i>
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Offer Details</h3>
     </div>
 
-    <button id="btnExportPDF" class="erp-btn erp-btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
-      <i data-lucide="download"></i> Generate PDF
-    </button>
+    <!-- Student Selector -->
+    <div style="margin-bottom: 16px;">
+      <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Fill from Student</label>
+      <select id="studentQuickFill" class="erp-input" onchange="fillFromStudent(this.value)" style="font-size: 13px;">
+        <option value="">-- Select student to auto-fill --</option>
+        <% if (typeof students !== 'undefined' && students.length > 0) { %>
+          <% students.forEach(function(s) { %>
+            <option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %> (<%= s.student_id %>)</option>
+          <% }) %>
+        <% } %>
+      </select>
+    </div>
+    
+    <div id="erpFormFields" style="display: flex; flex-direction: column; gap: 14px;">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Candidate Name</label>
+        <input type="text" id="candidateName" class="erp-input" value="S. Kavin" style="font-size: 13px;">
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Address / College</label>
+        <textarea id="candidateAddress" class="erp-input" rows="2" style="font-size: 13px;">KSR College of Engineering,
+Tiruchengode.</textarea>
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Role Title</label>
+        <input type="text" id="roleTitle" class="erp-input" value="Data Science & AI Intern" style="font-size: 13px;">
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Location</label>
+        <input type="text" id="location" class="erp-input" value="Salem" style="font-size: 13px;">
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div>
+          <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Start Date</label>
+          <input type="date" id="startDate" class="erp-input" style="font-size: 13px;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">End Date</label>
+          <input type="date" id="endDate" class="erp-input" style="font-size: 13px;">
+        </div>
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Stipend Amount</label>
+        <input type="text" id="stipendAmount" class="erp-input" value="₹5,000 – ₹8,000 per month (Performance Based)" style="font-size: 13px;">
+      </div>
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Signatory Name</label>
+        <input type="text" id="signatoryName" class="erp-input" value="R. Kavitha" style="font-size: 13px;">
+      </div>
+    </div>
   </div>
 
-  <!-- Right Side: Preview -->
-  <div class="erp-card" style="padding: 0; overflow: hidden; background: var(--erp-bg-secondary); border: var(--erp-border-width) solid var(--erp-border); display: flex; align-items: center; justify-content: center; height: calc(100vh - 200px);">
-    <iframe id="certFrame" src="/offerletter/index.html" style="width: 100%; height: 100%; border: none;"></iframe>
+  <!-- Right Side: Preview (60%, scrollable) -->
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); overflow: hidden; max-height: calc(100vh - 220px); position: relative; display: flex; flex-direction: column; box-shadow: var(--erp-shadow-subtle);">
+    
+    <div style="padding: 10px 16px; background: var(--erp-bg-secondary); border-bottom: 1px solid var(--erp-divider); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary);">
+        <i data-lucide="eye" style="width: 14px; height: 14px;"></i> Live Preview
+      </div>
+      <span style="font-size: 11px; color: var(--erp-text-secondary);">Offer Letter</span>
+    </div>
+
+    <div style="flex: 1; overflow-y: auto; overflow-x: hidden; background: #E8ECF2; display: flex; justify-content: center; padding: 16px;">
+      <iframe id="certFrame" src="/offerletter/index.html" style="width: 100%; max-width: 800px; min-height: 1100px; border: none; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); flex-shrink: 0;"></iframe>
+    </div>
+
+    <div style="padding: 10px 16px; background: var(--erp-bg); border-top: 1px solid var(--erp-divider); display: flex; gap: 8px; justify-content: center; flex-shrink: 0;">
+      <button onclick="frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');" class="erp-btn erp-btn-primary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="download" style="width: 14px; height: 14px;"></i> Download PDF
+      </button>
+      <button onclick="openFullscreen()" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="maximize" style="width: 14px; height: 14px;"></i> Fullscreen
+      </button>
+      <button onclick="window.print()" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Print
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen Modal -->
+<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);">
+  <div style="position: relative; width: 100%; height: 100%; max-width: 1100px; max-height: 90vh; background: #fff; border-radius: var(--erp-radius); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <div style="padding: 16px 24px; border-bottom: 1px solid var(--erp-divider); display: flex; justify-content: space-between; align-items: center; background: var(--erp-bg-secondary);">
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Offer Letter Preview</h3>
+      <button onclick="closeFullscreen()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--erp-text-secondary);">&times;</button>
+    </div>
+    <div style="flex: 1; background: #F3F4F6; display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 16px;">
+      <iframe id="fullscreenFrame" style="width: 100%; max-width: 900px; height: 1100px; border: none; border-radius: 6px;"></iframe>
+    </div>
   </div>
 </div>
 
 <script>
-  const frame = document.getElementById('certFrame');
-  
+  var frame = document.getElementById('certFrame');
+  var studentDb = {};
+
+  <% if (typeof students !== 'undefined' && students.length > 0) { %>
+    <% students.forEach(function(s) { %>
+      studentDb['<%= s.id %>'] = { name: '<%= s.first_name %> <%= s.last_name %>', college: '<%= (s.college || "N/A").replace(/'/g, "\\'") %>', course: '<%= (s.course_title || "Full Stack Web Development").replace(/'/g, "\\'") %>' };
+    <% }) %>
+  <% } %>
+
+  function fillFromStudent(id) {
+    if (!id || !studentDb[id]) return;
+    var s = studentDb[id];
+    document.getElementById('candidateName').value = s.name;
+    document.getElementById('candidateAddress').value = s.college;
+    document.getElementById('roleTitle').value = s.course + ' Intern';
+    updatePreview();
+  }
+
   function updatePreview() {
     if (!frame.contentWindow) return;
-    
-    const data = {};
-    document.querySelectorAll('#erpFormFields input, #erpFormFields textarea, #erpFormFields select').forEach(el => {
+    var data = {};
+    document.querySelectorAll('#erpFormFields input, #erpFormFields textarea, #erpFormFields select').forEach(function(el) {
       data[el.id] = el.type === 'checkbox' ? el.checked : el.value;
     });
-    
-    frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data }, '*');
+    frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: data }, '*');
   }
 
   document.getElementById('erpFormFields').addEventListener('input', updatePreview);
-  
-  document.getElementById('btnExportPDF').addEventListener('click', () => {
-    frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
-  });
+  frame.onload = function() { setTimeout(updatePreview, 600); };
+  setTimeout(updatePreview, 1000);
 
-  frame.onload = () => {
-    setTimeout(updatePreview, 500);
-  };
+  function openFullscreen() {
+    document.getElementById('fullscreenModal').style.display = 'flex';
+    var fsFrame = document.getElementById('fullscreenFrame');
+    fsFrame.src = '/offerletter/index.html';
+    fsFrame.onload = function() { setTimeout(updatePreview, 500); };
+  }
+  function closeFullscreen() {
+    document.getElementById('fullscreenModal').style.display = 'none';
+    document.getElementById('fullscreenFrame').src = '';
+  }
+
+  lucide.createIcons();
 </script>

@@ -1,72 +1,159 @@
-<div class="erp-h1">Project Letter Generator</div>
+<%- include('../../partials/generator-nav', { currentGenerator: 'project' }) %>
 
-<div class="erp-grid-2">
+<div style="display: grid; grid-template-columns: 2fr 3fr; gap: 24px;">
   
   <!-- Left Side: Control Panel -->
-  <div class="erp-card" style="height: calc(100vh - 200px); overflow-y: auto;">
-    <h3 class="erp-h3">Project Details</h3>
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); padding: 24px; overflow-y: auto; max-height: calc(100vh - 220px); box-shadow: var(--erp-shadow-subtle);">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--erp-divider);">
+      <i data-lucide="briefcase" style="width: 18px; height: 18px; color: var(--erp-primary);"></i>
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Project Details</h3>
+    </div>
+
+    <!-- Student Selector -->
+    <div style="margin-bottom: 16px;">
+      <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Fill from Student</label>
+      <select id="studentQuickFill" class="erp-input" onchange="fillFromStudent(this.value)" style="font-size: 13px;">
+        <option value="">-- Select student to auto-fill --</option>
+        <% if (typeof students !== 'undefined' && students.length > 0) { %>
+          <% students.forEach(function(s) { %>
+            <option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %> (<%= s.student_id %>)</option>
+          <% }) %>
+        <% } %>
+      </select>
+    </div>
     
-    <div id="erpFormFields">
-      <div class="erp-form-group">
-        <label class="erp-label">Certificate ID</label>
-        <input type="text" id="cert-id-input" class="erp-input" value="ATX-PC-2026-0001">
+    <div id="erpFormFields" style="display: flex; flex-direction: column; gap: 14px;">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Certificate ID</label>
+        <input type="text" id="cert-id-input" class="erp-input" value="ATX-PC-2026-0001" style="font-size: 13px;">
       </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Date of Issue</label>
-        <input type="text" id="issue-date-input" class="erp-input" value="04 August 2026">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Date of Issue</label>
+        <input type="text" id="issue-date-input" class="erp-input" value="04 August 2026" style="font-size: 13px;">
       </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Student Name</label>
-        <input type="text" id="name-input" class="erp-input" value="S. Kavin">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Student Name</label>
+        <input type="text" id="name-input" class="erp-input" value="S. Kavin" style="font-size: 13px;">
       </div>
-      <div class="erp-form-group">
-        <label class="erp-label">Project Title</label>
-        <input type="text" id="project-input" class="erp-input" value="AI Driven Healthcare Analytics">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Project Title</label>
+        <input type="text" id="project-input" class="erp-input" value="AI Driven Healthcare Analytics" style="font-size: 13px;">
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        <div class="erp-form-group">
-          <label class="erp-label">Start Date</label>
-          <input type="text" id="start-date-input" class="erp-input" value="January 2026">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <div>
+          <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Start Date</label>
+          <input type="text" id="start-date-input" class="erp-input" value="January 2026" style="font-size: 13px;">
         </div>
-        <div class="erp-form-group">
-          <label class="erp-label">End Date</label>
-          <input type="text" id="end-date-input" class="erp-input" value="June 2026">
+        <div>
+          <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">End Date</label>
+          <input type="text" id="end-date-input" class="erp-input" value="June 2026" style="font-size: 13px;">
         </div>
       </div>
     </div>
-
-    <button id="btnExportPDF" class="erp-btn erp-btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
-      <i data-lucide="download"></i> Generate PDF
-    </button>
   </div>
 
-  <!-- Right Side: Preview -->
-  <div class="erp-card" style="padding: 0; overflow: hidden; background: var(--erp-bg-secondary); border: var(--erp-border-width) solid var(--erp-border); display: flex; align-items: center; justify-content: center; height: calc(100vh - 200px);">
-    <iframe id="certFrame" src="/project/index.html" style="width: 100%; height: 100%; border: none;"></iframe>
+  <!-- Right Side: Certificate Preview (60%) -->
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); overflow: hidden; max-height: calc(100vh - 220px); position: relative; display: flex; flex-direction: column; box-shadow: var(--erp-shadow-subtle);">
+    
+    <div style="padding: 10px 16px; background: var(--erp-bg-secondary); border-bottom: 1px solid var(--erp-divider); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary);">
+        <i data-lucide="eye" style="width: 14px; height: 14px;"></i> Live Preview
+      </div>
+      <span style="font-size: 11px; color: var(--erp-text-secondary);">Project Certificate • A4</span>
+    </div>
+
+    <div id="certPreviewWrap" style="flex: 1; position: relative; overflow: hidden; background: #E8ECF2;">
+      <iframe id="certFrame" src="/project/index.html" style="width: 794px; height: 1123px; border: none; position: absolute; top: 0; left: 0; transform-origin: top left;"></iframe>
+    </div>
+
+    <div style="padding: 10px 16px; background: var(--erp-bg); border-top: 1px solid var(--erp-divider); display: flex; gap: 8px; justify-content: center; flex-shrink: 0;">
+      <button onclick="frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');" class="erp-btn erp-btn-primary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="download" style="width: 14px; height: 14px;"></i> Download PDF
+      </button>
+      <button onclick="openFullscreen()" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="maximize" style="width: 14px; height: 14px;"></i> Fullscreen
+      </button>
+      <button onclick="window.print()" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Print
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen Modal -->
+<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);">
+  <div style="position: relative; width: 100%; height: 100%; max-width: 1100px; max-height: 90vh; background: #fff; border-radius: var(--erp-radius); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <div style="padding: 16px 24px; border-bottom: 1px solid var(--erp-divider); display: flex; justify-content: space-between; align-items: center; background: var(--erp-bg-secondary);">
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Project Certificate Preview</h3>
+      <button onclick="closeFullscreen()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--erp-text-secondary);">&times;</button>
+    </div>
+    <div style="flex: 1; background: #F3F4F6; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 16px;">
+      <iframe id="fullscreenFrame" style="width: 100%; height: 100%; border: none; border-radius: 6px;"></iframe>
+    </div>
   </div>
 </div>
 
 <script>
-  const frame = document.getElementById('certFrame');
-  
+  var frame = document.getElementById('certFrame');
+  var studentDb = {};
+
+  <% if (typeof students !== 'undefined' && students.length > 0) { %>
+    <% students.forEach(function(s) { %>
+      studentDb['<%= s.id %>'] = { name: '<%= s.first_name %> <%= s.last_name %>', id: '<%= s.student_id %>', course: '<%= (s.course_title || "Capstone Project").replace(/'/g, "\\'") %>' };
+    <% }) %>
+  <% } %>
+
+  function fillFromStudent(id) {
+    if (!id || !studentDb[id]) return;
+    var s = studentDb[id];
+    document.getElementById('name-input').value = s.name;
+    document.getElementById('cert-id-input').value = 'ATX-PC-' + s.id;
+    document.getElementById('project-input').value = s.course + ' Capstone';
+    updatePreview();
+  }
+
   function updatePreview() {
     if (!frame.contentWindow) return;
-    
-    const data = {};
-    document.querySelectorAll('#erpFormFields input').forEach(el => {
+    var data = {};
+    document.querySelectorAll('#erpFormFields input').forEach(function(el) {
       data[el.id] = el.value;
     });
-    
-    frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data }, '*');
+    frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: data }, '*');
   }
 
   document.getElementById('erpFormFields').addEventListener('input', updatePreview);
-  
-  document.getElementById('btnExportPDF').addEventListener('click', () => {
-    frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
-  });
+  frame.onload = function() { setTimeout(updatePreview, 600); };
+  setTimeout(updatePreview, 1000);
 
-  frame.onload = () => {
-    setTimeout(updatePreview, 500);
-  };
+  function scaleCertPreview() {
+    var wrap = document.getElementById('certPreviewWrap');
+    var iframe = document.getElementById('certFrame');
+    if (!wrap || !iframe) return;
+    var wrapW = wrap.clientWidth, wrapH = wrap.clientHeight;
+    var certW = 794, certH = 1123;
+    var scale = Math.min(wrapW / certW, wrapH / certH) * 0.95;
+    var scaledW = certW * scale, scaledH = certH * scale;
+    iframe.style.transform = 'scale(' + scale + ')';
+    iframe.style.left = ((wrapW - scaledW) / 2) + 'px';
+    iframe.style.top = ((wrapH - scaledH) / 2) + 'px';
+  }
+
+  frame.onload = function() { setTimeout(scaleCertPreview, 600); };
+  window.addEventListener('load', function() { setTimeout(scaleCertPreview, 400); });
+  window.addEventListener('resize', scaleCertPreview);
+  setTimeout(scaleCertPreview, 1000);
+  setTimeout(scaleCertPreview, 2000);
+
+  function openFullscreen() {
+    document.getElementById('fullscreenModal').style.display = 'flex';
+    var fsFrame = document.getElementById('fullscreenFrame');
+    fsFrame.src = '/project/index.html';
+    fsFrame.onload = function() { setTimeout(updatePreview, 500); };
+  }
+  function closeFullscreen() {
+    document.getElementById('fullscreenModal').style.display = 'none';
+    document.getElementById('fullscreenFrame').src = '';
+  }
+
+  lucide.createIcons();
 </script>

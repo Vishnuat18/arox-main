@@ -6,64 +6,250 @@
   <title>Login - AROX ERP</title>
   <link rel="stylesheet" href="/erp-assets/css/erp-theme.css">
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    /* Clean Shifting Role Switcher */
+    .role-switcher-container {
+      margin-bottom: 24px;
+    }
+    .role-switcher {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      position: relative;
+    }
+    .role-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      color: #64748B;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      outline: none;
+    }
+    .role-btn:hover:not(.active) {
+      color: #0F172A;
+      background: rgba(255, 255, 255, 0.6);
+    }
+    .role-btn.active {
+      background: #FFFFFF;
+      color: #0F172A;
+      font-weight: 600;
+      border-color: rgba(0, 0, 0, 0.04);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
+    .role-btn.active i {
+      color: #2563EB;
+    }
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      background: #EFF6FF;
+      color: #2563EB;
+      border: 1px solid #DBEAFE;
+    }
+  </style>
 </head>
-<body class="erp-body erp-login-page" style="background-image: url('/assets/hero/login.png'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative;">
+<body class="erp-body erp-login-page" style="background-image: url('/assets/hero/login.png'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
 
-  <a href="/" style="position: absolute; top: 24px; left: 24px; display: flex; align-items: center; gap: 8px; color: white; text-decoration: none; font-weight: 500; font-size: 16px; background: rgba(0,0,0,0.4); padding: 8px 16px; border-radius: 8px; backdrop-filter: blur(8px); transition: background 0.3s; z-index: 10;">
-    <i data-lucide="arrow-left" style="width: 20px; height: 20px;"></i>
+  <a href="/" style="position: absolute; top: 24px; left: 24px; display: flex; align-items: center; gap: 8px; color: white; text-decoration: none; font-weight: 500; font-size: 15px; background: rgba(0,0,0,0.45); padding: 8px 16px; border-radius: 8px; backdrop-filter: blur(8px); transition: background 0.3s; z-index: 10; border: 1px solid rgba(255,255,255,0.15);">
+    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
     Back to Home
   </a>
 
-  <div class="erp-login-card">
-    <div style="display: flex; justify-content: center;">
-      <div class="erp-login-logo">
-        <i data-lucide="triangle" style="width: 24px; height: 24px;"></i>
+  <div class="erp-login-card" style="width: 100%; max-width: 440px; margin: 20px;">
+    <!-- Logo & Header -->
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+        <div class="erp-login-logo" style="width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+          <i data-lucide="triangle" style="width: 24px; height: 24px;"></i>
+        </div>
       </div>
-    </div>
-    
-    <div style="text-align: center; margin-bottom: 32px;">
-      <h1 class="erp-h2" style="margin-bottom: 8px;">Welcome back</h1>
-      <p class="erp-p">Enter your credentials to access the ERP</p>
+      <div id="roleBadgeContainer">
+        <span class="role-badge" id="roleBadge">
+          <i data-lucide="graduation-cap" style="width: 13px; height: 13px;"></i>
+          <span id="roleBadgeText">Student Access</span>
+        </span>
+      </div>
+      <h1 class="erp-h2" id="loginTitle" style="margin-bottom: 6px; font-size: 24px; font-weight: 700; color: #0F172A;">Student Portal</h1>
+      <p class="erp-p" id="loginSubtitle" style="font-size: 14px; color: #64748B; margin: 0;">Enter your credentials to access the student portal</p>
     </div>
 
+    <!-- 3 Shifting Role Buttons -->
+    <div class="role-switcher-container">
+      <div class="role-switcher" role="tablist" aria-label="Select Login Role">
+        <button type="button" class="role-btn active" data-role="student" role="tab" aria-selected="true" onclick="setRole('student')">
+          <i data-lucide="graduation-cap" style="width: 16px; height: 16px;"></i>
+          <span>Student</span>
+        </button>
+        <button type="button" class="role-btn" data-role="admin" role="tab" aria-selected="false" onclick="setRole('admin')">
+          <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
+          <span>Admin</span>
+        </button>
+        <button type="button" class="role-btn" data-role="employee" role="tab" aria-selected="false" onclick="setRole('employee')">
+          <i data-lucide="briefcase" style="width: 16px; height: 16px;"></i>
+          <span>Employee</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Login Form -->
     <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
+      <input type="hidden" name="role" id="loginRoleInput" value="student">
       
       <div>
-        <label class="erp-label">Email</label>
-        <input type="email" name="email" class="erp-input" placeholder="admin@arox.com" required autocomplete="email" value="admin@arox.com">
+        <label class="erp-label" id="emailLabel" style="font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; display: block;">Student Email</label>
+        <input type="email" name="email" id="emailInput" class="erp-input" placeholder="student@arox.com" required autocomplete="email" value="student@arox.com">
       </div>
 
       <div>
-        <label class="erp-label">Password</label>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label class="erp-label" style="font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 0;">Password</label>
+          <a href="#" style="font-size: 13px; font-weight: 500; color: #2563EB; text-decoration: none;">Forgot password?</a>
+        </div>
         <div style="position: relative;">
-          <input type="password" name="password" id="password" class="erp-input" placeholder="••••••••" required autocomplete="current-password" value="admin123">
-          <button type="button" id="togglePasswordBtn" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--erp-text-secondary); padding: 4px;">
+          <input type="password" name="password" id="password" class="erp-input" placeholder="••••••••" required autocomplete="current-password" value="student123">
+          <button type="button" id="togglePasswordBtn" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--erp-text-secondary); padding: 4px;" aria-label="Toggle password visibility">
             <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
           </button>
         </div>
       </div>
 
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; margin-bottom: 8px;">
-        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: var(--erp-text-secondary);">
-          <input type="checkbox" name="remember" style="accent-color: var(--erp-text-primary);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; margin-bottom: 4px;">
+        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #64748B;">
+          <input type="checkbox" name="remember" style="accent-color: #2563EB; width: 15px; height: 15px; border-radius: 4px;">
           Remember for 30 days
         </label>
-        <a href="#" style="font-size: 14px; font-weight: 500; color: var(--erp-text-primary); text-decoration: none;">Forgot password?</a>
       </div>
 
-      <div id="loginError" style="display: none; background: var(--erp-danger); color: white; padding: 12px; border-radius: 8px; font-size: 14px; text-align: center;"></div>
+      <div id="loginError" style="display: none; background: #FEF2F2; border: 1px solid #F87171; color: #DC2626; padding: 10px 14px; border-radius: 8px; font-size: 13px; text-align: center; font-weight: 500;"></div>
 
-      <button type="submit" id="loginBtn" class="erp-btn erp-btn-primary" style="width: 100%; padding: 12px;">Sign In</button>
+      <button type="submit" id="loginBtn" class="erp-btn erp-btn-primary" style="width: 100%; padding: 12px; font-weight: 600; font-size: 14px; border-radius: 8px; margin-top: 4px;">
+        Sign In as Student
+      </button>
     </form>
 
-    <div style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--erp-text-secondary);">
-      Don't have an account? <a href="/apply" style="color: var(--erp-text-primary); font-weight: 500; text-decoration: none;">Apply for a Course</a>
+    <div style="text-align: center; margin-top: 24px; font-size: 13px; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 18px;">
+      <span id="footerText">Don't have an account? </span>
+      <a href="/apply.html" id="footerLink" style="color: #2563EB; font-weight: 600; text-decoration: none;">Apply for a Course</a>
     </div>
   </div>
 
   <script>
+    const roleConfig = {
+      student: {
+        badgeIcon: 'graduation-cap',
+        badgeText: 'Student Access',
+        title: 'Student Portal',
+        subtitle: 'Enter your credentials to access your student dashboard',
+        emailLabel: 'Student Email',
+        emailPlaceholder: 'student@arox.com',
+        defaultEmail: 'student@arox.com',
+        defaultPassword: 'student123',
+        btnText: 'Sign In as Student',
+        footerText: "Don't have an account?",
+        footerLinkText: 'Apply for a Course',
+        footerLinkHref: '/apply.html'
+      },
+      admin: {
+        badgeIcon: 'shield',
+        badgeText: 'Admin Console',
+        title: 'Administrator Login',
+        subtitle: 'Enter your credentials to access system management',
+        emailLabel: 'Admin Email',
+        emailPlaceholder: 'admin@arox.com',
+        defaultEmail: 'admin@arox.com',
+        defaultPassword: 'admin123',
+        btnText: 'Sign In as Admin',
+        footerText: 'Protected Gateway • ',
+        footerLinkText: 'AROX ERP Support',
+        footerLinkHref: '#'
+      },
+      employee: {
+        badgeIcon: 'briefcase',
+        badgeText: 'Employee Access',
+        title: 'Employee Portal',
+        subtitle: 'Enter your staff or instructor credentials',
+        emailLabel: 'Employee Email',
+        emailPlaceholder: 'employee@arox.com',
+        defaultEmail: 'employee@arox.com',
+        defaultPassword: 'employee123',
+        btnText: 'Sign In as Employee',
+        footerText: 'Internal Staff Access • ',
+        footerLinkText: 'Helpdesk',
+        footerLinkHref: '#'
+      }
+    };
+
+    let activeRole = 'student';
+
+    function setRole(role) {
+      activeRole = role;
+      const cfg = roleConfig[role] || roleConfig.student;
+
+      // Update switcher buttons
+      document.querySelectorAll('.role-btn').forEach(btn => {
+        const isMatch = btn.dataset.role === role;
+        btn.classList.toggle('active', isMatch);
+        btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
+      });
+
+      // Update badge
+      const badge = document.getElementById('roleBadge');
+      if (badge) {
+        badge.innerHTML = `<i data-lucide="${cfg.badgeIcon}" style="width: 13px; height: 13px;"></i> <span id="roleBadgeText">${cfg.badgeText}</span>`;
+      }
+
+      // Update titles and labels
+      document.getElementById('loginTitle').textContent = cfg.title;
+      document.getElementById('loginSubtitle').textContent = cfg.subtitle;
+      document.getElementById('emailLabel').textContent = cfg.emailLabel;
+      
+      const emailInput = document.getElementById('emailInput');
+      emailInput.placeholder = cfg.emailPlaceholder;
+      emailInput.value = cfg.defaultEmail;
+      
+      const passInput = document.getElementById('password');
+      passInput.value = cfg.defaultPassword;
+
+      document.getElementById('loginRoleInput').value = role;
+      document.getElementById('loginBtn').textContent = cfg.btnText;
+
+      const footerText = document.getElementById('footerText');
+      if (footerText) footerText.textContent = cfg.footerText + ' ';
+      const footerLink = document.getElementById('footerLink');
+      if (footerLink) {
+        footerLink.textContent = cfg.footerLinkText;
+        footerLink.href = cfg.footerLinkHref;
+      }
+
+      const err = document.getElementById('loginError');
+      if (err) err.style.display = 'none';
+
+      lucide.createIcons();
+    }
+
     lucide.createIcons();
 
+    // Toggle Password visibility
     document.getElementById('togglePasswordBtn').addEventListener('click', (e) => {
       const input = document.getElementById('password');
       if (input.type === 'password') {
@@ -76,6 +262,7 @@
       lucide.createIcons();
     });
 
+    // Form submission
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = e.target;
@@ -98,18 +285,19 @@
 
         const result = await res.json();
 
-        if (!res.ok) {
+        if (!res.ok || !result.success) {
           throw new Error(result.message || 'Login failed. Please check your credentials.');
         }
 
-        btn.textContent = 'Success';
+        btn.textContent = 'Success ✓';
         window.location.href = result.redirectUrl || '/';
 
       } catch (err) {
         errorDiv.textContent = err.message;
         errorDiv.style.display = 'block';
         btn.disabled = false;
-        btn.textContent = 'Sign In';
+        const cfg = roleConfig[activeRole] || roleConfig.student;
+        btn.textContent = cfg.btnText;
       }
     });
   </script>

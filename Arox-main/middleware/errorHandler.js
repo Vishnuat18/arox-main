@@ -54,12 +54,32 @@ function errorHandler(err, req, res, next) {
     });
   }
 
-  // Web error page
+  // Web error page - determine correct layout based on path
   const statusCode = err.statusCode || 500;
+  let layout = 'layouts/main';
+  
+  if (req.path.startsWith('/admin')) {
+    layout = 'layouts/admin';
+  } else if (req.path.startsWith('/student')) {
+    layout = 'layouts/student';
+  }
+
+  // Determine the correct error message
+  let errorMessage;
+  if (statusCode === 501) {
+    errorMessage = 'This feature is coming soon.';
+  } else if (statusCode === 404) {
+    errorMessage = "The page you're looking for doesn't exist or has been moved.";
+  } else {
+    errorMessage = 'Something went wrong. Please try again later.';
+  }
+
   res.status(statusCode).render('website/error', {
-    title: 'Error',
+    layout: layout,
+    title: 'Error - AROX ERP',
     code: statusCode,
-    message: statusCode === 500 ? 'Something went wrong. Please try again later.' : err.message
+    message: err.message || errorMessage,
+    user: req.user || { first_name: 'User', last_name: '', role: 'guest' }
   });
 }
 

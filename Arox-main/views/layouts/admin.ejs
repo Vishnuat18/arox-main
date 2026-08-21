@@ -90,22 +90,19 @@
           <i data-lucide="file-box"></i>
           <span>Document Hub</span>
         </a>
-
-        <div class="erp-nav-section">Templates</div>
-        
-        <a href="/cert" target="_blank" class="erp-nav-item">
+        <a href="/admin/generators/certificate" class="erp-nav-item <%= currentPath === '/admin/generators/certificate' ? 'active' : '' %>">
           <i data-lucide="award"></i>
           <span>Certificates</span>
         </a>
-        <a href="/attendance" target="_blank" class="erp-nav-item">
-          <i data-lucide="calendar-check"></i>
-          <span>Attendance</span>
-        </a>
-        <a href="/offerletter" target="_blank" class="erp-nav-item">
+        <a href="/admin/generators/offer-letter" class="erp-nav-item <%= currentPath === '/admin/generators/offer-letter' ? 'active' : '' %>">
           <i data-lucide="file-text"></i>
           <span>Offer Letters</span>
         </a>
-        <a href="/project" target="_blank" class="erp-nav-item">
+        <a href="/admin/generators/attendance" class="erp-nav-item <%= currentPath === '/admin/generators/attendance' ? 'active' : '' %>">
+          <i data-lucide="calendar-check"></i>
+          <span>Attendance</span>
+        </a>
+        <a href="/admin/generators/project" class="erp-nav-item <%= currentPath === '/admin/generators/project' ? 'active' : '' %>">
           <i data-lucide="briefcase"></i>
           <span>Projects</span>
         </a>
@@ -138,7 +135,7 @@
       <!-- Topbar -->
       <header class="erp-topbar">
         <div class="erp-breadcrumb">
-          <span style="color: var(--erp-text-secondary);">Dashboard</span>
+          <span style="color: var(--erp-text-secondary);">Admin</span>
           <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--erp-text-secondary);"></i>
           <span class="erp-breadcrumb-active"><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Overview' %></span>
         </div>

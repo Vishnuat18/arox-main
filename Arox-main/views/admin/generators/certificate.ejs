@@ -1,101 +1,177 @@
-<div class="erp-h1">Certificate Generator</div>
+<%- include('../../partials/generator-nav', { currentGenerator: 'certificate' }) %>
 
-<div class="erp-grid-2">
+<div style="display: grid; grid-template-columns: 2fr 3fr; gap: 24px;">
   
-  <!-- Left Side: Control Panel (Monochrome ERP Theme) -->
-  <div class="erp-card" style="height: calc(100vh - 200px); overflow-y: auto;">
-    <h3 class="erp-h3">Student Details</h3>
+  <!-- Left Side: Control Panel -->
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); padding: 24px; overflow-y: auto; max-height: calc(100vh - 220px); box-shadow: var(--erp-shadow-subtle);">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--erp-divider);">
+      <i data-lucide="award" style="width: 18px; height: 18px; color: var(--erp-primary);"></i>
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Student Details</h3>
+    </div>
     
-    <div class="erp-form-group">
-      <label class="erp-label">Student Name</label>
-      <input type="text" id="inputName" class="erp-input" placeholder="e.g., John Doe" value="John Doe">
-    </div>
-
-    <div class="erp-form-group">
-      <label class="erp-label">Domain</label>
-      <select id="inputDomainSelect" class="erp-input" onchange="document.getElementById('inputDomain').value = this.value; updatePreview();">
-        <option value="Full Stack Web Development">Full Stack Web Development</option>
-        <option value="UI & UX Design">UI & UX Design</option>
-        <option value="Data Science & AI">Data Science & AI</option>
-        <option value="Cyber Security">Cyber Security</option>
-        <option value="Digital Marketing">Digital Marketing</option>
-        <option value="Embedded Systems & IoT">Embedded Systems & IoT</option>
-        <option value="DevOps Engineering">DevOps Engineering</option>
-        <option value="Software Development">Software Development</option>
-        <option value="App Development">App Development</option>
+    <!-- Student Selector -->
+    <div style="margin-bottom: 16px;">
+      <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Fill from Student</label>
+      <select id="studentQuickFill" class="erp-input" onchange="fillFromStudent(this.value)" style="font-size: 13px;">
+        <option value="">-- Select student to auto-fill --</option>
+        <% if (typeof students !== 'undefined' && students.length > 0) { %>
+          <% students.forEach(function(s) { %>
+            <option value="<%= s.id %>"><%= s.first_name %> <%= s.last_name %> (<%= s.student_id %>)</option>
+          <% }) %>
+        <% } %>
       </select>
-      <input type="hidden" id="inputDomain" value="Full Stack Web Development">
     </div>
 
-    <div class="erp-form-group">
-      <label class="erp-label">Date of Issue</label>
-      <input type="date" id="inputIssueDate" class="erp-input">
-    </div>
-
-    <div class="erp-form-group">
-      <label class="erp-label">Certificate ID</label>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <span style="font-weight: 600;">AT/INT/</span>
-        <input type="text" id="inputCertYear" class="erp-input" value="2026" style="width: 80px; text-align: center;">
-        <span style="font-weight: 600;">/</span>
-        <input type="text" id="inputCertNum" class="erp-input" value="0101" style="flex: 1; text-align: center;">
+    <div style="display: flex; flex-direction: column; gap: 14px;">
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Student Name</label>
+        <input type="text" id="inputName" class="erp-input" placeholder="e.g., John Doe" value="John Doe" style="font-size: 13px;">
       </div>
-      <input type="hidden" id="inputCertId" value="AT/INT/2026/0101">
-    </div>
 
-    <div class="erp-form-group">
-      <label class="erp-label">Appreciation Text</label>
-      <textarea id="inputDescription" class="erp-input" rows="3">During this internship, he/she was found to be dedicated, enthusiastic and hardworking. We wish him/her all the best for future endeavors.</textarea>
-    </div>
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Domain</label>
+        <select id="inputDomainSelect" class="erp-input" onchange="document.getElementById('inputDomain').value = this.value; updatePreview();" style="font-size: 13px;">
+          <option value="Full Stack Web Development">Full Stack Web Development</option>
+          <option value="UI & UX Design">UI & UX Design</option>
+          <option value="Data Science & AI">Data Science & AI</option>
+          <option value="Cyber Security">Cyber Security</option>
+          <option value="Digital Marketing">Digital Marketing</option>
+          <option value="Embedded Systems & IoT">Embedded Systems & IoT</option>
+          <option value="DevOps Engineering">DevOps Engineering</option>
+          <option value="Software Development">Software Development</option>
+          <option value="App Development">App Development</option>
+        </select>
+        <input type="hidden" id="inputDomain" value="Full Stack Web Development">
+      </div>
 
-    <button id="btnExportPDF" class="erp-btn erp-btn-primary" style="width: 100%; justify-content: center; margin-top: 16px;">
-      <i data-lucide="download"></i> Generate PDF
-    </button>
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Date of Issue</label>
+        <input type="date" id="inputIssueDate" class="erp-input" style="font-size: 13px;">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Certificate ID</label>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <span style="font-weight: 600; font-size: 13px; color: var(--erp-text-primary);">AT/INT/</span>
+          <input type="text" id="inputCertYear" class="erp-input" value="2026" style="width: 70px; text-align: center; font-size: 13px;">
+          <span style="font-weight: 600; font-size: 13px; color: var(--erp-text-primary);">/</span>
+          <input type="text" id="inputCertNum" class="erp-input" value="0101" style="flex: 1; text-align: center; font-size: 13px;">
+        </div>
+        <input type="hidden" id="inputCertId" value="AT/INT/2026/0101">
+      </div>
+
+      <div>
+        <label style="display: block; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Appreciation Text</label>
+        <textarea id="inputDescription" class="erp-input" rows="3" style="font-size: 13px; resize: vertical;">During this internship, he/she was found to be dedicated, enthusiastic and hardworking. We wish him/her all the best for future endeavors.</textarea>
+      </div>
+    </div>
   </div>
 
-  <!-- Right Side: Certificate Preview -->
-  <div class="erp-card" style="padding: 0; overflow: hidden; background: var(--erp-bg-secondary); border: var(--erp-border-width) solid var(--erp-border); display: flex; align-items: center; justify-content: center; height: calc(100vh - 200px);">
+  <!-- Right Side: Certificate Preview (60%) -->
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); overflow: hidden; max-height: calc(100vh - 220px); position: relative; display: flex; flex-direction: column; box-shadow: var(--erp-shadow-subtle);">
     
-    <!-- We inject the standalone original HTML into an iframe so the complex rendering CSS doesn't break our ERP CSS -->
-    <!-- BUT we need them to talk to each other! -->
-    
-    <iframe id="certFrame" src="/cert/index.html" style="width: 100%; height: 100%; border: none;"></iframe>
-    
+    <div style="padding: 10px 16px; background: var(--erp-bg-secondary); border-bottom: 1px solid var(--erp-divider); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary);">
+        <i data-lucide="eye" style="width: 14px; height: 14px;"></i> Live Preview
+      </div>
+      <span style="font-size: 11px; color: var(--erp-text-secondary);">Certificate • A4 Landscape</span>
+    </div>
+
+    <div id="certPreviewWrap" style="flex: 1; position: relative; overflow: hidden; background: #E8ECF2;">
+      <iframe id="certFrame" src="/cert/index.html" style="width: 794px; height: 1123px; border: none; position: absolute; top: 0; left: 0; transform-origin: top left;"></iframe>
+    </div>
+
+    <div style="padding: 10px 16px; background: var(--erp-bg); border-top: 1px solid var(--erp-divider); display: flex; gap: 8px; justify-content: center; flex-shrink: 0;">
+      <button onclick="frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');" class="erp-btn erp-btn-primary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="download" style="width: 14px; height: 14px;"></i> Download PDF
+      </button>
+      <button onclick="openFullscreen()" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="maximize" style="width: 14px; height: 14px;"></i> Fullscreen
+      </button>
+      <button onclick="frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+        <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Print
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Fullscreen Modal -->
+<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);">
+  <div style="position: relative; width: 100%; height: 100%; max-width: 1100px; max-height: 90vh; background: #fff; border-radius: var(--erp-radius); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <div style="padding: 16px 24px; border-bottom: 1px solid var(--erp-divider); display: flex; justify-content: space-between; align-items: center; background: var(--erp-bg-secondary);">
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Certificate Preview</h3>
+      <button onclick="closeFullscreen()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--erp-text-secondary);">&times;</button>
+    </div>
+    <div style="flex: 1; background: #F3F4F6; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 16px;">
+      <iframe id="fullscreenFrame" style="width: 100%; height: 100%; border: none; border-radius: 6px;"></iframe>
+    </div>
   </div>
 </div>
 
 <script>
-  // Setup communication with iframe
   const frame = document.getElementById('certFrame');
-  
+  const studentDb = {};
+
+  <% if (typeof students !== 'undefined' && students.length > 0) { %>
+    <% students.forEach(function(s) { %>
+      studentDb['<%= s.id %>'] = { name: '<%= s.first_name %> <%= s.last_name %>', course: '<%= s.course_title || "Full Stack Web Development" %>', id: '<%= s.student_id %>' };
+    <% }) %>
+  <% } %>
+
+  function fillFromStudent(id) {
+    if (!id || !studentDb[id]) return;
+    const s = studentDb[id];
+    document.getElementById('inputName').value = s.name;
+    document.getElementById('inputCertNum').value = s.id || '0101';
+    updatePreview();
+  }
+
   function updatePreview() {
     if (!frame.contentWindow) return;
-    
     const name = document.getElementById('inputName').value;
     const domain = document.getElementById('inputDomain').value;
     const date = document.getElementById('inputIssueDate').value;
-    
     const year = document.getElementById('inputCertYear').value;
     const num = document.getElementById('inputCertNum').value;
-    const certId = `AT/INT/${year}/${num}`;
+    const certId = 'AT/INT/' + year + '/' + num;
     document.getElementById('inputCertId').value = certId;
-    
     const desc = document.getElementById('inputDescription').value;
-    
-    // We postMessage to the iframe to update its DOM
-    frame.contentWindow.postMessage({
-      type: 'UPDATE_CERT',
-      data: { name, domain, date, certId, desc }
-    }, '*');
+    frame.contentWindow.postMessage({ type: 'UPDATE_CERT', data: { name, domain, date, certId, desc } }, '*');
   }
 
-  // Add listeners
-  ['inputName', 'inputIssueDate', 'inputCertYear', 'inputCertNum', 'inputDescription'].forEach(id => {
+  ['inputName', 'inputIssueDate', 'inputCertYear', 'inputCertNum', 'inputDescription'].forEach(function(id) {
     document.getElementById(id).addEventListener('input', updatePreview);
   });
-  
-  // Trigger export
-  document.getElementById('btnExportPDF').addEventListener('click', () => {
-    frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
-  });
+
+  function scaleCertPreview() {
+    var wrap = document.getElementById('certPreviewWrap');
+    var iframe = document.getElementById('certFrame');
+    if (!wrap || !iframe) return;
+    var wrapW = wrap.clientWidth, wrapH = wrap.clientHeight;
+    var certW = 794, certH = 1123;
+    var scale = Math.min(wrapW / certW, wrapH / certH) * 0.95;
+    var scaledW = certW * scale, scaledH = certH * scale;
+    iframe.style.transform = 'scale(' + scale + ')';
+    iframe.style.left = ((wrapW - scaledW) / 2) + 'px';
+    iframe.style.top = ((wrapH - scaledH) / 2) + 'px';
+  }
+
+  frame.onload = function() { setTimeout(scaleCertPreview, 600); };
+  window.addEventListener('load', function() { setTimeout(scaleCertPreview, 400); });
+  window.addEventListener('resize', scaleCertPreview);
+  setTimeout(scaleCertPreview, 1000);
+  setTimeout(scaleCertPreview, 2000);
+
+  function openFullscreen() {
+    document.getElementById('fullscreenModal').style.display = 'flex';
+    var fsFrame = document.getElementById('fullscreenFrame');
+    fsFrame.src = '/cert/index.html';
+    fsFrame.onload = function() { setTimeout(updatePreview, 500); };
+  }
+  function closeFullscreen() {
+    document.getElementById('fullscreenModal').style.display = 'none';
+    document.getElementById('fullscreenFrame').src = '';
+  }
+
+  lucide.createIcons();
 </script>

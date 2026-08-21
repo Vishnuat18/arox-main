@@ -12,7 +12,7 @@ const authController = {
     try {
       const { email, password } = req.body;
       
-      // MOCK LOGIN FOR DESIGN REVIEW
+      // MOCK LOGINS FOR DESIGN REVIEW & TESTING
       if (email === 'admin@arox.com' && password === 'admin123') {
         const token = jwt.sign(
           { id: 1, email: 'admin@arox.com', role: 'admin' },
@@ -22,9 +22,37 @@ const authController = {
         res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
         return res.json({
           success: true,
-          message: 'Mock login successful!',
+          message: 'Admin login successful!',
           redirectUrl: '/admin/dashboard',
           data: { token, user: { id: 1, email, role: 'admin', first_name: 'Admin', last_name: 'User' } }
+        });
+      }
+      if (email === 'student@arox.com' && password === 'student123') {
+        const token = jwt.sign(
+          { id: 2, email: 'student@arox.com', role: 'student' },
+          authConfig.secret || 'secret',
+          { expiresIn: authConfig.expiresIn || '1h' }
+        );
+        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+        return res.json({
+          success: true,
+          message: 'Student login successful!',
+          redirectUrl: '/student/dashboard',
+          data: { token, user: { id: 2, email, role: 'student', first_name: 'Student', last_name: 'User' } }
+        });
+      }
+      if (email === 'employee@arox.com' && password === 'employee123') {
+        const token = jwt.sign(
+          { id: 3, email: 'employee@arox.com', role: 'trainer' },
+          authConfig.secret || 'secret',
+          { expiresIn: authConfig.expiresIn || '1h' }
+        );
+        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+        return res.json({
+          success: true,
+          message: 'Employee login successful!',
+          redirectUrl: '/admin/dashboard',
+          data: { token, user: { id: 3, email, role: 'trainer', first_name: 'Staff', last_name: 'Trainer' } }
         });
       }
 

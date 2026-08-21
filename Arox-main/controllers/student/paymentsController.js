@@ -50,9 +50,11 @@ exports.index = (req, res) => {
   } catch (error) {
     logger.error('Student Payments Error:', error);
     res.status(500).render('website/error', {
-      layout: 'layouts/main',
+      layout: 'layouts/student',
+      title: 'Error - Student Portal',
       code: 500,
-      message: 'Failed to load payments history.'
+      message: 'Something went wrong loading payments. Please try again later.',
+      user: req.user
     });
   }
 };
