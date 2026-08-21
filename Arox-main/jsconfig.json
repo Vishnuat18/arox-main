@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2022",
+    "checkJs": false,
+    "forceConsistentCasingInFileNames": false
+  },
+  "include": [
+    "server.js",
+    "config/**/*",
+    "controllers/**/*",
+    "middleware/**/*",
+    "models/**/*",
+    "routes/**/*",
+    "utils/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "public",
+    "scripts"
+  ]
+}

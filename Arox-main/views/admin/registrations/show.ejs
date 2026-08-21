@@ -103,7 +103,7 @@
         
         <div style="margin-bottom: 24px;">
           <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 600;">Current Status</div>
-          <select id="statusSelect" class="form-select" style="font-weight: 600; padding: 12px;" onchange="updateStatus(<%= reg.id %>, this.value)">
+          <select id="statusSelect" class="form-select" style="font-weight: 600; padding: 12px;" data-reg-id="<%= reg.id %>" onchange="handleRegStatusChange(this)">
             <option value="pending_document" <%= reg.status === 'pending_document' ? 'selected' : '' %>>Pending Documents</option>
             <option value="pending_payment" <%= reg.status === 'pending_payment' ? 'selected' : '' %>>Pending Payment</option>
             <option value="completed" <%= reg.status === 'completed' ? 'selected' : '' %>>Completed (Active)</option>
@@ -126,9 +126,15 @@
 
 
 <script>
+  function handleRegStatusChange(selectEl) {
+    const id = selectEl.getAttribute('data-reg-id');
+    const status = selectEl.value;
+    updateStatus(id, status);
+  }
+
   async function updateStatus(id, status) {
     try {
-      const res = await fetch(\`/admin/registrations/\${id}/status\`, {
+      const res = await fetch('/admin/registrations/' + id + '/status', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })

@@ -5,7 +5,7 @@ const { sanitizeFilename } = require('../utils/helpers');
 const appConfig = require('../config/app');
 
 // Ensure upload directories exist
-const dirs = ['photos', 'documents', 'submissions', 'certificates', 'qr'];
+const dirs = ['photos', 'documents', 'submissions', 'certificates', 'qr', 'receipts'];
 dirs.forEach(dir => {
   const dirPath = path.join(__dirname, '..', 'public', 'uploads', dir);
   if (!fs.existsSync(dirPath)) {
@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
     if (file.fieldname === 'photo') folder = 'photos';
     else if (file.fieldname === 'submission') folder = 'submissions';
     else if (file.fieldname === 'certificate') folder = 'certificates';
+    else if (file.fieldname === 'receipt' || file.fieldname === 'payment_proof' || file.fieldname === 'screenshot') folder = 'receipts';
 
     const uploadPath = path.join(__dirname, '..', 'public', 'uploads', folder);
     cb(null, uploadPath);
@@ -38,12 +39,14 @@ const fileFilter = (req, file, cb) => {
   const allowedTypes = {
     photo: /jpeg|jpg|png|gif|webp/,
     document: /jpeg|jpg|png|gif|webp|pdf|doc|docx|xls|xlsx/,
-    submission: /zip|rar|pdf|doc|docx|ppt|pptx|py|js|html|css/
+    submission: /zip|rar|pdf|doc|docx|ppt|pptx|py|js|html|css/,
+    receipt: /jpeg|jpg|png|webp|pdf/
   };
 
   const ext = path.extname(file.originalname).toLowerCase().slice(1);
   const fieldType = file.fieldname === 'photo' ? 'photo' : 
-                    file.fieldname === 'submission' ? 'submission' : 'document';
+                    file.fieldname === 'submission' ? 'submission' : 
+                    (file.fieldname === 'receipt' || file.fieldname === 'payment_proof' || file.fieldname === 'screenshot') ? 'receipt' : 'document';
 
   if (allowedTypes[fieldType].test(ext)) {
     cb(null, true);

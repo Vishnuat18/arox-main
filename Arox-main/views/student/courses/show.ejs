@@ -35,6 +35,7 @@
     <button class="detail-tab-btn" data-tab="submissions"><i data-lucide="file-text"></i> Submissions</button>
     <button class="detail-tab-btn" data-tab="attendance"><i data-lucide="calendar"></i> Attendance</button>
     <button class="detail-tab-btn" data-tab="certificate"><i data-lucide="graduation-cap"></i> Certificate</button>
+    <button class="detail-tab-btn" data-tab="payment"><i data-lucide="qr-code"></i> Fee & Payment Verification</button>
   </div>
 
   <!-- Tab Panels -->
@@ -515,11 +516,292 @@
       </div>
     </div>
 
+    <!-- PANEL 5: FEE & PAYMENT VERIFICATION -->
+    <div id="payment" class="tab-panel hidden space-y-6">
+      
+      <!-- Privacy Policy & Verification Notice -->
+      <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; color: #000000;">
+        <i data-lucide="shield-check" style="width: 22px; height: 22px; color: #000000; flex-shrink: 0; margin-top: 2px;"></i>
+        <div>
+          <h4 style="font-size: 14px; font-weight: 700; margin: 0 0 4px 0; color: #000000;">AROX Manual Payment Verification Policy</h4>
+          <p style="font-size: 13px; color: #64748B; margin: 0; line-height: 1.5;">
+            As per official AROX Technology enrollment and privacy policy, payment verification is conducted manually via official UPI & bank channels. Please scan the QR code or transfer to the account details below, then upload the screenshot with the 12-digit UTR reference number. Our Admin team will verify and activate your credentials within 2-4 hours.
+          </p>
+        </div>
+      </div>
+
+      <!-- Financial Status & QR Code Section Grid -->
+      <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 24px; align-items: flex-start;" class="payments-grid-wrapper">
+        
+        <!-- Left: Official UPI QR & Bank Account -->
+        <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+              <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; background: #000000; color: #FFFFFF; padding: 3px 8px; border-radius: 99px;">
+                Official QR
+              </span>
+              <span style="font-size: 12px; color: #64748B;">All UPI Apps Supported</span>
+            </div>
+
+            <!-- QR Display Card -->
+            <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 12px; padding: 16px; text-align: center; margin-bottom: 16px;">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=aroxtechnologies@icici%26pn=AROX%20TECHNOLOGIES%20PVT%20LTD%26cu=INR" alt="AROX UPI QR Code" style="width: 150px; height: 150px; margin: 0 auto; display: block; border-radius: 8px; border: 1px solid #E2E8F0; background: #FFFFFF;">
+              <div style="font-weight: 700; font-size: 13px; color: #000000; margin-top: 10px;">AROX TECHNOLOGIES PVT LTD</div>
+              <p style="font-size: 11px; color: #64748B; margin: 2px 0 0 0;">Scan with GPay, PhonePe, Paytm, BHIM</p>
+            </div>
+
+            <!-- UPI Details with Copy button -->
+            <div style="padding: 10px 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <div>
+                <span style="display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748B;">Official UPI ID</span>
+                <span style="font-family: monospace; font-weight: 700; font-size: 13px; color: #000000;" id="aroxUpiId">aroxtechnologies@icici</span>
+              </div>
+              <button type="button" onclick="copyText('aroxtechnologies@icici', this)" class="erp-btn erp-btn-secondary" style="padding: 4px 10px; font-size: 12px; font-weight: 600; color: #000000; border: 1px solid #CBD5E1;">
+                <i data-lucide="copy" style="width: 12px; height: 12px;"></i> Copy
+              </button>
+            </div>
+
+            <!-- Bank Transfer Details -->
+            <div style="padding: 12px 14px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 12px; margin-bottom: 16px;">
+              <span style="display: block; font-size: 10px; font-weight: 700; text-transform: uppercase; color: #64748B; margin-bottom: 6px;">Bank Account (NEFT / IMPS)</span>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: #64748B;">Account:</span>
+                <span style="font-family: monospace; font-weight: 600; color: #000000;">000905034821</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: #64748B;">IFSC Code:</span>
+                <span style="font-family: monospace; font-weight: 600; color: #000000;">ICIC0000009</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: #64748B;">Bank & Branch:</span>
+                <span style="font-weight: 600; color: #000000;">ICICI Bank, Chennai Main</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fee Summary Box -->
+          <div style="background: #000000; color: #FFFFFF; padding: 16px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 600; color: #CBD5E1; display: block;">Balance Outstanding</span>
+              <span style="font-size: 20px; font-weight: 700;">₹<%= registration.balance_amount.toLocaleString('en-IN') %></span>
+            </div>
+            <div style="text-align: right;">
+              <span style="font-size: 11px; text-transform: uppercase; font-weight: 600; color: #CBD5E1; display: block;">Total Program Fee</span>
+              <span style="font-size: 14px; font-weight: 600;">₹<%= registration.total_amount.toLocaleString('en-IN') %></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Manual Payment Verification Upload Form -->
+        <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 24px;">
+          <div>
+            <h3 class="erp-h3" style="margin: 0 0 4px 0; color: #000000; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="file-up" style="width: 18px; height: 18px; color: #000000;"></i>
+              Submit Payment Proof for Verification
+            </h3>
+            <p style="font-size: 12px; color: #64748B; margin: 0 0 20px 0;">
+              After making the transfer, please fill in the transaction reference and upload the payment receipt screenshot.
+            </p>
+          </div>
+
+          <form id="paymentProofForm" onsubmit="submitPaymentProof(event)" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 14px;">
+            <input type="hidden" name="registration_id" value="<%= registration.id %>">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #000000; margin-bottom: 4px;">Amount Paid (₹) *</label>
+                <input type="number" name="amount" required min="1" max="<%= registration.balance_amount > 0 ? registration.balance_amount : registration.total_amount %>" value="<%= registration.balance_amount > 0 ? registration.balance_amount : registration.total_amount %>" class="erp-input" style="font-size: 13px; font-weight: 700;">
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #000000; margin-bottom: 4px;">Payment Method *</label>
+                <select name="payment_method" required class="erp-input" style="font-size: 13px;">
+                  <option value="upi">UPI (GPay / PhonePe / Paytm / BHIM)</option>
+                  <option value="netbanking">Net Banking (IMPS / NEFT)</option>
+                  <option value="cash">Direct Branch / Cash Deposit</option>
+                  <option value="card">Debit / Credit Card</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #000000; margin-bottom: 4px;">12-Digit UTR / Transaction ID *</label>
+                <input type="text" name="transaction_id" required placeholder="e.g. 412345678901" class="erp-input" style="font-size: 13px; font-family: monospace;">
+              </div>
+
+              <div>
+                <label style="display: block; font-size: 12px; font-weight: 600; color: #000000; margin-bottom: 4px;">Payment Date *</label>
+                <input type="date" name="payment_date" required value="<%= new Date().toISOString().split('T')[0] %>" class="erp-input" style="font-size: 13px;">
+              </div>
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #000000; margin-bottom: 4px;">Payment Screenshot / Receipt (PNG, JPG, PDF) *</label>
+              <input type="file" name="receipt" id="receiptInput" required accept="image/png, image/jpeg, image/jpg, image/webp, application/pdf" class="erp-input" style="font-size: 12px; padding: 6px 10px;">
+            </div>
+
+            <div>
+              <label style="display: block; font-size: 12px; font-weight: 600; color: #000000; margin-bottom: 4px;">Additional Notes (Optional)</label>
+              <input type="text" name="notes" placeholder="e.g. Paid via father's account" class="erp-input" style="font-size: 13px;">
+            </div>
+
+            <button type="submit" id="btnSubmitProof" class="erp-btn erp-btn-primary" style="width: 100%; padding: 12px; font-size: 13px; font-weight: 600; background: #000000; color: #FFFFFF; border-radius: 8px; margin-top: 6px;">
+              <i data-lucide="send" style="width: 14px; height: 14px;"></i> Submit Payment for Admin Verification
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Verification History & Submission Records Table -->
+      <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 0; overflow: hidden;">
+        <div style="padding: 16px 20px; border-bottom: 1px solid #E2E8F0;">
+          <h3 class="erp-h3" style="margin: 0; color: #000000; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="history" style="width: 16px; height: 16px; color: #000000;"></i>
+            Payment Verification History
+          </h3>
+        </div>
+
+        <% if (typeof payments !== 'undefined' && payments && payments.length > 0) { %>
+          <div class="erp-table-container" style="border: none; border-radius: 0; margin-bottom: 0;">
+            <table class="erp-table">
+              <thead>
+                <tr>
+                  <th style="color: #000000;">Payment ID & Date</th>
+                  <th style="color: #000000;">UTR / Ref No.</th>
+                  <th style="color: #000000;">Amount</th>
+                  <th style="color: #000000;">Method</th>
+                  <th style="text-align: center; color: #000000;">Screenshot</th>
+                  <th style="text-align: right; color: #000000;">Verification Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% payments.forEach(p => { %>
+                  <tr>
+                    <td>
+                      <div style="font-weight: 600; font-size: 13px; color: #000000;"><%= p.payment_id %></div>
+                      <div class="erp-small" style="color: #64748B;"><%= new Date(p.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %></div>
+                    </td>
+                    <td style="font-family: monospace; font-size: 13px; font-weight: 600; color: #000000;">
+                      <%= p.transaction_id || 'N/A' %>
+                    </td>
+                    <td style="font-weight: 700; font-size: 13px; color: #000000;">
+                      ₹<%= (p.total_amount || p.amount).toLocaleString('en-IN') %>
+                    </td>
+                    <td>
+                      <span style="text-transform: uppercase; font-size: 11px; font-weight: 600; background: #F1F5F9; color: #000000; padding: 2px 6px; border-radius: 4px; border: 1px solid #E2E8F0;">
+                        <%= p.payment_method || 'UPI' %>
+                      </span>
+                    </td>
+                    <td style="text-align: center;">
+                      <% if (p.receipt_path) { %>
+                        <a href="<%= p.receipt_path %>" target="_blank" class="erp-btn erp-btn-secondary" style="padding: 4px 8px; font-size: 11px; font-weight: 600; color: #000000; border: 1px solid #CBD5E1;">
+                          <i data-lucide="file-text" style="width: 12px; height: 12px;"></i> View
+                        </a>
+                      <% } else { %>
+                        <span style="color: #94A3B8; font-size: 12px;">-</span>
+                      <% } %>
+                    </td>
+                    <td style="text-align: right;">
+                      <% if (p.status === 'completed' || p.status === 'confirmed') { %>
+                        <span style="display: inline-block; padding: 3px 8px; background: #000000; color: #FFFFFF; border-radius: 99px; font-size: 11px; font-weight: 600;">
+                          Verified & Confirmed
+                        </span>
+                      <% } else if (p.status === 'failed' || p.status === 'rejected') { %>
+                        <span style="display: inline-block; padding: 3px 8px; background: #F1F5F9; color: #64748B; border: 1px solid #CBD5E1; border-radius: 99px; font-size: 11px; font-weight: 600;">
+                          Rejected
+                        </span>
+                      <% } else { %>
+                        <span style="display: inline-block; padding: 3px 8px; background: #F1F5F9; color: #000000; border: 1px solid #000000; border-radius: 99px; font-size: 11px; font-weight: 600;">
+                          Pending Review
+                        </span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div style="text-align: center; padding: 32px; color: #64748B; font-size: 13px;">
+            No payment submissions recorded for this program yet.
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+
   </div>
 </div>
 
 <%- script = `
 <script>
+  function copyText(text, btn) {
+    navigator.clipboard.writeText(text);
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i data-lucide="check" style="width: 12px; height: 12px;"></i> Copied!';
+    if (window.lucide) lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      if (window.lucide) lucide.createIcons();
+    }, 2000);
+  }
+
+  function previewReceiptFile(input) {
+    const file = input.files[0];
+    if (file) {
+      document.getElementById('receiptPlaceholder').style.display = 'none';
+      const container = document.getElementById('receiptPreviewContainer');
+      container.style.display = 'flex';
+      document.getElementById('receiptFileName').textContent = file.name;
+      
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById('receiptImagePreview').src = e.target.result;
+          document.getElementById('receiptImagePreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        document.getElementById('receiptImagePreview').style.display = 'none';
+      }
+      if (window.lucide) lucide.createIcons();
+    }
+  }
+
+  async function submitPaymentProof(e) {
+    e.preventDefault();
+    const form = document.getElementById('paymentProofForm');
+    const btn = document.getElementById('btnSubmitProof');
+    const origText = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span style="display:inline-block; width:14px; height:14px; border:2px solid #fff; border-radius:50%; border-top-color:transparent; animation:spin 1s linear infinite; margin-right:6px; vertical-align:middle;"></span> Submitting Verification...';
+
+    try {
+      const formData = new FormData(form);
+      const res = await fetch('/api/payments/submit-proof', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert("Payment screenshot and transaction details submitted successfully! ✅\\n\\nOur Admin team will review and verify your payment shortly.");
+        window.location.reload();
+      } else {
+        alert(data.message || "Failed to submit payment proof.");
+        btn.disabled = false;
+        btn.innerHTML = origText;
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error submitting payment proof.");
+      btn.disabled = false;
+      btn.innerHTML = origText;
+    }
+  }
+
   async function markPresentForToday(courseId) {
     try {
       const res = await fetch('/api/student/attendance/mark', {

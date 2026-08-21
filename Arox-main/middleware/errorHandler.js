@@ -58,9 +58,9 @@ function errorHandler(err, req, res, next) {
   const statusCode = err.statusCode || 500;
   let layout = 'layouts/main';
   
-  if (req.path.startsWith('/admin')) {
+  if (req.path && req.path.startsWith('/admin')) {
     layout = 'layouts/admin';
-  } else if (req.path.startsWith('/student')) {
+  } else if (req.path && req.path.startsWith('/student')) {
     layout = 'layouts/student';
   }
 
@@ -74,13 +74,29 @@ function errorHandler(err, req, res, next) {
     errorMessage = 'Something went wrong. Please try again later.';
   }
 
-  res.status(statusCode).render('website/error', {
-    layout: layout,
-    title: 'Error - AROX ERP',
-    code: statusCode,
-    message: err.message || errorMessage,
-    user: req.user || { first_name: 'User', last_name: '', role: 'guest' }
-  });
+  var user = req.user || { first_name: 'User', last_name: '', role: 'guest' };
+
+  try {
+    res.status(statusCode).render('website/error', {
+      layout: layout,
+      title: 'Error - AROX ERP',
+      code: statusCode,
+      message: err.message || errorMessage,
+      pageTitle: 'Error',
+      user: user
+    });
+  } catch (renderErr) {
+    // Fallback: if EJS rendering itself fails, send plain HTML
+    logger.error('Error rendering error page:', renderErr);
+    res.status(statusCode).send(
+      '<!DOCTYPE html><html><head><title>Error ' + statusCode + '</title></head><body style="font-family:sans-serif;text-align:center;padding:60px 20px;">' +
+      '<h1 style="font-size:4rem;color:#155EEF;">' + statusCode + '</h1>' +
+      '<h2>' + (statusCode === 404 ? 'Page Not Found' : 'Something Went Wrong') + '</h2>' +
+      '<p>' + (err.message || errorMessage) + '</p>' +
+      '<a href="/" style="display:inline-block;margin-top:20px;padding:12px 24px;background:#155EEF;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;">Back to Home</a>' +
+      '</body></html>'
+    );
+  }
 }
 
 module.exports = errorHandler;

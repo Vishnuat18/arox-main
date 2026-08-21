@@ -3,7 +3,7 @@
 <div style="display: grid; grid-template-columns: 2fr 3fr; gap: 24px;">
   
   <!-- Left Side: Control Panel -->
-  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); padding: 24px; overflow-y: auto; max-height: calc(100vh - 220px); box-shadow: var(--erp-shadow-subtle);">
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); padding: 24px; overflow-y: auto; max-height: calc(100vh - 180px); box-shadow: var(--erp-shadow-subtle);">
     <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--erp-divider);">
       <i data-lucide="briefcase" style="width: 18px; height: 18px; color: var(--erp-primary);"></i>
       <h3 style="font-size: 16px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Project Details</h3>
@@ -53,17 +53,17 @@
   </div>
 
   <!-- Right Side: Certificate Preview (60%) -->
-  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); overflow: hidden; max-height: calc(100vh - 220px); position: relative; display: flex; flex-direction: column; box-shadow: var(--erp-shadow-subtle);">
+  <div style="background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); overflow: hidden; max-height: calc(100vh - 180px); position: relative; display: flex; flex-direction: column; box-shadow: var(--erp-shadow-subtle);">
     
     <div style="padding: 10px 16px; background: var(--erp-bg-secondary); border-bottom: 1px solid var(--erp-divider); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;">
       <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--erp-text-secondary);">
         <i data-lucide="eye" style="width: 14px; height: 14px;"></i> Live Preview
       </div>
-      <span style="font-size: 11px; color: var(--erp-text-secondary);">Project Certificate • A4</span>
+      <span style="font-size: 11px; color: var(--erp-text-secondary);">Project Certificate &bull; A4</span>
     </div>
 
-    <div id="certPreviewWrap" style="flex: 1; position: relative; overflow: hidden; background: #E8ECF2;">
-      <iframe id="certFrame" src="/project/index.html" style="width: 794px; height: 1123px; border: none; position: absolute; top: 0; left: 0; transform-origin: top left;"></iframe>
+    <div id="certPreviewWrap" style="flex: 1; position: relative; overflow: hidden; background: #ffffff;">
+      <iframe id="certFrame" src="/project/index.html" style="width: 794px; height: 1123px; border: none; position: absolute; top: 0; left: 0; transform-origin: center center;"></iframe>
     </div>
 
     <div style="padding: 10px 16px; background: var(--erp-bg); border-top: 1px solid var(--erp-divider); display: flex; gap: 8px; justify-content: center; flex-shrink: 0;">
@@ -73,7 +73,7 @@
       <button onclick="openFullscreen()" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
         <i data-lucide="maximize" style="width: 14px; height: 14px;"></i> Fullscreen
       </button>
-      <button onclick="window.print()" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
+      <button onclick="frame.contentWindow.postMessage({ type: 'PRINT' }, '*');" class="erp-btn erp-btn-secondary" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; font-size: 12px;">
         <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Print
       </button>
     </div>
@@ -81,49 +81,101 @@
 </div>
 
 <!-- Fullscreen Modal -->
-<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);">
-  <div style="position: relative; width: 100%; height: 100%; max-width: 1100px; max-height: 90vh; background: #fff; border-radius: var(--erp-radius); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
-    <div style="padding: 16px 24px; border-bottom: 1px solid var(--erp-divider); display: flex; justify-content: space-between; align-items: center; background: var(--erp-bg-secondary);">
-      <h3 style="font-size: 14px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Project Certificate Preview</h3>
-      <button onclick="closeFullscreen()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--erp-text-secondary);">&times;</button>
+<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px);">
+  <div style="position: relative; width: 100%; height: 100%; max-width: 1200px; max-height: 96vh; background: #fff; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <div style="padding: 14px 20px; border-bottom: 1px solid var(--erp-divider); display: flex; justify-content: space-between; align-items: center; background: #fafafa; flex-shrink: 0;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <i data-lucide="maximize-2" style="width: 18px; color: var(--erp-primary);"></i>
+        <h3 style="font-size: 14px; font-weight: 700; color: var(--erp-text-primary); margin: 0;">Project Certificate Preview</h3>
+      </div>
+      <button onclick="closeFullscreen()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--erp-text-secondary); line-height: 1;">&times;</button>
     </div>
-    <div style="flex: 1; background: #F3F4F6; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 16px;">
-      <iframe id="fullscreenFrame" style="width: 100%; height: 100%; border: none; border-radius: 6px;"></iframe>
+    <div id="fsContainer" style="flex: 1; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; padding: 0;">
+      <iframe id="fullscreenFrame" style="border: none; position: absolute;"></iframe>
     </div>
   </div>
 </div>
+
+<div id="studentsData" style="display: none;" data-students="<%= Buffer.from(JSON.stringify(typeof students !== 'undefined' ? students : [])).toString('base64') %>"></div>
 
 <script>
   var frame = document.getElementById('certFrame');
   var studentDb = {};
 
-  <% if (typeof students !== 'undefined' && students.length > 0) { %>
-    <% students.forEach(function(s) { %>
-      studentDb['<%= s.id %>'] = { name: '<%= s.first_name %> <%= s.last_name %>', id: '<%= s.student_id %>', course: '<%= (s.course_title || "Capstone Project").replace(/'/g, "\\'") %>' };
-    <% }) %>
-  <% } %>
+  (function() {
+    var studentsDataEl = document.getElementById('studentsData');
+    if (studentsDataEl) {
+      var raw = studentsDataEl.getAttribute('data-students') || '';
+      if (raw) {
+        try {
+          var list = JSON.parse(atob(raw));
+          list.forEach(function(s) {
+            studentDb[s.id] = {
+              name: (s.first_name + ' ' + (s.last_name || '')).trim(),
+              id: s.student_id,
+              course: s.course_title || 'Full Stack Web Development',
+              start: s.start_date ? new Date(s.start_date).toLocaleString('en-US', { month: 'long', year: 'numeric' }) : 'August 2026',
+              end: s.end_date ? new Date(s.end_date).toLocaleString('en-US', { month: 'long', year: 'numeric' }) : 'October 2026'
+            };
+          });
+        } catch(e) {}
+      }
+    }
+  })();
 
   function fillFromStudent(id) {
     if (!id || !studentDb[id]) return;
     var s = studentDb[id];
-    document.getElementById('name-input').value = s.name;
-    document.getElementById('cert-id-input').value = 'ATX-PC-' + s.id;
-    document.getElementById('project-input').value = s.course + ' Capstone';
+    var nameEl = document.getElementById('name-input');
+    var certEl = document.getElementById('cert-id-input');
+    var projEl = document.getElementById('project-input');
+    var startEl = document.getElementById('start-date-input');
+    var endEl = document.getElementById('end-date-input');
+
+    if (nameEl) nameEl.value = s.name;
+    if (certEl) certEl.value = s.id || 'AROX/PROJ/2026/001';
+    if (projEl) projEl.value = s.course + ' Capstone Project';
+    if (startEl && s.start) startEl.value = s.start;
+    if (endEl && s.end) endEl.value = s.end;
     updatePreview();
   }
 
+  // Set default issue date
+  var issueEl = document.getElementById('issue-date-input');
+  if (issueEl && !issueEl.value) {
+    var now = new Date();
+    issueEl.value = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+  }
+
+  // Auto-select first real student on load if available
+  window.addEventListener('DOMContentLoaded', function() {
+    var quickFill = document.getElementById('studentQuickFill');
+    if (quickFill && quickFill.options.length > 1) {
+      quickFill.selectedIndex = 1;
+      fillFromStudent(quickFill.value);
+    }
+  });
+
   function updatePreview() {
-    if (!frame.contentWindow) return;
-    var data = {};
-    document.querySelectorAll('#erpFormFields input').forEach(function(el) {
-      data[el.id] = el.value;
-    });
-    frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: data }, '*');
+    var data = {
+      'cert-id-input': (document.getElementById('cert-id-input') || {}).value || '',
+      'issue-date-input': (document.getElementById('issue-date-input') || {}).value || '',
+      'name-input': (document.getElementById('name-input') || {}).value || '',
+      'project-input': (document.getElementById('project-input') || {}).value || '',
+      'start-date-input': (document.getElementById('start-date-input') || {}).value || '',
+      'end-date-input': (document.getElementById('end-date-input') || {}).value || ''
+    };
+    if (frame && frame.contentWindow) {
+      frame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: data }, '*');
+    }
+    var fsFrame = document.getElementById('fullscreenFrame');
+    if (fsFrame && fsFrame.contentWindow) {
+      fsFrame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: data }, '*');
+    }
   }
 
   document.getElementById('erpFormFields').addEventListener('input', updatePreview);
-  frame.onload = function() { setTimeout(updatePreview, 600); };
-  setTimeout(updatePreview, 1000);
+  document.getElementById('erpFormFields').addEventListener('change', updatePreview);
 
   function scaleCertPreview() {
     var wrap = document.getElementById('certPreviewWrap');
@@ -131,15 +183,27 @@
     if (!wrap || !iframe) return;
     var wrapW = wrap.clientWidth, wrapH = wrap.clientHeight;
     var certW = 794, certH = 1123;
-    var scale = Math.min(wrapW / certW, wrapH / certH) * 0.95;
-    var scaledW = certW * scale, scaledH = certH * scale;
+    if (wrapW <= 0 || wrapH <= 0) return;
+    var pad = 16;
+    var scale = Math.min((wrapW - pad) / certW, (wrapH - pad) / certH);
+    
+    iframe.style.width = certW + 'px';
+    iframe.style.height = certH + 'px';
+    iframe.style.position = 'absolute';
+    iframe.style.transformOrigin = 'center center';
+    iframe.style.left = Math.round((wrapW - certW) / 2) + 'px';
+    iframe.style.top = Math.round((wrapH - certH) / 2) + 'px';
     iframe.style.transform = 'scale(' + scale + ')';
-    iframe.style.left = ((wrapW - scaledW) / 2) + 'px';
-    iframe.style.top = ((wrapH - scaledH) / 2) + 'px';
   }
 
-  frame.onload = function() { setTimeout(scaleCertPreview, 600); };
-  window.addEventListener('load', function() { setTimeout(scaleCertPreview, 400); });
+  frame.onload = function() { 
+    setTimeout(scaleCertPreview, 300); 
+    setTimeout(updatePreview, 600); 
+  };
+  window.addEventListener('load', function() { 
+    setTimeout(scaleCertPreview, 400); 
+    setTimeout(updatePreview, 800); 
+  });
   window.addEventListener('resize', scaleCertPreview);
   setTimeout(scaleCertPreview, 1000);
   setTimeout(scaleCertPreview, 2000);
@@ -148,12 +212,36 @@
     document.getElementById('fullscreenModal').style.display = 'flex';
     var fsFrame = document.getElementById('fullscreenFrame');
     fsFrame.src = '/project/index.html';
-    fsFrame.onload = function() { setTimeout(updatePreview, 500); };
+    fsFrame.onload = function() { 
+      setTimeout(scaleFullscreenCert, 300);
+      setTimeout(updatePreview, 600);
+    };
   }
+
   function closeFullscreen() {
     document.getElementById('fullscreenModal').style.display = 'none';
     document.getElementById('fullscreenFrame').src = '';
   }
 
+  function scaleFullscreenCert() {
+    var container = document.getElementById('fsContainer');
+    var fsFrame = document.getElementById('fullscreenFrame');
+    if (!container || !fsFrame) return;
+    var wrapW = container.clientWidth, wrapH = container.clientHeight;
+    var certW = 794, certH = 1123;
+    if (wrapW <= 0 || wrapH <= 0) return;
+    var pad = 16;
+    var scale = Math.min((wrapW - pad) / certW, (wrapH - pad) / certH);
+
+    fsFrame.style.width = certW + 'px';
+    fsFrame.style.height = certH + 'px';
+    fsFrame.style.position = 'absolute';
+    fsFrame.style.transformOrigin = 'center center';
+    fsFrame.style.left = Math.round((wrapW - certW) / 2) + 'px';
+    fsFrame.style.top = Math.round((wrapH - certH) / 2) + 'px';
+    fsFrame.style.transform = 'scale(' + scale + ')';
+  }
+
+  window.addEventListener('resize', scaleFullscreenCert);
   lucide.createIcons();
 </script>

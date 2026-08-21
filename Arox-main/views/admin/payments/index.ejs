@@ -1,70 +1,243 @@
-<div class="animate-fade-slide-up">
-  <div class="card" style="padding: 0; overflow: hidden;">
-    <div style="padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-      <div class="search-input-wrapper">
-        <span class="search-icon"><i data-lucide="search"></i></span>
-        <input type="text" class="form-input" placeholder="Search Transaction ID, Registration ID..." data-table-search="payments-table">
+<div class="erp-h1" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; color: #000000;">
+  <div>Payment Verifications & Records</div>
+  <div style="font-size: 13px; color: #64748B; font-weight: 500;">
+    <i data-lucide="shield-check" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+    Manual UPI & Bank Transfer Verifications
+  </div>
+</div>
+
+<!-- Payments Management Card -->
+<div class="erp-card" style="padding: 0; background: #FFFFFF; border: 1px solid #E2E8F0; overflow: hidden;">
+  <!-- Header Bar with Search -->
+  <div style="padding: 20px 24px; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <h3 class="erp-h3" style="margin: 0; color: #000000;">Student Payment Receipts</h3>
+      <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748B;">Inspect uploaded payment screenshots, verify 12-digit UTR references, and confirm enrollments.</p>
+    </div>
+    
+    <div style="display: flex; gap: 12px; min-width: 280px;">
+      <input type="text" id="paymentSearchInput" class="erp-input" style="padding: 8px 14px; font-size: 13px;" placeholder="Search UTR, Student Name, ID..." onkeyup="filterPaymentsTable(this.value)">
+    </div>
+  </div>
+
+  <!-- Payments Table (Clean Layout with no unnecessary scroll) -->
+  <div class="erp-table-container" style="border: none; border-radius: 0; margin-bottom: 0;">
+    <table class="erp-table" id="paymentsTable">
+      <thead>
+        <tr>
+          <th style="width: 140px; color: #000000;">Date & ID</th>
+          <th style="width: 160px; color: #000000;">UTR / Trans. ID</th>
+          <th style="color: #000000;">Student & Course</th>
+          <th style="width: 110px; color: #000000;">Amount</th>
+          <th style="width: 100px; color: #000000;">Method</th>
+          <th style="width: 120px; text-align: center; color: #000000;">Screenshot</th>
+          <th style="width: 130px; text-align: center; color: #000000;">Status</th>
+          <th style="width: 160px; text-align: right; color: #000000;">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (payments && payments.length > 0) { %>
+          <% payments.forEach(p => { %>
+            <tr class="payment-row">
+              <td>
+                <div style="font-weight: 600; font-size: 13px; color: #000000;">
+                  <%= new Date(p.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                </div>
+                <div class="erp-small" style="font-family: monospace; color: #64748B;"><%= p.payment_id || p.id %></div>
+              </td>
+              <td>
+                <div style="font-family: monospace; font-weight: 700; font-size: 13px; color: #000000; word-break: break-all;">
+                  <%= p.transaction_id || 'N/A' %>
+                </div>
+              </td>
+              <td>
+                <div style="font-weight: 600; font-size: 13px; color: #000000;"><%= p.first_name %> <%= p.last_name %></div>
+                <div class="erp-small" style="color: #64748B;"><%= p.course_title || p.email %></div>
+              </td>
+              <td>
+                <div style="font-weight: 700; font-size: 14px; color: #000000;">
+                  ₹<%= Number(p.total_amount || p.amount || 0).toLocaleString('en-IN') %>
+                </div>
+              </td>
+              <td>
+                <span style="text-transform: uppercase; font-size: 11px; font-weight: 600; background: #F1F5F9; color: #000000; padding: 3px 8px; border-radius: 4px; border: 1px solid #E2E8F0;">
+                  <%= p.payment_method || 'UPI' %>
+                </span>
+              </td>
+              <td style="text-align: center;">
+                <% if (p.receipt_path) { %>
+                  <button type="button" onclick="previewProofModal('<%= p.receipt_path %>', '<%= p.transaction_id %>', '<%= p.first_name %> <%= p.last_name %>', '<%= (p.total_amount || p.amount) %>', '<%= p.id %>', '<%= p.status %>')" class="erp-btn erp-btn-secondary" style="padding: 5px 10px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; border: 1px solid #CBD5E1; color: #000000;">
+                    <i data-lucide="image" style="width: 13px; height: 13px;"></i> View Proof
+                  </button>
+                <% } else { %>
+                  <span style="color: #94A3B8; font-size: 12px;">No proof</span>
+                <% } %>
+              </td>
+              <td style="text-align: center;">
+                <% if (p.status === 'completed' || p.status === 'confirmed') { %>
+                  <span style="display: inline-block; padding: 4px 10px; background: #000000; color: #FFFFFF; border-radius: 99px; font-size: 11px; font-weight: 600;">
+                    Verified
+                  </span>
+                <% } else if (p.status === 'failed' || p.status === 'rejected') { %>
+                  <span style="display: inline-block; padding: 4px 10px; background: #F1F5F9; color: #64748B; border: 1px solid #CBD5E1; border-radius: 99px; font-size: 11px; font-weight: 600;">
+                    Rejected
+                  </span>
+                <% } else { %>
+                  <span style="display: inline-block; padding: 4px 10px; background: #F1F5F9; color: #000000; border: 1px solid #000000; border-radius: 99px; font-size: 11px; font-weight: 600;">
+                    Pending
+                  </span>
+                <% } %>
+              </td>
+              <td style="text-align: right;">
+                <% if (p.status === 'pending') { %>
+                  <div style="display: inline-flex; gap: 6px; justify-content: flex-end;">
+                    <button type="button" onclick="verifyPaymentAdmin('<%= p.id %>', 'completed')" class="erp-btn erp-btn-primary" style="padding: 5px 10px; font-size: 12px; font-weight: 600; background: #000000; color: #FFFFFF; border-radius: 6px;" title="Approve Payment & Confirm Registration">
+                      <i data-lucide="check" style="width: 13px; height: 13px;"></i> Approve
+                    </button>
+                    <button type="button" onclick="verifyPaymentAdmin('<%= p.id %>', 'failed')" class="erp-btn erp-btn-secondary" style="padding: 5px 8px; font-size: 12px; font-weight: 600; color: #000000; border: 1px solid #CBD5E1; border-radius: 6px;" title="Reject Payment">
+                      <i data-lucide="x" style="width: 13px; height: 13px;"></i> Reject
+                    </button>
+                  </div>
+                <% } else if (p.status === 'completed' || p.status === 'confirmed') { %>
+                  <span style="font-size: 12px; color: #000000; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                    <i data-lucide="check-circle-2" style="width: 14px; height: 14px;"></i> Cleared
+                  </span>
+                <% } else { %>
+                  <button type="button" onclick="verifyPaymentAdmin('<%= p.id %>', 'completed')" class="erp-btn erp-btn-ghost" style="padding: 4px 8px; font-size: 12px; color: #000000; font-weight: 600;">
+                    Re-approve
+                  </button>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 48px; color: #64748B;">
+              <div style="font-size: 24px; margin-bottom: 8px; color: #94A3B8;"><i data-lucide="credit-card"></i></div>
+              <div style="font-weight: 600; color: #000000;">No payment records found</div>
+              <div style="font-size: 13px; color: #64748B; margin-top: 4px;">Uploaded student payment proofs will appear here for verification.</div>
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Payment Proof Inspection Modal (Clean & High-Contrast) -->
+<div id="proofModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 9999; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px);">
+  <div style="position: relative; width: 100%; max-width: 600px; max-height: 90vh; background: #FFFFFF; border-radius: 12px; border: 1px solid #E2E8F0; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <!-- Modal Header -->
+    <div style="padding: 16px 20px; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; background: #FFFFFF;">
+      <div>
+        <h3 style="font-size: 15px; font-weight: 700; margin: 0; color: #000000;" id="proofModalStudent">Payment Proof Verification</h3>
+        <p style="font-size: 12px; color: #64748B; margin: 2px 0 0 0;" id="proofModalDetails">UTR Reference • Amount</p>
       </div>
-      
-      <div style="display: flex; gap: 12px;">
-        <button class="btn btn-ghost" title="Export to CSV">⬇️ Export</button>
+      <button onclick="closeProofModal()" style="background: none; border: none; font-size: 22px; cursor: pointer; color: #64748B; padding: 4px; line-height: 1; border-radius: 4px;">&times;</button>
+    </div>
+
+    <!-- Image / Document Preview Body -->
+    <div style="padding: 20px; text-align: center; overflow-y: auto; max-height: calc(90vh - 140px); background: #F8FAFC; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <img id="proofModalImage" src="" alt="Payment Screenshot Proof" style="max-width: 100%; max-height: 480px; border-radius: 8px; border: 1px solid #E2E8F0; object-fit: contain; background: #FFFFFF;">
+      <div id="proofModalPdfLink" style="display: none; padding: 24px; text-align: center;">
+        <a id="proofPdfHref" href="" target="_blank" class="erp-btn erp-btn-primary" style="background: #000000; color: #FFFFFF; padding: 10px 18px;">
+          <i data-lucide="external-link" style="width: 14px; height: 14px;"></i> Open PDF Proof in New Tab
+        </a>
       </div>
     </div>
 
-    <div style="overflow-x: auto;">
-      <table class="data-table" id="payments-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Transaction ID</th>
-            <th>Registration / Student</th>
-            <th>Amount</th>
-            <th>Method</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% if (payments && payments.length > 0) { %>
-            <% payments.forEach(p => { %>
-              <tr>
-                <td>
-                  <div style="font-weight: 500;"><%= new Date(p.created_at).toLocaleDateString() %></div>
-                  <div style="font-size: 0.75rem; color: var(--text-muted);"><%= new Date(p.created_at).toLocaleTimeString() %></div>
-                </td>
-                <td style="font-family: monospace; font-size: 0.9rem; color: var(--primary); font-weight: 600;">
-                  <%= p.transaction_id || p.id %>
-                </td>
-                <td>
-                  <div style="font-family: monospace; font-size: 0.85rem;"><%= p.registration_id %></div>
-                  <div style="font-size: 0.8rem; color: var(--text-muted);"><%= p.first_name %> <%= p.last_name %></div>
-                </td>
-                <td style="font-weight: 700;">
-                  ₹<%= p.amount.toLocaleString('en-IN') %>
-                </td>
-                <td>
-                  <span style="text-transform: capitalize; font-size: 0.85rem;"><%= p.payment_method %></span>
-                </td>
-                <td>
-                  <% if (p.status === 'completed') { %>
-                    <span class="status-badge status-active">Completed</span>
-                  <% } else if (p.status === 'failed') { %>
-                    <span class="status-badge status-error">Failed</span>
-                  <% } else { %>
-                    <span class="status-badge status-pending"><%= p.status %></span>
-                  <% } %>
-                </td>
-              </tr>
-            <% }) %>
-          <% } else { %>
-            <tr>
-              <td colspan="6" style="text-align: center; padding: 40px; color: var(--text-muted);">
-                <div style="font-size: 2rem; margin-bottom: 8px;"><i data-lucide="credit-card"></i></div>
-                No payment records found.
-              </td>
-            </tr>
-          <% } %>
-        </tbody>
-      </table>
+    <!-- Modal Footer Actions -->
+    <div id="proofModalActions" style="padding: 14px 20px; border-top: 1px solid #E2E8F0; background: #FFFFFF; display: flex; justify-content: space-between; align-items: center;">
+      <button type="button" onclick="closeProofModal()" class="erp-btn erp-btn-ghost" style="color: #64748B; font-size: 13px;">Close</button>
+      <div id="proofModalButtons" style="display: flex; gap: 8px;">
+        <!-- Injected dynamically -->
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  let activeProofPaymentId = null;
+
+  function filterPaymentsTable(val) {
+    const q = (val || '').toLowerCase().trim();
+    const rows = document.querySelectorAll('#paymentsTable tbody tr.payment-row');
+    rows.forEach(r => {
+      const text = r.textContent.toLowerCase();
+      r.style.display = text.includes(q) ? '' : 'none';
+    });
+  }
+
+  function previewProofModal(path, utr, studentName, amount, paymentId, status) {
+    activeProofPaymentId = paymentId;
+    document.getElementById('proofModal').style.display = 'flex';
+    document.getElementById('proofModalStudent').textContent = `Payment Proof: ${studentName}`;
+    document.getElementById('proofModalDetails').textContent = `UTR: ${utr || 'N/A'} • Amount: ₹${Number(amount || 0).toLocaleString('en-IN')}`;
+    
+    if (path.endsWith('.pdf')) {
+      document.getElementById('proofModalImage').style.display = 'none';
+      document.getElementById('proofModalPdfLink').style.display = 'block';
+      document.getElementById('proofPdfHref').href = path;
+    } else {
+      document.getElementById('proofModalPdfLink').style.display = 'none';
+      document.getElementById('proofModalImage').style.display = 'block';
+      document.getElementById('proofModalImage').src = path;
+    }
+
+    const btnContainer = document.getElementById('proofModalButtons');
+    if (status === 'pending') {
+      btnContainer.innerHTML = `
+        <button type="button" onclick="verifyPaymentAdmin('${paymentId}', 'failed'); closeProofModal();" class="erp-btn erp-btn-secondary" style="border: 1px solid #CBD5E1; color: #000000; font-size: 13px; font-weight: 600;">
+          <i data-lucide="x" style="width: 14px; height: 14px;"></i> Reject
+        </button>
+        <button type="button" onclick="verifyPaymentAdmin('${paymentId}', 'completed'); closeProofModal();" class="erp-btn erp-btn-primary" style="background: #000000; color: #FFFFFF; font-size: 13px; font-weight: 600;">
+          <i data-lucide="check" style="width: 14px; height: 14px;"></i> Approve & Confirm
+        </button>
+      `;
+    } else {
+      btnContainer.innerHTML = `
+        <button type="button" onclick="verifyPaymentAdmin('${paymentId}', 'completed'); closeProofModal();" class="erp-btn erp-btn-secondary" style="font-size: 13px; font-weight: 600;">
+          Re-approve
+        </button>
+      `;
+    }
+
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeProofModal() {
+    document.getElementById('proofModal').style.display = 'none';
+  }
+
+  // Close modal on escape key or outside click
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeProofModal();
+  });
+
+  document.getElementById('proofModal').addEventListener('click', (e) => {
+    if (e.target.id === 'proofModal') closeProofModal();
+  });
+
+  async function verifyPaymentAdmin(paymentId, status) {
+    const actionText = status === 'completed' ? 'Approve & Confirm' : 'Reject';
+    if (!confirm(`Are you sure you want to ${actionText} this payment proof?`)) return;
+
+    try {
+      const res = await fetch(`/api/payments/${paymentId}/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        alert(data.message || 'Payment updated successfully.');
+        window.location.reload();
+      } else {
+        alert(data.message || 'Failed to process verification.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error.');
+    }
+  }
+</script>

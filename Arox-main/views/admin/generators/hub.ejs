@@ -224,9 +224,12 @@
     <!-- MIDDLE PANEL: Document Hub (30%) -->
     <div class="col-2">
       <div class="hub-panel" style="flex: 1; display: flex; flex-direction: column;">
-        <div class="panel-title">
-          <i data-lucide="file-box" style="width: 16px;"></i> Document Hub
-          <span class="sel-count" id="selBadge" style="display: none;">0</span>
+        <div class="panel-title" style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="file-box" style="width: 16px;"></i> Document Hub
+            <span class="sel-count" id="selBadge" style="display: none;">0</span>
+          </div>
+          <button type="button" id="btnToggleAll" onclick="toggleSelectAllDocs()" style="background: none; border: none; font-size: 11px; color: var(--erp-primary); cursor: pointer; font-weight: 600; text-decoration: underline;">Select All</button>
         </div>
         
         <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px; flex: 1;">
@@ -295,24 +298,9 @@
           <div style="font-size: 11px; color: #9CA3AF; margin-top: 4px;">Click a document from the hub to preview</div>
         </div>
 
-        <!-- Preview Area - Full Certificate Fit -->
-        <div id="previewArea" style="flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #F3F4F6;">
+        <!-- Preview Area - Direct Certificate View -->
+        <div id="previewArea" style="flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #ffffff;">
           <iframe id="certFrame" style="border: none; position: absolute; top: 0; left: 0; transform-origin: center center;"></iframe>
-        </div>
-
-        <!-- 3 Action Buttons at Bottom of Preview -->
-        <div id="previewActions" style="display: none; position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 10; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); padding: 8px 12px; border-radius: 10px; border: 1px solid var(--erp-border); box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-          <div style="display: flex; gap: 8px;">
-            <button onclick="fireAction('download')" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--erp-border); background: var(--erp-primary); color: #fff; transition: var(--erp-transition); font-family: var(--erp-font);">
-              <i data-lucide="download" style="width: 14px; height: 14px;"></i> Download PDF
-            </button>
-            <button onclick="openFullscreenPreview()" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--erp-border); background: var(--erp-bg); color: var(--erp-text-primary); transition: var(--erp-transition); font-family: var(--erp-font);">
-              <i data-lucide="maximize" style="width: 14px; height: 14px;"></i> Fullscreen
-            </button>
-            <button onclick="fireAction('save')" style="display: flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--erp-border); background: var(--erp-bg); color: var(--erp-text-primary); transition: var(--erp-transition); font-family: var(--erp-font);">
-              <i data-lucide="folder-input" style="width: 14px; height: 14px;"></i> Save to Portal
-            </button>
-          </div>
         </div>
       </div>
     </div>
@@ -362,17 +350,17 @@
 </div>
 
 <!-- Fullscreen Preview Modal -->
-<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 24px; backdrop-filter: blur(4px);">
-  <div style="position: relative; width: 100%; height: 100%; max-width: 1100px; max-height: 90vh; background: #fff; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
-    <div style="padding: 16px 24px; border-bottom: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center; background: #fafafa;">
+<div id="fullscreenModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px);">
+  <div style="position: relative; width: 100%; height: 100%; max-width: 1200px; max-height: 96vh; background: #fff; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+    <div style="padding: 14px 20px; border-bottom: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center; background: #fafafa; flex-shrink: 0;">
       <div style="display: flex; align-items: center; gap: 8px;">
-        <i data-lucide="maximize-2" style="width: 18px; color: #4F46E5;"></i>
+        <i data-lucide="maximize-2" style="width: 18px; color: var(--erp-primary);"></i>
         <h3 style="font-size: 14px; font-weight: 700; color: #111827; margin: 0;" id="fsModalTitle">Fullscreen Preview</h3>
       </div>
       <button onclick="closeFullscreenPreview()" style="background: none; border: none; font-size: 24px; font-weight: 300; cursor: pointer; color: #9CA3AF; line-height: 1;">&times;</button>
     </div>
-    <div style="flex: 1; background: #F3F4F6; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 16px;">
-      <iframe id="fullscreenFrame" style="width: 100%; height: 100%; border: none; border-radius: 6px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);"></iframe>
+    <div id="fsContainer" style="flex: 1; background: #ffffff; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; padding: 0;">
+      <iframe id="fullscreenFrame" style="border: none; position: absolute;"></iframe>
     </div>
   </div>
 </div>
@@ -463,36 +451,96 @@
   }
 
   function toggleDoc(el, docType) {
-    // Toggle multi-select
     if (selectedDocs.has(docType)) {
+      // Unselect document
       selectedDocs.delete(docType);
       el.classList.remove('selected');
+      el.classList.remove('active');
+
+      if (currentDoc === docType) {
+        if (selectedDocs.size > 0) {
+          // Switch to another selected document
+          const nextDoc = Array.from(selectedDocs)[selectedDocs.size - 1];
+          currentDoc = nextDoc;
+          document.querySelectorAll('.doc-list-item').forEach(item => {
+            if (item.getAttribute('data-doc') === nextDoc) {
+              item.classList.add('active');
+            } else {
+              item.classList.remove('active');
+            }
+          });
+          frame.src = routeMap[nextDoc];
+          frame.onload = () => {
+            setTimeout(() => {
+              updateSandbox();
+              scalePreview();
+            }, 300);
+          };
+        } else {
+          // No document selected
+          currentDoc = null;
+          document.getElementById('overlay').style.display = 'flex';
+          frame.src = 'about:blank';
+        }
+      }
     } else {
+      // Select document
       selectedDocs.add(docType);
       el.classList.add('selected');
+      
+      // Set as active preview
+      currentDoc = docType;
+      document.querySelectorAll('.doc-list-item').forEach(item => item.classList.remove('active'));
+      el.classList.add('active');
+
+      document.getElementById('overlay').style.display = 'none';
+
+      frame.src = routeMap[docType];
+      frame.onload = () => {
+        setTimeout(() => {
+          updateSandbox();
+          scalePreview();
+        }, 300);
+      };
     }
 
-    // Also set as active preview doc
-    currentDoc = docType;
-    document.querySelectorAll('.doc-list-item').forEach(e => e.classList.remove('active'));
-    el.classList.add('active');
-    el.classList.add('selected');
-    selectedDocs.add(docType);
-
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('previewActions').style.display = 'block';
-
-    // Update selected count
     updateSelectedCount();
+  }
 
-    // Load iframe
-    frame.src = routeMap[docType];
-    frame.onload = () => {
-      setTimeout(() => {
-        updateSandbox();
-        scalePreview();
-      }, 500);
-    };
+  function toggleSelectAllDocs() {
+    const allDocTypes = ['offerletter', 'certificate', 'attendance', 'project'];
+    const btn = document.getElementById('btnToggleAll');
+    if (selectedDocs.size === allDocTypes.length) {
+      // Deselect all
+      selectedDocs.clear();
+      document.querySelectorAll('.doc-list-item').forEach(e => {
+        e.classList.remove('selected');
+        e.classList.remove('active');
+      });
+      currentDoc = null;
+      document.getElementById('overlay').style.display = 'flex';
+      frame.src = 'about:blank';
+      if (btn) btn.textContent = 'Select All';
+    } else {
+      // Select all
+      allDocTypes.forEach(d => selectedDocs.add(d));
+      document.querySelectorAll('.doc-list-item').forEach(e => e.classList.add('selected'));
+      if (!currentDoc) {
+        currentDoc = 'certificate';
+        const certEl = document.querySelector('.doc-list-item[data-doc="certificate"]');
+        if (certEl) certEl.classList.add('active');
+        document.getElementById('overlay').style.display = 'none';
+        frame.src = routeMap['certificate'];
+        frame.onload = () => {
+          setTimeout(() => {
+            updateSandbox();
+            scalePreview();
+          }, 300);
+        };
+      }
+      if (btn) btn.textContent = 'Deselect All';
+    }
+    updateSelectedCount();
   }
 
   function updateSelectedCount() {
@@ -500,6 +548,7 @@
     const badge = document.getElementById('selBadge');
     const countBar = document.getElementById('selectedCountBar');
     const countText = document.getElementById('selCountText');
+    const btn = document.getElementById('btnToggleAll');
     
     if (count > 0) {
       badge.style.display = 'inline-flex';
@@ -510,28 +559,34 @@
       badge.style.display = 'none';
       countBar.style.display = 'none';
     }
+
+    if (btn) {
+      btn.textContent = count === 4 ? 'Deselect All' : 'Select All';
+    }
   }
 
   function scalePreview() {
     if (!currentDoc) return;
     const previewArea = document.getElementById('previewArea');
+    if (!previewArea) return;
     const wrapW = previewArea.clientWidth;
     const wrapH = previewArea.clientHeight;
+    if (wrapW <= 0 || wrapH <= 0) return;
     const dim = certDimensions[currentDoc] || { w: 794, h: 1123 };
     
-    const scaleX = wrapW / dim.w;
-    const scaleY = wrapH / dim.h;
-    const scale = Math.min(scaleX, scaleY) * 0.92;
+    const pad = 16;
+    const availW = Math.max(wrapW - pad, 100);
+    const availH = Math.max(wrapH - pad, 100);
+    const baseScale = Math.min(availW / dim.w, availH / dim.h);
+    const totalScale = baseScale * currentZoom;
     
     frame.style.width = dim.w + 'px';
     frame.style.height = dim.h + 'px';
-    
-    const scaledW = dim.w * scale;
-    const scaledH = dim.h * scale;
-    
-    frame.style.transform = `scale(${scale * currentZoom})`;
-    frame.style.left = `${(wrapW - scaledW * currentZoom) / 2}px`;
-    frame.style.top = `${(wrapH - scaledH * currentZoom) / 2}px`;
+    frame.style.position = 'absolute';
+    frame.style.transformOrigin = 'center center';
+    frame.style.left = Math.round((wrapW - dim.w) / 2) + 'px';
+    frame.style.top = Math.round((wrapH - dim.h) / 2) + 'px';
+    frame.style.transform = `scale(${totalScale})`;
   }
 
   window.addEventListener('resize', scalePreview);
@@ -578,6 +633,47 @@
     scalePreview();
   }
 
+  function scaleFullscreenPreview() {
+    const fsContainer = document.getElementById('fsContainer');
+    const fsFrame = document.getElementById('fullscreenFrame');
+    if (!fsContainer || !fsFrame || !currentDoc) return;
+    
+    const wrapW = fsContainer.clientWidth;
+    const wrapH = fsContainer.clientHeight;
+    const dim = certDimensions[currentDoc] || { w: 794, h: 1123 };
+    
+    if (currentDoc === 'offerletter' || currentDoc === 'attendance') {
+      // Allow scroll for multi-page offer letter and extended attendance
+      fsContainer.style.overflowY = 'auto';
+      fsContainer.style.overflowX = 'hidden';
+      fsContainer.style.display = 'block';
+      fsFrame.style.position = 'relative';
+      fsFrame.style.width = '100%';
+      fsFrame.style.height = 'auto';
+      fsFrame.style.minHeight = '1400px';
+      fsFrame.style.transform = 'none';
+      fsFrame.style.left = '0';
+      fsFrame.style.top = '0';
+    } else {
+      // Single-page certificates (certificate, project): NO scroll, 100% fits perfectly in view
+      fsContainer.style.overflow = 'hidden';
+      fsContainer.style.display = 'flex';
+      
+      const pad = 16;
+      const availW = Math.max(wrapW - pad, 100);
+      const availH = Math.max(wrapH - pad, 100);
+      const scale = Math.min(availW / dim.w, availH / dim.h);
+      
+      fsFrame.style.width = dim.w + 'px';
+      fsFrame.style.height = dim.h + 'px';
+      fsFrame.style.position = 'absolute';
+      fsFrame.style.transformOrigin = 'center center';
+      fsFrame.style.left = `${(wrapW - dim.w) / 2}px`;
+      fsFrame.style.top = `${(wrapH - dim.h) / 2}px`;
+      fsFrame.style.transform = `scale(${scale})`;
+    }
+  }
+
   function openFullscreenPreview() {
     if (!currentStudent || !currentDoc) {
       alert("Please select a student and document first.");
@@ -591,11 +687,13 @@
     fsFrame.src = routeMap[currentDoc];
     fsFrame.onload = () => {
       setTimeout(() => {
+        scaleFullscreenPreview();
         const payload = getPayloadForDoc(currentDoc);
         fsFrame.contentWindow.postMessage({ type: 'UPDATE_DATA', data: payload }, '*');
         if (currentDoc === 'certificate') fsFrame.contentWindow.postMessage({ type: 'UPDATE_CERT', data: payload }, '*');
-      }, 500);
+      }, 300);
     };
+    setTimeout(scaleFullscreenPreview, 150);
   }
 
   function closeFullscreenPreview() {
@@ -604,6 +702,13 @@
     modal.style.display = 'none';
     fsFrame.src = '';
   }
+
+  window.addEventListener('resize', () => {
+    scalePreview();
+    if (document.getElementById('fullscreenModal').style.display === 'flex') {
+      scaleFullscreenPreview();
+    }
+  });
 
   function showToast(msg) {
     const toast = document.getElementById('toastSuccess');
@@ -623,26 +728,19 @@
     }
 
     if (action === 'generate' || action === 'download') {
-      const checkRes = await fetch('/api/registrations/check-download', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ student_id: currentStudentDbId, document_type: currentDoc })
-      });
-      const checkData = await checkRes.json();
-      if (checkData.downloaded) {
-        alert("This document has already been downloaded once for this student.");
-        return;
-      }
-
       if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'EXPORT_PDF' }, '*');
       
-      await fetch('/api/registrations/log-download', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ student_id: currentStudentDbId, document_type: currentDoc })
-      });
+      try {
+        await fetch('/api/registrations/log-download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ student_id: currentStudentDbId, document_type: currentDoc })
+        });
+      } catch(e) {}
 
-      showToast("Document generated and download logged!");
+      showToast("Document generated and downloading!");
+    } else if (action === 'print') {
+      if (frame.contentWindow) frame.contentWindow.postMessage({ type: 'PRINT' }, '*');
     } else if (action === 'email') {
       showToast("Email sent to " + currentStudent.email);
     } else if (action === 'whatsapp') {
@@ -667,41 +765,50 @@
     showToast(`Generating ${selectedDocs.size} document(s) as ZIP... Please wait.`);
 
     const zip = new JSZip();
-    const docFolder = zip.folder(`${currentStudent.name.replace(/\s+/g, '_')}_documents`);
+    const folderName = `${currentStudent.name.replace(/\s+/g, '_')}_documents`;
+    const docFolder = zip.folder(folderName);
     
+    let generatedCount = 0;
     for (const docType of selectedDocs) {
       try {
-        const checkRes = await fetch('/api/registrations/check-download', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ student_id: currentStudentDbId, document_type: docType })
-        });
-        const checkData = await checkRes.json();
-        if (checkData.downloaded) {
-          console.log(`${docType} already downloaded, skipping.`);
-          continue;
-        }
-
-        // Generate PDF via hidden iframe
         const pdfBlob = await generatePdfBlob(docType);
         if (pdfBlob) {
           docFolder.file(`${docType}.pdf`, pdfBlob);
+          generatedCount++;
           
-          // Log download
-          fetch('/api/registrations/log-download', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ student_id: currentStudentDbId, document_type: docType })
-          });
+          try {
+            fetch('/api/registrations/log-download', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ student_id: currentStudentDbId, document_type: docType })
+            });
+          } catch(e) {}
         }
       } catch (err) {
         console.error(`Error generating ${docType}:`, err);
       }
     }
 
+    if (generatedCount === 0) {
+      alert("Could not generate documents for ZIP export. Please check document selection.");
+      return;
+    }
+
     // Generate and download ZIP
     const zipBlob = await zip.generateAsync({ type: 'blob' });
-    saveAs(zipBlob, `${currentStudent.name.replace(/\s+/g, '_')}_all_documents.zip`);
+    const zipFilename = `${currentStudent.name.replace(/\s+/g, '_')}_all_documents.zip`;
+    
+    if (typeof saveAs === 'function') {
+      saveAs(zipBlob, zipFilename);
+    } else {
+      const url = URL.createObjectURL(zipBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = zipFilename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 2000);
+    }
     
     showToast("ZIP download complete!");
   }
@@ -709,9 +816,31 @@
   function generatePdfBlob(docType) {
     return new Promise((resolve) => {
       const hiddenFrame = document.createElement('iframe');
-      hiddenFrame.style.display = 'none';
+      hiddenFrame.style.position = 'fixed';
+      hiddenFrame.style.top = '-9999px';
+      hiddenFrame.style.left = '-9999px';
+      hiddenFrame.style.width = '794px';
+      hiddenFrame.style.height = '1123px';
+      hiddenFrame.style.opacity = '0';
       hiddenFrame.src = routeMap[docType];
       document.body.appendChild(hiddenFrame);
+
+      let resolved = false;
+      const cleanup = () => {
+        if (!resolved) {
+          resolved = true;
+          window.removeEventListener('message', handler);
+          if (hiddenFrame.parentNode) document.body.removeChild(hiddenFrame);
+        }
+      };
+
+      const handler = (event) => {
+        if (event.data && event.data.type === 'PDF_BLOB') {
+          cleanup();
+          resolve(event.data.blob);
+        }
+      };
+      window.addEventListener('message', handler);
 
       hiddenFrame.onload = () => {
         setTimeout(() => {
@@ -721,32 +850,15 @@
           
           setTimeout(() => {
             hiddenFrame.contentWindow.postMessage({ type: 'EXPORT_PDF_BLOB' }, '*');
-            
-            // Listen for PDF blob response
-            const handler = (event) => {
-              if (event.data && event.data.type === 'PDF_BLOB') {
-                window.removeEventListener('message', handler);
-                document.body.removeChild(hiddenFrame);
-                resolve(event.data.blob);
-              }
-            };
-            window.addEventListener('message', handler);
-            
-            // Timeout fallback
-            setTimeout(() => {
-              window.removeEventListener('message', handler);
-              if (hiddenFrame.parentNode) document.body.removeChild(hiddenFrame);
-              resolve(null);
-            }, 15000);
-          }, 500);
-        }, 1000);
+          }, 600);
+        }, 500);
       };
 
-      // Error fallback
+      // Timeout fallback
       setTimeout(() => {
-        if (hiddenFrame.parentNode) document.body.removeChild(hiddenFrame);
+        cleanup();
         resolve(null);
-      }, 20000);
+      }, 15000);
     });
   }
 </script>

@@ -52,7 +52,7 @@
       </script>
       <div class="erp-sidebar-header">
         <div class="sidebar-logo-container">
-          <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" class="sidebar-logo-large" style="height: 50px; width: auto; object-fit: contain;">
+          <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" class="sidebar-logo-large" style="height: 88px; max-height: 94px; width: auto; max-width: 235px; object-fit: contain;">
         </div>
         <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" title="Toggle Sidebar">
           <i id="sidebar-toggle-icon" data-lucide="panel-left-close" style="width: 18px; height: 18px;"></i>
@@ -90,37 +90,41 @@
           <i data-lucide="file-box"></i>
           <span>Document Hub</span>
         </a>
-        <a href="/admin/generators/certificate" class="erp-nav-item <%= currentPath === '/admin/generators/certificate' ? 'active' : '' %>">
+        <a href="/admin/generators/certificate" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/certificate') ? 'active' : '' %>">
           <i data-lucide="award"></i>
           <span>Certificates</span>
         </a>
-        <a href="/admin/generators/offer-letter" class="erp-nav-item <%= currentPath === '/admin/generators/offer-letter' ? 'active' : '' %>">
+        <a href="/admin/generators/offer-letter" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/offer-letter') ? 'active' : '' %>">
           <i data-lucide="file-text"></i>
           <span>Offer Letters</span>
         </a>
-        <a href="/admin/generators/attendance" class="erp-nav-item <%= currentPath === '/admin/generators/attendance' ? 'active' : '' %>">
+        <a href="/admin/generators/attendance" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/attendance') ? 'active' : '' %>">
           <i data-lucide="calendar-check"></i>
           <span>Attendance</span>
         </a>
-        <a href="/admin/generators/project" class="erp-nav-item <%= currentPath === '/admin/generators/project' ? 'active' : '' %>">
+        <a href="/admin/generators/project" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/project') ? 'active' : '' %>">
           <i data-lucide="briefcase"></i>
           <span>Projects</span>
         </a>
 
-        <% if (user.role === 'admin') { %>
+        <% 
+          const adminUser = typeof user !== 'undefined' && user ? user : (typeof locals !== 'undefined' && locals.user ? locals.user : { first_name: 'Admin', last_name: 'User', role: 'admin', email: 'admin@arox.com' });
+        %>
+
+        <% if (adminUser && (adminUser.role === 'admin' || adminUser.role === 'super_admin')) { %>
           <div class="erp-nav-section">System</div>
-          <a href="/admin/users" class="erp-nav-item <%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">
+          <a href="/admin/users" class="erp-nav-item <%= (typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/users')) ? 'active' : '' %>">
             <i data-lucide="user-circle-2"></i>
             <span>Staff & Users</span>
           </a>
-          <a href="/admin/settings" class="erp-nav-item <%= currentPath.startsWith('/admin/settings') ? 'active' : '' %>">
+          <a href="/admin/settings" class="erp-nav-item <%= (typeof currentPath !== 'undefined' && currentPath.startsWith('/admin/settings')) ? 'active' : '' %>">
             <i data-lucide="settings"></i>
             <span>Settings</span>
           </a>
         <% } %>
       </nav>
 
-      <div style="padding: 24px 16px; border-top: var(--erp-border-width) solid rgba(255,255,255,0.1);">
+      <div style="padding: 20px 14px; border-top: 1px solid #E2E8F0;">
         <form action="/api/auth/logout" method="POST">
           <button type="submit" class="erp-nav-item" style="width: 100%; border: none; background: transparent; cursor: pointer; text-align: left;">
             <i data-lucide="log-out"></i>
@@ -147,18 +151,18 @@
           
           <div class="erp-profile">
             <div style="display: flex; flex-direction: column; text-align: right;">
-              <span style="font-size: 13px; font-weight: 600;"><%= user.first_name %> <%= user.last_name %></span>
-              <span style="font-size: 11px; color: var(--erp-text-secondary); text-transform: capitalize;"><%= user.role %></span>
+              <span style="font-size: 13px; font-weight: 600;"><%= adminUser.first_name || 'Admin' %> <%= adminUser.last_name || '' %></span>
+              <span style="font-size: 11px; color: var(--erp-text-secondary); text-transform: capitalize;"><%= adminUser.role || 'Admin' %></span>
             </div>
             <div class="erp-avatar">
-              <%= user.first_name.charAt(0).toUpperCase() %>
+              <%= (adminUser.first_name || 'A').charAt(0).toUpperCase() %>
             </div>
           </div>
         </div>
       </header>
 
       <!-- Page Content -->
-      <div class="erp-content">
+      <div class="erp-content<%= (typeof currentPath !== 'undefined' && (currentPath.startsWith('/admin/generators') || currentPath === '/admin/document-hub')) ? ' erp-content-full' : '' %>">
         <%- body %>
       </div>
     </main>

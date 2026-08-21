@@ -1,6 +1,6 @@
 <section style="min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 20px;">
   <div class="animate-scale-in">
-    <div style="width: 80px; height: 80px; margin: 0 auto 24px; background: <%= typeof code !== 'undefined' && code === 404 ? '#EFF6FF' : '#FEF2F2' %>; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+    <div class="error-icon-bg <%= typeof code !== 'undefined' && code === 404 ? 'error-404' : 'error-other' %>" style="width: 80px; height: 80px; margin: 0 auto 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
       <% if (typeof code !== 'undefined' && code === 404) { %>
         <i data-lucide="search" style="width: 36px; height: 36px; color: #2563EB;"></i>
       <% } else if (typeof code !== 'undefined' && code === 501) { %>
@@ -28,3 +28,8 @@
     </div>
   </div>
 </section>
+
+<style>
+  .error-icon-bg.error-404 { background-color: #EFF6FF; }
+  .error-icon-bg.error-other { background-color: #FEF2F2; }
+</style>

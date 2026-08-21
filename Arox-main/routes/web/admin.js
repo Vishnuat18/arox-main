@@ -13,7 +13,7 @@ const paymentsController = require('../../controllers/admin/paymentsController')
 
 // Apply auth and roleGuard to all admin routes
 router.use(authenticate);
-router.use(roleGuard('admin', 'super_admin', 'trainer'));
+router.use(roleGuard('admin', 'super_admin', 'trainer', 'staff'));
 
 // Helper: load students list for generators
 function loadStudentsList() {
@@ -35,8 +35,9 @@ function loadStudentsList() {
   }
 }
 
-// --- Dashboard ---
+// --- Dashboard & Reports ---
 router.get('/dashboard', dashboardController.overview);
+router.get('/reports', dashboardController.overview);
 
 // --- Students ---
 router.get('/students', studentsController.index);
@@ -44,8 +45,12 @@ router.get('/students/:id', studentsController.show);
 
 // --- Courses ---
 router.get('/courses', coursesController.index);
+router.get('/courses/new', (req, res) => res.redirect('/admin/courses'));
+router.get('/courses/:id/edit', (req, res) => res.redirect('/admin/courses'));
 router.post('/courses', coursesController.create);
+router.put('/courses/:id', coursesController.update);
 router.put('/courses/:id/status', coursesController.updateStatus);
+router.delete('/courses/:id', coursesController.delete);
 
 // --- Registrations ---
 router.get('/registrations', registrationsController.index);
@@ -70,7 +75,7 @@ router.get('/generators/certificate', (req, res) => {
 });
 
 // Offer Letter Generator
-router.get('/generators/offer-letter', (req, res) => {
+router.get(['/generators/offer-letter', '/generators/offerletter'], (req, res) => {
   res.render('admin/generators/offerletter', {
     layout: 'layouts/admin',
     pageTitle: 'Offer Letter Generator',

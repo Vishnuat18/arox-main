@@ -1,0 +1,545 @@
+:root {
+    --primary-blue: #142850; /* Darker navy blue matching design */
+    --primary-orange: #f26f21;
+    --text-color: #333;
+    --bg-color: #f4f6f8;
+    --gold: #d4af37;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Preloader */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(11, 28, 59, 0.2);
+    border-top-color: var(--primary-orange);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin { 
+    to { transform: rotate(360deg); } 
+}
+
+/* Layout */
+.app-container {
+    display: flex;
+    height: 100vh;
+    padding: 1.5rem;
+    gap: 1.5rem;
+    overflow: hidden;
+}
+
+.controls {
+    width: 350px;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.controls h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: var(--primary-blue);
+    text-align: center;
+    border-bottom: 2px solid var(--bg-color);
+    padding-bottom: 10px;
+}
+
+/* Form Styles */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(242, 111, 33, 0.1);
+}
+
+.actions {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    z-index: 10;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px; /* Pill shape */
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.primary-btn {
+    background-color: var(--primary-orange);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #d85c14;
+    box-shadow: 0 4px 12px rgba(242, 111, 33, 0.3);
+}
+
+.secondary-btn {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: #071227;
+    box-shadow: 0 4px 12px rgba(11, 28, 59, 0.3);
+}
+
+/* Certificate Preview */
+.preview-area {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    height: 100%;
+}
+
+.certificate-wrapper {
+    position: relative;
+    width: 1123px; /* A4 landscape approx */
+    height: 794px; /* A4 landscape approx */
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+    transform-origin: center center;
+    transform: scale(calc(min((100vw - 420px) / 1150, (100vh - 140px) / 820)));
+    margin-bottom: 20px; /* Balance space for buttons */
+}
+
+.cert-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    object-fit: cover;
+}
+
+.cert-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    padding: 50px 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Top Section */
+.top-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.cert-logo {
+    height: 90px;
+}
+
+/* Middle Section */
+.middle-section {
+    text-align: center;
+    flex: 1;
+}
+
+.cert-title {
+    font-family: 'Cinzel', serif;
+    color: var(--primary-blue);
+    font-size: 3rem;
+    font-weight: 700;
+    margin-top: 5px;
+    letter-spacing: 2px;
+}
+
+/* Certificate Subtitle & Diamonds */
+.cert-subtitle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px; /* Reduced from 30px */
+    gap: 15px;
+}
+
+.cert-subtitle {
+    font-family: 'Cinzel', serif;
+    color: var(--primary-orange);
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 12px;
+}
+
+.cert-subtitle-wrapper .line {
+    width: 70px;
+    height: 1px;
+    background-color: var(--primary-blue);
+    position: relative;
+}
+
+.cert-subtitle-wrapper .line:first-child .diamond {
+    right: -4px;
+}
+
+.cert-subtitle-wrapper .line:last-child .diamond {
+    left: -4px;
+}
+
+.diamond {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    background-color: var(--primary-blue);
+}
+
+.cert-presented {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #666;
+    letter-spacing: 2px;
+    margin-bottom: 0px;
+}
+
+/* Name Line */
+.cert-name-wrapper {
+    position: relative;
+    width: 70%;
+    margin: 25px auto 20px auto; /* Reduced to avoid conflicts */
+}
+
+.cert-name {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 2.2rem;
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+.diamond-line {
+    width: 100%;
+    height: 1px;
+    background-color: #999;
+    position: relative;
+}
+
+.diamond-line .diamond {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 7px;
+    height: 7px;
+    background-color: #999;
+    box-shadow: 0 0 0 4px white; /* Clears the line behind it */
+}
+
+.cert-for {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* Project Line */
+.cert-project-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 60%;
+    margin: 0 auto 15px auto; /* Reduced from 20px */
+    color: var(--primary-orange);
+}
+
+.quote {
+    font-family: Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    line-height: 0.5;
+    margin: 0 10px;
+    position: relative;
+    top: 5px;
+}
+
+.project-title-container {
+    flex: 1;
+    border-bottom: 2px solid var(--primary-orange);
+    text-align: center;
+    padding-bottom: 5px;
+}
+
+.cert-project-title {
+    color: var(--primary-blue);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.cert-duration {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.cert-date-inline {
+    border-bottom: 1px solid #aaa;
+    padding: 0 20px;
+    font-weight: 600;
+    color: #333;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.cert-appreciation {
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-top: 10px; /* Reduced from 20px */
+}
+
+/* Meta Section (ID and Date) */
+.meta-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 180px; /* Increased padding to bring columns closer */
+    margin-top: 15px; /* Reduced margin */
+}
+
+.cert-meta-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 150px; /* Fixed width to match signatures exactly */
+}
+
+.meta-label {
+    font-weight: 700;
+    color: var(--primary-blue);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 4px;
+    margin-bottom: 6px;
+}
+
+.meta-value {
+    color: #555;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.meta-center-line {
+    flex: 1;
+    height: 1px;
+    background-color: #ccc;
+    margin: 0 20px;
+    position: relative;
+    top: -5px; /* adjust for the border-bottom visually */
+}
+
+.meta-center-line .diamond {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    background-color: #ccc;
+    box-shadow: 0 0 0 4px white;
+}
+
+/* Bottom Section */
+.bottom-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 5px; /* Reduced gap */
+    padding: 0 180px; /* Match meta-section padding exactly */
+}
+
+.ceo-col, .trainer-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px; /* Match meta-item width */
+}
+
+.signature-wrap {
+    height: 70px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    position: relative;
+    border-bottom: 2px solid var(--gold);
+}
+
+.signature-wrap::before,
+.signature-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; 
+    width: 4px;
+    height: 4px;
+    background-color: var(--gold);
+    transform: rotate(45deg);
+}
+
+.signature-wrap::before { left: 0; }
+.signature-wrap::after { right: 0; }
+
+.ceo-sign {
+    max-height: 80px; 
+}
+
+.trainer-sign {
+    max-height: 50px;
+}
+
+.name-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.name-title strong {
+    font-weight: 700;
+    color: var(--primary-blue);
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
+
+.name-title span {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.qr-container {
+    width: 80px;
+    height: 80px;
+    background: white;
+    padding: 5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px; /* Pushes QR code up to align with seals */
+}
+
+.qr-container img {
+    max-width: 100%;
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .no-print {
+        display: none !important;
+    }
+    
+    .app-container {
+        padding: 0;
+        margin: 0;
+        display: block;
+    }
+    
+    .certificate-wrapper {
+        box-shadow: none;
+        width: 100%;
+        height: 100vh;
+        page-break-after: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        transform: none !important;
+    }
+    
+    @page {
+        size: A4 landscape;
+        margin: 0;
+    }
+}

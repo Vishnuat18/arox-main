@@ -19,13 +19,13 @@
       <div class="grid-2">
         <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md);">
           <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Education</div>
-          <div style="font-weight: 600; color: var(--text-primary);"><%= student.degree %></div>
-          <div style="font-size: 0.85rem; color: var(--text-secondary);"><%= student.college_name %> (Year <%= student.year_of_study %>)</div>
+          <div style="font-weight: 600; color: var(--text-primary);"><%= student.degree || 'N/A' %></div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary);"><%= student.college_name || 'N/A' %> <%= student.year_of_study ? `(Year ${student.year_of_study})` : '' %></div>
         </div>
         
         <div style="background: var(--bg-secondary); padding: 16px; border-radius: var(--radius-md);">
           <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">Address</div>
-          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;"><%= student.address %></div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;"><%= student.address || 'Address not provided' %></div>
         </div>
       </div>
     </div>

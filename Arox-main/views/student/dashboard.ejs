@@ -1,15 +1,15 @@
 <!-- Offer Letter Collection Modal (shows on first visit) -->
-<div id="offerLetterModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-  <div style="background: #fff; border-radius: 16px; width: 100%; max-width: 520px; margin: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden;">
+<div id="offerLetterModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+  <div style="background: #fff; border-radius: 16px; width: 100%; max-width: 520px; margin: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; border: 1px solid #E2E8F0;">
     <!-- Header -->
-    <div style="background: linear-gradient(135deg, #155EEF 0%, #0F4EBB 100%); padding: 28px 32px; color: #fff;">
+    <div style="background: #000000; padding: 28px 32px; color: #fff;">
       <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-        <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+        <div style="width: 40px; height: 40px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
           <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
         </div>
-        <h2 style="margin: 0; font-size: 20px; font-weight: 700;">Welcome to AROX!</h2>
+        <h2 style="margin: 0; font-size: 20px; font-weight: 700; color: #FFFFFF;">Welcome to AROX!</h2>
       </div>
-      <p style="margin: 0; font-size: 14px; opacity: 0.9; line-height: 1.5;">Let's set up your offer letter. Please confirm your details below so we can generate your official offer letter.</p>
+      <p style="margin: 0; font-size: 14px; color: #94A3B8; line-height: 1.5;">Let's set up your offer letter. Please confirm your details below so we can generate your official offer letter.</p>
     </div>
     
     <!-- Form -->
@@ -17,28 +17,28 @@
       <input type="hidden" id="offerStudentId" value="<%= typeof student !== 'undefined' && student ? student.id : '' %>">
       
       <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">Full Name</label>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #000000; margin-bottom: 6px;">Full Name</label>
         <input type="text" id="offerName" class="erp-input" placeholder="e.g., S. Kavin" value="<%= typeof student !== 'undefined' && student ? student.first_name + ' ' + student.last_name : '' %>" required>
       </div>
 
       <div style="margin-bottom: 16px;">
-        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">College / University</label>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #000000; margin-bottom: 6px;">College / University</label>
         <input type="text" id="offerCollege" class="erp-input" placeholder="e.g., KSR College of Engineering" value="<%= typeof student !== 'undefined' && student ? (student.college || '') : '' %>">
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
         <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">Department</label>
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #000000; margin-bottom: 6px;">Department</label>
           <input type="text" id="offerDept" class="erp-input" placeholder="e.g., IT" value="<%= typeof student !== 'undefined' && student ? (student.department || '') : '' %>">
         </div>
         <div>
-          <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">Year of Study</label>
+          <label style="display: block; font-size: 13px; font-weight: 600; color: #000000; margin-bottom: 6px;">Year of Study</label>
           <input type="text" id="offerYear" class="erp-input" placeholder="e.g., III Year" value="<%= typeof student !== 'undefined' && student ? (student.year_of_study || '') : '' %>">
         </div>
       </div>
 
       <div style="margin-bottom: 20px;">
-        <label style="display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px;">Preferred Role / Domain</label>
+        <label style="display: block; font-size: 13px; font-weight: 600; color: #000000; margin-bottom: 6px;">Preferred Role / Domain</label>
         <select id="offerDomain" class="erp-input">
           <option value="">Select your domain</option>
           <option value="Full Stack Web Development">Full Stack Web Development</option>
@@ -52,10 +52,10 @@
       </div>
 
       <div style="display: flex; gap: 12px;">
-        <button type="submit" style="flex: 1; padding: 12px; background: #155EEF; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--erp-font);">
+        <button type="submit" style="flex: 1; padding: 12px; background: #000000; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: var(--erp-font);">
           <i data-lucide="check-circle-2" style="width: 16px; height: 16px;"></i> Confirm & Generate Offer Letter
         </button>
-        <button type="button" onclick="skipOfferLetter()" style="padding: 12px 20px; background: transparent; color: #64748B; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--erp-font);">
+        <button type="button" onclick="skipOfferLetter()" style="padding: 12px 20px; background: transparent; color: #64748B; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; font-family: var(--erp-font);">
           Skip for now
         </button>
       </div>
@@ -65,76 +65,81 @@
   </div>
 </div>
 
-<div class="erp-h1" style="margin-bottom: 24px;">Student Overview</div>
+<div class="erp-h1" style="margin-bottom: 24px; color: #000000;">Student Overview</div>
 
 <% if (typeof latestRegistration !== 'undefined' && latestRegistration) { %>
-  <div style="background: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius); padding: 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center;">
+  <div style="background: #000000; border: 1px solid #000000; border-radius: 12px; padding: 24px; margin-bottom: 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; color: #FFFFFF;">
     <div>
-      <h2 style="font-size: 20px; font-weight: 700; color: var(--success); margin-bottom: 8px;">
-        Welcome to AROX Tech, <%= student.first_name %>! <i data-lucide="party-popper"></i>
+      <h2 style="font-size: 20px; font-weight: 700; color: #FFFFFF; margin-bottom: 6px;">
+        Welcome to AROX Tech, <%= (typeof student !== 'undefined' && student) ? student.first_name : 'Student' %>!
       </h2>
-      <p style="color: var(--text-secondary); font-size: 14px;">
-        Your offer letter is ready. Please download it below and save it for your records.
+      <p style="color: #CBD5E1; font-size: 14px; margin: 0;">
+        Your official documents and course materials are accessible in your portal.
       </p>
     </div>
     <div>
-      <a href="/api/registrations/<%= latestRegistration.registration_id %>/offer-letter" target="_blank" class="erp-btn erp-btn-primary" style="background: var(--success); border-color: var(--success);">
-        <i data-lucide="download"></i> Download Offer Letter
+      <a href="/api/registrations/<%= latestRegistration.registration_id %>/offer-letter" target="_blank" class="erp-btn" style="background: #FFFFFF; color: #000000; font-weight: 700; border: none; padding: 10px 20px;">
+        <i data-lucide="download" style="color: #000000;"></i> Download Offer Letter
       </a>
     </div>
   </div>
 <% } %>
 <div class="erp-grid-4">
   <!-- Enrolled Courses -->
-  <div class="erp-card">
+  <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0;">
     <div class="erp-card-header">
-      <div class="erp-card-icon">
+      <div class="erp-card-icon" style="background: #000000; color: #FFFFFF;">
         <i data-lucide="book-open"></i>
       </div>
-      <div class="erp-card-title">Enrolled Courses</div>
+      <div class="erp-card-title" style="color: #64748B;">Enrolled Courses</div>
     </div>
-    <div class="erp-card-value"><%= (typeof enrollments !== 'undefined') ? enrollments.length : '1' %></div>
-    <div class="erp-p" style="margin-top: 8px;">Active programs</div>
+    <div class="erp-card-value" style="color: #000000;"><%= (typeof stats !== 'undefined' && stats.enrolled !== undefined) ? stats.enrolled : ((typeof enrollments !== 'undefined') ? enrollments.length : '0') %></div>
+    <div class="erp-p" style="margin-top: 8px; color: #64748B;">Active programs</div>
   </div>
 
-  <!-- Overall Progress -->
-  <div class="erp-card">
+  <!-- Overall Progress / Attendance -->
+  <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0;">
     <div class="erp-card-header">
-      <div class="erp-card-icon">
+      <div class="erp-card-icon" style="background: #000000; color: #FFFFFF;">
         <i data-lucide="activity"></i>
       </div>
-      <div class="erp-card-title">Overall Progress</div>
+      <div class="erp-card-title" style="color: #64748B;">Attendance Rate</div>
     </div>
-    <div class="erp-card-value">45%</div>
-    <div style="width: 100%; height: 6px; background-color: var(--erp-border); border-radius: 99px; margin-top: 12px; overflow: hidden;">
-      <div style="width: 45%; height: 100%; background-color: var(--erp-text-primary);"></div>
+    <div class="erp-card-value" style="color: #000000;"><%= (typeof stats !== 'undefined' && stats.attendance !== undefined) ? stats.attendance : 100 %>%</div>
+    <div style="width: 100%; height: 6px; background-color: #E2E8F0; border-radius: 99px; margin-top: 12px; overflow: hidden;">
+      <div style="width: <%= (typeof stats !== 'undefined' && stats.attendance !== undefined) ? stats.attendance : 100 %>%; height: 100%; background-color: #000000;"></div>
     </div>
   </div>
 
-  <!-- Assignments -->
-  <div class="erp-card">
+  <!-- Completed Programs -->
+  <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0;">
     <div class="erp-card-header">
-      <div class="erp-card-icon">
-        <i data-lucide="clipboard-list"></i>
+      <div class="erp-card-icon" style="background: #000000; color: #FFFFFF;">
+        <i data-lucide="award"></i>
       </div>
-      <div class="erp-card-title">Assignments Due</div>
+      <div class="erp-card-title" style="color: #64748B;">Certifications</div>
     </div>
-    <div class="erp-card-value">2</div>
-    <div class="erp-p" style="margin-top: 8px; color: var(--erp-warning); font-weight: 500;">Next due in 3 days</div>
+    <div class="erp-card-value" style="color: #000000;"><%= (typeof stats !== 'undefined' && stats.completed !== undefined) ? stats.completed : 0 %></div>
+    <div class="erp-p" style="margin-top: 8px; color: #64748B; font-weight: 500;">Issued credentials</div>
   </div>
 
   <!-- Payment Status -->
-  <div class="erp-card">
+  <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0;">
     <div class="erp-card-header">
-      <div class="erp-card-icon">
+      <div class="erp-card-icon" style="background: #000000; color: #FFFFFF;">
         <i data-lucide="wallet"></i>
       </div>
-      <div class="erp-card-title">Payment Status</div>
+      <div class="erp-card-title" style="color: #64748B;">Payment Status</div>
     </div>
-    <div class="erp-card-value">Clear</div>
-    <div class="erp-p" style="margin-top: 8px; color: var(--erp-success); font-weight: 500;">
-      <i data-lucide="check-circle-2" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
-      All dues paid
+    <div class="erp-card-value" style="color: #000000;">
+      <%= (typeof stats !== 'undefined' && stats.pendingPayments > 0) ? `₹${stats.pendingPayments.toLocaleString('en-IN')}` : 'Verified' %>
+    </div>
+    <div class="erp-p" style="margin-top: 8px; color: #000000; font-weight: 500;">
+      <% if (typeof stats !== 'undefined' && stats.pendingPayments > 0) { %>
+        <i data-lucide="clock" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> Pending Balance
+      <% } else { %>
+        <i data-lucide="check-circle-2" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> All dues settled
+      <% } %>
     </div>
   </div>
 </div>

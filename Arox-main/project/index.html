@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arox Tech - Certificate Generator & Preview</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- html2canvas and jspdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #142850;
+            --primary-orange: #f26f21;
+            --text-color: #333;
+            --bg-color: #f4f6f8;
+            --gold: #d4af37;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(11, 28, 59, 0.2);
+            border-top-color: var(--primary-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .app-container {
+            display: flex;
+            height: calc(100vh - 54px);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .controls {
+            width: 400px;
+            background: #f6f7fb;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow-y: auto;
+            border-right: 1px solid #d8dce6;
+            flex-shrink: 0;
+        }
+
+        .controls h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-blue);
+            text-align: center;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(242, 111, 33, 0.1);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 2rem;
+            background: transparent;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .primary-btn {
+            background-color: var(--primary-orange);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: #d85c14;
+            box-shadow: 0 4px 12px rgba(242, 111, 33, 0.3);
+        }
+
+        .secondary-btn {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .secondary-btn:hover {
+            background-color: #071227;
+            box-shadow: 0 4px 12px rgba(11, 28, 59, 0.3);
+        }
+
+        .preview-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #e2e8f0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .preview-viewport {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            padding: 1rem;
+        }
+
+        .certificate-wrapper {
+            position: relative;
+            width: 1123px;
+            /* A4 landscape approx */
+            height: 794px;
+            /* A4 landscape approx */
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            flex-shrink: 0;
+            transform-origin: center center;
+        }
+
+        .cert-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            object-fit: cover;
+        }
+
+        .cert-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            padding: 50px 80px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .cert-logo {
+            max-height: 300px;
+            max-width: 300px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .middle-section {
+            text-align: center;
+            flex: 1;
+        }
+
+        .cert-title {
+            font-family: 'Cinzel', serif;
+            color: var(--primary-blue);
+            font-size: 3rem;
+            font-weight: 700;
+            margin-top: 5px;
+            letter-spacing: 2px;
+        }
+
+        .cert-subtitle-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .cert-subtitle {
+            font-family: 'Cinzel', serif;
+            color: var(--primary-orange);
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 12px;
+        }
+
+        .cert-subtitle-wrapper .line {
+            width: 70px;
+            height: 1px;
+            background-color: var(--primary-blue);
+            position: relative;
+        }
+
+        .cert-subtitle-wrapper .line:first-child .diamond {
+            right: -4px;
+        }
+
+        .cert-subtitle-wrapper .line:last-child .diamond {
+            left: -4px;
+        }
+
+        .diamond {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            width: 6px;
+            height: 6px;
+            background-color: var(--primary-blue);
+        }
+
+        .cert-presented {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            letter-spacing: 2px;
+        }
+
+        /* Name Line */
+        .cert-name-wrapper {
+            margin: 25px auto 20px auto;
+        }
+
+        .cert-name {
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            color: var(--primary-blue);
+            font-weight: 700;
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        .cert-name:hover,
+        .cert-name:focus {
+            background: rgba(242, 111, 33, 0.05);
+            border-radius: 4px;
+        }
+
+        .cert-for {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .cert-project-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            width: 60%;
+            margin: 0 auto 15px auto;
+            color: var(--primary-orange);
+        }
+
+        .project-title-container {
+            flex: 1;
+            text-align: center;
+            padding-bottom: 5px;
+        }
+
+        .cert-project-title {
+            color: var(--primary-blue);
+            font-size: 1.2rem;
+            font-weight: 700;
+            outline: none;
+            transition: background 0.2s;
+            padding: 2px 8px;
+        }
+
+        .cert-project-title:hover,
+        .cert-project-title:focus {
+            background: rgba(242, 111, 33, 0.05);
+            border-radius: 4px;
+        }
+
+        .cert-duration {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .cert-date-inline {
+            padding: 0 10px;
+            font-weight: 600;
+            color: #333;
+            display: inline-block;
+            min-width: 80px;
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        .cert-date-inline:hover,
+        .cert-date-inline:focus {
+            background: rgba(242, 111, 33, 0.05);
+            border-radius: 4px;
+        }
+
+        .cert-appreciation {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .bottom-section {
+            display: flex;
+            justify-content: start;
+            align-items: flex-end;
+            margin-top: auto;
+            padding: 0 80px;
+        }
+
+        .ceo-col,
+        .trainer-col,
+        .qr-col,
+        .date-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 200px;
+            margin-left: -20px;
+            margin-top: 20px;
+        }
+
+        .signature-wrap {
+            height: 70px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .ceo-sign {
+            max-height: 100px;
+        }
+
+        .trainer-sign {
+            max-height: 70px;
+        }
+
+        .name-title,
+        .cert-meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 35px;
+        }
+
+        .name-title strong {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .name-title span {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .qr-wrap {
+            border-bottom: none;
+        }
+
+        .qr-container {
+            width: 80px;
+            height: 80px;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-container img {
+            max-width: 100%;
+        }
+
+        .meta-label {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+            margin-top: 6px;
+        }
+
+        .meta-value {
+            color: #555;
+            font-size: 0.8rem;
+            font-weight: 600;
+            outline: none;
+            transition: background 0.2s;
+            padding: 0 5px;
+        }
+
+        .meta-value:hover,
+        .meta-value:focus {
+            background: rgba(242, 111, 33, 0.05);
+            border-radius: 4px;
+        }
+
+        @media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .app-container {
+                padding: 0;
+                margin: 0;
+                display: block;
+            }
+
+            .certificate-wrapper {
+                box-shadow: none;
+                width: 1123px !important;
+                height: 794px !important;
+                page-break-after: avoid;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                transform: none !important;
+                margin: 0 !important;
+            }
+
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+        }
+        /* Unified Generator Navigation */
+        .generator-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #0A1F44;
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: white;
+            z-index: 1000;
+            position: relative;
+        }
+        .generator-nav .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        .generator-nav .nav-brand img {
+            height: 30px;
+        }
+        .generator-nav .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .generator-nav .nav-link {
+            color: #CBD5E0;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        .generator-nav .nav-link:hover, .generator-nav .nav-link.active {
+            color: #F26522;
+            background: rgba(255,255,255,0.05);
+        }
+        .generator-nav .nav-admin .admin-btn {
+            background-color: #F26522;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .generator-nav .nav-admin .admin-btn:hover {
+            background-color: #d9561a;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Unified Navigation Bar -->
+    <nav class="generator-nav">
+      <a href="/admin/dashboard" class="nav-brand" style="text-decoration: none;">
+        <img src="/erp-assets/images/logo/logo.png" onerror="this.src='../arox-cert/assets/cert/a logo.png'" alt="Arox Logo">
+        <span>Arox Generators</span>
+      </a>
+      <div class="nav-links">
+        <a href="/admin/document-hub" class="nav-link" id="nav-hub">Document Hub</a>
+        <a href="/cert/index.html" class="nav-link" id="nav-cert">Certificate</a>
+        <a href="/offerletter/index.html" class="nav-link" id="nav-offer">Offer Letter</a>
+        <a href="/attendance/index.html" class="nav-link" id="nav-attendance">Attendance</a>
+        <a href="/project/index.html" class="nav-link active" id="nav-project">Project</a>
+      </div>
+      <div class="nav-admin">
+        <a href="/admin/dashboard" class="admin-btn">Dashboard</a>
+      </div>
+    </nav>
+    <div id="preloader" class="hidden">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <div class="app-container">
+        <aside class="controls no-print">
+            <h2>Certificate Details</h2>
+
+            <form id="cert-form">
+                <div class="form-group" style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+                    <label style="color: #0A1F44; font-weight: 600;">Select Candidate (Live from ERP)</label>
+                    <select id="statusFilter" onchange="applyFilters()" style="margin-bottom: 10px;">
+                        <option value="ALL">All Students</option>
+                        <option value="ACTIVE" selected>Active</option>
+                        <option value="COMPLETED">Completed</option>
+                        <option value="INACTIVE">Inactive / Stopped</option>
+                    </select>
+                    <select id="studentSelect" onchange="handleStudentSelect(this.value)">
+                        <option value="">-- Loading students... --</option>
+                    </select>
+                    <small style="color: #64748b; font-size: 0.8rem; margin-top: 5px; display: block;">Auto-fills Candidate Name and Project.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="cert-id-input">Certificate ID</label>
+                    <input type="text" id="cert-id-input" value="ATX-PC-2026-0001">
+                </div>
+                <div class="form-group">
+                    <label for="issue-date-input">Date of Issue</label>
+                    <input type="text" id="issue-date-input" value="04 August 2026">
+                </div>
+                <div class="form-group">
+                    <label for="name-input">Student Name</label>
+                    <input type="text" id="name-input" value="Student Name">
+                </div>
+                <div class="form-group">
+                    <label for="project-input">Project Title</label>
+                    <input type="text" id="project-input" value="Project Title Here">
+                </div>
+                <div class="form-group">
+                    <label for="start-date-input">Start Date</label>
+                    <input type="text" id="start-date-input" value="January 2026">
+                </div>
+                <div class="form-group">
+                    <label for="end-date-input">End Date</label>
+                    <input type="text" id="end-date-input" value="June 2026">
+                </div>
+            </form>
+        </aside>
+
+        <main class="preview-panel">
+            <div class="preview-viewport">
+                <div id="certificate" class="certificate-wrapper">
+                    <img src="assets/CertBG.png" alt="Certificate Background" class="cert-bg">
+
+                    <div class="cert-content">
+                        <div class="top-section">
+                            <img src="assets/logo.png" alt="Arox Tech Logo" class="cert-logo">
+                        </div>
+
+                        <div class="middle-section">
+                            <h1 class="cert-title">PROJECT COMPLETION</h1>
+
+                            <div class="cert-subtitle-wrapper">
+                                <span class="line"><span class="diamond"></span></span>
+                                <h2 class="cert-subtitle">CERTIFICATE</h2>
+                                <span class="line"><span class="diamond"></span></span>
+                            </div>
+
+                            <p class="cert-presented">THIS CERTIFICATE IS PROUDLY PRESENTED TO</p>
+
+                            <div class="cert-name-wrapper">
+                                <h3 class="cert-name" id="cert-name-val" contenteditable="true" spellcheck="false">
+                                    Student Name</h3>
+                            </div>
+
+                            <p class="cert-for">for successfully completing the project titled</p>
+
+                            <div class="cert-project-wrapper">
+                                <div class="project-title-container">
+                                    <span class="cert-project-title" id="cert-project-val" contenteditable="true"
+                                        spellcheck="false">Project Title Here</span>
+                                </div>
+                            </div>
+
+                            <p class="cert-duration">
+                                at Arox Tech from <span class="cert-date-inline" id="cert-start-date-val"
+                                    contenteditable="true" spellcheck="false">January 2026</span> to <span
+                                    class="cert-date-inline" id="cert-end-date-val" contenteditable="true"
+                                    spellcheck="false">June 2026</span>.
+                            </p>
+                            <p class="cert-appreciation">
+                                We appreciate your dedication, hard work, and valuable contributions<br>
+                                towards the successful completion of the project.
+                            </p>
+                        </div>
+
+                        <div class="bottom-section">
+                            <div class="date-col">
+                                <div class="signature-wrap date-wrap">
+                                    <!-- Empty to maintain equal baseline height -->
+                                </div>
+                                <div class="cert-meta-item">
+                                    <span class="meta-label">DATE OF ISSUE</span>
+                                    <span class="meta-value" id="cert-issue-date-val" contenteditable="true"
+                                        spellcheck="false">04 August 2026</span>
+                                </div>
+                            </div>
+
+                            <div class="ceo-col">
+                                <div class="signature-wrap">
+                                    <img src="assets/Sign.png" alt="CEO Signature & Seal" class="ceo-sign">
+                                </div>
+                                <div class="name-title">
+                                    <strong>CEO</strong>
+                                    <span>Arox Tech</span>
+                                </div>
+                            </div>
+
+                            <div class="qr-col">
+                                <div class="signature-wrap qr-wrap">
+                                    <div id="qr-code" class="qr-container"></div>
+                                </div>
+                                <div class="cert-meta-item cert-id-qr">
+                                    <span class="meta-label">CERTIFICATE ID</span>
+                                    <span class="meta-value" id="cert-id-val" contenteditable="true"
+                                        spellcheck="false">ATX-PC-2026-0001</span>
+                                </div>
+                            </div>
+
+                            <div class="trainer-col">
+                                <div class="signature-wrap">
+                                    <img src="assets/trainer.png" alt="Trainer Signature" class="trainer-sign">
+                                </div>
+                                <div class="name-title">
+                                    <strong>TRAINING HEAD</strong>
+                                    <span>Arox Tech</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End preview-viewport -->
+
+            <div class="actions no-print">
+                <button id="download-img-btn" class="btn primary-btn">Download Image</button>
+                <button id="download-pdf-btn" class="btn primary-btn">Download PDF</button>
+                <button id="print-btn" class="btn secondary-btn">Print</button>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize QR Code
+            const qrContainer = document.getElementById('qr-code');
+            new QRCode(qrContainer, {
+                text: "https://arox.tech/certificate-verify",
+                width: 70,
+                height: 70,
+                colorDark: "#0b1c3b",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            const preloader = document.getElementById('preloader');
+            const certificate = document.getElementById('certificate');
+            const downloadImgBtn = document.getElementById('download-img-btn');
+            const downloadPdfBtn = document.getElementById('download-pdf-btn');
+            const printBtn = document.getElementById('print-btn');
+
+            // Input syncing logic with two-way binding for contenteditable
+            const syncInput = (inputId, targetId) => {
+                const input = document.getElementById(inputId);
+                const target = document.getElementById(targetId);
+
+                if (input && target) {
+                    // Form to Preview
+                    input.addEventListener('input', (e) => {
+                        target.textContent = e.target.value;
+                    });
+                    // Preview to Form
+                    target.addEventListener('input', (e) => {
+                        input.value = e.target.textContent;
+                    });
+                    // Prevent enter key adding newlines
+                    target.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            target.blur();
+                        }
+                    });
+                }
+            };
+
+            syncInput('cert-id-input', 'cert-id-val');
+            syncInput('issue-date-input', 'cert-issue-date-val');
+            syncInput('name-input', 'cert-name-val');
+            syncInput('project-input', 'cert-project-val');
+            syncInput('start-date-input', 'cert-start-date-val');
+            syncInput('end-date-input', 'cert-end-date-val');
+
+            // Dynamic scale to fit preview perfectly
+            const resizeCertificate = () => {
+                const viewport = document.querySelector('.preview-viewport');
+                if (!viewport || !certificate) return;
+
+                const availableWidth = viewport.clientWidth - 40;
+                const availableHeight = viewport.clientHeight - 40;
+
+                const scale = Math.min(availableWidth / 1123, availableHeight / 794);
+                certificate.style.transform = `scale(${scale})`;
+            };
+
+            window.addEventListener('resize', resizeCertificate);
+            resizeCertificate();
+            setTimeout(resizeCertificate, 100);
+
+            // Helper: Show/Hide preloader
+            const togglePreloader = (show) => {
+                if (show) {
+                    preloader.classList.remove('hidden');
+                } else {
+                    preloader.classList.add('hidden');
+                }
+            };
+
+            const generateCanvas = async () => {
+                // Move certificate out of the flex container to top-left to avoid html2canvas cropping
+                const originalTransform = certificate.style.transform;
+                const originalPosition = certificate.style.position;
+                const originalTop = certificate.style.top;
+                const originalLeft = certificate.style.left;
+                const originalZIndex = certificate.style.zIndex;
+
+                certificate.style.transform = 'none';
+                certificate.style.position = 'absolute';
+                certificate.style.top = '0';
+                certificate.style.left = '0';
+                certificate.style.zIndex = '99999';
+
+                await new Promise(resolve => setTimeout(resolve, 50)); // let browser reflow
+
+                const canvas = await html2canvas(certificate, {
+                    scale: 2, // Higher resolution for better quality
+                    useCORS: true,
+                    backgroundColor: null,
+                    scrollX: 0,
+                    scrollY: 0
+                });
+
+                // Restore
+                certificate.style.transform = originalTransform;
+                certificate.style.position = originalPosition;
+                certificate.style.top = originalTop;
+                certificate.style.left = originalLeft;
+                certificate.style.zIndex = originalZIndex;
+
+                return canvas;
+            };
+
+            downloadImgBtn.addEventListener('click', async () => {
+                togglePreloader(true);
+                try {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+
+                    const canvas = await generateCanvas();
+                    const link = document.createElement('a');
+                    link.download = 'Arox-Certificate.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                } catch (error) {
+                    console.error("Error generating image", error);
+                    alert("There was an error generating the image. Please try again.");
+                } finally {
+                    togglePreloader(false);
+                }
+            });
+
+            downloadPdfBtn.addEventListener('click', async () => {
+                togglePreloader(true);
+                try {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+
+                    const canvas = await generateCanvas();
+                    const imgData = canvas.toDataURL('image/png');
+
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF({
+                        orientation: 'landscape',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('Arox-Certificate.pdf');
+                } catch (error) {
+                    console.error("Error generating PDF", error);
+                    alert("There was an error generating the PDF. Please try again.");
+                } finally {
+                    togglePreloader(false);
+                }
+            });
+
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+
+            // --- INTEGRATION FOR AROX ERP ---
+            if (window.self !== window.top) {
+                const nav = document.querySelector('.generator-nav');
+                if (nav) nav.style.display = 'none';
+                
+                const controls = document.querySelector('.controls');
+                if (controls) controls.style.display = 'none';
+                
+                const actions = document.querySelector('.actions');
+                if (actions) actions.style.display = 'none';
+                
+                document.body.style.margin = '0';
+                document.body.style.padding = '0';
+                document.body.style.height = '100vh';
+                
+                const appContainer = document.querySelector('.app-container');
+                if (appContainer) {
+                    appContainer.style.height = '100vh';
+                    appContainer.style.flexDirection = 'column';
+                    appContainer.style.padding = '0';
+                }
+
+                window.addEventListener('message', (event) => {
+                    if (event.data.type === 'UPDATE_DATA') {
+                        const d = event.data.data;
+                        for (const key in d) {
+                            const el = document.getElementById(key);
+                            if (el) {
+                                if (el.type === 'checkbox') {
+                                    el.checked = d[key];
+                                    el.dispatchEvent(new Event('change'));
+                                } else {
+                                    el.value = d[key];
+                                    el.dispatchEvent(new Event('input'));
+                                }
+                            }
+                        }
+                    } else if (event.data.type === 'EXPORT_PDF') {
+                        downloadPdfBtn.click();
+                    }
+                });
+            }
+
+            // --- AUTO FILL LOGIC ---
+            fetchStudents();
+        });
+
+        let allStudents = [];
+        async function fetchStudents() {
+            try {
+                const res = await fetch('/api/students');
+                allStudents = await res.json();
+                if (!Array.isArray(allStudents)) allStudents = [];
+                applyFilters();
+                const urlParams = new URLSearchParams(window.location.search);
+                const studentId = urlParams.get('studentId');
+                if (studentId) {
+                    const select = document.getElementById('studentSelect');
+                    if(select) {
+                        select.value = studentId;
+                        handleStudentSelect(studentId);
+                    }
+                }
+            } catch(e) {
+                console.error(e);
+                const select = document.getElementById('studentSelect');
+                if(select) select.innerHTML = '<option value="">-- Failed to load students --</option>';
+            }
+        }
+        
+        function applyFilters() {
+            const filter = document.getElementById('statusFilter').value;
+            let filtered = allStudents;
+            if(filter !== 'ALL') {
+                filtered = allStudents.filter(s => s.status === filter);
+            }
+            
+            const select = document.getElementById('studentSelect');
+            if(select) {
+                select.innerHTML = '<option value="">-- Choose Student --</option>';
+                filtered.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = `${s.name} - ${s.internship}`;
+                    select.appendChild(opt);
+                });
+            }
+        }
+
+        window.handleStudentSelect = function(id) {
+            if(!id) return;
+            const s = allStudents.find(st => st.id === id);
+            if(s) {
+                const nameInput = document.getElementById('name-input');
+                const projectInput = document.getElementById('project-input');
+                if (nameInput) {
+                    nameInput.value = s.name;
+                    nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                if (projectInput) {
+                    projectInput.value = s.internship;
+                    projectInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+        };
+    </script>
+</body>
+
+</html>

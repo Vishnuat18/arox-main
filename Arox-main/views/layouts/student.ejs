@@ -54,7 +54,7 @@
       </script>
       <div class="erp-sidebar-header">
         <div class="sidebar-logo-container">
-          <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" class="sidebar-logo-large" style="height: 50px; width: auto; object-fit: contain;">
+          <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" class="sidebar-logo-large" style="height: 88px; max-height: 94px; width: auto; max-width: 235px; object-fit: contain;">
         </div>
         <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" title="Toggle Sidebar">
           <i id="sidebar-toggle-icon" data-lucide="panel-left-close" style="width: 18px; height: 18px;"></i>
@@ -83,7 +83,7 @@
         </a>
       </nav>
 
-      <div style="padding: 24px 16px; border-top: var(--erp-border-width) solid rgba(255, 255, 255, 0.1);">
+      <div style="padding: 20px 14px; border-top: 1px solid #E2E8F0;">
         <a href="/" class="erp-nav-item" style="margin-bottom: 8px;">
           <i data-lucide="home"></i>
           <span>Back to Website</span>
@@ -115,7 +115,7 @@
           <div class="erp-profile">
             <div style="display: flex; flex-direction: column; text-align: right;" class="hidden sm:flex">
               <span style="font-size: 13px; font-weight: 600;">
-                <%= (typeof student !== 'undefined' && student) ? `${student.first_name} ${student.last_name}` : user.email.split('@')[0] %>
+                <%= (typeof student !== 'undefined' && student) ? `${student.first_name} ${student.last_name}` : ((typeof user !== 'undefined' && user && user.email) ? user.email.split('@')[0] : 'Student') %>
               </span>
               <span style="font-size: 11px; color: var(--erp-text-secondary);">Student</span>
             </div>
@@ -123,7 +123,7 @@
               <% if (typeof student !== 'undefined' && student && student.photo) { %>
                 <img src="<%= student.photo %>" alt="Avatar" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
               <% } else { %>
-                <%= user.email.charAt(0).toUpperCase() %>
+                <%= (typeof user !== 'undefined' && user && user.email) ? user.email.charAt(0).toUpperCase() : 'S' %>
               <% } %>
             </div>
           </div>

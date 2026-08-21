@@ -1,46 +1,134 @@
-<% 
-  // Generator navigation - pass currentGenerator ('certificate', 'offerletter', 'attendance', 'project', or 'hub')
+<%
   var currentGen = typeof currentGenerator !== 'undefined' ? currentGenerator : '';
+  
+  var navItems = [
+    { key: 'hub',         label: 'Hub',          icon: 'file-box',        href: '/admin/document-hub' },
+    { key: 'certificate', label: 'Certificate',  icon: 'award',           href: '/admin/generators/certificate' },
+    { key: 'offerletter', label: 'Offer Letter', icon: 'file-text',       href: '/admin/generators/offer-letter' },
+    { key: 'attendance',  label: 'Attendance',   icon: 'calendar-check',  href: '/admin/generators/attendance' },
+    { key: 'project',     label: 'Project',      icon: 'briefcase',       href: '/admin/generators/project' }
+  ];
 %>
-<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px; background: var(--erp-bg); border: var(--erp-border-width) solid var(--erp-border); border-radius: var(--erp-radius); padding: 6px; box-shadow: var(--erp-shadow-subtle);">
-  
-  <!-- Hub Link -->
-  <a href="/admin/document-hub" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--erp-radius-sm); font-size: 12px; font-weight: 600; text-decoration: none; transition: all var(--erp-transition); font-family: var(--erp-font); <%= currentGen === 'hub' ? 'background: var(--erp-primary); color: #fff;' : 'color: var(--erp-text-secondary); background: transparent;' %>">
-    <i data-lucide="file-box" style="width: 14px; height: 14px;"></i>
-    <span>Hub</span>
-  </a>
-  
-  <div style="width: 1px; height: 20px; background: var(--erp-divider);"></div>
-  
-  <!-- Certificate -->
-  <a href="/admin/generators/certificate" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--erp-radius-sm); font-size: 12px; font-weight: 600; text-decoration: none; transition: all var(--erp-transition); font-family: var(--erp-font); <%= currentGen === 'certificate' ? 'background: var(--erp-primary); color: #fff;' : 'color: var(--erp-text-secondary); background: transparent;' %>">
-    <i data-lucide="award" style="width: 14px; height: 14px;"></i>
-    <span>Certificate</span>
-  </a>
-  
-  <!-- Offer Letter -->
-  <a href="/admin/generators/offer-letter" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--erp-radius-sm); font-size: 12px; font-weight: 600; text-decoration: none; transition: all var(--erp-transition); font-family: var(--erp-font); <%= currentGen === 'offerletter' ? 'background: var(--erp-primary); color: #fff;' : 'color: var(--erp-text-secondary); background: transparent;' %>">
-    <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
-    <span>Offer Letter</span>
-  </a>
-  
-  <!-- Attendance -->
-  <a href="/admin/generators/attendance" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--erp-radius-sm); font-size: 12px; font-weight: 600; text-decoration: none; transition: all var(--erp-transition); font-family: var(--erp-font); <%= currentGen === 'attendance' ? 'background: var(--erp-primary); color: #fff;' : 'color: var(--erp-text-secondary); background: transparent;' %>">
-    <i data-lucide="calendar-check" style="width: 14px; height: 14px;"></i>
-    <span>Attendance</span>
-  </a>
-  
-  <!-- Project -->
-  <a href="/admin/generators/project" style="display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--erp-radius-sm); font-size: 12px; font-weight: 600; text-decoration: none; transition: all var(--erp-transition); font-family: var(--erp-font); <%= currentGen === 'project' ? 'background: var(--erp-primary); color: #fff;' : 'color: var(--erp-text-secondary); background: transparent;' %>">
-    <i data-lucide="briefcase" style="width: 14px; height: 14px;"></i>
-    <span>Project</span>
+<style>
+  .gen-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    background: var(--erp-bg);
+    border: var(--erp-border-width) solid var(--erp-border);
+    border-radius: var(--erp-radius);
+    padding: 5px 10px;
+    box-shadow: var(--erp-shadow-subtle);
+  }
+  .gen-nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    margin-right: 6px;
+    flex-shrink: 0;
+    padding-right: 10px;
+    border-right: 1px solid var(--erp-divider);
+  }
+  .gen-nav-tabs {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex: 1;
+  }
+  .gen-nav-tab {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 13px;
+    border-radius: var(--erp-radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--erp-transition);
+    font-family: var(--erp-font);
+    white-space: nowrap;
+  }
+  .gen-nav-tab:hover {
+    background: var(--erp-hover);
+    color: var(--erp-text-primary);
+  }
+  .gen-nav-tab.active {
+    background: #000000;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  .gen-nav-tab:not(.active) {
+    color: var(--erp-text-secondary);
+  }
+  .gen-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-left: 10px;
+    border-left: 1px solid var(--erp-divider);
+  }
+  .gen-nav-action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 10px;
+    border-radius: var(--erp-radius-sm);
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--erp-transition);
+    font-family: var(--erp-font);
+    white-space: nowrap;
+  }
+  .gen-nav-action.primary {
+    color: var(--erp-primary);
+    background: var(--erp-primary-light);
+    border: 1px solid var(--erp-primary);
+  }
+  .gen-nav-action.primary:hover {
+    background: var(--erp-primary);
+    color: #fff;
+  }
+  .gen-nav-action.secondary {
+    color: var(--erp-text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .gen-nav-action.secondary:hover {
+    background: var(--erp-hover);
+    color: var(--erp-text-primary);
+  }
+</style>
+
+<nav class="gen-nav">
+  <!-- Logo -->
+  <a href="/admin/dashboard" class="gen-nav-logo">
+    <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX" style="height: 48px; width: auto; object-fit: contain;">
   </a>
 
-  <!-- Quick Actions -->
-  <div style="margin-left: auto; display: flex; align-items: center; gap: 6px;">
-    <a href="/admin/document-hub" style="display: flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: var(--erp-radius-sm); font-size: 11px; font-weight: 600; text-decoration: none; color: var(--erp-primary); background: var(--erp-primary-light); border: 1px solid var(--erp-primary); transition: all var(--erp-transition); font-family: var(--erp-font);">
+  <!-- Generator Tabs -->
+  <div class="gen-nav-tabs">
+    <% navItems.forEach(function(item) { %>
+      <a href="<%= item.href %>" class="gen-nav-tab <%= currentGen === item.key ? 'active' : '' %>">
+        <i data-lucide="<%= item.icon %>" style="width: 14px; height: 14px;"></i>
+        <span><%= item.label %></span>
+      </a>
+    <% }) %>
+  </div>
+
+  <!-- Right Side Actions -->
+  <div class="gen-nav-right">
+    <a href="/admin/document-hub" class="gen-nav-action primary">
       <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
       Generate All
     </a>
+    <a href="/admin/dashboard" class="gen-nav-action secondary">
+      <i data-lucide="layout-dashboard" style="width: 12px; height: 12px;"></i>
+      Admin
+    </a>
   </div>
-</div>
+</nav>

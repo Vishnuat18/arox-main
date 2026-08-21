@@ -102,7 +102,7 @@ const authController = {
         student = Student.findByUserId(user.id);
       }
 
-      const redirectUrl = ['admin', 'super_admin', 'trainer'].includes(user.role_name)
+      const redirectUrl = ['admin', 'super_admin', 'trainer', 'staff'].includes(user.role_name)
         ? '/admin/dashboard' 
         : '/student/dashboard';
 

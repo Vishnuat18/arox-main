@@ -20,6 +20,10 @@ router.get('/dashboard', dashboardController.index);
 router.get('/courses', coursesController.index);
 router.get('/courses/:id', coursesController.show);
 
+// --- Documents & Certificates ---
+router.get('/documents', (req, res) => res.redirect('/student/courses'));
+router.get('/certificates', (req, res) => res.redirect('/student/courses'));
+
 // --- Payments ---
 router.get('/payments', paymentsController.index);
 

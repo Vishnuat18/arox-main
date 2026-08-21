@@ -45,6 +45,7 @@ function authenticate(req, res, next) {
         first_name: 'Admin',
         last_name: 'User'
       };
+      res.locals.user = req.user;
       return next();
     }
 
@@ -73,6 +74,7 @@ function authenticate(req, res, next) {
       first_name: user.first_name || '',
       last_name: user.last_name || ''
     };
+    res.locals.user = req.user;
 
     next();
   } catch (error) {
@@ -116,6 +118,7 @@ function optionalAuth(req, res, next) {
           first_name: user.first_name || '',
           last_name: user.last_name || ''
         };
+        res.locals.user = req.user;
       }
     } catch (e) {
       // Token invalid, continue without user

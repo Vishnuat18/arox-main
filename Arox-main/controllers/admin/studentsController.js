@@ -58,9 +58,9 @@ exports.show = (req, res) => {
     const registrations = db.prepare(`
       SELECT 
         r.*,
-        c.title as course_title, c.type as course_type, c.batch_name
+        c.title as course_title, c.category as course_type, c.batch_name
       FROM registrations r
-      JOIN courses c ON r.course_id = c.id
+      LEFT JOIN courses c ON r.course_id = c.id
       WHERE r.student_id = ?
       ORDER BY r.created_at DESC
     `).all(studentId);
@@ -69,7 +69,7 @@ exports.show = (req, res) => {
       layout: 'layouts/admin',
       title: `${student.first_name} ${student.last_name} | AROX ERP`,
       pageTitle: 'Student Profile',
-      user: req.user,
+      user: req.user || (res.locals && res.locals.user),
       student,
       registrations
     });
@@ -78,7 +78,8 @@ exports.show = (req, res) => {
     res.status(500).render('website/error', { 
       layout: 'layouts/admin',
       code: 500,
-      message: 'Failed to load student details.'
+      message: 'Failed to load student details.',
+      user: req.user || (res.locals && res.locals.user)
     });
   }
 };

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Arox Tech — Offer Letter Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Unified Generator Navigation */
+    .generator-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #0A1F44;
+      padding: 10px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      color: white;
+      z-index: 1000;
+      position: relative;
+    }
+    .generator-nav .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+    .generator-nav .nav-brand img {
+      height: 30px;
+    }
+    .generator-nav .nav-links {
+      display: flex;
+      gap: 20px;
+    }
+    .generator-nav .nav-link {
+      color: #CBD5E0;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+    .generator-nav .nav-link:hover, .generator-nav .nav-link.active {
+      color: #F26522;
+      background: rgba(255,255,255,0.05);
+    }
+    .generator-nav .nav-admin .admin-btn {
+      background-color: #F26522;
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .generator-nav .nav-admin .admin-btn:hover {
+      background-color: #d9561a;
+    }
+    .app-shell { height: calc(100vh - 120px) !important; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Unified Navigation Bar -->
+  <nav class="generator-nav">
+    <a href="/admin/dashboard" class="nav-brand" style="text-decoration: none;">
+      <img src="/erp-assets/images/logo/logo.png" onerror="this.src='../arox-cert/assets/cert/a logo.png'" alt="Arox Logo">
+      <span>Arox Generators</span>
+    </a>
+    <div class="nav-links">
+      <a href="/admin/document-hub" class="nav-link" id="nav-hub">Document Hub</a>
+      <a href="/cert/index.html" class="nav-link" id="nav-cert">Certificate</a>
+      <a href="/offerletter/index.html" class="nav-link active" id="nav-offer">Offer Letter</a>
+      <a href="/attendance/index.html" class="nav-link" id="nav-attendance">Attendance</a>
+      <a href="/project/index.html" class="nav-link" id="nav-project">Project</a>
+    </div>
+    <div class="nav-admin">
+      <a href="/admin/dashboard" class="admin-btn">Dashboard</a>
+    </div>
+  </nav>
+
+
+  <div class="loading-overlay hidden" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p>Preparing your PDF…</p>
+    <small>Rendering borders, images &amp; content — this takes a few seconds</small>
+  </div>
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="dot"></span>
+      <div>
+        <h1>Offer Letter Generator</h1>
+        <p>Arox Tech · Internship &amp; Job Offer Letters</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" id="resetBtn">Reset Fields</button>
+      <button class="btn btn-ghost" id="printBtn">🖨 Print</button>
+      <button class="btn btn-primary" id="downloadBtn">⬇ Download PDF</button>
+    </div>
+  </div>
+
+  <div class="app-shell">
+    <div class="control-panel">
+
+      <!-- Database Filter & ERP Selection -->
+      <fieldset>
+        <legend>Select Candidate (Live from ERP)</legend>
+        <div class="row2">
+          <div class="field">
+            <label>Filter Status</label>
+            <select id="statusFilter" onchange="applyFilters()">
+              <option value="ALL">All Students</option>
+              <option value="ACTIVE" selected>Active</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="INACTIVE">Inactive / Stopped</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Student</label>
+            <select id="studentSelect" onchange="handleStudentSelect(this.value)">
+              <option value="">-- Loading students... --</option>
+            </select>
+          </div>
+        </div>
+        <p class="hint">Auto-fills Candidate Name and Position.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Offer Type</legend>
+        <div class="type-switch">
+          <button type="button" data-type="internship-paid" class="active">Internship<br>With Stipend</button>
+          <button type="button" data-type="internship-unpaid">Internship<br>Without Stipend</button>
+          <button type="button" data-type="job">Job Offer</button>
+        </div>
+        <p class="hint">Switching reshapes the letter, table rows and wording automatically.</p>
+      </fieldset>
+
+      <fieldset>
+        <legend>Letter Reference</legend>
+        <div class="row2">
+          <div class="field"><label>Offer Letter No.</label><input type="text" id="offerNo" value="AT/2026/1028"></div>
+          <div class="field"><label>Date</label><input type="date" id="letterDate"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Company Header (Top of Page 1)</legend>
+        <div class="field"><label>Address Line 1</label><input type="text" id="addrLine1"
+            value="9/1, Thirunavukkarasu Street, Fairlands,"></div>
+        <div class="field"><label>Address Line 2</label><input type="text" id="addrLine2"
+            value="Salem, Tamil Nadu 636004"></div>
+        <div class="row2">
+          <div class="field"><label>Email</label><input type="text" id="addrEmail" value="mail@aroxtech.in"></div>
+          <div class="field"><label>Website</label><input type="text" id="addrWeb" value="www.aroxtech.in"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Candidate Details</legend>
+        <div class="row2">
+          <div class="field"><label>Salutation</label>
+            <select id="salutation">
+              <option>Mr.</option>
+              <option>Ms.</option>
+              <option>Mx.</option>
+              <option>Dr.</option>
+            </select>
+          </div>
+          <div class="field"><label>Full Name</label><input type="text" id="candidateName" value="Muralidharan R.">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Role Details</legend>
+        <div class="field"><label>Position / Designation</label><input type="text" id="position"
+            value="Artificial Intelligence &amp; Machine Learning Intern"></div>
+        <div class="row2">
+          <div class="field"><label>Department</label><input type="text" id="department"
+              value="Research &amp; Development"></div>
+          <div class="field"><label>Reporting To</label><input type="text" id="reportingTo"
+              value="Project Mentor / Team Lead"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Location</label><input type="text" id="location" value="Salem"></div>
+          <div class="field"><label>Working Days</label><input type="text" id="workingDays" value="Monday – Saturday">
+          </div>
+        </div>
+        <div class="field"><label>Working Hours</label><input type="text" id="workingHours" value="9:30 AM – 6:30 PM">
+        </div>
+      </fieldset>
+
+      <fieldset id="durationBlock">
+        <legend>Duration (Internship)</legend>
+        <div class="row2">
+          <div class="field"><label>Start Date</label><input type="date" id="startDate"></div>
+          <div class="field"><label>End Date</label><input type="date" id="endDate"></div>
+        </div>
+        <p class="hint" id="durationPreview">Duration will be calculated automatically.</p>
+      </fieldset>
+
+      <fieldset id="joiningBlock" style="display:none;">
+        <legend>Joining Details (Job Offer)</legend>
+        <div class="row2">
+          <div class="field"><label>Date of Joining</label><input type="date" id="joiningDate"></div>
+          <div class="field"><label>Employment Type</label>
+            <select id="employmentType">
+              <option>Full-Time</option>
+              <option>Part-Time</option>
+              <option>Contract</option>
+            </select>
+          </div>
+        </div>
+        <div class="field"><label>Probation Period (optional)</label><input type="text" id="probation"
+            placeholder="e.g. 3 Months"></div>
+      </fieldset>
+
+      <fieldset id="stipendBlock">
+        <legend>Stipend</legend>
+        <div class="field"><label>Stipend Amount</label><input type="text" id="stipendAmount"
+            value="₹5,000 – ₹8,000 per month (Performance Based)"></div>
+      </fieldset>
+
+      <fieldset id="salaryBlock" style="display:none;">
+        <legend>Compensation</legend>
+        <div class="field"><label>CTC / Salary</label><input type="text" id="salaryAmount"
+            placeholder="e.g. ₹3,60,000 per annum (CTC)"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Roles &amp; Responsibilities</legend>
+        <textarea id="roles" rows="8">Learn and apply core concepts of Artificial Intelligence and Machine Learning.
+Contribute to real-time, industry-relevant projects.
+Design, develop, and test software solutions as assigned.
+Participate in team meetings and collaborate closely with your project team.
+Complete assigned tasks within the given deadlines.
+Prepare and maintain technical documentation, progress reports, and project updates as required.
+Research emerging technologies, tools, and best practices to enhance project development and innovation.
+Adhere to organizational coding standards, data security policies, and professional work ethics throughout the internship.</textarea>
+        <p class="hint">One point per line.</p>
+      </fieldset>
+
+      <fieldset>
+        <div class="toggle-row"><input type="checkbox" id="includeEval" checked><label for="includeEval">Include
+            Performance Evaluation</label></div>
+        <textarea id="evalCriteria" rows="5">Attendance &amp; punctuality
+Technical learning
+Project quality
+Team collaboration
+Professional conduct
+Innovation and task completion</textarea>
+      </fieldset>
+
+      <fieldset id="eligibilityBlock">
+        <div class="toggle-row"><input type="checkbox" id="includeEligibility" checked><label
+            for="includeEligibility">Include Completion Note</label></div>
+        <textarea id="eligibilityText" rows="4">Upon successful completion and satisfactory performance, the intern will receive:
+• Internship Completion Certificate
+• Project Experience Certificate</textarea>
+      </fieldset>
+
+
+
+      <fieldset>
+        <legend>Terms &amp; Conditions</legend>
+        <textarea id="terms"
+          rows="5">All company policies and confidentiality guidelines must be strictly adhered to.
+All project work, documents, and company information shared with you must be kept strictly confidential.
+The company reserves the right to terminate this internship by providing seven (7) days' written notice, or with immediate effect in the event of a policy violation or misconduct.</textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend>Signatory</legend>
+        <div class="row2">
+          <div class="field"><label>Signatory Name (optional)</label><input type="text" id="signatoryName"
+              placeholder="e.g. R. Kavitha"></div>
+          <div class="field"><label>Designation</label><input type="text" id="signatoryDesignation" value="HR Manager">
+          </div>
+        </div>
+        <div class="field"><label>Company Name</label><input type="text" id="companyName" value="Arox Tech"></div>
+        <div class="toggle-row" style="margin-top:8px;"><input type="checkbox" id="includeStamp" checked><label
+            for="includeStamp">Show Founder Signature / Stamp</label></div>
+      </fieldset>
+
+    </div>
+
+    <div class="preview-panel" id="pagesContainer"></div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // --- INTEGRATION FOR AROX ERP ---
+    if (window.self !== window.top) {
+      const nav = document.querySelector('.generator-nav');
+      if (nav) nav.style.display = 'none';
+      const topbar = document.querySelector('.topbar');
+      if (topbar) topbar.style.display = 'none';
+      const cp = document.querySelector('.control-panel');
+      if (cp) cp.style.display = 'none';
+      document.body.style.margin = '0';
+      document.body.style.padding = '0';
+      document.body.style.height = '100vh';
+      const shell = document.querySelector('.app-shell');
+      if (shell) {
+        shell.style.height = '100vh';
+        shell.style.padding = '0';
+      }
+      
+      window.addEventListener('message', (event) => {
+        if (event.data.type === 'UPDATE_DATA') {
+          const d = event.data.data;
+          for (const key in d) {
+            const el = document.getElementById(key);
+            if (el) {
+              if (el.type === 'checkbox') el.checked = d[key];
+              else el.value = d[key];
+            }
+          }
+          if (typeof render === 'function') render();
+        } else if (event.data.type === 'EXPORT_PDF') {
+          if (typeof downloadPDF === 'function') downloadPDF();
+        }
+      });
+    }
+
+    // --- AUTO FILL LOGIC ---
+    let allStudents = [];
+    async function fetchStudents() {
+      try {
+        const res = await fetch('/api/students');
+        allStudents = await res.json();
+        if (!Array.isArray(allStudents)) allStudents = [];
+        applyFilters();
+        const urlParams = new URLSearchParams(window.location.search);
+        const studentId = urlParams.get('studentId');
+        if (studentId) {
+          const select = document.getElementById('studentSelect');
+          if(select) {
+            select.value = studentId;
+            handleStudentSelect(studentId);
+          }
+        }
+      } catch(e) {
+        console.error(e);
+        const select = document.getElementById('studentSelect');
+        if(select) select.innerHTML = '<option value="">-- Failed to load students --</option>';
+      }
+    }
+    
+    function applyFilters() {
+      const filter = document.getElementById('statusFilter').value;
+      let filtered = allStudents;
+      if(filter !== 'ALL') {
+        filtered = allStudents.filter(s => s.status === filter);
+      }
+      
+      const select = document.getElementById('studentSelect');
+      if(select) {
+        select.innerHTML = '<option value="">-- Choose Student --</option>';
+        filtered.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.textContent = `${s.name} - ${s.internship}`;
+          select.appendChild(opt);
+        });
+      }
+    }
+
+    function handleStudentSelect(id) {
+      if(!id) return;
+      const s = allStudents.find(st => st.id === id);
+      if(s) {
+        const nameInput = document.getElementById('candidateName');
+        const posInput = document.getElementById('position');
+        if (nameInput) {
+          nameInput.value = s.name;
+          nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+        if (posInput) {
+          posInput.value = s.internship;
+          posInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', fetchStudents);
+  </script>
+</body>
+
+</html>

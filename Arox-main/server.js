@@ -38,11 +38,34 @@ app.use(cookieParser());
 
 // ----- Static Files -----
 app.use('/erp-assets', express.static(path.join(__dirname, 'public')));
-app.use('/attendance', express.static(path.join(__dirname, '../arox-attendance')));
-app.use('/cert', express.static(path.join(__dirname, '../arox-cert')));
-app.use('/offerletter', express.static(path.join(__dirname, '../arox-offerletter')));
-app.use('/project', express.static(path.join(__dirname, '../arox-project')));
-app.use(express.static(__dirname));
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
+app.use(express.static(path.join(__dirname, 'public'), { redirect: false }));
+
+// Well-known and devtools handler to prevent 404 console errors
+app.get('/.well-known/*', (req, res) => res.status(204).end());
+
+// Generator static folders (robust multi-path resolution)
+const serveGeneratorFolder = (routePrefix, folderName) => {
+  const candidatePaths = [
+    path.join(__dirname, '..', folderName),
+    path.join(__dirname, folderName),
+    path.join(__dirname, '..', 'arox-' + folderName),
+    path.join(__dirname, 'public', folderName)
+  ];
+  candidatePaths.forEach(p => {
+    app.use(routePrefix, express.static(p));
+  });
+};
+
+serveGeneratorFolder('/cert', 'cert');
+serveGeneratorFolder('/attendance', 'attendance');
+serveGeneratorFolder('/offerletter', 'offerletter');
+serveGeneratorFolder('/project', 'project');
+
+app.use(express.static(path.join(__dirname, '..'), { redirect: false }));
+app.use(express.static(__dirname, { redirect: false }));
 
 // ----- Make org config available to all views -----
 app.use((req, res, next) => {
@@ -122,10 +145,29 @@ app.get('/api/students', (req, res) => {
   }
 });
 
+// Certificate API
+app.post('/api/certificates', (req, res) => {
+  try {
+    const { certId, studentName, course, domain, startDate, endDate, totalDays, issueDate } = req.body;
+    logger.info(`Certificate issued/saved: ${certId} for ${studentName}`);
+    res.json({ success: true, message: 'Certificate recorded successfully', certId });
+  } catch (error) {
+    logger.error('API /api/certificates error:', error);
+    res.status(500).json({ success: false, error: 'Failed to save certificate record' });
+  }
+});
+
 // Web (page) routes
 app.use('/admin', require('./routes/web/admin'));
 app.use('/student', require('./routes/web/student'));
 app.use('/', require('./routes/web/auth'));
+
+// ----- 404 Handler -----
+app.use((req, res, next) => {
+  const err = new Error('Page not found');
+  err.statusCode = 404;
+  next(err);
+});
 
 // ----- Error Handling -----
 app.use(errorHandler);

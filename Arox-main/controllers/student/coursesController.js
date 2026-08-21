@@ -141,6 +141,13 @@ exports.show = (req, res) => {
       WHERE student_id = ? AND course_id = ? AND registration_id = ?
     `).all(student.id, registration.course_id, registration.id);
 
+    // 5. Fetch Payments & Verification Proofs for this registration
+    const payments = db.prepare(`
+      SELECT * FROM payments 
+      WHERE registration_id = ?
+      ORDER BY created_at DESC
+    `).all(registration.id);
+
     res.render('student/courses/show', {
       layout: 'layouts/student',
       title: `${registration.course_title} | AROX ERP`,
@@ -154,7 +161,8 @@ exports.show = (req, res) => {
       attendancePercent,
       assignments,
       projects,
-      certificates
+      certificates,
+      payments
     });
   } catch (error) {
     logger.error('Student Course Details Error:', error);
