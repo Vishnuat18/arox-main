@@ -14,10 +14,11 @@ const clientScriptPath = path.resolve(__dirname, 'pg-client.js');
 function executeQuery(sql, params) {
   try {
     const input = JSON.stringify({ sql, params });
-    const stdout = execFileSync('node', [clientScriptPath], {
+    const stdout = execFileSync(process.execPath, [clientScriptPath], {
       input,
       env: {
         ...process.env,
+        DATABASE_URL: process.env.DATABASE_URL || process.env.POSTGRES_URL,
         DB_HOST,
         DB_PORT,
         DB_USER,
