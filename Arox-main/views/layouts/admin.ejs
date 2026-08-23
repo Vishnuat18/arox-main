@@ -2,8 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>AROX ERP - Admin Dashboard</title>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AROX ERP Admin">
+  <meta property="og:title" content="AROX ERP - Admin Dashboard">
+  <meta property="og:description" content="Manage students, courses, registrations, and payments on the AROX Tech Admin Dashboard.">
+  <meta property="og:url" content="<%= org.website %><%= currentPath %>">
+  <meta property="og:image" content="<%= org.website %>/assets/hero/home_light.png">
+  <meta property="og:image:alt" content="AROX ERP Admin Dashboard">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AROX ERP - Admin Dashboard">
+  <meta name="twitter:description" content="Manage students, courses, registrations, and payments on the AROX Tech Admin Dashboard.">
+
+  <!-- SEO -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#155EEF">
 
   <!-- Google Fonts: Montserrat (unified brand font) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,11 +53,21 @@
   <link rel="stylesheet" href="/erp-assets/css/erp-theme.css">
 
   <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/erp-assets/favicon.svg">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/erp-assets/assets/logo/logo-dark.png">
 
   <%- style %>
 </head>
 <body class="erp-body">
+
+  <!-- Skip to content (accessibility) -->
+  <a href="#admin-main-content" style="position:absolute;top:-100%;left:16px;z-index:99999;padding:12px 24px;background:#000;color:#fff;font-weight:600;font-size:14px;border-radius:0 0 8px 8px;text-decoration:none;transition:top 0.2s ease;" onfocus="this.style.top='0'" onblur="this.style.top='-100%'">
+    Skip to main content
+  </a>
+
+  <!-- Sidebar Overlay (mobile) — must be OUTSIDE .erp-layout for proper z-index -->
+  <div class="erp-sidebar-overlay" id="admin-sidebar-overlay" aria-hidden="true"></div>
 
   <div class="erp-layout">
     <!-- Sidebar -->
@@ -52,7 +80,7 @@
       </script>
       <div class="erp-sidebar-header">
         <div class="sidebar-logo-container">
-          <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" class="sidebar-logo-large" style="height: 88px; max-height: 94px; width: auto; max-width: 235px; object-fit: contain;">
+          <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" class="sidebar-logo-large" style="height: 64px; max-height: 68px; width: auto; max-width: 220px; object-fit: contain;">
         </div>
         <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" title="Toggle Sidebar">
           <i id="sidebar-toggle-icon" data-lucide="panel-left-close" style="width: 18px; height: 18px;"></i>
@@ -135,13 +163,18 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="erp-main">
+    <main class="erp-main" id="admin-main-content" role="main" aria-label="Admin dashboard content">
       <!-- Topbar -->
       <header class="erp-topbar">
-        <div class="erp-breadcrumb">
-          <span style="color: var(--erp-text-secondary);">Admin</span>
-          <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--erp-text-secondary);"></i>
-          <span class="erp-breadcrumb-active"><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Overview' %></span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button class="erp-mobile-toggle" id="admin-mobile-toggle" aria-label="Open menu">
+            <i data-lucide="menu" style="width: 22px; height: 22px;"></i>
+          </button>
+          <div class="erp-breadcrumb">
+            <span style="color: var(--erp-text-secondary);">Admin</span>
+            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--erp-text-secondary);"></i>
+            <span class="erp-breadcrumb-active"><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Overview' %></span>
+          </div>
         </div>
 
         <div class="erp-topbar-right">
@@ -165,6 +198,30 @@
       <div class="erp-content<%= (typeof currentPath !== 'undefined' && (currentPath.startsWith('/admin/generators') || currentPath === '/admin/document-hub')) ? ' erp-content-full' : '' %>">
         <%- body %>
       </div>
+
+      <!-- ERP Mobile Bottom Navigation Bar -->
+      <nav class="erp-bottom-nav" aria-label="Mobile Navigation">
+        <a href="/admin/dashboard" class="erp-bottom-nav-item <%= currentPath === '/admin/dashboard' ? 'active' : '' %>">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Overview</span>
+        </a>
+        <a href="/admin/registrations" class="erp-bottom-nav-item <%= currentPath.startsWith('/admin/registrations') ? 'active' : '' %>">
+          <i data-lucide="clipboard-list"></i>
+          <span>Registrations</span>
+        </a>
+        <a href="/admin/students" class="erp-bottom-nav-item <%= currentPath.startsWith('/admin/students') ? 'active' : '' %>">
+          <i data-lucide="users"></i>
+          <span>Students</span>
+        </a>
+        <a href="/admin/courses" class="erp-bottom-nav-item <%= currentPath.startsWith('/admin/courses') ? 'active' : '' %>">
+          <i data-lucide="book-open"></i>
+          <span>Courses</span>
+        </a>
+        <button type="button" class="erp-bottom-nav-item" id="admin-bottom-menu-btn">
+          <i data-lucide="menu"></i>
+          <span>Menu</span>
+        </button>
+      </nav>
     </main>
   </div>
 
@@ -177,6 +234,8 @@
       const sidebar = document.getElementById('admin-sidebar');
       const toggleBtn = document.getElementById('sidebar-toggle-btn');
       const toggleIcon = document.getElementById('sidebar-toggle-icon');
+      const mobileToggle = document.getElementById('admin-mobile-toggle');
+      const overlay = document.getElementById('admin-sidebar-overlay');
 
       function updateToggleIcon(isCollapsed) {
         if (toggleIcon) {
@@ -189,17 +248,52 @@
         }
       }
 
-      // Check current state from DOM (which was set by inline script)
+      function openMobileSidebar() {
+        sidebar.classList.add('mobile-open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMobileSidebar() {
+        sidebar.classList.remove('mobile-open');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      // Desktop toggle
       const currentCollapsed = sidebar.classList.contains('collapsed');
       updateToggleIcon(currentCollapsed);
 
       if (toggleBtn) {
         toggleBtn.addEventListener('click', () => {
-          const collapsed = sidebar.classList.toggle('collapsed');
-          localStorage.setItem('sidebar-collapsed', collapsed ? 'true' : 'false');
-          updateToggleIcon(collapsed);
+          const isMobile = window.innerWidth <= 768;
+          if (isMobile) {
+            openMobileSidebar();
+          } else {
+            const collapsed = sidebar.classList.toggle('collapsed');
+            localStorage.setItem('sidebar-collapsed', collapsed ? 'true' : 'false');
+            updateToggleIcon(collapsed);
+          }
         });
       }
+
+      // Mobile hamburger & Bottom menu button
+      if (mobileToggle) {
+        mobileToggle.addEventListener('click', openMobileSidebar);
+      }
+      const bottomMenuBtn = document.getElementById('admin-bottom-menu-btn');
+      if (bottomMenuBtn) {
+        bottomMenuBtn.addEventListener('click', openMobileSidebar);
+      }
+      if (overlay) {
+        overlay.addEventListener('click', closeMobileSidebar);
+      }
+
+      // Close mobile sidebar on nav item click
+      sidebar.querySelectorAll('.erp-nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          if (window.innerWidth <= 768) closeMobileSidebar();
+        });
+      });
     });
   </script>
 

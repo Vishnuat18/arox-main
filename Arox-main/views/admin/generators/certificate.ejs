@@ -278,16 +278,6 @@
     fsFrame.style.transform = 'scale(' + scale + ')';
   }
 
-        updatePreview();
-      }, 300); 
-    };
-    setTimeout(scaleFullscreenCert, 150);
-  }
-  function closeFullscreen() {
-    document.getElementById('fullscreenModal').style.display = 'none';
-    document.getElementById('fullscreenFrame').src = '';
-  }
-
   window.addEventListener('resize', function() {
     scaleCertPreview();
     if (document.getElementById('fullscreenModal').style.display === 'flex') {

@@ -38,9 +38,17 @@ app.use(cookieParser());
 
 // ----- Static Files -----
 app.use('/erp-assets', express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/assets', express.static(path.join(__dirname, 'public', 'assets')));
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
+app.use('/images', express.static(path.join(__dirname, '..', 'images')));
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+app.use('/images', express.static(path.join(__dirname, 'public', 'assets')));
 app.use(express.static(path.join(__dirname, 'public'), { redirect: false }));
 
 // Well-known and devtools handler to prevent 404 console errors
@@ -205,7 +213,9 @@ async function startServer() {
   }
 }
 
-startServer();
+if (require.main === module) {
+  startServer();
+}
 
 // Graceful shutdown
 process.on('SIGINT', () => {

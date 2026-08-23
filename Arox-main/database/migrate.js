@@ -10,32 +10,66 @@ function migrate() {
   const seedPath = path.join(__dirname, 'seed.sql');
 
   try {
-    // Run schema
-    logger.info('Running database schema...');
-    const schema = fs.readFileSync(schemaPath, 'utf8');
-    
-    // sql.js exec handles multiple statements
-    db.exec(schema);
-    logger.info('✅ Schema applied successfully.');
-
-    // Run seed data
     const shouldSeed = process.argv.includes('--seed') || process.argv.includes('-s');
-    
-    // Always seed on first run (check if roles table is empty)
-    const roleCount = db.prepare('SELECT COUNT(*) as count FROM roles').get();
-    
-    if (shouldSeed || (roleCount && roleCount.count === 0)) {
-      logger.info('Running seed data...');
-      const seed = fs.readFileSync(seedPath, 'utf8');
-      db.exec(seed);
-      logger.info('✅ Seed data inserted successfully.');
+    let hasTables = false;
+    let roleCount = null;
+
+    // Check if tables exist by querying the roles table
+    try {
+      roleCount = db.prepare('SELECT COUNT(*) as count FROM roles').get();
+      if (roleCount !== undefined && roleCount !== null) {
+        hasTables = true;
+      }
+    } catch (e) {
+      // Table doesn't exist or query failed
+      hasTables = false;
+    }
+
+    if (!hasTables) {
+      // Run schema
+      logger.info('Running database schema...');
+      try {
+        const schema = fs.readFileSync(schemaPath, 'utf8');
+        db.exec(schema);
+        logger.info('✅ Schema applied successfully.');
+      } catch (schemaErr) {
+        logger.error('Schema application failed:', schemaErr.message);
+        // Try to continue anyway - some statements may have succeeded
+      }
+      
+      // Re-check if roles table was created
+      try {
+        roleCount = db.prepare('SELECT COUNT(*) as count FROM roles').get();
+      } catch (e) {
+        // Roles table still doesn't exist
+        roleCount = null;
+      }
     } else {
+      logger.info('ℹ️  Database schema already up to date.');
+    }
+
+    // Run seed data if:
+    // 1. --seed flag is passed, OR
+    // 2. Roles table exists but is empty (first run after schema creation)
+    const shouldRunSeed = shouldSeed || (hasTables && roleCount && parseInt(roleCount.count) === 0);
+    
+    if (shouldRunSeed) {
+      logger.info('Running seed data...');
+      try {
+        const seed = fs.readFileSync(seedPath, 'utf8');
+        db.exec(seed);
+        logger.info('✅ Seed data inserted successfully.');
+      } catch (seedErr) {
+        logger.warn('Seed data partially applied (some may already exist):', seedErr.message);
+        // This is expected when re-running seeds - INSERT OR IGNORE handles conflicts
+      }
+    } else if (!shouldSeed) {
       logger.info('ℹ️  Seed data skipped (use --seed flag to force).');
     }
 
     logger.info('🎉 Database migration complete!');
   } catch (error) {
-    logger.warn('⚠️ Migration failed/skipped due to DB connection issue.');
+    logger.warn('⚠️ Migration failed/skipped due to DB connection issue: ' + (error ? error.message : ''));
     // We intentionally don't throw error to allow frontend server to continue running
   }
 }

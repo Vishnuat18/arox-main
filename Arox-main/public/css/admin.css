@@ -381,3 +381,9 @@
   padding-left: 36px;
   margin-bottom: 0;
 }
+
+@media (max-width: 768px) {
+  .search-input-wrapper {
+    width: 100% !important;
+  }
+}

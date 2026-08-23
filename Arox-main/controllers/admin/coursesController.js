@@ -1,4 +1,3 @@
-const Course = require('../../models/Course');
 const logger = require('../../utils/logger');
 const { getDb } = require('../../config/database');
 const helpers = require('../../utils/helpers');
@@ -14,11 +13,11 @@ exports.index = (req, res) => {
         coalesce(c.price, 0) as fee,
         coalesce(c.category, 'training') as type,
         coalesce(c.category, 'training') as category,
-        coalesce(c.status, CASE WHEN c.is_active = 1 THEN 'active' ELSE 'draft' END) as status,
+        CASE WHEN c.is_active = 1 THEN 'active' ELSE 'draft' END as status,
         (SELECT COUNT(*) FROM registrations r WHERE r.course_id = c.id) as enrolled_count
       FROM courses c
       ORDER BY c.created_at DESC
-    `).all();
+    `).all() || [];
 
     res.render('admin/courses/index', {
       layout: 'layouts/admin',
@@ -30,9 +29,10 @@ exports.index = (req, res) => {
   } catch (error) {
     logger.error('Courses Index Error:', error);
     res.status(500).render('website/error', { 
-      layout: 'layouts/admin',
+      layout: 'layouts/admin', 
       code: 500,
-      message: 'Failed to load courses.'
+      message: 'Failed to load courses.',
+      user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
     });
   }
 };
@@ -44,9 +44,13 @@ exports.create = (req, res) => {
       start_date, end_date, max_students, description, status 
     } = req.body;
     
+    if (!title) {
+      return res.status(400).json({ error: 'Course title is required.' });
+    }
+
     const slug = helpers.slugify(title) + '-' + helpers.slugify(batch_name || 'batch-1') + '-' + Date.now().toString().slice(-4);
 
-    const newId = Course.create({
+    const newId = require('../../models/Course').create({
       title,
       slug,
       type: type || 'training',
@@ -89,7 +93,6 @@ exports.update = (req, res) => {
         end_date = COALESCE(@end_date, end_date),
         max_students = COALESCE(@max_students, max_students),
         description = COALESCE(@description, description),
-        status = @status,
         is_active = @is_active,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = @id
@@ -104,7 +107,6 @@ exports.update = (req, res) => {
       end_date,
       max_students: parseInt(max_students) || 50,
       description,
-      status: status || 'draft',
       is_active: isActive
     });
 
@@ -122,7 +124,7 @@ exports.updateStatus = (req, res) => {
     const isActive = (status === 'active') ? 1 : 0;
     
     const db = getDb();
-    db.prepare('UPDATE courses SET status = @status, is_active = @is_active, updated_at = CURRENT_TIMESTAMP WHERE id = @id').run({ status, is_active: isActive, id });
+    db.prepare('UPDATE courses SET is_active = @is_active, updated_at = CURRENT_TIMESTAMP WHERE id = @id').run({ is_active: isActive, id });
 
     res.json({ success: true, message: 'Course status updated' });
   } catch (error) {
@@ -135,6 +137,13 @@ exports.delete = (req, res) => {
   try {
     const { id } = req.params;
     const db = getDb();
+    
+    // Check if course has registrations before deleting
+    const regCount = db.prepare('SELECT COUNT(*) as count FROM registrations WHERE course_id = ?').get(id);
+    if (regCount && parseInt(regCount.count, 10) > 0) {
+      return res.status(400).json({ error: 'Cannot delete course with existing registrations. Deactivate it instead.' });
+    }
+    
     db.prepare('DELETE FROM courses WHERE id = ?').run(id);
     res.json({ success: true, message: 'Course deleted successfully' });
   } catch (error) {

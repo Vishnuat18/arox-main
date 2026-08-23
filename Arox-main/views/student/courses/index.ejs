@@ -1,22 +1,48 @@
-<div class="erp-h1" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; color: #000000;">
+<div class="erp-h1" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; color: #000000;">
   <div>My Enrolled Programs</div>
-  <div style="font-size: 13px; color: #64748B; font-weight: 500;">
-    <i data-lucide="book-marked" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
-    Curriculum, Daily Logs & Credentials
-  </div>
+  
+  <% if (courses && courses.length > 0) { 
+      const stInternships = courses.filter(c => (c.category || '').toLowerCase() === 'internship').length;
+      const stTrainings = courses.filter(c => (c.category || '').toLowerCase() !== 'internship').length;
+  %>
+    <!-- Two-Way Pill Switcher -->
+    <div class="two-way-pill-nav">
+      <button type="button" class="pill-btn active" onclick="filterStudentCourses('all', this)" id="stPillAll">
+        <span>ALL</span>
+        <span class="pill-badge"><%= courses.length %></span>
+      </button>
+      <button type="button" class="pill-btn" onclick="filterStudentCourses('internship', this)" id="stPillIntern">
+        <i data-lucide="briefcase" style="width: 13px; height: 13px;"></i>
+        <span>INTERNSHIP</span>
+        <span class="pill-badge"><%= stInternships %></span>
+      </button>
+      <button type="button" class="pill-btn" onclick="filterStudentCourses('training', this)" id="stPillTrain">
+        <i data-lucide="graduation-cap" style="width: 13px; height: 13px;"></i>
+        <span>TRAINING</span>
+        <span class="pill-badge"><%= stTrainings %></span>
+      </button>
+    </div>
+  <% } else { %>
+    <div style="font-size: 13px; color: #64748B; font-weight: 500;">
+      <i data-lucide="book-marked" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+      Curriculum, Daily Logs & Credentials
+    </div>
+  <% } %>
 </div>
 
 <% if (courses && courses.length > 0) { %>
-  <div class="erp-grid-3" style="align-items: stretch;">
+  <div class="erp-grid-3" id="studentCoursesGrid" style="align-items: stretch;">
     <% courses.forEach(course => { %>
-      <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px;">
+      <div class="erp-card student-course-card" 
+           data-type="<%= ((course.category || '').toLowerCase() === 'internship') ? 'internship' : 'training' %>"
+           style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 24px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; transition: all 0.25s ease;">
         <div>
           <!-- Type and Status Badges -->
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; background: #F1F5F9; color: #000000; padding: 3px 8px; border-radius: 4px; border: 1px solid #E2E8F0;">
               <%= course.category || 'Program' %>
             </span>
-            <span style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 99px; <%= (course.reg_status === 'active' || course.reg_status === 'confirmed') ? 'background: #000000; color: #FFFFFF;' : 'background: #F1F5F9; color: #64748B; border: 1px solid #CBD5E1;' %>">
+            <span class="<%= (course.reg_status === 'active' || course.reg_status === 'confirmed') ? 'st-badge-active' : 'st-badge-inactive' %>" style="font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 99px;">
               <%= (course.reg_status === 'active' || course.reg_status === 'confirmed') ? 'Active' : (course.reg_status || 'Enrolled') %>
             </span>
           </div>
@@ -25,7 +51,7 @@
           <h3 class="erp-h3" style="margin: 0 0 8px 0; color: #000000; font-size: 16px; line-height: 1.4;">
             <%= course.title %>
           </h3>
-          <p style="margin: 0 0 16px 0; font-size: 13px; color: #64748B; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+          <p style="margin: 0 0 16px 0; font-size: 13px; color: #64748B; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
             <%= course.short_description || course.description || 'Access course syllabus, projects, and live verification dashboard.' %>
           </p>
 
@@ -55,6 +81,12 @@
       </div>
     <% }); %>
   </div>
+
+  <div id="noFilterMatch" style="display: none; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 48px; text-align: center; max-width: 500px; margin: 40px auto;">
+    <i data-lucide="inbox" style="width: 32px; height: 32px; color: #94A3B8; margin-bottom: 12px;"></i>
+    <h3 class="erp-h3" style="color: #000000; margin-bottom: 6px;">No Enrolled Programs in this Category</h3>
+    <p style="font-size: 13px; color: #64748B; margin: 0;">Try selecting "ALL" or explore new programs.</p>
+  </div>
 <% } else { %>
   <div class="erp-card" style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 48px; text-align: center; max-width: 540px; margin: 40px auto;">
     <div style="font-size: 32px; color: #94A3B8; margin-bottom: 12px;">
@@ -74,3 +106,102 @@
     </div>
   </div>
 <% } %>
+
+<style>
+  .two-way-pill-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #F1F5F9;
+    padding: 4px;
+    border-radius: 9999px;
+    border: 1px solid #E2E8F0;
+  }
+  .two-way-pill-nav .pill-btn {
+    border: none;
+    background: transparent;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748B;
+    cursor: pointer;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+    font-family: inherit;
+  }
+  .two-way-pill-nav .pill-btn:hover {
+    color: #000000;
+  }
+  .two-way-pill-nav .pill-btn.active {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  }
+  .two-way-pill-nav .pill-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: rgba(0,0,0,0.06);
+    color: inherit;
+    font-weight: 700;
+  }
+  .two-way-pill-nav .pill-btn.active .pill-badge {
+    background: rgba(255,255,255,0.25);
+    color: #FFFFFF;
+  }
+  .st-badge-active {
+    background: #000000 !important;
+    color: #FFFFFF !important;
+  }
+  .st-badge-inactive {
+    background: #F1F5F9 !important;
+    color: #64748B !important;
+    border: 1px solid #CBD5E1 !important;
+  }
+  @media (max-width: 768px) {
+    .erp-h1 { font-size: 20px !important; }
+    .erp-grid-3 { grid-template-columns: 1fr !important; gap: 16px !important; }
+    .two-way-pill-nav { width: 100%; justify-content: center; }
+    .two-way-pill-nav .pill-btn { padding: 8px 12px; font-size: 10px; }
+  }
+</style>
+
+<script>
+  function filterStudentCourses(type, btn) {
+    document.querySelectorAll('.two-way-pill-nav .pill-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.student-course-card');
+    let visibleCount = 0;
+    cards.forEach(card => {
+      const cardType = card.getAttribute('data-type');
+      if (type === 'all' || cardType === type) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const noMatch = document.getElementById('noFilterMatch');
+    if (noMatch) {
+      noMatch.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab === 'internship') {
+      filterStudentCourses('internship', document.getElementById('stPillIntern'));
+    } else if (tab === 'training') {
+      filterStudentCourses('training', document.getElementById('stPillTrain'));
+    }
+  });
+</script>

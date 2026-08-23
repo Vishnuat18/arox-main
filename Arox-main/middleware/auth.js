@@ -34,20 +34,6 @@ function authenticate(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, authConfig.secret);
-    
-    // MOCK BYPASS FOR DESIGN REVIEW
-    if (decoded.email === 'admin@arox.com') {
-      req.user = {
-        id: 1,
-        email: 'admin@arox.com',
-        roleId: 2,
-        role: 'admin',
-        first_name: 'Admin',
-        last_name: 'User'
-      };
-      res.locals.user = req.user;
-      return next();
-    }
 
     // Get fresh user data
     const db = getDb();

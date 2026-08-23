@@ -2,14 +2,20 @@ const { getDb } = require('../config/database');
 const User = require('../models/User');
 const Student = require('../models/Student');
 const Course = require('../models/Course');
-const Internship = require('../models/Internship');
 const Registration = require('../models/Registration');
-const Payment = require('../models/Payment');
 const { generateStudentId, generateRegistrationId, generatePassword, calculateGST } = require('../utils/helpers');
 const paymentService = require('../services/paymentService');
 const pdfService = require('../services/pdfService');
 const emailService = require('../services/emailService');
 const logger = require('../utils/logger');
+
+// Safe require for Internship (may not exist in all deployments)
+let Internship;
+try {
+  Internship = require('../models/Internship');
+} catch (e) {
+  Internship = null;
+}
 
 const registrationController = {
   /**
@@ -31,6 +37,14 @@ const registrationController = {
         payment_plan, payment_method, coupon_code
       } = req.body;
 
+      // Validate required fields
+      if (!first_name || !last_name || !email || !phone || !course_id) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing required fields: first_name, last_name, email, phone, and course_id are required.'
+        });
+      }
+
       // Check if email already registered
       const existingStudent = Student.findByEmail(email);
       if (existingStudent) {
@@ -47,7 +61,7 @@ const registrationController = {
       }
 
       // Calculate pricing
-      const basePrice = course.discounted_price || course.price;
+      const basePrice = course.discounted_price || course.price || 0;
       let discount = 0;
       let appliedCoupon = null;
 
@@ -114,7 +128,7 @@ const registrationController = {
           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).run(
           registrationId, studentDbId, course_id, internship_id || null,
-          course.batch_name, course.start_date, course.end_date, course.mode,
+          course.batch_name, course.start_date, course.end_date, course.mode || 'online',
           'confirmed', payment_plan || 'full', totalAmount, paidAmount, balanceAmount,
           coupon_code || null, discount, gstInfo.gstAmount
         );
@@ -123,8 +137,12 @@ const registrationController = {
 
         // 4. Increment enrollment counters
         Course.incrementEnrollment(course_id);
-        if (internship_id) {
-          Internship.incrementEnrollment(internship_id);
+        if (internship_id && Internship) {
+          try {
+            Internship.incrementEnrollment(internship_id);
+          } catch (e) {
+            logger.warn('Could not increment internship enrollment:', e.message);
+          }
         }
 
         // 5. Use coupon if applied
@@ -133,10 +151,14 @@ const registrationController = {
         }
 
         // 6. Log activity
-        db.prepare(`
-          INSERT INTO activity_logs (user_id, action, module, entity_type, entity_id, description)
-          VALUES (?, 'registration', 'registrations', 'registration', ?, ?)
-        `).run(userId, regDbId, `New registration: ${first_name} ${last_name} for ${course.title}`);
+        try {
+          db.prepare(`
+            INSERT INTO activity_logs (user_id, action, module, entity_type, entity_id, description)
+            VALUES (?, 'registration', 'registrations', 'registration', ?, ?)
+          `).run(userId, regDbId, `New registration: ${first_name} ${last_name} for ${course.title}`);
+        } catch (e) {
+          logger.warn('Activity log write failed:', e.message);
+        }
 
         return {
           userId,
@@ -152,7 +174,7 @@ const registrationController = {
       // Generate offer letter (async, don't block response)
       pdfService.generateOfferLetter(
         { student_id: studentId, first_name, last_name },
-        { registration_id: registrationId, batch_name: course.batch_name, start_date: course.start_date, end_date: course.end_date, mode: course.mode },
+        { registration_id: registrationId, batch_name: course.batch_name, start_date: course.start_date, end_date: course.end_date, mode: course.mode || 'online' },
         course
       ).then(pdf => {
         db.prepare('UPDATE registrations SET offer_letter_generated = 1, offer_letter_path = ? WHERE id = ?')
@@ -175,7 +197,7 @@ const registrationController = {
           batchName: course.batch_name,
           startDate: course.start_date,
           endDate: course.end_date,
-          mode: course.mode,
+          mode: course.mode || 'online',
           trainerName: course.trainer_name,
           totalAmount: totalAmount,
           paidAmount,
@@ -219,6 +241,14 @@ const registrationController = {
         payment_plan
       } = req.body;
 
+      // Validate required fields
+      if (!first_name || !last_name || !email || !phone) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing required fields: first_name, last_name, email, and phone are required.'
+        });
+      }
+
       // Check if email already registered
       const existingStudent = Student.findByEmail(email);
       if (existingStudent) {
@@ -234,8 +264,8 @@ const registrationController = {
         // Auto-create as draft
         const slug = require('../utils/helpers').slugify(course || 'Generic Course');
         const result = db.prepare(`
-          INSERT INTO courses (slug, title, duration, price, category, status, is_active) 
-          VALUES (?, ?, ?, 0, 'training', 'draft', 0)
+          INSERT INTO courses (slug, title, duration, price, category, is_active) 
+          VALUES (?, ?, ?, 0, 'training', 0)
         `).run(slug, course || 'Generic Course', course_duration || '6 months');
         courseRecord = db.prepare('SELECT * FROM courses WHERE id = ?').get(result.lastInsertRowid);
       }
@@ -347,6 +377,11 @@ const registrationController = {
       // Generate on demand
       const student = Student.findById(registration.student_id);
       const course = Course.findById(registration.course_id);
+      
+      if (!student || !course) {
+        return res.status(404).json({ success: false, message: 'Student or course data not found.' });
+      }
+
       const pdf = await pdfService.generateOfferLetter(student, registration, course);
 
       const db = getDb();

@@ -41,7 +41,7 @@ exports.index = (req, res) => {
       title: 'Error - Student Portal',
       code: 500,
       message: 'Something went wrong loading courses. Please try again later.',
-      user: req.user
+      user: req.user || { first_name: 'Student', last_name: '', role: 'student' }
     });
   }
 };
@@ -73,7 +73,7 @@ exports.show = (req, res) => {
         title: 'Not Found - Student Portal',
         code: 404,
         message: 'Registration not found or access denied.',
-        user: req.user
+        user: req.user || { first_name: 'Student', last_name: '', role: 'student' }
       });
     }
 
@@ -86,67 +86,103 @@ exports.show = (req, res) => {
     }
 
     // 1. Fetch Daily Attendance for this course
-    const attendance = db.prepare(`
-      SELECT date, status, check_in_time, check_out_time, remarks
-      FROM attendance
-      WHERE student_id = ? AND course_id = ?
-      ORDER BY date DESC
-    `).all(student.id, registration.course_id);
+    let attendance = [];
+    try {
+      attendance = db.prepare(`
+        SELECT date, status, check_in_time, check_out_time, remarks
+        FROM attendance
+        WHERE student_id = ? AND course_id = ?
+        ORDER BY date DESC
+      `).all(student.id, registration.course_id);
+    } catch (e) {
+      logger.warn('Attendance query failed:', e.message);
+    }
 
     // Fetch today's attendance record (local YYYY-MM-DD)
+    let todayAttendance = null;
     const localToday = new Date();
     const year = localToday.getFullYear();
     const month = String(localToday.getMonth() + 1).padStart(2, '0');
     const day = String(localToday.getDate()).padStart(2, '0');
     const todayStr = `${year}-${month}-${day}`;
     
-    const todayAttendance = db.prepare(`
-      SELECT * FROM attendance
-      WHERE student_id = ? AND course_id = ? AND date = ?
-    `).get(student.id, registration.course_id, todayStr);
+    try {
+      todayAttendance = db.prepare(`
+        SELECT * FROM attendance
+        WHERE student_id = ? AND course_id = ? AND date = ?
+      `).get(student.id, registration.course_id, todayStr);
+    } catch (e) {
+      logger.warn('Today attendance query failed:', e.message);
+    }
 
     // Calculate attendance rate for this course
-    const attSummary = db.prepare(`
-      SELECT COUNT(*) as total, SUM(CASE WHEN status = 'present' THEN 1 ELSE 0 END) as present
-      FROM attendance
-      WHERE student_id = ? AND course_id = ?
-    `).get(student.id, registration.course_id);
-    
-    const attendancePercent = attSummary.total > 0
-      ? Math.round((attSummary.present / attSummary.total) * 100)
-      : 100;
+    let attendancePercent = 100;
+    try {
+      const attSummary = db.prepare(`
+        SELECT COUNT(*) as total, SUM(CASE WHEN status = 'present' THEN 1 ELSE 0 END) as present
+        FROM attendance
+        WHERE student_id = ? AND course_id = ?
+      `).get(student.id, registration.course_id);
+      
+      const total = attSummary ? parseInt(attSummary.total, 10) || 0 : 0;
+      const present = attSummary ? parseInt(attSummary.present, 10) || 0 : 0;
+      
+      attendancePercent = total > 0 ? Math.round((present / total) * 100) : 100;
+    } catch (e) {
+      logger.warn('Attendance summary query failed:', e.message);
+    }
 
     // 2. Fetch Assignments & Submissions
-    const assignments = db.prepare(`
-      SELECT a.*, s.submission_path, s.submission_text, s.marks, s.feedback, s.status as submission_status, s.submitted_at
-      FROM assignments a
-      LEFT JOIN assignment_submissions s ON a.id = s.assignment_id AND s.student_id = ?
-      WHERE a.course_id = ? AND a.is_active = 1
-      ORDER BY a.due_date ASC
-    `).all(student.id, registration.course_id);
+    let assignments = [];
+    try {
+      assignments = db.prepare(`
+        SELECT a.*, s.submission_path, s.submission_text, s.marks, s.feedback, s.status as submission_status, s.submitted_at
+        FROM assignments a
+        LEFT JOIN assignment_submissions s ON a.id = s.assignment_id AND s.student_id = ?
+        WHERE a.course_id = ? AND a.is_active = 1
+        ORDER BY a.due_date ASC
+      `).all(student.id, registration.course_id);
+    } catch (e) {
+      logger.warn('Assignments query failed:', e.message);
+    }
 
     // 3. Fetch Projects & Submissions
-    const projects = db.prepare(`
-      SELECT p.*, s.title as submission_title, s.description as submission_desc, s.file_path, s.github_link, s.demo_link,
-             s.marks, s.feedback, s.status as submission_status, s.submitted_at
-      FROM projects p
-      LEFT JOIN project_submissions s ON p.id = s.project_id AND s.student_id = ?
-      WHERE p.course_id = ? AND p.is_active = 1
-      ORDER BY p.due_date ASC
-    `).all(student.id, registration.course_id);
+    let projects = [];
+    try {
+      projects = db.prepare(`
+        SELECT p.*, s.title as submission_title, s.description as submission_desc, s.file_path, s.github_link, s.demo_link,
+               s.marks, s.feedback, s.status as submission_status, s.submitted_at
+        FROM projects p
+        LEFT JOIN project_submissions s ON p.id = s.project_id AND s.student_id = ?
+        WHERE p.course_id = ? AND p.is_active = 1
+        ORDER BY p.due_date ASC
+      `).all(student.id, registration.course_id);
+    } catch (e) {
+      logger.warn('Projects query failed:', e.message);
+    }
 
     // 4. Fetch Certificates if any
-    const certificates = db.prepare(`
-      SELECT * FROM certificates 
-      WHERE student_id = ? AND course_id = ? AND registration_id = ?
-    `).all(student.id, registration.course_id, registration.id);
+    let certificates = [];
+    try {
+      certificates = db.prepare(`
+        SELECT * FROM certificates 
+        WHERE student_id = ? AND course_id = ? AND registration_id = ?
+      `).all(student.id, registration.course_id, registration.id);
+    } catch (e) {
+      logger.warn('Certificates query failed:', e.message);
+    }
 
     // 5. Fetch Payments & Verification Proofs for this registration
-    const payments = db.prepare(`
-      SELECT * FROM payments 
-      WHERE registration_id = ?
-      ORDER BY created_at DESC
-    `).all(registration.id);
+    let payments = [];
+    try {
+      payments = db.prepare(`
+        SELECT * FROM payments 
+        WHERE registration_id = ?
+        ORDER BY created_at DESC
+      `).all(registration.id);
+    } catch (e) {
+      logger.warn('Payments query failed:', e.message);
+    }
 
     res.render('student/courses/show', {
       layout: 'layouts/student',
@@ -171,7 +207,7 @@ exports.show = (req, res) => {
       title: 'Error - Student Portal',
       code: 500,
       message: 'Something went wrong loading course details. Please try again later.',
-      user: req.user
+      user: req.user || { first_name: 'Student', last_name: '', role: 'student' }
     });
   }
 };

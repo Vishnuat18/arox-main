@@ -26,17 +26,54 @@ exports.overview = (req, res) => {
     const db = getDb();
     
     // Get aggregate counts
-    stats.students = parseInt(db.prepare('SELECT COUNT(*) as count FROM students').get().count, 10) || 0;
-    stats.courses = parseInt(db.prepare('SELECT COUNT(*) as count FROM courses WHERE is_active = 1').get().count, 10) || 0;
-    stats.registrations = parseInt(db.prepare('SELECT COUNT(*) as count FROM registrations').get().count, 10) || 0;
-    stats.pendingRegistrations = parseInt(db.prepare("SELECT COUNT(*) as count FROM registrations WHERE status = 'pending'").get().count, 10) || 0;
+    const studentsRow = db.prepare('SELECT COUNT(*) as count FROM students').get();
+    stats.students = studentsRow ? parseInt(studentsRow.count, 10) || 0 : 0;
+    
+    const coursesRow = db.prepare('SELECT COUNT(*) as count FROM courses WHERE is_active = 1').get();
+    stats.courses = coursesRow ? parseInt(coursesRow.count, 10) || 0 : 0;
+    
+    const regRow = db.prepare('SELECT COUNT(*) as count FROM registrations').get();
+    stats.registrations = regRow ? parseInt(regRow.count, 10) || 0 : 0;
+    
+    const pendingRegRow = db.prepare("SELECT COUNT(*) as count FROM registrations WHERE status = 'pending'").get();
+    stats.pendingRegistrations = pendingRegRow ? parseInt(pendingRegRow.count, 10) || 0 : 0;
     
     // Revenue sum (total paid)
     const revenueRow = db.prepare("SELECT SUM(amount) as total FROM payments WHERE status = 'completed'").get();
-    stats.revenue = parseFloat(revenueRow.total) || 0;
+    stats.revenue = revenueRow && revenueRow.total ? parseFloat(revenueRow.total) || 0 : 0;
 
     const pendingRevRow = db.prepare("SELECT SUM(amount) as total FROM payments WHERE status = 'pending'").get();
-    stats.pendingRevenue = parseFloat(pendingRevRow.total) || 0;
+    stats.pendingRevenue = pendingRevRow && pendingRevRow.total ? parseFloat(pendingRevRow.total) || 0 : 0;
+
+    // Student growth: current month vs previous month
+    try {
+      const currentMonth = new Date().getMonth() + 1;
+      const currentYear = new Date().getFullYear();
+      const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+      const prevYear = currentMonth === 1 ? currentYear - 1 : currentYear;
+
+      const currentMonthRow = db.prepare(
+        `SELECT COUNT(*) as count FROM students WHERE EXTRACT(MONTH FROM created_at) = $1 AND EXTRACT(YEAR FROM created_at) = $2`
+      ).get(currentMonth, currentYear);
+      const currentMonthCount = currentMonthRow ? parseInt(currentMonthRow.count, 10) || 0 : 0;
+
+      const prevMonthRow = db.prepare(
+        `SELECT COUNT(*) as count FROM students WHERE EXTRACT(MONTH FROM created_at) = $1 AND EXTRACT(YEAR FROM created_at) = $2`
+      ).get(prevMonth, prevYear);
+      const prevMonthCount = prevMonthRow ? parseInt(prevMonthRow.count, 10) || 0 : 0;
+
+      if (prevMonthCount > 0) {
+        stats.studentGrowth = Math.round(((currentMonthCount - prevMonthCount) / prevMonthCount) * 100);
+      } else if (currentMonthCount > 0) {
+        stats.studentGrowth = 100; // first month with students
+      } else {
+        stats.studentGrowth = 0;
+      }
+      stats.currentMonthStudents = currentMonthCount;
+    } catch (e) {
+      stats.studentGrowth = 0;
+      stats.currentMonthStudents = 0;
+    }
 
     recentRegistrations = db.prepare(`
       SELECT 
@@ -48,7 +85,7 @@ exports.overview = (req, res) => {
       JOIN courses c ON r.course_id = c.id
       ORDER BY r.created_at DESC
       LIMIT 5
-    `).all();
+    `).all() || [];
 
     // Upcoming batches
     upcomingBatches = db.prepare(`
@@ -57,45 +94,57 @@ exports.overview = (req, res) => {
       WHERE is_active = 1
       ORDER BY start_date ASC
       LIMIT 4
-    `).all();
+    `).all() || [];
 
     // 1. Category Distribution from registrations
-    const catRows = db.prepare(`
-      SELECT c.category, COUNT(r.id) as count
-      FROM courses c
-      LEFT JOIN registrations r ON r.course_id = c.id
-      GROUP BY c.category
-    `).all();
-    catRows.forEach(row => {
-      const cat = (row.category || 'training').toLowerCase();
-      if (analytics.categoryBreakdown[cat] !== undefined) {
-        analytics.categoryBreakdown[cat] += parseInt(row.count, 10) || 0;
-      } else {
-        analytics.categoryBreakdown[cat] = parseInt(row.count, 10) || 0;
-      }
-    });
+    try {
+      const catRows = db.prepare(`
+        SELECT c.category, COUNT(r.id) as count
+        FROM courses c
+        LEFT JOIN registrations r ON r.course_id = c.id
+        GROUP BY c.category
+      `).all() || [];
+      catRows.forEach(row => {
+        const cat = (row.category || 'training').toLowerCase();
+        if (analytics.categoryBreakdown[cat] !== undefined) {
+          analytics.categoryBreakdown[cat] += parseInt(row.count, 10) || 0;
+        } else {
+          analytics.categoryBreakdown[cat] = parseInt(row.count, 10) || 0;
+        }
+      });
+    } catch (e) {
+      logger.warn('Category breakdown error:', e.message);
+    }
 
     // 2. Course breakdown
-    analytics.coursesBreakdown = db.prepare(`
-      SELECT c.title, c.category, COUNT(r.id) as enrolled, COALESCE(c.price, 0) as price
-      FROM courses c
-      LEFT JOIN registrations r ON r.course_id = c.id
-      GROUP BY c.id, c.title, c.category, c.price
-      ORDER BY enrolled DESC
-      LIMIT 6
-    `).all();
+    try {
+      analytics.coursesBreakdown = db.prepare(`
+        SELECT c.title, c.category, COUNT(r.id) as enrolled, COALESCE(c.price, 0) as price
+        FROM courses c
+        LEFT JOIN registrations r ON r.course_id = c.id
+        GROUP BY c.id, c.title, c.category, c.price
+        ORDER BY enrolled DESC
+        LIMIT 6
+      `).all() || [];
+    } catch (e) {
+      logger.warn('Courses breakdown error:', e.message);
+    }
 
     // 3. Payment Status Breakdown
-    const payRows = db.prepare(`
-      SELECT status, COUNT(*) as count, SUM(amount) as total
-      FROM payments
-      GROUP BY status
-    `).all();
-    payRows.forEach(p => {
-      if (analytics.paymentStatusBreakdown[p.status] !== undefined) {
-        analytics.paymentStatusBreakdown[p.status] = parseInt(p.count, 10) || 0;
-      }
-    });
+    try {
+      const payRows = db.prepare(`
+        SELECT status, COUNT(*) as count, SUM(amount) as total
+        FROM payments
+        GROUP BY status
+      `).all() || [];
+      payRows.forEach(p => {
+        if (analytics.paymentStatusBreakdown[p.status] !== undefined) {
+          analytics.paymentStatusBreakdown[p.status] = parseInt(p.count, 10) || 0;
+        }
+      });
+    } catch (e) {
+      logger.warn('Payment status breakdown error:', e.message);
+    }
 
     const totalPays = (analytics.paymentStatusBreakdown.completed || 0) + (analytics.paymentStatusBreakdown.pending || 0);
     if (totalPays > 0) {
@@ -111,7 +160,7 @@ exports.overview = (req, res) => {
         FROM registrations
         WHERE created_at IS NOT NULL
         GROUP BY EXTRACT(MONTH FROM created_at)
-      `).all();
+      `).all() || [];
       monthEnrollRows.forEach(r => {
         const mIndex = parseInt(r.month_num, 10) - 1;
         if (mIndex >= 0 && mIndex < 12) {
@@ -130,7 +179,7 @@ exports.overview = (req, res) => {
         FROM payments
         WHERE status = 'completed' AND created_at IS NOT NULL
         GROUP BY EXTRACT(MONTH FROM created_at)
-      `).all();
+      `).all() || [];
       monthPayRows.forEach(r => {
         const mIndex = parseInt(r.month_num, 10) - 1;
         if (mIndex >= 0 && mIndex < 12) {
@@ -160,7 +209,7 @@ exports.overview = (req, res) => {
     layout: 'layouts/admin',
     title: 'Admin Dashboard | AROX ERP',
     pageTitle: 'Overview',
-    user: req.user,
+    user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' },
     stats,
     analytics,
     recentRegistrations,

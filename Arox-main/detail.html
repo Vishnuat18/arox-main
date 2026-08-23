@@ -1643,735 +1643,240 @@
         </div>
     </section>
 
-
-
     <!-- ─── FOOTER ─── -->
-    <footer>
-    <div class="footer-glow-1"></div>
-    <div class="footer-glow-2"></div>
-    <div class="footer-watermark">Arox Tech</div>
+  <footer>
     <div class="footer-inner">
+      <!-- Background Watermark -->
+      <div class="footer-watermark">Arox Tech</div>
+
+      <!-- Main Footer Grid / Mobile Accordions -->
       <div class="footer-grid">
-        <div>
-          <a href="#" style="display:inline-block;margin-bottom:.5rem;">
-            <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech"
-              style="height:3rem;width:auto;"
-              onerror="this.style.display='none';document.getElementById('footer-logo-text').style.display='block'" />
-            <span id="footer-logo-text"
-              style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--heading);">AROX</span>
+        <!-- Brand Section (Top on mobile, Col 1 on desktop) -->
+        <div class="footer-brand">
+          <a href="index.html" class="footer-brand-logo">
+            <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech" onerror="this.src='assets/logo/logo-dark.png'" />
           </a>
-          <p class="footer-tagline">We build digital products, AI solutions, and powerful experiences that help
-            businesses grow faster and smarter.</p>
+          <p class="footer-tagline">
+            We build scalable software architectures, robust digital platforms, and high-impact AI solutions for modern businesses.
+          </p>
+          <!-- 4 Social Icons in a Single Row: Instagram, WhatsApp, Facebook, LinkedIn -->
           <div class="footer-socials">
-            <a href="#" class="footer-social-btn" aria-label="LinkedIn"><svg viewBox="0 0 24 24">
-                <path
-                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-              </svg></a>
-            <a href="#" class="footer-social-btn" aria-label="Twitter"><svg viewBox="0 0 24 24">
-                <path
-                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-              </svg></a>
-            <a href="#" class="footer-social-btn" aria-label="GitHub"><svg viewBox="0 0 24 24">
-                <path
-                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-              </svg></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="WhatsApp">
+              <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Facebook">
+              <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
           </div>
-          <p class="footer-copyright">&copy; <span>AROX Tech <span id="footer-year"></span></span> &bull; All Rights
-            Reserved</p>
+          <div class="footer-brand-divider"></div>
+          <p class="footer-copyright">&copy; <span>AROX Tech 2026</span><br/>All Rights Reserved</p>
         </div>
-        <div>
-          <h4 class="footer-col-title">Company</h4>
-          <ul class="footer-links">
-            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>About Us</a></li>
-            <li><a href="about.html" class="footer-link"><span class="footer-link-arrow"></span>Our Journey</a></li>
-            <li><a href="apply.html" class="footer-link"><span class="footer-link-arrow"></span>Careers</a></li>
-            <li><a href="index.html" class="footer-link"><span class="footer-link-arrow"></span>Blog</a></li>
-            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Partners</a></li>
-            <li><a href="contact.html" class="footer-link"><span class="footer-link-arrow"></span>News &amp; Updates</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="footer-col-title">Services</h4>
-          <ul class="footer-links">
-            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Software Development</a></li>
-            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>AI Solutions</a></li>
-            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Cloud &amp; DevOps</a></li>
-            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>UI/UX Design</a></li>
-            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>Data &amp; Analytics</a></li>
-            <li><a href="services.html" class="footer-link"><span class="footer-link-arrow"></span>IT Consulting</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="footer-col-title">Contact</h4>
-          <div class="footer-contact-items">
-            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>Salem, Tamil Nadu, India</div>
-            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <path
-                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z" />
-              </svg>+91 12345 67890</div>
-            <div class="footer-contact-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>info@aroxtech.com</div>
+
+        <!-- Row 1 / Col 2: Company -->
+        <details class="footer-col footer-col-company" open>
+          <summary class="footer-col-header">
+            <div class="footer-col-header-left">
+              <div class="footer-col-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v8"/><path d="M18 9h2a2 2 0 0 1 2 2v11"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
+              </div>
+              <div>
+                <h3 class="footer-col-title">Company</h3>
+                <div class="footer-title-bar"></div>
+              </div>
+            </div>
+            <div class="footer-chevron">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </summary>
+          <div class="footer-col-body">
+            <ul class="footer-links">
+              <li><a class="footer-link" href="about.html"><span class="footer-link-arrow"></span> About Us</a></li>
+              <li><a class="footer-link" href="about.html#journey"><span class="footer-link-arrow"></span> Our Journey</a></li>
+              <li><a class="footer-link" href="apply.html"><span class="footer-link-arrow"></span> Careers</a></li>
+              <li><a class="footer-link" href="about.html#team"><span class="footer-link-arrow"></span> Core Team</a></li>
+              <li><a class="footer-link" href="services.html"><span class="footer-link-arrow"></span> Partners</a></li>
+              <li><a class="footer-link" href="contact.html"><span class="footer-link-arrow"></span> News &amp; Updates</a></li>
+            </ul>
           </div>
-          <a href="contact.html" class="footer-cta-link"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2">
-              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-              <path
-                d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
-            </svg><span>Let's Build Something<br />Amazing Together</span></a>
-        </div>
+        </details>
+
+        <!-- Row 1 / Col 3: Services -->
+        <details class="footer-col footer-col-services" open>
+          <summary class="footer-col-header">
+            <div class="footer-col-header-left">
+              <div class="footer-col-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </div>
+              <div>
+                <h3 class="footer-col-title">Services</h3>
+                <div class="footer-title-bar"></div>
+              </div>
+            </div>
+            <div class="footer-chevron">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </summary>
+          <div class="footer-col-body">
+            <ul class="footer-links">
+              <li><a class="footer-link" href="services.html"><span class="footer-link-arrow"></span> Software Development</a></li>
+              <li><a class="footer-link" href="services.html"><span class="footer-link-arrow"></span> Web Design &amp; Dev</a></li>
+              <li><a class="footer-link" href="services.html"><span class="footer-link-arrow"></span> App Development</a></li>
+              <li><a class="footer-link" href="services.html"><span class="footer-link-arrow"></span> UI/UX &amp; Branding</a></li>
+              <li><a class="footer-link" href="services.html"><span class="footer-link-arrow"></span> Cloud &amp; Infrastructure</a></li>
+              <li><a class="footer-link" href="services.html"><span class="footer-link-arrow"></span> Digital Marketing &amp; SEO</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Row 1 / Col 4: Training -->
+        <details class="footer-col footer-col-training" open>
+          <summary class="footer-col-header">
+            <div class="footer-col-header-left">
+              <div class="footer-col-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div>
+                <h3 class="footer-col-title">Training</h3>
+                <div class="footer-title-bar"></div>
+              </div>
+            </div>
+            <div class="footer-chevron">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </summary>
+          <div class="footer-col-body">
+            <ul class="footer-links">
+              <li><a class="footer-link" href="courses.html"><span class="footer-link-arrow"></span> Full Stack Web Dev</a></li>
+              <li><a class="footer-link" href="courses.html"><span class="footer-link-arrow"></span> Python &amp; Data Science</a></li>
+              <li><a class="footer-link" href="courses.html"><span class="footer-link-arrow"></span> AI &amp; Machine Learning</a></li>
+              <li><a class="footer-link" href="courses.html"><span class="footer-link-arrow"></span> Cyber Security</a></li>
+              <li><a class="footer-link" href="courses.html"><span class="footer-link-arrow"></span> Cloud &amp; DevOps</a></li>
+              <li><a class="footer-link" href="courses.html"><span class="footer-link-arrow"></span> Mobile App Dev</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Row 2 / Col 2: Internships -->
+        <details class="footer-col footer-col-internships" open>
+          <summary class="footer-col-header">
+            <div class="footer-col-header-left">
+              <div class="footer-col-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              </div>
+              <div>
+                <h3 class="footer-col-title">Internships</h3>
+                <div class="footer-title-bar"></div>
+              </div>
+            </div>
+            <div class="footer-chevron">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </summary>
+          <div class="footer-col-body">
+            <ul class="footer-links">
+              <li><a class="footer-link" href="internships.html"><span class="footer-link-arrow"></span> Full Stack Internship</a></li>
+              <li><a class="footer-link" href="internships.html"><span class="footer-link-arrow"></span> Python Backend</a></li>
+              <li><a class="footer-link" href="internships.html"><span class="footer-link-arrow"></span> UI/UX Product Design</a></li>
+              <li><a class="footer-link" href="internships.html"><span class="footer-link-arrow"></span> AI Agent Engineering</a></li>
+              <li><a class="footer-link" href="internships.html"><span class="footer-link-arrow"></span> Cloud &amp; DevOps</a></li>
+              <li><a class="footer-link" href="internships.html"><span class="footer-link-arrow"></span> Mobile App Engineering</a></li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Row 2 / Col 3: Contact -->
+        <details class="footer-col footer-col-contact" open>
+          <summary class="footer-col-header">
+            <div class="footer-col-header-left">
+              <div class="footer-col-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
+              </div>
+              <div>
+                <h3 class="footer-col-title">Contact</h3>
+                <div class="footer-title-bar"></div>
+              </div>
+            </div>
+            <div class="footer-chevron">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </summary>
+          <div class="footer-col-body">
+            <ul class="footer-contact-items">
+              <li class="footer-contact-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>Salem, Tamil Nadu, India</span>
+              </li>
+              <li class="footer-contact-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.1a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.38l3-.02a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.18 6.18l1.44-1.44a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.03z"/></svg>
+                <a href="tel:+911234567890">+91 12345 67890</a>
+              </li>
+              <li class="footer-contact-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                <a href="mailto:info@aroxtech.com">info@aroxtech.com</a>
+              </li>
+              <li class="footer-contact-item">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span>Mon - Sat: 9:00 AM - 6:00 PM</span>
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Row 2 / Col 4: Stay Updated (Newsletter) -->
+        <details class="footer-col footer-col-newsletter" open>
+          <summary class="footer-col-header">
+            <div class="footer-col-header-left">
+              <div class="footer-col-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+              </div>
+              <div>
+                <h3 class="footer-col-title">Stay Updated</h3>
+                <div class="footer-title-bar"></div>
+              </div>
+            </div>
+            <div class="footer-chevron">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+          </summary>
+          <div class="footer-col-body">
+            <div class="footer-newsletter">
+              <p class="footer-newsletter-desc">Subscribe to our newsletter for the latest tech releases, industry insights, and engineering updates.</p>
+              <form class="footer-newsletter-form" onsubmit="event.preventDefault();">
+                <input class="footer-newsletter-input" placeholder="Enter your email" required type="email" />
+                <button class="footer-newsletter-btn" type="submit" aria-label="Subscribe">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </button>
+              </form>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Mobile Copyright (Visible only on mobile) -->
+      <div class="footer-mobile-copyright">
+        &copy; <span>AROX Tech 2026</span> &bull; All Rights Reserved
+      </div>
+    </div>
+
+    <!-- Bottom Tagline & Dots Bar -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <span class="footer-bottom-dot">&#x25CF;</span>
+        <span class="footer-bottom-text">Building Digital Products</span>
+        <span class="footer-bottom-dot">&#x25CF;</span>
+        <span class="footer-bottom-text">Solving Real-World Problems</span>
+        <span class="footer-bottom-dot">&#x25CF;</span>
+        <span class="footer-bottom-text">All Rights Reserved @2026</span>
+        <span class="footer-bottom-dot">&#x25CF;</span>
       </div>
     </div>
   </footer>
-
-    <!-- ─── SCRIPTS ─── -->
-    <!-- AOS Library -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ once: true, offset: 50, duration: 800, easing: 'ease-out-cubic' });
-        window.addEventListener('load', () => { document.body.style.opacity = '1'; });
-    </script>
-
-    <!-- Course Data & Dynamic Rendering -->
-    <script type="module">
-        import { LogoParticleEngine, MetaParticleEngine } from './js/particle-engine.js';
-        const deviconMap = {
-            'HTML5': 'html5/html5-original.svg',
-            'CSS3': 'css3/css3-original.svg',
-            'JavaScript': 'javascript/javascript-original.svg',
-            'JS': 'javascript/javascript-original.svg',
-            'TypeScript': 'typescript/typescript-original.svg',
-            'TS': 'typescript/typescript-original.svg',
-            'React': 'react/react-original.svg',
-            'Node': 'nodejs/nodejs-original.svg',
-            'Node.js': 'nodejs/nodejs-original.svg',
-            'MongoDB': 'mongodb/mongodb-original.svg',
-            'Git': 'git/git-original.svg',
-            'Figma': 'figma/figma-original.svg',
-            'Sketch': 'sketch/sketch-original.svg',
-            'Adobe XD': 'xd/xd-plain.svg',
-            'Photoshop': 'photoshop/photoshop-original.svg',
-            'Illustrator': 'illustrator/illustrator-plain.svg',
-            'Python': 'python/python-original.svg',
-            'R': 'r/r-original.svg',
-            'SQL': 'mysql/mysql-original.svg',
-            'Pandas': 'pandas/pandas-original.svg',
-            'TensorFlow': 'tensorflow/tensorflow-original.svg',
-            'Kali Linux': 'linux/linux-original.svg',
-            'Wireshark': 'wireshark/wireshark-original.svg',
-            'Metasploit': 'linux/linux-original.svg',
-            'Bash': 'bash/bash-original.svg',
-            'Google Ads': 'google/google-original.svg',
-            'Meta Ads': 'facebook/facebook-original.svg',
-            'Analytics': 'google/google-original.svg',
-            'WordPress': 'wordpress/wordpress-plain.svg',
-            'Mailchimp': 'mailchimp/mailchimp-original.svg',
-            'C/C++': 'cplusplus/cplusplus-original.svg',
-            'C++': 'cplusplus/cplusplus-original.svg',
-            'Raspberry Pi': 'raspberrypi/raspberrypi-original.svg',
-            'Arduino': 'arduino/arduino-original.svg',
-            'AWS IoT': 'amazonwebservices/amazonwebservices-original.svg',
-            'Docker': 'docker/docker-original.svg',
-            'Kubernetes': 'kubernetes/kubernetes-plain.svg',
-            'Jenkins': 'jenkins/jenkins-original.svg',
-            'AWS': 'amazonwebservices/amazonwebservices-original.svg',
-            'Java': 'java/java-original.svg',
-            'Spring Boot': 'spring/spring-original.svg',
-            'Spring': 'spring/spring-original.svg',
-            'React Native': 'react/react-original.svg',
-            'Flutter': 'flutter/flutter-original.svg',
-            'Swift': 'swift/swift-original.svg',
-            'Android': 'android/android-original.svg',
-            'Firebase': 'firebase/firebase-plain.svg',
-            'Django': 'django/django-plain.svg',
-            'FastAPI': 'fastapi/fastapi-original.svg',
-            'PostgreSQL': 'postgresql/postgresql-original.svg',
-            'Redis': 'redis/redis-original.svg',
-            'Next.js': 'nextjs/nextjs-original.svg',
-            'Express': 'express/express-original.svg',
-            'PyTorch': 'pytorch/pytorch-original.svg',
-            'NumPy': 'numpy/numpy-original.svg',
-            'Terraform': 'terraform/terraform-original.svg',
-            'Dart': 'dart/dart-original.svg'
-        };
-
-        const coursesData = [
-            // ─── Training courses (from flip cards in courses.html) ───
-            {
-                slug: 'full-stack-web-development',
-                title: 'Full Stack Web Development',
-                category: 'Development',
-                desc: 'Engineer modern responsive web platforms using React, Node.js, databases, and version control.',
-                learnItems: ['HTML5, CSS3, & Modern UI Layouts', 'React & Next.js Frameworks', 'Node.js & Express API Backend', 'Database Modeling & Design', 'Git Version Control & Deployment'],
-                techStack: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Node.js', 'MongoDB', 'Git'],
-                topics: [
-                    {
-                        title: 'HTML5, CSS3, & Modern UI Layouts',
-                        tool: 'HTML5',
-                        desc: 'Master semantic web structure, responsive layout design, CSS Flexbox & Grid, dynamic CSS variables, and fluid keyframe animations.',
-                        points: [
-                            'Semantic HTML5 structure & accessibility standards',
-                            'Responsive design with CSS Flexbox & CSS Grid',
-                            'Custom theme variables & modern glassmorphism UI',
-                            'CSS keyframe animations & smooth UI transitions'
-                        ],
-                        practicalLab: 'Build a high-performance responsive web portal with smooth animations and dark mode toggle.'
-                    },
-                    {
-                        title: 'React & Next.js Frameworks',
-                        tool: 'React',
-                        desc: 'Build reactive single-page applications and server-rendered web platforms using React Hooks and Next.js App Router.',
-                        points: [
-                            'React Hooks (useState, useEffect, useMemo, useCallback)',
-                            'Component lifecycle & reusable design systems',
-                            'Next.js Server Side Rendering (SSR) & Static Site Generation',
-                            'State management with Context API & Zustand'
-                        ],
-                        practicalLab: 'Develop an interactive e-commerce product catalog with real-time cart state management.'
-                    },
-                    {
-                        title: 'Node.js & Express API Backend',
-                        tool: 'Node.js',
-                        desc: 'Engineer fast asynchronous RESTful APIs, authentication middleware, and microservices using Node.js and Express.',
-                        points: [
-                            'Node.js Event Loop & Non-blocking I/O architecture',
-                            'Express REST API routing & custom middleware stack',
-                            'JWT Authentication, password hashing & security headers',
-                            'Error handling, input validation & request logging'
-                        ],
-                        practicalLab: 'Create a secure multi-tenant backend API with JWT authentication and RBAC authorization.'
-                    },
-                    {
-                        title: 'Database Modeling & Design',
-                        tool: 'MongoDB',
-                        desc: 'Design scalable document schemas, optimize indexes, and execute complex aggregation queries in MongoDB.',
-                        points: [
-                            'MongoDB document schemas & Mongoose ORM models',
-                            'Data modeling & indexing strategies for high throughput',
-                            'Aggregation pipelines & complex lookup joins',
-                            'Transaction safety & data validation rules'
-                        ],
-                        practicalLab: 'Design a high-volume analytics database schema with Mongoose aggregation pipelines.'
-                    },
-                    {
-                        title: 'Git Version Control & Deployment',
-                        tool: 'Git',
-                        desc: 'Orchestrate Git version control workflows and deploy full stack web apps to production cloud platforms.',
-                        points: [
-                            'Git branching, pull request reviews & merge conflict resolution',
-                            'Continuous deployment with Vercel, Render & Docker',
-                            'Production environment configuration & secret management',
-                            'Custom domain setups, SSL security & uptime monitoring'
-                        ],
-                        practicalLab: 'Deploy a full-stack MERN application live on cloud servers with automated CI/CD deployment.'
-                    }
-                ]
-            },
-            {
-                slug: 'ui-ux-designing',
-                title: 'UI & UX Designing',
-                category: 'Creative',
-                desc: 'Master Figma, layout design, visual styling, wireframes, and prototypes.',
-                learnItems: ['Design Systems & Figma Components', 'User Persona & Research', 'Interactive Prototyping & Flow', 'Visual Hierarchy & Layouts', 'Developer Handoff Best Practices'],
-                techStack: ['Figma', 'Sketch', 'Adobe XD', 'Photoshop', 'Illustrator']
-            },
-            {
-                slug: 'data-science-and-ai',
-                title: 'Data Science & AI',
-                category: 'Data',
-                desc: 'Analyze data, train machine learning models, and engineer AI systems with Python.',
-                learnItems: ['Data Analysis with Python & Pandas', 'SQL Querying & Database Management', 'Exploratory Data Visualization', 'Machine Learning Algorithms', 'Deep Learning & AI Integration'],
-                techStack: ['Python', 'R', 'SQL', 'Pandas', 'TensorFlow']
-            },
-            {
-                slug: 'cyber-security',
-                title: 'Cyber Security',
-                category: 'Security',
-                desc: 'Ethically hack, audit networks, secure systems, and design security policies.',
-                learnItems: ['Network Auditing & Wireshark Analysis', 'Pentesting with Kali Linux & Metasploit', 'System & Server Hardening', 'Cryptography Foundations', 'Security Scripting with Python & Bash'],
-                techStack: ['Kali Linux', 'Wireshark', 'Metasploit', 'Python', 'Bash']
-            },
-            {
-                slug: 'digital-marketing',
-                title: 'Digital Marketing',
-                category: 'Marketing',
-                desc: 'Grow audiences, manage paid ads, orchestrate email campaigns, and analyze conversions.',
-                learnItems: ['SEO Optimization & Keyword Analysis', 'Paid Campaigns on Google & Meta Ads', 'Email Marketing & Custom Newsletters', 'Web Analytics & Performance Tracking', 'CMS Systems & WordPress Customization'],
-                techStack: ['Google Ads', 'Meta Ads', 'Analytics', 'WordPress', 'Mailchimp']
-            },
-            {
-                slug: 'embedded-systems-and-iot',
-                title: 'Embedded Systems & IoT',
-                category: 'Hardware',
-                desc: 'Program hardware, integrate sensors, and interface devices with cloud dashboards.',
-                learnItems: ['C/C++ Bare-Metal Programming', 'Raspberry Pi & Single Board Systems', 'Arduino Microcontrollers & Circuits', 'Sensor & Actuator Calibration', 'AWS IoT Cloud Integrations'],
-                techStack: ['C/C++', 'Raspberry Pi', 'Arduino', 'Python', 'AWS IoT']
-            },
-            {
-                slug: 'devops-engineering',
-                title: 'DevOps Engineering',
-                category: 'Operations',
-                desc: 'Deploy scalable containers, configure CI/CD pipelines, and manage cloud clusters.',
-                learnItems: ['Docker Containerization & Packaging', 'Kubernetes Orchestration & Scaling', 'CI/CD Automation with Jenkins', 'AWS Cloud Provisioning & IAM', 'Git Version Control & Branching'],
-                techStack: ['Docker', 'Kubernetes', 'Jenkins', 'AWS', 'Git'],
-                topics: [
-                    {
-                        title: 'Docker Containerization & Packaging',
-                        tool: 'Docker',
-                        desc: 'Learn to isolate applications, write efficient multi-stage Dockerfiles, manage storage volumes, and orchestrate containers with Docker Compose.',
-                        points: [
-                            'Building optimized Docker images & Dockerfile best practices',
-                            'Multi-container application orchestration with Docker Compose',
-                            'Virtual network drivers, volumes & persistent storage',
-                            'Vulnerability scanning & container security hardening'
-                        ],
-                        practicalLab: 'Containerize a microservice application and configure local environment orchestration with Docker Compose.'
-                    },
-                    {
-                        title: 'Kubernetes Orchestration & Scaling',
-                        tool: 'Kubernetes',
-                        desc: 'Deploy, scale, auto-heal, and manage production-grade microservices across Kubernetes clusters with zero downtime.',
-                        points: [
-                            'Pod architecture, Deployments, ReplicaSets & StatefulSets',
-                            'Service Discovery, Load Balancing & NGINX Ingress Controllers',
-                            'Horizontal Pod Autoscaling (HPA) & cluster autoscaling',
-                            'ConfigMaps, Secrets management & RBAC security controls'
-                        ],
-                        practicalLab: 'Deploy a resilient production web service on a Kubernetes cluster with automated rolling updates.'
-                    },
-                    {
-                        title: 'CI/CD Automation with Jenkins',
-                        tool: 'Jenkins',
-                        desc: 'Design automated continuous integration and delivery pipelines to build, test, scan, and deploy code rapidly.',
-                        points: [
-                            'Scripted & Declarative Jenkinsfile pipeline development',
-                            'GitHub Webhooks & trigger-driven build automation',
-                            'Automated unit testing, static analysis & Docker publishing',
-                            'Zero-downtime deployment triggers to cloud staging & prod'
-                        ],
-                        practicalLab: 'Create an automated Jenkins CI/CD pipeline triggered automatically on GitHub pull request merge.'
-                    },
-                    {
-                        title: 'AWS Cloud Provisioning & IAM',
-                        tool: 'AWS',
-                        desc: 'Architect and manage cloud infrastructure on Amazon Web Services using scalable, secure Cloud patterns.',
-                        points: [
-                            'EC2 instances, Security Groups & Auto Scaling Groups',
-                            'S3 Bucket management, Lifecycle policies & static hosting',
-                            'Virtual Private Cloud (VPC), Subnets & Route tables',
-                            'IAM Roles, User access policies & least privilege access'
-                        ],
-                        practicalLab: 'Provision a secure multi-tier AWS architecture with custom VPC networking and IAM controls.'
-                    },
-                    {
-                        title: 'Git Version Control & Branching',
-                        tool: 'Git',
-                        desc: 'Master collaborative Git workflows, branching strategies, code review standards, and automated release tagging.',
-                        points: [
-                            'GitFlow & trunk-based development branching strategies',
-                            'Resolving merge conflicts & interactive git rebasing',
-                            'Pull request checks & code review enforcement',
-                            'Semantic versioning & automated release tagging'
-                        ],
-                        practicalLab: 'Set up an enterprise Git repository with protected main branch, automated checks, and release tags.'
-                    }
-                ]
-            },
-            {
-                slug: 'software-development',
-                title: 'Software Development',
-                category: 'Engineering',
-                desc: 'Master core computing, algorithms, object-oriented concepts, and relational databases.',
-                learnItems: ['Core Java, Python, & C++ OOPs', 'Data Structures & Algorithms', 'Relational SQL Databases & Indexing', 'Design Patterns & Best Practices', 'Git Workflows & Team Collaboration'],
-                techStack: ['Java', 'Python', 'C++', 'SQL', 'Git']
-            },
-            {
-                slug: 'app-development',
-                title: 'App Development',
-                category: 'Mobile',
-                desc: 'Build native and cross-platform apps for mobile operating systems.',
-                learnItems: ['React Native & Cross-Platform UI', 'Flutter & Dart Frameworks', 'iOS Swift Native Programming', 'Android Native Development', 'Firebase Database & Authentication'],
-                techStack: ['React Native', 'Flutter', 'Swift', 'Android', 'Firebase']
-            },
-
-            // ─── Expandable courses (from expCourses in courses.html) ───
-            {
-                slug: 'java-fsd',
-                title: 'Java Full Stack Development',
-                category: 'Development',
-                desc: 'Master Java, Spring Boot, SQL and build scalable full stack enterprise applications.',
-                learnItems: ['Core Java & OOPs Concepts', 'Spring Boot & REST APIs', 'HTML5, CSS3, JavaScript (ES6+)', 'MySQL & Database Architecture', 'Projects & Enterprise Deployment'],
-                techStack: ['Java', 'Spring Boot', 'HTML5', 'CSS3', 'JavaScript', 'SQL']
-            },
-            {
-                slug: 'python-dev',
-                title: 'Python Development',
-                category: 'Development',
-                desc: 'Build backend microservices, automation scripts, and RESTful web applications with Python & Django.',
-                learnItems: ['Python Fundamentals & Syntax', 'Django & FastAPI Frameworks', 'Data Structures & Algorithms', 'PostgreSQL Integration & ORM', 'Automated Testing & CI/CD'],
-                techStack: ['Python', 'Django', 'PostgreSQL', 'Docker', 'Git']
-            },
-            {
-                slug: 'mern-stack',
-                title: 'MERN Stack Web Development',
-                category: 'Development',
-                desc: 'Engineer modern responsive web platforms using MongoDB, Express, React, and Node.js.',
-                learnItems: ['React & Next.js App Router', 'Node.js & Express Async Services', 'MongoDB NoSQL & Mongoose Schema', 'State Management (Redux / Zustand)', 'Vercel & Docker Cloud Hosting'],
-                techStack: ['React', 'Node.js', 'MongoDB', 'JavaScript', 'Docker']
-            },
-            {
-                slug: 'ui-ux-design',
-                title: 'UI/UX Design Professional',
-                category: 'Creative',
-                desc: 'Craft world-class visual interfaces, high-fidelity wireframes, and design systems in Figma.',
-                learnItems: ['Figma Advanced & Auto-Layout', 'User Research & Personas', 'Interactive Prototyping', 'Design Systems & Tokenization', 'Usability Testing & Audit'],
-                techStack: ['Figma', 'Sketch', 'Adobe XD', 'Photoshop', 'Illustrator']
-            },
-            {
-                slug: 'data-science-ai',
-                title: 'Data Science & AI',
-                category: 'Data',
-                desc: 'Train machine learning models, analyze big data, and engineer AI agents.',
-                learnItems: ['Python for Data (Pandas/NumPy)', 'Exploratory Data Analysis', 'Scikit-Learn & Machine Learning', 'Deep Learning with PyTorch', 'Generative AI & LLM Agents'],
-                techStack: ['Python', 'Pandas', 'TensorFlow', 'SQL', 'Git']
-            },
-            {
-                slug: 'cloud-aws',
-                title: 'Cloud Computing with AWS',
-                category: 'Cloud',
-                desc: 'Architect cloud networks, automate infrastructure, and manage DevOps pipelines.',
-                learnItems: ['AWS Core (EC2, S3, IAM, VPC)', 'Serverless Architecture (Lambda)', 'Terraform Infrastructure as Code', 'Docker & Kubernetes Basics', 'CI/CD Pipeline Automation'],
-                techStack: ['AWS', 'Docker', 'Kubernetes', 'Python', 'Git']
-            },
-
-            // ─── Internship programs ───
-            {
-                slug: 'full-stack-internship',
-                title: 'Full Stack Web Development Internship',
-                category: 'Internship',
-                desc: 'Build real production-ready web platforms using React, Node.js, and databases in a corporate environment.',
-                learnItems: ['Agile Sprints & Workflows', 'REST & GraphQL APIs', 'Git Flow Collaboration', 'CI/CD Deployment', 'SQL & NoSQL Integration'],
-                techStack: ['React', 'Node.js', 'TypeScript', 'MongoDB']
-            },
-            {
-                slug: 'python-backend-internship',
-                title: 'Python Backend Engineering Internship',
-                category: 'Internship',
-                desc: 'Engineer scalable backend microservices, REST APIs, and automated scripting jobs.',
-                learnItems: ['FastAPI Microservices', 'PostgreSQL Schema Design', 'Redis Caching Systems', 'Docker Containerization', 'Unit Testing & Coverage'],
-                techStack: ['Python', 'Django', 'PostgreSQL', 'Docker']
-            },
-            {
-                slug: 'ui-ux-design-internship',
-                title: 'UI/UX Product Design Internship',
-                category: 'Internship',
-                desc: 'Prototype enterprise-grade digital products and master complete product design systems.',
-                learnItems: ['Advanced Figma Auto-Layout', 'Component Variables', 'High-Fidelity Wireframes', 'Usability Audit Reports', 'Developer Handoff Workflows'],
-                techStack: ['Figma', 'HTML5', 'CSS3', 'React']
-            },
-            {
-                slug: 'ai-agent-internship',
-                title: 'AI Agent Engineering Internship',
-                category: 'Internship',
-                desc: 'Orchestrate LLMs, build RAG pipelines, and deploy custom vector search engine applications.',
-                learnItems: ['OpenAI API Orchestration', 'Vector Databases (Pinecone)', 'Semantic Search & RAG', 'Fine-Tuning Techniques', 'LangChain Frameworks'],
-                techStack: ['Python', 'PostgreSQL', 'Docker', 'Git']
-            },
-            {
-                slug: 'cloud-devops-internship',
-                title: 'Cloud & DevOps Engineering Internship',
-                category: 'Internship',
-                desc: 'Deploy serverless architectures and automate secure cloud infrastructure systems.',
-                learnItems: ['AWS Infrastructure (IAM, VPC)', 'Terraform IaC', 'Docker & Kubernetes', 'CI/CD Pipeline Design', 'Monitoring & Alerting'],
-                techStack: ['AWS', 'Docker', 'Python', 'Git']
-            },
-            {
-                slug: 'mobile-app-internship',
-                title: 'Mobile App Engineering Internship',
-                category: 'Internship',
-                desc: 'Build native cross-platform mobile apps for iOS and Android devices.',
-                learnItems: ['React Native & Expo', 'Mobile UI/UX Layouts', 'Navigation Architecture', 'App Store Publishing', 'Local Storage & APIs'],
-                techStack: ['Android', 'React Native', 'TypeScript', 'Git']
-            }
-        ];
-
-        // ─── Interactive 3-Column Syllabus Engine ───
-        function initInteractiveSyllabus(course) {
-            const techContainer = document.getElementById('tech-stack-container');
-            const curriculumContainer = document.getElementById('curriculum-container');
-            const topicDetailPanel = document.getElementById('topic-detail-panel');
-
-            if (!curriculumContainer || !topicDetailPanel) return;
-
-            // Generate structured topic objects if not explicitly provided
-            const topics = course.topics || course.learnItems.map((item, idx) => {
-                const associatedTool = course.techStack[idx % course.techStack.length] || 'Technology';
-                return {
-                    title: item,
-                    tool: associatedTool,
-                    desc: `Master ${item} through practical labs, real-world case studies, and industry-aligned training modules. Build key skills required by top engineering teams.`,
-                    points: [
-                        `Comprehensive coverage of ${item} concepts`,
-                        `Hands-on practical exercises & live demonstrations`,
-                        `Industry standard design patterns & best practices`,
-                        `Real-world troubleshooting & workflow integration`
-                    ],
-                    practicalLab: `Build and complete a hands-on project assignment focusing on ${item}.`
-                };
-            });
-
-            // 1. Render Tools in Column 1 (Static / Sticky)
-            if (techContainer) {
-                techContainer.innerHTML = '';
-                course.techStack.forEach(techName => {
-                    const deviconSlug = deviconMap[techName] || 'chrome/chrome-original.svg';
-                    const badge = document.createElement('div');
-                    badge.className = 'tech-badge-card';
-                    badge.setAttribute('data-tool', techName);
-                    badge.innerHTML = `
-                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${deviconSlug}" alt="${techName}" />
-                        <span>${techName}</span>
-                    `;
-                    badge.addEventListener('click', () => {
-                        const topicIdx = topics.findIndex(t => t.tool.toLowerCase() === techName.toLowerCase());
-                        if (topicIdx !== -1) {
-                            activateTopic(topicIdx);
-                        }
-                    });
-                    techContainer.appendChild(badge);
-                });
-            }
-
-            // 2. Render Topics in Column 2 (Scroll-driven arrival sequence)
-            curriculumContainer.innerHTML = '';
-            topics.forEach((topic, index) => {
-                const stepNum = String(index + 1).padStart(2, '0');
-                const topicItem = document.createElement('div');
-                topicItem.className = 'topic-scroll-item';
-                topicItem.setAttribute('data-index', index);
-                topicItem.innerHTML = `
-                    <div class="topic-card-body">
-                        <div class="topic-num-badge">${stepNum}</div>
-                        <div class="topic-content-preview">
-                            <h4 class="topic-title">${topic.title}</h4>
-                            <span class="topic-tag"><i class="fa-solid fa-layer-group"></i> Module ${index + 1} &bull; ${topic.tool}</span>
-                        </div>
-                    </div>
-                `;
-
-                topicItem.addEventListener('click', () => {
-                    activateTopic(index);
-                });
-
-                curriculumContainer.appendChild(topicItem);
-            });
-
-            let currentActiveIndex = -1;
-
-            // Activate specific topic in Col 2, update Col 3 detail, and highlight Col 1 tool
-            function activateTopic(index) {
-                if (index === currentActiveIndex) return;
-
-                const topicItems = curriculumContainer.querySelectorAll('.topic-scroll-item');
-                topicItems.forEach((item, idx) => {
-                    if (idx === index) {
-                        item.classList.add('active-topic');
-                        item.classList.add('arrived');
-                    } else {
-                        item.classList.remove('active-topic');
-                    }
-                });
-
-                const activeTopic = topics[index];
-                if (!activeTopic) return;
-
-                // Highlight matching tool in Col 1
-                if (techContainer) {
-                    const toolCards = techContainer.querySelectorAll('.tech-badge-card');
-                    toolCards.forEach(card => {
-                        const toolName = card.getAttribute('data-tool');
-                        if (toolName && activeTopic.tool && toolName.toLowerCase() === activeTopic.tool.toLowerCase()) {
-                            card.classList.add('active-tool');
-                        } else {
-                            card.classList.remove('active-tool');
-                        }
-                    });
-                }
-
-                // Update Col 3 Detail Panel with smooth transition
-                updateDetailPanel(activeTopic, index + 1, topics.length);
-                currentActiveIndex = index;
-            }
-
-            function updateDetailPanel(topic, modNum, totalMods) {
-                const renderHTML = `
-                    <div class="detail-transition-wrapper fade-out">
-                        <div class="detail-header-badge">
-                            <i class="fa-solid fa-sparkles"></i> Module ${modNum} of ${totalMods}
-                        </div>
-                        <h4 class="detail-main-title">${topic.title}</h4>
-                        <p class="detail-desc">${topic.desc}</p>
-
-                        <div class="detail-bullets-title">Key Takeaways:</div>
-                        <ul class="detail-bullets-list">
-                            ${topic.points.map(pt => `<li><i class="fa-solid fa-circle-check"></i> ${pt}</li>`).join('')}
-                        </ul>
-
-                        <div class="detail-lab-box">
-                            <div class="detail-lab-header">
-                                <i class="fa-solid fa-flask"></i> Hands-On Practical Lab
-                            </div>
-                            <div class="detail-lab-text">${topic.practicalLab}</div>
-                        </div>
-                    </div>
-                `;
-
-                topicDetailPanel.innerHTML = renderHTML;
-                const newWrap = topicDetailPanel.querySelector('.detail-transition-wrapper');
-                
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        if (newWrap) {
-                            newWrap.classList.remove('fade-out');
-                            newWrap.classList.add('fade-in');
-                        }
-                    });
-                });
-            }
-
-            // Activate initial topic
-            activateTopic(0);
-
-            // 3. Scroll Observer: Topics arrive one by one on scroll and REMAIN IN PLACE!
-            const observerOptions = {
-                root: null,
-                rootMargin: '-10% 0px -25% 0px',
-                threshold: 0.15
-            };
-
-            const topicObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const item = entry.target;
-                        const idx = parseInt(item.getAttribute('data-index'), 10);
-                        
-                        // Mark topic as arrived so it stays in place
-                        item.classList.add('arrived');
-                        
-                        // Activate topic in Col 2 and update Col 3
-                        activateTopic(idx);
-                    }
-                });
-            }, observerOptions);
-
-            const topicItems = curriculumContainer.querySelectorAll('.topic-scroll-item');
-            topicItems.forEach(item => {
-                topicObserver.observe(item);
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const slug = urlParams.get('course') || 'full-stack-web-development';
-
-            const course = coursesData.find(c => c.slug === slug) || coursesData[0];
-            if (course) {
-                // Update page title
-                document.getElementById('page-title').innerText = `Arox Tech - ${course.title}`;
-
-                // Update hero
-                const heroTitle = document.getElementById('hero-title');
-                if (heroTitle) heroTitle.innerText = course.title;
-
-                // Update Breadcrumbs & Back Button
-                const fromSource = urlParams.get('from') || (document.referrer.includes('anotherinternship') ? 'bootcamps' : 'training');
-                const parentLink = document.getElementById('breadcrumb-parent-link');
-                const currentText = document.getElementById('breadcrumb-current-text');
-                const backBtn = document.getElementById('back-btn');
-
-                const cardAnchor = course.id || course.slug;
-                const targetPage = fromSource === 'bootcamps' ? 'anotherinternship.html' : 'courses.html';
-                const targetUrl = `${targetPage}#card-${cardAnchor}`;
-
-                if (parentLink) {
-                    parentLink.innerText = fromSource === 'bootcamps' ? 'Bootcamps' : 'Training';
-                    parentLink.href = targetUrl;
-                }
-                if (currentText) {
-                    currentText.innerText = course.title;
-                }
-                if (backBtn) {
-                    backBtn.onclick = (e) => {
-                        e.preventDefault();
-                        if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
-                            window.history.back();
-                        } else {
-                            window.location.href = targetUrl;
-                        }
-                    };
-                }
-
-                const heroDesc = document.getElementById('hero-desc');
-                if (heroDesc && course.desc) heroDesc.innerText = course.desc;
-
-                // Instantiate 3D Particle Logo Animation
-                const heroParticleCanvas = document.getElementById('hero-particle-canvas');
-                if (heroParticleCanvas) {
-                    const getLogoType = (id) => {
-                        const map = {
-                            'full-stack-web-development': 'react',
-                            'full-stack-internship': 'react',
-                            'ui-ux-designing': 'figma',
-                            'ui-ux-design-internship': 'figma',
-                            'data-science-and-ai': 'python',
-                            'ai-agent-internship': 'python',
-                            'cyber-security': 'linux',
-                            'cyber-security-internship': 'linux',
-                            'digital-marketing': 'meta',
-                            'embedded-systems-and-iot': 'cpp',
-                            'devops-engineering': 'aws',
-                            'cloud-devops-internship': 'aws',
-                            'software-development': 'mobile',
-                            'python-backend-internship': 'mobile',
-                            'app-development': 'flutter',
-                            'mobile-app-internship': 'flutter'
-                        };
-                        return map[id] || 'react';
-                    };
-                    const logoType = getLogoType(course.slug || course.id);
-                    if (logoType === 'meta') {
-                        new MetaParticleEngine(heroParticleCanvas, { isDetail: true });
-                    } else {
-                        new LogoParticleEngine(heroParticleCanvas, logoType, { isDetail: true });
-                    }
-                }
-
-                // Initialize 3-Column Interactive Syllabus
-                initInteractiveSyllabus(course);
-
-                // Update Apply links
-                const applyLink = document.getElementById('apply-link');
-                if (applyLink) applyLink.href = `apply.html?course=${course.slug}`;
-                const ctaApplyLink = document.getElementById('cta-apply-link');
-                if (ctaApplyLink) ctaApplyLink.href = `apply.html?course=${course.slug}`;
-            }
-        });
-    </script>
-
-    <!-- GSAP (must load before main.js) -->
-    <script src="js/gsap.min.js"></script>
-    <script src="js/ScrollTrigger.min.js"></script>
-    <!-- Global theme & nav JS -->
-    <script src="js/main.js" defer></script>
+  <script src="js/main.js" defer></script>
 </body>
-
 </html>

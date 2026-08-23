@@ -14,6 +14,10 @@ const paymentController = {
     try {
       const { registration_id, amount, payment_method, payment_type } = req.body;
 
+      if (!registration_id || !amount) {
+        return res.status(400).json({ success: false, message: 'registration_id and amount are required.' });
+      }
+
       // Get registration
       const registration = Registration.findByRegistrationId(registration_id);
       if (!registration) {
@@ -55,9 +59,9 @@ const paymentController = {
       });
 
       // Update registration payment status
-      const newPaidAmount = registration.paid_amount + amount;
-      const newBalance = registration.total_amount - newPaidAmount;
-      Registration.updatePayment(registration.id, newPaidAmount, Math.max(0, newBalance));
+      const newPaidAmount = (registration.paid_amount || 0) + amount;
+      const newBalance = Math.max(0, (registration.total_amount || 0) - newPaidAmount);
+      Registration.updatePayment(registration.id, newPaidAmount, newBalance);
 
       if (newBalance <= 0) {
         Registration.updateStatus(registration.id, 'active');
@@ -90,6 +94,10 @@ const paymentController = {
       const { registration_id, amount, payment_method, transaction_id, notes } = req.body;
       const db = getDb();
 
+      if (!registration_id) {
+        return res.status(400).json({ success: false, message: 'registration_id is required.' });
+      }
+
       // Find registration by ID (number or registration_id string)
       let reg = null;
       if (!isNaN(registration_id) && Number.isInteger(Number(registration_id))) {
@@ -104,7 +112,7 @@ const paymentController = {
       }
 
       const receiptPath = req.file ? `/uploads/receipts/${req.file.filename}` : null;
-      const parsedAmount = parseFloat(amount) || reg.balance_amount || reg.total_amount;
+      const parsedAmount = parseFloat(amount) || reg.balance_amount || reg.total_amount || 0;
       const paymentId = generatePaymentId();
       const invoiceNumber = generateInvoiceNumber();
       const gstInfo = calculateGST(parsedAmount);
@@ -126,19 +134,23 @@ const paymentController = {
         gst_amount: gstInfo.gstAmount,
         total_amount: parsedAmount,
         payment_method: payment_method || 'upi',
-        payment_type: parsedAmount >= reg.total_amount ? 'full' : 'advance',
+        payment_type: parsedAmount >= (reg.total_amount || 0) ? 'full' : 'advance',
         transaction_id: transaction_id || 'PENDING-VERIFICATION',
         invoice_number: invoiceNumber,
         receipt_path: receiptPath,
         notes: notes || 'Submitted via Student Portal for Verification'
       });
 
-      // Update registration status to indicate pending verification if it was pending
-      db.prepare(`
-        UPDATE registrations 
-        SET notes = coalesce(notes || ' | ', '') || 'Payment proof submitted (UTR: ' || @utr || ')'
-        WHERE id = @id
-      `).run({ utr: transaction_id || 'N/A', id: reg.id });
+      // Update registration notes to indicate pending verification
+      try {
+        db.prepare(`
+          UPDATE registrations 
+          SET notes = coalesce(notes || ' | ', '') || 'Payment proof submitted (UTR: ' || @utr || ')'
+          WHERE id = @id
+        `).run({ utr: transaction_id || 'N/A', id: reg.id });
+      } catch (e) {
+        logger.warn('Could not update registration notes:', e.message);
+      }
 
       logger.info(`Payment proof submitted: ${paymentId} for registration ${reg.registration_id} by student ${reg.student_id}`);
 
@@ -168,6 +180,10 @@ const paymentController = {
       const { status, admin_notes } = req.body; // status: 'completed' or 'failed'
       const db = getDb();
 
+      if (!status || !['completed', 'failed'].includes(status)) {
+        return res.status(400).json({ success: false, message: 'Valid status (completed or failed) is required.' });
+      }
+
       let payment = null;
       if (!isNaN(id) && Number.isInteger(Number(id))) {
         payment = db.prepare('SELECT * FROM payments WHERE id = ?').get(parseInt(id, 10));
@@ -191,8 +207,8 @@ const paymentController = {
         // Update registration balances & status
         const reg = db.prepare('SELECT * FROM registrations WHERE id = ?').get(payment.registration_id);
         if (reg) {
-          const newPaid = reg.paid_amount + payment.total_amount;
-          const newBalance = Math.max(0, reg.total_amount - newPaid);
+          const newPaid = (reg.paid_amount || 0) + (payment.total_amount || 0);
+          const newBalance = Math.max(0, (reg.total_amount || 0) - newPaid);
           const newStatus = (reg.status === 'pending' || reg.status === 'confirmed') ? 'confirmed' : reg.status;
 
           db.prepare(`
@@ -202,11 +218,15 @@ const paymentController = {
           `).run({ paid: newPaid, balance: newBalance, status: newStatus, id: reg.id });
 
           // Update course enrolled count
-          db.prepare(`
-            UPDATE courses 
-            SET total_enrolled = (SELECT COUNT(*) FROM registrations WHERE course_id = @courseId AND status IN ('confirmed', 'active', 'completed'))
-            WHERE id = @courseId
-          `).run({ courseId: reg.course_id });
+          try {
+            db.prepare(`
+              UPDATE courses 
+              SET total_enrolled = (SELECT COUNT(*) FROM registrations WHERE course_id = @courseId AND status IN ('confirmed', 'active', 'completed'))
+              WHERE id = @courseId
+            `).run({ courseId: reg.course_id });
+          } catch (e) {
+            logger.warn('Could not update course enrollment count:', e.message);
+          }
         }
 
         logger.info(`Payment ${payment.payment_id} approved by admin.`);
@@ -234,8 +254,13 @@ const paymentController = {
   verifyCoupon(req, res) {
     try {
       const { code, amount } = req.body;
+      
+      if (!code) {
+        return res.status(400).json({ success: false, message: 'Coupon code is required.' });
+      }
+
       const db = getDb();
-      const result = paymentService.verifyCoupon(db, code, amount);
+      const result = paymentService.verifyCoupon(db, code, amount || 0);
 
       res.json({
         success: result.valid,

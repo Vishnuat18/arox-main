@@ -1,6 +1,5 @@
 const { getDb } = require('../../config/database');
 const logger = require('../../utils/logger');
-const Registration = require('../../models/Registration');
 
 exports.index = (req, res) => {
   try {
@@ -15,7 +14,7 @@ exports.index = (req, res) => {
       JOIN students s ON r.student_id = s.id
       JOIN courses c ON r.course_id = c.id
       ORDER BY r.created_at DESC
-    `).all();
+    `).all() || [];
 
     res.render('admin/registrations/index', {
       layout: 'layouts/admin',
@@ -27,9 +26,10 @@ exports.index = (req, res) => {
   } catch (error) {
     logger.error('Registrations Index Error:', error);
     res.status(500).render('website/error', { 
-      layout: 'layouts/admin',
+      layout: 'layouts/admin', 
       code: 500,
-      message: 'Failed to load registrations.'
+      message: 'Failed to load registrations.',
+      user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
     });
   }
 };
@@ -43,8 +43,9 @@ exports.show = (req, res) => {
       SELECT 
         r.*,
         s.college AS college_name, s.degree, s.phone AS whatsapp_no,
-        s.first_name, s.last_name, s.email,
-        c.title as course_title, c.price as fee, c.batch_name
+        s.first_name, s.last_name, s.email, s.year_of_study, s.department,
+        c.title as course_title, c.price as fee, c.batch_name, c.duration,
+        c.start_date, c.end_date, c.category as course_type
       FROM registrations r
       JOIN students s ON r.student_id = s.id
       JOIN courses c ON r.course_id = c.id
@@ -53,11 +54,14 @@ exports.show = (req, res) => {
 
     if (!reg) {
       return res.status(404).render('website/error', { 
-        layout: 'layouts/admin', code: 404, message: 'Registration not found' 
+        layout: 'layouts/admin', 
+        code: 404, 
+        message: 'Registration not found',
+        user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
       });
     }
 
-    const payments = db.prepare('SELECT * FROM payments WHERE registration_id = ? ORDER BY created_at DESC').all(id);
+    const payments = db.prepare('SELECT * FROM payments WHERE registration_id = ? ORDER BY created_at DESC').all(id) || [];
 
     res.render('admin/registrations/show', {
       layout: 'layouts/admin',
@@ -70,7 +74,10 @@ exports.show = (req, res) => {
   } catch (error) {
     logger.error('Registration Show Error:', error);
     res.status(500).render('website/error', { 
-      layout: 'layouts/admin', code: 500, message: 'Failed to load details' 
+      layout: 'layouts/admin', 
+      code: 500, 
+      message: 'Failed to load details',
+      user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
     });
   }
 };
@@ -79,6 +86,10 @@ exports.updateStatus = (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+    
+    if (!status) {
+      return res.status(400).json({ error: 'Status is required.' });
+    }
     
     const db = getDb();
     db.prepare('UPDATE registrations SET status = @status WHERE id = @id').run({ status, id });

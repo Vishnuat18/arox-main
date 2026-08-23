@@ -22,7 +22,7 @@ exports.index = (req, res) => {
       title: 'Error - Student Portal',
       code: 500,
       message: 'Something went wrong loading your profile. Please try again later.',
-      user: req.user
+      user: req.user || { first_name: 'Student', last_name: '', role: 'student' }
     });
   }
 };

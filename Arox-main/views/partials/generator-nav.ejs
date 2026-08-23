@@ -102,12 +102,43 @@
     background: var(--erp-hover);
     color: var(--erp-text-primary);
   }
+  @media (max-width: 768px) {
+    .gen-nav {
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 6px 8px;
+    }
+    .gen-nav-logo {
+      border-right: none;
+      padding-right: 0;
+      margin-right: 0;
+    }
+    .gen-nav-logo img { height: 40px; }
+    .gen-nav-tabs {
+      flex-wrap: wrap;
+      gap: 2px;
+    }
+    .gen-nav-tab {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    .gen-nav-tab span { display: none; }
+    .gen-nav-right {
+      width: 100%;
+      justify-content: center;
+      border-left: none;
+      padding-left: 0;
+      margin-left: 0;
+      padding-top: 6px;
+      border-top: 1px solid var(--erp-divider);
+    }
+  }
 </style>
 
 <nav class="gen-nav">
   <!-- Logo -->
   <a href="/admin/dashboard" class="gen-nav-logo">
-    <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX" style="height: 48px; width: auto; object-fit: contain;">
+    <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX" style="height: 56px; width: auto; object-fit: contain;">
   </a>
 
   <!-- Generator Tabs -->

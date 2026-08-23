@@ -403,6 +403,13 @@ body.erp-body {
   gap: 24px;
 }
 
+.erp-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
 /* Tables */
 .erp-table-container {
   background-color: var(--erp-bg);
@@ -781,3 +788,519 @@ button:hover svg.lucide-arrow-right path:last-child,
   transform: translateX(0);
 }
 
+/* ============================================================
+   MOBILE RESPONSIVE SYSTEM
+   Mobile-first breakpoints: 768px (tablet), 640px (mobile)
+   ============================================================ */
+
+/* ─── Mobile Sidebar Overlay ─── */
+.erp-sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+.erp-sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ─── Mobile Hamburger Button ─── */
+.erp-mobile-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  color: var(--erp-text-primary);
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.erp-mobile-toggle:hover {
+  background: #F1F5F9;
+}
+
+/* ═══════════════════════════════════════
+   TABLET BREAKPOINT (max-width: 1024px)
+   ═══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .erp-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .erp-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .erp-content {
+    padding: 24px;
+  }
+  .erp-content.erp-content-full {
+    padding: 16px;
+  }
+  .erp-topbar {
+    padding: 0 20px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   MOBILE BREAKPOINT (max-width: 768px)
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ─── Layout ─── */
+  .erp-layout {
+    position: relative;
+  }
+
+  /* ─── Sidebar → Hidden drawer ─── */
+  .erp-sidebar {
+    position: fixed;
+    top: 0;
+    left: -290px;
+    width: 280px;
+    height: 100vh;
+    height: 100dvh;
+    z-index: 10000;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  }
+  .erp-sidebar.mobile-open {
+    left: 0;
+  }
+  .erp-sidebar.collapsed {
+    left: -290px;
+    width: 280px !important;
+  }
+  .erp-sidebar.collapsed .erp-nav-item span,
+  .erp-sidebar.collapsed .erp-nav-section,
+  .erp-sidebar.collapsed .sidebar-logo-container {
+    display: block !important;
+    opacity: 1;
+    width: auto;
+    pointer-events: auto;
+  }
+  .erp-sidebar.collapsed .erp-nav-item {
+    justify-content: flex-start !important;
+    padding: 10px 12px !important;
+    margin: 3px 0 !important;
+  }
+
+  /* ─── Topbar ─── */
+  .erp-topbar {
+    height: 60px;
+    padding: 0 16px;
+    gap: 8px;
+  }
+  .erp-mobile-toggle {
+    display: flex;
+  }
+  .erp-breadcrumb {
+    font-size: 13px;
+    gap: 6px;
+  }
+  .erp-topbar-right {
+    gap: 12px;
+  }
+  .erp-profile > div:first-child {
+    display: none;
+  }
+  .erp-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+
+  /* ─── Content ─── */
+  .erp-content {
+    padding: 16px;
+    padding-top: 20px;
+  }
+  .erp-content.erp-content-full {
+    padding: 12px;
+  }
+
+  /* ─── Typography ─── */
+  .erp-h1 {
+    font-size: 22px;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .erp-h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .erp-h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .erp-card-value {
+    font-size: 22px;
+  }
+
+  /* ─── Grid → Stack ─── */
+  .erp-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .erp-grid-3 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .erp-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* ─── Cards ─── */
+  .erp-card {
+    padding: 16px;
+    border-radius: 8px;
+  }
+  .erp-card-header {
+    margin-bottom: 12px;
+  }
+  .erp-card-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* ─── Tables → Scrollable ─── */
+  .erp-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .erp-table {
+    min-width: 600px;
+  }
+  .erp-table th,
+  .erp-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .erp-table th {
+    font-size: 11px;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* ─── Buttons ─── */
+  .erp-btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .erp-btn-primary {
+    min-height: 44px;
+  }
+
+  /* ─── Forms ─── */
+  .erp-input, .form-input, .form-select, .form-textarea {
+    padding: 11px 14px;
+    font-size: 16px !important; /* Prevents iOS auto-zoom */
+    min-height: 44px;
+    border-radius: 8px;
+  }
+  .erp-form-group {
+    margin-bottom: 16px;
+  }
+
+  /* ─── Modals → Bottom Sheet on Mobile ─── */
+  .modal-overlay, .erp-modal-overlay {
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+  .modal, .erp-modal {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: 90vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin: 0 !important;
+    transform: translateY(100%);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .modal-overlay.open .modal, .erp-modal-overlay.open .erp-modal {
+    transform: translateY(0);
+  }
+  .modal-lg {
+    max-width: 100% !important;
+  }
+  .modal-header, .erp-modal-header {
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--erp-border);
+    z-index: 2;
+    border-radius: 20px 20px 0 0;
+  }
+  .modal-body, .erp-modal-body {
+    padding: 16px 20px;
+    padding-bottom: 90px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal-footer, .erp-modal-footer {
+    padding: 14px 20px;
+    position: sticky;
+    bottom: 0;
+    background: #FFFFFF;
+    border-top: 1px solid var(--erp-border);
+    z-index: 2;
+  }
+
+  /* ─── Login ─── */
+  .erp-login-card {
+    padding: 24px;
+    margin: 16px;
+    border-radius: 12px;
+  }
+  .erp-login-page {
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 30px;
+  }
+
+  /* ─── Search Input ─── */
+  .search-input-wrapper {
+    width: 100% !important;
+  }
+  .search-input-wrapper input {
+    min-height: 44px;
+    font-size: 16px !important;
+  }
+
+  /* ─── Table header flex → stack ─── */
+  .erp-card > div[style*="display: flex"][style*="justify-content: space-between"] {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch !important;
+  }
+}
+
+/* ═══════════════════════════════════════
+   ERP MOBILE BOTTOM NAVIGATION
+   ═══════════════════════════════════════ */
+.erp-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .erp-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid #E2E8F0;
+    z-index: 100;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .erp-bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 48px;
+    color: #64748B;
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    gap: 2px;
+    transition: all 0.18s ease;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .erp-bottom-nav-item i,
+  .erp-bottom-nav-item svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2px;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.18s ease;
+  }
+
+  .erp-bottom-nav-item:active {
+    transform: scale(0.92);
+  }
+
+  .erp-bottom-nav-item.active {
+    color: #000000;
+    font-weight: 700;
+  }
+
+  .erp-bottom-nav-item.active i,
+  .erp-bottom-nav-item.active svg {
+    color: #000000;
+    stroke-width: 2.4px;
+    transform: translateY(-1px);
+  }
+
+  /* Make room for bottom navigation on mobile */
+  .erp-content {
+    padding-bottom: calc(75px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE DATA TABLE CONTAINER
+   ═══════════════════════════════════════ */
+.erp-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  border-radius: inherit;
+}
+
+.erp-table-responsive::-webkit-scrollbar {
+  height: 4px;
+}
+.erp-table-responsive::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .erp-table, .data-table {
+    min-width: 540px;
+  }
+  .erp-table th, .data-table th,
+  .erp-table td, .data-table td {
+    padding: 10px 12px;
+    font-size: 12.5px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   SMALL MOBILE (max-width: 480px)
+   ═══════════════════════════════════════ */
+@media (max-width: 480px) {
+  .erp-grid-4 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .erp-grid-3 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .erp-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .erp-card-value {
+    font-size: 20px;
+  }
+  .erp-content {
+    padding: 12px;
+  }
+  .erp-topbar {
+    padding: 0 12px;
+    height: 60px;
+  }
+  .erp-sidebar {
+    width: 280px;
+    left: -280px;
+  }
+  .erp-sidebar.collapsed {
+    left: -280px;
+    width: 280px !important;
+  }
+  .erp-h1 {
+    font-size: 22px;
+    margin-bottom: 16px;
+  }
+  .erp-h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   TOUCH FRIENDLY OVERRIDES
+   ═══════════════════════════════════════ */
+@media (pointer: coarse) {
+  .erp-nav-item {
+    min-height: 44px;
+    padding: 12px 14px;
+  }
+  .erp-btn {
+    min-height: 44px;
+  }
+  .erp-input {
+    min-height: 44px;
+  }
+  .toggle-track {
+    width: 44px;
+    height: 24px;
+  }
+  .toggle-thumb {
+    width: 20px;
+    height: 20px;
+  }
+  .toggle-track.is-active .toggle-thumb {
+    left: 22px;
+  }
+}
+
+/* ═══════════════════════════════════════
+   SAFE AREA (notch phones)
+   ═══════════════════════════════════════ */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .erp-sidebar {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .erp-topbar {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* ═══════════════════════════════════════
+   PRINT STYLES
+   ═══════════════════════════════════════ */
+@media print {
+  .erp-sidebar, .erp-topbar, .erp-mobile-toggle, .erp-sidebar-overlay, .erp-bottom-nav {
+    display: none !important;
+  }
+  .erp-main {
+    width: 100% !important;
+  }
+  .erp-content {
+    padding: 20px !important;
+  }
+}

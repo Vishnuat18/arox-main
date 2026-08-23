@@ -14,7 +14,7 @@ exports.index = (req, res) => {
       JOIN registrations r ON p.registration_id = r.id
       JOIN students s ON r.student_id = s.id
       ORDER BY p.created_at DESC
-    `).all();
+    `).all() || [];
 
     res.render('admin/payments/index', {
       layout: 'layouts/admin',
@@ -26,9 +26,10 @@ exports.index = (req, res) => {
   } catch (error) {
     logger.error('Payments Index Error:', error);
     res.status(500).render('website/error', { 
-      layout: 'layouts/admin',
+      layout: 'layouts/admin', 
       code: 500,
-      message: 'Failed to load payments.'
+      message: 'Failed to load payments.',
+      user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
     });
   }
 };

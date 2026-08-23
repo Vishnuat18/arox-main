@@ -5,7 +5,7 @@ const pageController = {
   login(req, res) {
     // If already logged in, redirect based on role
     if (req.user) {
-      if (req.user.role === 'admin' || req.user.role === 'staff') {
+      if (req.user.role === 'admin' || req.user.role === 'super_admin' || req.user.role === 'staff' || req.user.role === 'trainer') {
         return res.redirect('/admin/dashboard');
       }
       return res.redirect('/student/dashboard');
@@ -14,6 +14,21 @@ const pageController = {
     res.render('website/login', {
       layout: false,
       title: 'Login - AROX Tech'
+    });
+  },
+
+  /** GET /signup /register */
+  signup(req, res) {
+    if (req.user) {
+      if (req.user.role === 'admin' || req.user.role === 'super_admin' || req.user.role === 'staff' || req.user.role === 'trainer') {
+        return res.redirect('/admin/dashboard');
+      }
+      return res.redirect('/student/dashboard');
+    }
+    
+    res.render('website/signup', {
+      layout: false,
+      title: 'Sign Up - AROX Tech'
     });
   },
 

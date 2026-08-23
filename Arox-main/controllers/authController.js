@@ -11,15 +11,23 @@ const authController = {
   async login(req, res) {
     try {
       const { email, password } = req.body;
+
+      if (!email || !password) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email and password are required.'
+        });
+      }
       
       // MOCK LOGINS FOR DESIGN REVIEW & TESTING
+      // These bypass the database for quick testing
       if (email === 'admin@arox.com' && password === 'admin123') {
         const token = jwt.sign(
           { id: 1, email: 'admin@arox.com', role: 'admin' },
           authConfig.secret || 'secret',
-          { expiresIn: authConfig.expiresIn || '1h' }
+          { expiresIn: authConfig.expiresIn || '7d' }
         );
-        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
         return res.json({
           success: true,
           message: 'Admin login successful!',
@@ -31,9 +39,9 @@ const authController = {
         const token = jwt.sign(
           { id: 2, email: 'student@arox.com', role: 'student' },
           authConfig.secret || 'secret',
-          { expiresIn: authConfig.expiresIn || '1h' }
+          { expiresIn: authConfig.expiresIn || '7d' }
         );
-        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
         return res.json({
           success: true,
           message: 'Student login successful!',
@@ -45,9 +53,9 @@ const authController = {
         const token = jwt.sign(
           { id: 3, email: 'employee@arox.com', role: 'trainer' },
           authConfig.secret || 'secret',
-          { expiresIn: authConfig.expiresIn || '1h' }
+          { expiresIn: authConfig.expiresIn || '7d' }
         );
-        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
+        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
         return res.json({
           success: true,
           message: 'Employee login successful!',
@@ -56,6 +64,7 @@ const authController = {
         });
       }
 
+      // Database-backed authentication
       const user = User.findByEmail(email);
 
       if (!user) {
@@ -134,6 +143,13 @@ const authController = {
     try {
       const { email, password } = req.body;
 
+      if (!email || !password) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email and password are required.'
+        });
+      }
+
       const existing = User.findByEmail(email);
       if (existing) {
         return res.status(409).json({
@@ -173,6 +189,14 @@ const authController = {
   async forgotPassword(req, res) {
     try {
       const { email } = req.body;
+
+      if (!email) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email is required.'
+        });
+      }
+
       const user = User.findByEmail(email);
 
       // Always return success (don't reveal if email exists)

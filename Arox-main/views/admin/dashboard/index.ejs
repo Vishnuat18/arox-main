@@ -18,8 +18,16 @@
     </div>
     <div class="erp-card-value" style="color: #000000;"><%= (typeof stats !== 'undefined' && stats.students) ? stats.students.toLocaleString('en-IN') : '0' %></div>
     <div class="erp-p" style="margin-top: 8px; color: #000000; font-weight: 600; font-size: 12px;">
-      <i data-lucide="trending-up" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
-      +14% this month
+      <% if (typeof stats !== 'undefined' && stats.studentGrowth > 0) { %>
+        <i data-lucide="trending-up" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
+        +<%= stats.studentGrowth %>% this month
+      <% } else if (typeof stats !== 'undefined' && stats.studentGrowth < 0) { %>
+        <i data-lucide="trending-down" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; color: #EF4444;"></i> 
+        <%= stats.studentGrowth %>% this month
+      <% } else { %>
+        <i data-lucide="minus" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> 
+        No change this month
+      <% } %>
     </div>
   </div>
 
@@ -302,6 +310,20 @@
   @media (max-width: 900px) {
     .analytics-grid-wrapper {
       grid-template-columns: 1fr !important;
+    }
+  }
+  @media (max-width: 768px) {
+    .erp-h1 {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    .analytics-tab-group {
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .analytics-tab-btn {
+      padding: 5px 10px;
+      font-size: 11px;
     }
   }
 </style>

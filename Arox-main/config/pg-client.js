@@ -61,14 +61,20 @@ async function main() {
     let translatedSql = sql;
     let pgParams = [];
 
+    // Coerce params - ensure proper types for PostgreSQL
+    function coerceParam(val) {
+      if (val === undefined || val === null || val === '') return null;
+      return val;
+    }
+
     if (params) {
       if (Array.isArray(params)) {
-        pgParams = params;
+        pgParams = params.map(coerceParam);
         let index = 1;
         translatedSql = sql.replace(/\?/g, () => `$${index++}`);
       } else if (typeof params === 'object') {
-        const namedParamRegex = /[@$:][a-zA-Z0-9_]+/g;
-        const matches = sql.match(namedParamRegex) || [];
+        // Only match @param and :param styles — NOT $N (PostgreSQL positional)
+        const namedParamRegex = /[@:][a-zA-Z0-9_]+/g;
         let index = 1;
         const paramMap = {};
         translatedSql = sql.replace(namedParamRegex, (match) => {
@@ -77,12 +83,15 @@ async function main() {
             paramMap[name] = index++;
             const keyWithoutPrefix = name.slice(1);
             const val = params[name] !== undefined ? params[name] : params[keyWithoutPrefix];
-            pgParams.push(val === undefined ? null : val);
+            pgParams.push(coerceParam(val));
           }
           return `$${paramMap[name]}`;
         });
       }
     }
+
+    // Check for INSERT OR IGNORE before translation
+    const hasInsertOrIgnore = /INSERT\s+OR\s+IGNORE\s+INTO/i.test(translatedSql);
 
     // Convert SQLite specific syntax to PostgreSQL
     translatedSql = translatedSql
@@ -93,8 +102,16 @@ async function main() {
       .replace(/CREATE TABLE IF NOT EXISTS/gi, 'CREATE TABLE IF NOT EXISTS')
       .replace(/INTEGER\s+PRIMARY\s+KEY\s+AUTOINCREMENT/gi, 'SERIAL PRIMARY KEY')
       .replace(/INSERT\s+OR\s+IGNORE\s+INTO/gi, 'INSERT INTO')
-      .replace(/DATETIME/gi, 'TIMESTAMP')
+      .replace(/DATETIME(?!\s*\()/gi, 'TIMESTAMP') // Only replace DATETIME type, not datetime() function calls
       .replace(/DATE\('now'\)/gi, 'CURRENT_DATE');
+
+    // Add ON CONFLICT DO NOTHING for INSERT OR IGNORE statements
+    if (hasInsertOrIgnore) {
+      // Only add if not already present
+      if (!/ON\s+CONFLICT/i.test(translatedSql)) {
+        translatedSql = translatedSql.trimEnd() + ' ON CONFLICT DO NOTHING';
+      }
+    }
 
     const result = await client.query(translatedSql, pgParams);
     

@@ -1,22 +1,22 @@
-<nav class="navbar" id="navbar">
+<nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
   <div class="navbar-inner">
-    <a href="/" class="navbar-logo" style="display: flex; align-items: center;">
-      <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" style="height: 36px; width: auto; object-fit: contain;">
+    <a href="/" class="navbar-logo" style="display: flex; align-items: center;" aria-label="AROX Tech - Go to homepage">
+      <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" style="height: 56px; width: auto; object-fit: contain;" width="56" height="56" loading="eager">
     </a>
 
-    <ul class="navbar-menu" id="navbar-menu">
-      <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">Home</a></li>
-      <li><a href="/internships" class="<%= currentPath === '/internships' ? 'active' : '' %>">Internships</a></li>
-      <li><a href="/training" class="<%= currentPath === '/training' ? 'active' : '' %>">Training</a></li>
-      <li><a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>">About</a></li>
-      <li><a href="/contact" class="<%= currentPath === '/contact' ? 'active' : '' %>">Contact</a></li>
-      <li><a href="/apply" class="navbar-cta">Apply Now →</a></li>
+    <ul class="navbar-menu" id="navbar-menu" role="menubar" aria-hidden="true">
+      <li role="none"><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>" role="menuitem">Home</a></li>
+      <li role="none"><a href="/internships" class="<%= currentPath === '/internships' ? 'active' : '' %>" role="menuitem">Internships</a></li>
+      <li role="none"><a href="/training" class="<%= currentPath === '/training' ? 'active' : '' %>" role="menuitem">Training</a></li>
+      <li role="none"><a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>" role="menuitem">About</a></li>
+      <li role="none"><a href="/contact" class="<%= currentPath === '/contact' ? 'active' : '' %>" role="menuitem">Contact</a></li>
+      <li role="none" style="margin-top: 12px;"><a href="/apply" class="navbar-cta" role="menuitem" style="width: 100%; justify-content: center;">Apply Now →</a></li>
     </ul>
 
-    <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle menu">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navbar-menu" type="button">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
     </button>
   </div>
 </nav>

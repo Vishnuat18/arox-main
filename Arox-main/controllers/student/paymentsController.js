@@ -26,7 +26,7 @@ exports.index = (req, res) => {
       JOIN courses c ON r.course_id = c.id 
       WHERE p.student_id = ? 
       ORDER BY p.paid_at DESC, p.created_at DESC
-    `).all(student.id);
+    `).all(student.id) || [];
 
     // Fetch registration summary for payment plan tracking
     const registrations = db.prepare(`
@@ -36,7 +36,7 @@ exports.index = (req, res) => {
       JOIN courses c ON r.course_id = c.id
       WHERE r.student_id = ?
       ORDER BY r.created_at DESC
-    `).all(student.id);
+    `).all(student.id) || [];
 
     res.render('student/payments/index', {
       layout: 'layouts/student',
@@ -54,7 +54,7 @@ exports.index = (req, res) => {
       title: 'Error - Student Portal',
       code: 500,
       message: 'Something went wrong loading payments. Please try again later.',
-      user: req.user
+      user: req.user || { first_name: 'Student', last_name: '', role: 'student' }
     });
   }
 };

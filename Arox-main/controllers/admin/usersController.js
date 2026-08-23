@@ -2,6 +2,7 @@ const User = require('../../models/User');
 const logger = require('../../utils/logger');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const { getDb } = require('../../config/database');
 
 exports.index = (req, res) => {
   try {
@@ -18,7 +19,8 @@ exports.index = (req, res) => {
     res.status(500).render('website/error', { 
       layout: 'layouts/admin',
       code: 500,
-      message: 'Failed to load users.'
+      message: 'Failed to load users.',
+      user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
     });
   }
 };
@@ -37,7 +39,7 @@ exports.create = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(tempPassword, salt);
 
-    const newId = User.create({
+    const newId = await User.create({
       first_name,
       last_name,
       email,
@@ -52,7 +54,7 @@ exports.create = async (req, res) => {
     res.json({ 
       success: true, 
       message: 'User created successfully',
-      id: newId,
+      id: newId.id || newId,
       tempPassword // For demo purposes, we return it to display
     });
   } catch (error) {
@@ -71,7 +73,7 @@ exports.updateStatus = (req, res) => {
       return res.status(400).json({ error: 'Cannot change your own status' });
     }
 
-    const db = require('../../config/database').getDb();
+    const db = getDb();
     db.prepare('UPDATE users SET status = @status WHERE id = @id').run({
       status: is_active ? 'active' : 'inactive',
       id
@@ -92,7 +94,7 @@ exports.delete = (req, res) => {
       return res.status(400).json({ error: 'Cannot delete yourself' });
     }
 
-    const db = require('../../config/database').getDb();
+    const db = getDb();
     
     // Ensure not deleting the last admin
     const adminCount = db.prepare(`

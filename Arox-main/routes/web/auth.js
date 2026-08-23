@@ -17,8 +17,9 @@ router.get('/internships', (req, res) => res.redirect('/courses.html?tab=interns
 router.get('/course/:slug', (req, res) => res.sendFile(path.join(rootDir, 'detail.html')));
 router.get('/verify-certificate', (req, res) => res.redirect('/cert/index.html'));
 
-// ERP Login page
+// ERP Login & Signup pages
 router.get('/login', pageController.login);
+router.get(['/signup', '/register'], pageController.signup);
 
 // Catch-all for 404
 router.get('*', pageController.error);

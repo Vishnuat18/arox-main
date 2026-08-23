@@ -255,5 +255,12 @@
   .toggle-track.is-active .toggle-thumb {
     left: 18px;
   }
+  @media (max-width: 768px) {
+    .data-table { min-width: 550px; }
+    .grid-2 { grid-template-columns: 1fr !important; }
+    .modal-overlay { align-items: flex-end !important; }
+    .modal { border-radius: 16px 16px 0 0 !important; max-width: 100% !important; transform: translateY(100%); }
+    .modal-overlay.open .modal { transform: translateY(0); }
+  }
 </style>
 

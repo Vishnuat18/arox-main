@@ -178,6 +178,19 @@
   </div>
 </div>
 
+<style>
+  @media (max-width: 768px) {
+    .grid-cols-1.lg\:grid-cols-3 { grid-template-columns: 1fr !important; }
+    .grid-cols-1.sm\:grid-cols-2 { grid-template-columns: 1fr !important; }
+    .grid-cols-1.sm\:grid-cols-3 { grid-template-columns: 1fr !important; }
+    .card { padding: 16px !important; }
+    .form-input { font-size: 16px !important; min-height: 44px !important; }
+    .btn.w-full { min-height: 48px; }
+    .flex.flex-col.sm\:flex-row { flex-direction: column !important; align-items: center !important; text-align: center !important; }
+    h1.text-2xl { font-size: 20px !important; }
+  }
+</style>
+
 <script>
   function previewImage(input) {
     if (input.files && input.files[0]) {

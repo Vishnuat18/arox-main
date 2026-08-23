@@ -65,12 +65,22 @@
 <div class="erp-card" style="padding: 0; background: #FFFFFF; border: 1px solid #E2E8F0; overflow: hidden;">
   <!-- Header Bar with Filter & Search -->
   <div style="padding: 20px 24px; border-bottom: 1px solid #E2E8F0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-    <!-- Filter Tabs -->
-    <div class="course-filter-group" style="display: inline-flex; background: #F1F5F9; padding: 4px; border-radius: 8px; border: 1px solid #E2E8F0;">
-      <button type="button" class="course-filter-btn active" onclick="filterCoursesByType('all', this)">All Programs</button>
-      <button type="button" class="course-filter-btn" onclick="filterCoursesByType('internship', this)">Internships</button>
-      <button type="button" class="course-filter-btn" onclick="filterCoursesByType('training', this)">Trainings</button>
-      <button type="button" class="course-filter-btn" onclick="filterCoursesByType('active', this)">Active Only</button>
+    <!-- Two-Way Pill Switcher (Internship / Training / All) -->
+    <div class="two-way-pill-nav">
+      <button type="button" class="pill-btn active" onclick="filterCoursesByType('all', this)" id="pillBtnAll">
+        <span>ALL PROGRAMS</span>
+        <span class="pill-badge"><%= totalPrograms %></span>
+      </button>
+      <button type="button" class="pill-btn" onclick="filterCoursesByType('internship', this)" id="pillBtnInternship">
+        <i data-lucide="briefcase" style="width: 13px; height: 13px;"></i>
+        <span>INTERNSHIP</span>
+        <span class="pill-badge"><%= internshipCount %></span>
+      </button>
+      <button type="button" class="pill-btn" onclick="filterCoursesByType('training', this)" id="pillBtnTraining">
+        <i data-lucide="graduation-cap" style="width: 13px; height: 13px;"></i>
+        <span>TRAINING</span>
+        <span class="pill-badge"><%= trainingCount %></span>
+      </button>
     </div>
 
     <!-- Search Input -->
@@ -131,7 +141,7 @@
                   const percent = Math.min(100, Math.round((enrolledSt / maxSt) * 100));
                 %>
                 <div style="width: 100%; height: 5px; background: #E2E8F0; border-radius: 99px; overflow: hidden;">
-                  <div style="width: <%= percent %>%; height: 100%; background: #000000; transition: width 0.3s ease;"></div>
+                  <div style="height: 100%; background: #000000; transition: width 0.3s ease; width: <%= percent + '%' %>;"></div>
                 </div>
               </td>
               <td style="text-align: center;">
@@ -146,7 +156,7 @@
                   <a href="/course/<%= c.slug %>" target="_blank" class="erp-btn erp-btn-ghost" style="padding: 6px; color: #000000;" title="View Public Course Page">
                     <i data-lucide="external-link" style="width: 15px; height: 15px;"></i>
                   </a>
-                  <button type="button" onclick="openEditCourseModal(<%= JSON.stringify(c) %>)" class="erp-btn erp-btn-ghost" style="padding: 6px; color: #000000;" title="Edit Course Details">
+                  <button type="button" onclick="openEditCourseById('<%= c.id %>')" class="erp-btn erp-btn-ghost" style="padding: 6px; color: #000000;" title="Edit Course Details">
                     <i data-lucide="edit-3" style="width: 15px; height: 15px;"></i>
                   </button>
                   <button type="button" onclick="deleteCourse('<%= c.id %>', '<%= c.title %>')" class="erp-btn erp-btn-ghost" style="padding: 6px; color: #64748B;" title="Delete Program">
@@ -260,25 +270,58 @@
 </div>
 
 <style>
-  .course-filter-btn {
+  .two-way-pill-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #F1F5F9;
+    padding: 4px;
+    border-radius: 9999px;
+    border: 1px solid #E2E8F0;
+  }
+  .two-way-pill-nav .pill-btn {
     border: none;
     background: transparent;
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 12.5px;
-    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 9999px;
+    font-size: 11.5px;
+    font-weight: 700;
     color: #64748B;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: var(--erp-font, inherit);
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1;
+    font-family: inherit;
   }
-  .course-filter-btn:hover {
+  .two-way-pill-nav .pill-btn:hover {
     color: #000000;
   }
-  .course-filter-btn.active {
+  .two-way-pill-nav .pill-btn.active {
     background: #000000 !important;
     color: #FFFFFF !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  }
+  .two-way-pill-nav .pill-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 9999px;
+    background: rgba(0,0,0,0.06);
+    color: inherit;
+    font-weight: 700;
+  }
+  .two-way-pill-nav .pill-btn.active .pill-badge {
+    background: rgba(255,255,255,0.25);
+    color: #FFFFFF;
+  }
+  @media (max-width: 768px) {
+    .erp-h1 { font-size: 20px !important; }
+    .erp-table { min-width: 700px; }
+    .two-way-pill-nav { width: 100%; justify-content: center; }
+    .two-way-pill-nav .pill-btn { padding: 8px 12px; font-size: 10px; }
   }
 </style>
 
@@ -287,8 +330,14 @@
 
   function filterCoursesByType(type, btn) {
     currentFilterType = type;
-    document.querySelectorAll('.course-filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.two-way-pill-nav .pill-btn').forEach(b => b.classList.remove('active'));
+    if (btn) {
+      btn.classList.add('active');
+    } else {
+      if (type === 'internship') document.getElementById('pillBtnInternship')?.classList.add('active');
+      else if (type === 'training') document.getElementById('pillBtnTraining')?.classList.add('active');
+      else document.getElementById('pillBtnAll')?.classList.add('active');
+    }
     applyFilters();
   }
 
@@ -301,14 +350,13 @@
     const rows = document.querySelectorAll('#coursesTable tbody tr.course-row');
     
     rows.forEach(r => {
-      const type = r.getAttribute('data-type') || '';
-      const status = r.getAttribute('data-status') || '';
+      const type = (r.getAttribute('data-type') || '').toLowerCase();
+      const status = (r.getAttribute('data-status') || '').toLowerCase();
       const text = r.textContent.toLowerCase();
 
       let matchesType = true;
       if (currentFilterType === 'internship') matchesType = (type === 'internship');
       else if (currentFilterType === 'training') matchesType = (type === 'training');
-      else if (currentFilterType === 'active') matchesType = (status === 'active');
 
       const matchesSearch = !q || text.includes(q);
 
@@ -316,11 +364,29 @@
     });
   }
 
+  // Handle URL query parameters (?tab=internship or ?tab=training)
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab === 'internship') {
+      filterCoursesByType('internship');
+    } else if (tab === 'training') {
+      filterCoursesByType('training');
+    }
+  });
+
   function openAddCourseModal() {
     document.getElementById('courseModalTitle').textContent = 'Add New Program';
     document.getElementById('courseFormId').value = '';
     document.getElementById('courseForm').reset();
     document.getElementById('courseModal').style.display = 'flex';
+  }
+
+  const allCoursesMap = <%- JSON.stringify((courses || []).reduce((acc, c) => Object.assign(acc, { [c.id]: c }), {})) %>;
+
+  function openEditCourseById(id) {
+    const course = allCoursesMap[id];
+    if (course) openEditCourseModal(course);
   }
 
   function openEditCourseModal(course) {

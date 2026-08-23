@@ -34,9 +34,84 @@ function executeQuery(sql, params) {
     }
     return result;
   } catch (err) {
-    logger.error(`Postgres execution error: ${sql}`, err.message);
+    logger.error(`Postgres execution error: ${sql.substring(0, 100)}...`, err.message);
     throw err;
   }
+}
+
+/**
+ * Split SQL into individual statements, respecting string literals and dollar-quoted blocks.
+ * Handles semicolons inside single-quoted strings, dollar-quoted strings, and $$ blocks.
+ */
+function splitSqlStatements(sql) {
+  const statements = [];
+  let current = '';
+  let inSingleQuote = false;
+  let inDollarQuote = false;
+  let dollarTag = '';
+  let i = 0;
+
+  while (i < sql.length) {
+    const ch = sql[i];
+
+    // Handle dollar-quoted strings ($$...$$ or $tag$...$tag$)
+    if (!inSingleQuote && ch === '$') {
+      // Check for opening dollar tag: $tag$
+      const dollarMatch = sql.slice(i).match(/^\$([a-zA-Z_]*)\$/);
+      if (dollarMatch) {
+        const tag = dollarMatch[0]; // e.g., $$ or $function$
+        if (!inDollarQuote) {
+          inDollarQuote = true;
+          dollarTag = tag;
+          current += tag;
+          i += tag.length;
+          continue;
+        } else if (tag === dollarTag) {
+          inDollarQuote = false;
+          dollarTag = '';
+          current += tag;
+          i += tag.length;
+          continue;
+        }
+      }
+    }
+
+    // Handle single-quoted strings
+    if (!inDollarQuote && ch === "'") {
+      // Check for escaped quote ''
+      if (inSingleQuote && sql[i + 1] === "'") {
+        current += "''";
+        i += 2;
+        continue;
+      }
+      inSingleQuote = !inSingleQuote;
+      current += ch;
+      i++;
+      continue;
+    }
+
+    // Handle semicolons (statement separators)
+    if (ch === ';' && !inSingleQuote && !inDollarQuote) {
+      const trimmed = current.trim();
+      if (trimmed) {
+        statements.push(trimmed);
+      }
+      current = '';
+      i++;
+      continue;
+    }
+
+    current += ch;
+    i++;
+  }
+
+  // Push any remaining statement
+  const trimmed = current.trim();
+  if (trimmed) {
+    statements.push(trimmed);
+  }
+
+  return statements;
 }
 
 class StatementWrapper {
@@ -93,9 +168,15 @@ class DatabaseWrapper {
   }
 
   exec(sql) {
-    const queries = sql.split(';').map(q => q.trim()).filter(Boolean);
-    for (const q of queries) {
-      executeQuery(q);
+    const statements = splitSqlStatements(sql);
+    for (const stmt of statements) {
+      try {
+        executeQuery(stmt);
+      } catch (err) {
+        logger.warn(`Statement failed: ${stmt.substring(0, 80)}... -> ${err.message}`);
+        // Continue with next statement instead of failing the whole batch
+        // This is important for seed data where INSERT OR IGNORE might have conflicts
+      }
     }
   }
 

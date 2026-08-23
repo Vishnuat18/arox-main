@@ -1,4 +1,3 @@
-const Student = require('../../models/Student');
 const logger = require('../../utils/logger');
 const { getDb } = require('../../config/database');
 
@@ -6,7 +5,7 @@ exports.index = (req, res) => {
   try {
     const db = getDb();
     
-// We want a list of students with their user info and number of registrations
+    // We want a list of students with their user info and number of registrations
     const students = db.prepare(`
       SELECT 
         s.id, s.college AS college_name, s.degree, s.phone AS whatsapp_no,
@@ -28,7 +27,8 @@ exports.index = (req, res) => {
     res.status(500).render('website/error', { 
       layout: 'layouts/admin',
       code: 500,
-      message: 'Failed to load students.'
+      message: 'Failed to load students.',
+      user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
     });
   }
 };
@@ -48,9 +48,10 @@ exports.show = (req, res) => {
 
     if (!student) {
       return res.status(404).render('website/error', { 
-        layout: 'layouts/admin',
+        layout: 'layouts/admin', 
         code: 404,
-        message: 'Student not found.'
+        message: 'Student not found.',
+        user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
       });
     }
 
@@ -69,17 +70,17 @@ exports.show = (req, res) => {
       layout: 'layouts/admin',
       title: `${student.first_name} ${student.last_name} | AROX ERP`,
       pageTitle: 'Student Profile',
-      user: req.user || (res.locals && res.locals.user),
+      user: req.user,
       student,
       registrations
     });
   } catch (error) {
     logger.error('Student Details Error:', error);
     res.status(500).render('website/error', { 
-      layout: 'layouts/admin',
+      layout: 'layouts/admin', 
       code: 500,
       message: 'Failed to load student details.',
-      user: req.user || (res.locals && res.locals.user)
+      user: req.user || { first_name: 'Admin', last_name: '', role: 'admin' }
     });
   }
 };

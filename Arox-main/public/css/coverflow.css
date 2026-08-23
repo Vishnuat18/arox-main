@@ -1,0 +1,384 @@
+/* ─────────────────────────────────────────────────────────────────
+   Featured Projects Coverflow CSS — Premium Monochrome Apple Aesthetic
+   Supports Light & Dark Themes using monochrome palette only.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Design Tokens & Theme Colors */
+:root {
+  --cf-bg: #FFFFFF;
+  --cf-card-bg: #FFFFFF;
+  --cf-border: 1px solid #E5E7EB;
+  --cf-border-hover: 1px solid #A3A3A3;
+  --cf-shadow: 0 20px 60px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.1);
+  --cf-heading: #111111;
+  --cf-body: #525252;
+  --cf-chip-border: 1px solid #E5E7EB;
+  --cf-chip-text: #737373;
+  --cf-nav-btn-bg: transparent;
+  --cf-nav-btn-border: 1px solid #E5E7EB;
+  --cf-nav-btn-color: #111111;
+  --cf-dot-bg: #E5E7EB;
+  --cf-dot-active: #111111;
+}
+
+.theme-dark {
+  --cf-bg: #050505;
+  --cf-card-bg: #111111;
+  --cf-border: 1px solid rgba(255, 255, 255, 0.08);
+  --cf-border-hover: 1px solid rgba(255, 255, 255, 0.25);
+  --cf-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  --cf-heading: #FFFFFF;
+  --cf-body: rgba(255, 255, 255, 0.75);
+  --cf-chip-border: 1px solid rgba(255, 255, 255, 0.12);
+  --cf-chip-text: #A3A3A3;
+  --cf-nav-btn-bg: transparent;
+  --cf-nav-btn-border: 1px solid rgba(255, 255, 255, 0.12);
+  --cf-nav-btn-color: #FFFFFF;
+  --cf-dot-bg: rgba(255, 255, 255, 0.2);
+  --cf-dot-active: #FFFFFF;
+}
+
+/* Section Layout */
+.featured-projects-section {
+  position: relative;
+  background-color: var(--cf-bg);
+  padding: 120px 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.4s ease;
+  z-index: 10;
+}
+
+/* Subtly blurred background circles and radial lighting */
+.featured-projects-section::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--cf-card-bg) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.35;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.projects-container {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.projects-header {
+  text-align: center;
+  margin-bottom: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.projects-badge {
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--cf-body);
+  border: 1px solid var(--cf-chip-border);
+  padding: 6px 14px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.projects-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--cf-heading);
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+
+.projects-subtitle {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 1.125rem;
+  color: var(--cf-body);
+  max-width: 620px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 3D Coverflow Stage */
+.coverflow-root {
+  position: relative;
+  width: 100%;
+  height: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  outline: none;
+  perspective: 1600px;
+}
+
+.coverflow-stage {
+  position: relative;
+  width: 340px;
+  height: 480px;
+  transform-style: preserve-3d;
+}
+
+/* Card Styling */
+.coverflow-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 340px;
+  height: 480px;
+  background-color: var(--cf-card-bg);
+  border: var(--cf-border);
+  border-radius: 32px;
+  box-shadow: var(--cf-shadow);
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  will-change: transform, opacity;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: border 0.3s ease, background-color 0.4s ease, box-shadow 0.3s ease;
+}
+
+/* Top 60% Image Area */
+.coverflow-card-media {
+  width: 100%;
+  height: 58%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: transparent;
+  padding: 16px 24px;
+}
+
+.coverflow-card-media svg {
+  transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.08));
+}
+
+.theme-dark .coverflow-card-media svg {
+  filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.4));
+}
+
+/* Device floating animation */
+.device-float {
+  animation: deviceFloat 6s ease-in-out infinite;
+}
+@keyframes deviceFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(-1deg); }
+}
+
+/* Bottom 40% Text Area */
+.coverflow-card-content {
+  width: 100%;
+  height: 42%;
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 10;
+  background: var(--cf-card-bg);
+}
+
+.coverflow-project-name {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--cf-heading);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.coverflow-project-desc {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.875rem;
+  color: var(--cf-body);
+  margin-top: 6px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.coverflow-tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.tech-chip {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--cf-chip-text);
+  border: var(--cf-chip-border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  text-transform: capitalize;
+}
+
+/* Dimmer overlay for side cards */
+.coverflow-dim {
+  position: absolute;
+  inset: 0;
+  background: var(--cf-bg);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition: opacity 0.5s ease;
+}
+
+/* Hover Zoom & Translate Effects */
+.coverflow-card.active:hover {
+  transform: translate(-50%, -50%) translateY(-10px) scale(1.02) !important;
+  border: var(--cf-border-hover);
+}
+
+.coverflow-card.active:hover .coverflow-card-media svg {
+  transform: scale(1.05);
+}
+
+/* Pagination & Navigation Control below carousel */
+.coverflow-controls {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.coverflow-dots {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.coverflow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--cf-dot-bg);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease, width 0.3s ease, border-radius 0.3s ease;
+}
+
+.coverflow-dot.active {
+  width: 12px;
+  height: 12px;
+  background-color: var(--cf-dot-active);
+}
+
+.coverflow-arrows {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.coverflow-arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--cf-nav-btn-bg);
+  border: var(--cf-nav-btn-border);
+  color: var(--cf-nav-btn-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s;
+}
+
+.coverflow-arrow:hover {
+  transform: scale(1.08);
+  border-color: var(--cf-heading);
+}
+
+.coverflow-arrow:active {
+  transform: scale(0.95);
+}
+
+.coverflow-arrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+}
+
+/* ──────────────── Responsive Overrides ──────────────── */
+@media (max-width: 1024px) {
+  .coverflow-root {
+    height: 500px;
+  }
+  .coverflow-stage, .coverflow-card {
+    width: 300px;
+    height: 420px;
+  }
+}
+
+@media (max-width: 768px) {
+  .featured-projects-section {
+    padding: 80px 16px;
+  }
+  .coverflow-root {
+    height: 450px;
+  }
+  .coverflow-stage, .coverflow-card {
+    width: 260px;
+    height: 370px;
+  }
+  .coverflow-project-name {
+    font-size: 1.25rem;
+  }
+  .coverflow-project-desc {
+    font-size: 0.75rem;
+  }
+  .coverflow-card-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .coverflow-root {
+    height: 400px;
+  }
+  .coverflow-stage, .coverflow-card {
+    width: 230px;
+    height: 330px;
+  }
+  .coverflow-project-name {
+    font-size: 1.125rem;
+  }
+}

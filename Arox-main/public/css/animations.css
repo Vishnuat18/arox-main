@@ -314,6 +314,39 @@
   background-clip: text;
 }
 
+/* --- Mobile Animation Optimizations --- */
+@media (max-width: 768px) {
+  /* Disable all scroll-triggered animations on mobile for performance */
+  .reveal, .reveal-left, .reveal-right, .reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .stagger-children > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  /* Disable hover effects that cause repaints */
+  .hover-lift, .hover-glow, .hover-scale {
+    transform: none;
+    transition: none;
+  }
+  /* Disable infinite animations on mobile */
+  .animate-float, .animate-float-slow,
+  .animate-glow, .animate-pulse {
+    animation: none;
+  }
+  /* Simplify page transition */
+  .page-transition {
+    animation: none;
+  }
+  /* Reduce stagger delays */
+  .stagger-children.revealed > * {
+    transition-delay: 0ms !important;
+  }
+}
+
 /* --- Reduced motion --- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

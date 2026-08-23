@@ -107,7 +107,7 @@
     </div>
     <div class="erp-card-value" style="color: #000000;"><%= (typeof stats !== 'undefined' && stats.attendance !== undefined) ? stats.attendance : 100 %>%</div>
     <div style="width: 100%; height: 6px; background-color: #E2E8F0; border-radius: 99px; margin-top: 12px; overflow: hidden;">
-      <div style="width: <%= (typeof stats !== 'undefined' && stats.attendance !== undefined) ? stats.attendance : 100 %>%; height: 100%; background-color: #000000;"></div>
+      <div style="height: 100%; background-color: #000000; width: <%= ((typeof stats !== 'undefined' && stats.attendance !== undefined) ? stats.attendance : 100) + '%' %>;"></div>
     </div>
   </div>
 
@@ -164,12 +164,9 @@
           </div>
         <% }) %>
       <% } else { %>
-        <div style="padding: 16px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;">Full Stack Web Development</div>
-            <div class="erp-small">Batch: B2026 • Status: In Progress</div>
-          </div>
-          <a href="/student/courses" class="erp-btn erp-btn-secondary">Go to Course</a>
+        <div style="text-align: center; padding: 24px; color: #94A3B8;">
+          <i data-lucide="book-open" style="width: 24px; height: 24px; display: block; margin: 0 auto 8px; opacity: 0.5;"></i>          <div style="font-size: 13px; font-weight: 500; color: #64748B; margin-bottom: 4px;">No courses enrolled yet</div>
+          <div style="font-size: 12px;">Browse our programs to get started</div>
         </div>
       <% } %>
     </div>
@@ -182,31 +179,28 @@
     </div>
     
     <div style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
-      <div style="display: flex; gap: 16px;">
-        <div style="width: 56px; height: 56px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--erp-bg-secondary);">
-          <span style="font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); text-transform: uppercase;">Oct</span>
-          <span style="font-size: 18px; font-weight: 700; color: var(--erp-text-primary);">28</span>
-        </div>
-        <div>
-          <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;">React Fundamentals</div>
-          <div class="erp-small" style="display: flex; align-items: center; gap: 4px;">
-            <i data-lucide="clock" style="width: 12px; height: 12px;"></i> 10:00 AM - 12:00 PM
+      <% if (typeof upcomingClasses !== 'undefined' && upcomingClasses.length > 0) { %>
+        <% upcomingClasses.forEach(cls => { %>
+          <div style="display: flex; gap: 16px;">
+            <div style="width: 56px; height: 56px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--erp-bg-secondary);">
+              <span style="font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); text-transform: uppercase;"><%= cls.month %></span>
+              <span style="font-size: 18px; font-weight: 700; color: var(--erp-text-primary);"><%= cls.day %></span>
+            </div>
+            <div>
+              <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;"><%= cls.course_title %></div>
+              <div class="erp-small" style="display: flex; align-items: center; gap: 4px;">
+                <i data-lucide="clock" style="width: 12px; height: 12px;"></i> <%= cls.time %>
+              </div>
+            </div>
           </div>
+        <% }) %>
+      <% } else { %>
+        <div style="text-align: center; padding: 24px; color: #94A3B8;">
+          <i data-lucide="calendar-x" style="width: 24px; height: 24px; display: block; margin: 0 auto 8px; opacity: 0.5;"></i>
+          <div style="font-size: 13px;">No upcoming classes scheduled</div>
+          <div style="font-size: 12px; margin-top: 4px;">Enroll in a course to see your schedule</div>
         </div>
-      </div>
-      
-      <div style="display: flex; gap: 16px;">
-        <div style="width: 56px; height: 56px; border: var(--erp-border-width) solid var(--erp-border); border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--erp-bg-secondary);">
-          <span style="font-size: 12px; font-weight: 600; color: var(--erp-text-secondary); text-transform: uppercase;">Oct</span>
-          <span style="font-size: 18px; font-weight: 700; color: var(--erp-text-primary);">30</span>
-        </div>
-        <div>
-          <div style="font-weight: 600; color: var(--erp-text-primary); margin-bottom: 4px;">Node.js API Development</div>
-          <div class="erp-small" style="display: flex; align-items: center; gap: 4px;">
-            <i data-lucide="clock" style="width: 12px; height: 12px;"></i> 02:00 PM - 04:00 PM
-          </div>
-        </div>
-      </div>
+      <% } %>
     </div>
   </div>
 </div>
@@ -260,4 +254,17 @@
 <style>
   @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @media (max-width: 768px) {
+    .erp-grid-2 { grid-template-columns: 1fr !important; }
+    .erp-grid-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+    .erp-h1 { font-size: 20px !important; margin-bottom: 16px !important; }
+    #offerLetterModal > div { margin: 12px !important; }
+    #offerLetterModal form { padding: 16px 20px 20px !important; }
+    #offerLetterModal form > div[style*="grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+  }
+  @media (max-width: 480px) {
+    .erp-grid-4 { grid-template-columns: 1fr !important; }
+  }
 </style>

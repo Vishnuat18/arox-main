@@ -18,20 +18,25 @@ exports.index = (req, res) => {
         student: null,
         stats: { enrolled: 0, completed: 0, attendance: 100, pendingPayments: 0 },
         courses: [],
-        recentPayments: []
+        enrollments: [],
+        recentPayments: [],
+        upcomingClasses: [],
+        latestRegistration: null
       });
     }
 
     // 1. Course Stats
-    const enrolledCount = db.prepare(`
+    const enrolledRow = db.prepare(`
       SELECT COUNT(*) as count FROM registrations 
       WHERE student_id = ? AND status IN ('confirmed', 'active')
-    `).get(student.id).count;
+    `).get(student.id);
+    const enrolledCount = enrolledRow ? parseInt(enrolledRow.count, 10) || 0 : 0;
 
-    const completedCount = db.prepare(`
+    const completedRow = db.prepare(`
       SELECT COUNT(*) as count FROM registrations 
       WHERE student_id = ? AND status = 'completed'
-    `).get(student.id).count;
+    `).get(student.id);
+    const completedCount = completedRow ? parseInt(completedRow.count, 10) || 0 : 0;
 
     // 2. Attendance Stats
     const attendanceRow = db.prepare(`
@@ -39,8 +44,11 @@ exports.index = (req, res) => {
       FROM attendance WHERE student_id = ?
     `).get(student.id);
     
-    const attendanceRate = attendanceRow.total > 0 
-      ? Math.round((attendanceRow.present / attendanceRow.total) * 100) 
+    const totalAttendance = attendanceRow ? parseInt(attendanceRow.total, 10) || 0 : 0;
+    const presentAttendance = attendanceRow ? parseInt(attendanceRow.present, 10) || 0 : 0;
+    
+    const attendanceRate = totalAttendance > 0
+      ? Math.round((presentAttendance / totalAttendance) * 100)
       : 100; // default 100% if no records yet
 
     // 3. Pending Payments sum
@@ -48,7 +56,7 @@ exports.index = (req, res) => {
       SELECT SUM(balance_amount) as pending FROM registrations 
       WHERE student_id = ? AND status IN ('confirmed', 'active')
     `).get(student.id);
-    const pendingPayments = paymentRow.pending || 0;
+    const pendingPayments = paymentRow && paymentRow.pending ? parseFloat(paymentRow.pending) || 0 : 0;
 
     // 4. Enrolled Courses
     const courses = db.prepare(`
@@ -81,6 +89,34 @@ exports.index = (req, res) => {
       LIMIT 1
     `).get(student.id);
 
+    // 7. Upcoming Classes — derive from enrolled courses with start dates
+    let upcomingClasses = [];
+    try {
+      upcomingClasses = courses
+        .filter(c => c.start_date)
+        .map(c => {
+          const startDate = new Date(c.start_date);
+          const now = new Date();
+          // Find next upcoming class date (weekly recurrence from start_date)
+          let classDate = new Date(startDate);
+          // Advance to the next future date
+          while (classDate < now) {
+            classDate.setDate(classDate.getDate() + 7);
+          }
+          return {
+            course_title: c.course_title,
+            date: classDate,
+            month: classDate.toLocaleString('en-IN', { month: 'short' }).toUpperCase(),
+            day: classDate.getDate(),
+            time: '10:00 AM - 12:00 PM'
+          };
+        })
+        .sort((a, b) => a.date - b.date)
+        .slice(0, 3);
+    } catch (e) {
+      logger.warn('Could not compute upcoming classes:', e.message);
+    }
+
     res.render('student/dashboard', {
       layout: 'layouts/student',
       title: 'Student Dashboard | AROX ERP',
@@ -93,9 +129,11 @@ exports.index = (req, res) => {
         attendance: attendanceRate,
         pendingPayments
       },
+      courses,
       enrollments: courses,
       recentPayments,
-      latestRegistration
+      latestRegistration,
+      upcomingClasses
     });
   } catch (error) {
     logger.error('Student Dashboard Error:', error);
@@ -104,7 +142,7 @@ exports.index = (req, res) => {
       title: 'Error - Student Portal',
       code: 500,
       message: 'Something went wrong loading your dashboard. Please try again later.',
-      user: req.user
+      user: req.user || { first_name: 'Student', last_name: '', role: 'student' }
     });
   }
 };

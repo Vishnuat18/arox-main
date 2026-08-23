@@ -3,195 +3,722 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - AROX ERP</title>
-  <link rel="stylesheet" href="/erp-assets/css/erp-theme.css">
+  <title>Sign In - AROX Tech</title>
+  <link rel="icon" type="image/svg+xml" href="/erp-assets/favicon.svg">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    /* Clean Shifting Role Switcher */
-    .role-switcher-container {
-      margin-bottom: 24px;
+    :root {
+      --auth-bg: #0b0c11;
+      --auth-card: #12141d;
+      --auth-border: rgba(255, 255, 255, 0.08);
+      --auth-text: #f8fafc;
+      --auth-muted: #94a3b8;
+      --auth-primary: #2563eb;
+      --auth-primary-hover: #1d4ed8;
     }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+      background-color: var(--auth-bg);
+      color: var(--auth-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    .auth-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    @media (min-width: 1024px) {
+      .auth-container {
+        grid-template-columns: 1.05fr 1fr;
+      }
+    }
+
+    /* Left Brand & Animation Pane */
+    .auth-left-pane {
+      display: none;
+      position: relative;
+      background: rgba(15, 17, 26, 0.7);
+      border-right: 1px solid var(--auth-border);
+      padding: 3.5rem;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    @media (min-width: 1024px) {
+      .auth-left-pane {
+        display: flex;
+      }
+    }
+
+    .auth-left-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15), transparent 60%),
+                  radial-gradient(circle at 80% 80%, rgba(30, 64, 175, 0.12), transparent 60%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .auth-brand {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .auth-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: #ffffff;
+    }
+
+    .auth-brand-logo img {
+      height: 42px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .auth-quote-wrap {
+      position: relative;
+      z-index: 10;
+      max-width: 480px;
+    }
+
+    .auth-quote {
+      font-size: 1.25rem;
+      line-height: 1.6;
+      font-weight: 500;
+      color: #e2e8f0;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .auth-author {
+      font-family: var(--font-mono, monospace);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--auth-primary);
+    }
+
+    /* Floating SVG Paths Animation */
+    .floating-paths-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.75;
+    }
+
+    .floating-path {
+      fill: none;
+      stroke: rgba(147, 197, 253, 0.22);
+      stroke-dasharray: 200 400;
+      animation: floatPath 18s linear infinite;
+    }
+
+    @keyframes floatPath {
+      0% {
+        stroke-dashoffset: 0;
+        opacity: 0.2;
+      }
+      50% {
+        opacity: 0.6;
+      }
+      100% {
+        stroke-dashoffset: -1200;
+        opacity: 0.2;
+      }
+    }
+
+    /* Right Form Pane */
+    .auth-right-pane {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2.5rem 1.5rem;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .auth-ambient-radial {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .back-home-btn {
+      position: absolute;
+      top: 1.75rem;
+      left: 1.75rem;
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--auth-muted);
+      text-decoration: none;
+      padding: 0.5rem 0.875rem;
+      border-radius: 8px;
+      border: 1px solid var(--auth-border);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(8px);
+      transition: all 0.2s ease;
+    }
+
+    .back-home-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateX(-2px);
+    }
+
+    .auth-card-inner {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 420px;
+      margin: auto 0;
+    }
+
+    .auth-header {
+      margin-bottom: 1.75rem;
+      text-align: left;
+    }
+
+    .mobile-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-logo {
+        display: none;
+      }
+    }
+
+    .auth-title {
+      font-size: 1.75rem;
+      font-weight: 750;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      margin-bottom: 0.35rem;
+    }
+
+    .auth-subtitle {
+      font-size: 0.925rem;
+      color: var(--auth-muted);
+    }
+
+    /* Role Switcher */
     .role-switcher {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      background: #F1F5F9;
-      border: 1px solid #E2E8F0;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--auth-border);
       border-radius: 12px;
       padding: 4px;
       gap: 4px;
-      position: relative;
+      margin-bottom: 1.5rem;
     }
+
     .role-btn {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 12px;
+      gap: 6px;
+      padding: 8px 10px;
       border: 1px solid transparent;
       border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: inherit;
-      color: #64748B;
+      font-size: 0.8125rem;
+      font-weight: 550;
+      color: var(--auth-muted);
       background: transparent;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       user-select: none;
-      outline: none;
     }
+
     .role-btn:hover:not(.active) {
-      color: #0F172A;
-      background: rgba(255, 255, 255, 0.6);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
     }
+
     .role-btn.active {
-      background: #FFFFFF;
-      color: #0F172A;
+      background: var(--auth-primary);
+      color: #ffffff;
       font-weight: 600;
-      border-color: rgba(0, 0, 0, 0.04);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
     }
-    .role-btn.active i {
-      color: #2563EB;
+
+    /* SSO Buttons */
+    .sso-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-bottom: 1.5rem;
     }
-    .role-badge {
+
+    .sso-btn {
+      height: 44px;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--auth-border);
+      background: rgba(255, 255, 255, 0.03);
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 550;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 9999px;
-      font-size: 12px;
+      justify-content: center;
+      gap: 0.65rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sso-btn:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .sso-btn svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+    }
+
+    /* Separator */
+    .auth-separator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-separator-line {
+      flex: 1;
+      height: 1px;
+      background: var(--auth-border);
+    }
+
+    .auth-separator-text {
+      font-size: 0.75rem;
       font-weight: 600;
-      margin-bottom: 12px;
-      background: #EFF6FF;
-      color: #2563EB;
-      border: 1px solid #DBEAFE;
+      color: var(--auth-muted);
+      padding: 0 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Form Fields */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      text-align: left;
+    }
+
+    .form-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-label {
+      font-size: 0.8125rem;
+      font-weight: 550;
+      color: #cbd5e1;
+    }
+
+    .forgot-link {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #60a5fa;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .forgot-link:hover {
+      color: #93c5fd;
+      text-decoration: underline;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 12px;
+      color: var(--auth-muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px 0 40px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--auth-border);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .auth-input:focus {
+      border-color: var(--auth-primary);
+      background: rgba(37, 99, 235, 0.05);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .input-btn-right {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: var(--auth-muted);
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+
+    .input-btn-right:hover {
+      color: #ffffff;
+    }
+
+    .remember-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8125rem;
+      color: var(--auth-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .remember-row input {
+      accent-color: var(--auth-primary);
+      width: 15px;
+      height: 15px;
+      border-radius: 4px;
+    }
+
+    .auth-error {
+      display: none;
+      background: rgba(220, 38, 38, 0.12);
+      border: 1px solid rgba(220, 38, 38, 0.35);
+      color: #f87171;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .auth-submit-btn {
+      height: 46px;
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: var(--auth-primary);
+      color: #ffffff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .auth-submit-btn:hover {
+      background: var(--auth-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
+    }
+
+    .auth-submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .auth-footer {
+      margin-top: 2rem;
+      font-size: 0.775rem;
+      line-height: 1.6;
+      color: var(--auth-muted);
+      text-align: center;
+    }
+
+    .auth-footer a {
+      color: #cbd5e1;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s;
+    }
+
+    .auth-footer a:hover {
+      color: var(--auth-primary);
+    }
+
+    .auth-switch-link {
+      margin-top: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--auth-muted);
+      text-align: center;
+    }
+
+    .auth-switch-link a {
+      color: #60a5fa;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .auth-switch-link a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
-<body class="erp-body erp-login-page" style="background-image: url('/assets/hero/login.png'); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-
-  <a href="/" style="position: absolute; top: 24px; left: 24px; display: flex; align-items: center; gap: 8px; color: white; text-decoration: none; font-weight: 500; font-size: 15px; background: rgba(0,0,0,0.45); padding: 8px 16px; border-radius: 8px; backdrop-filter: blur(8px); transition: background 0.3s; z-index: 10; border: 1px solid rgba(255,255,255,0.15);">
-    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
-    Back to Home
-  </a>
-
-  <div class="erp-login-card" style="width: 100%; max-width: 440px; margin: 20px;">
-    <!-- Logo & Header -->
-    <div style="text-align: center; margin-bottom: 24px;">
-      <div style="display: flex; justify-content: center; margin-bottom: 16px;">
-        <img src="/erp-assets/assets/logo/logo-dark.png" alt="AROX Logo" style="height: 88px; max-width: 260px; width: auto; object-fit: contain;">
-      </div>
-      <div id="roleBadgeContainer">
-        <span class="role-badge" id="roleBadge">
-          <i data-lucide="graduation-cap" style="width: 13px; height: 13px;"></i>
-          <span id="roleBadgeText">Student Access</span>
-        </span>
-      </div>
-      <h1 class="erp-h2" id="loginTitle" style="margin-bottom: 6px; font-size: 24px; font-weight: 700; color: #0F172A;">Student Portal</h1>
-      <p class="erp-p" id="loginSubtitle" style="font-size: 14px; color: #64748B; margin: 0;">Enter your credentials to access the student portal</p>
-    </div>
-
-    <!-- 3 Shifting Role Buttons -->
-    <div class="role-switcher-container">
-      <div class="role-switcher" role="tablist" aria-label="Select Login Role">
-        <button type="button" class="role-btn active" data-role="student" role="tab" aria-selected="true" onclick="setRole('student')">
-          <i data-lucide="graduation-cap" style="width: 16px; height: 16px;"></i>
-          <span>Student</span>
-        </button>
-        <button type="button" class="role-btn" data-role="admin" role="tab" aria-selected="false" onclick="setRole('admin')">
-          <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
-          <span>Admin</span>
-        </button>
-        <button type="button" class="role-btn" data-role="employee" role="tab" aria-selected="false" onclick="setRole('employee')">
-          <i data-lucide="briefcase" style="width: 16px; height: 16px;"></i>
-          <span>Employee</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Login Form -->
-    <form id="loginForm" style="display: flex; flex-direction: column; gap: 16px;">
-      <input type="hidden" name="role" id="loginRoleInput" value="student">
+<body>
+  <div class="auth-container">
+    
+    <!-- Left Pane: Branding & Animated Floating Paths -->
+    <div class="auth-left-pane">
+      <div class="auth-left-glow"></div>
       
-      <div>
-        <label class="erp-label" id="emailLabel" style="font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 6px; display: block;">Student Email</label>
-        <input type="email" name="email" id="emailInput" class="erp-input" placeholder="student@arox.com" required autocomplete="email" value="student@arox.com">
+      <div class="auth-brand">
+        <a href="/" class="auth-brand-logo">
+          <img src="/public/assets/logo/logo-dark.png" alt="AROX" onerror="this.src='/assets/logo/logo-dark.png'" />
+        </a>
       </div>
 
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-          <label class="erp-label" style="font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 0;">Password</label>
-          <a href="#" style="font-size: 13px; font-weight: 500; color: #2563EB; text-decoration: none;">Forgot password?</a>
+      <div class="auth-quote-wrap">
+        <blockquote class="auth-quote">
+          &ldquo;This Platform has helped me to save time and serve my clients faster than ever before.&rdquo;
+        </blockquote>
+        <footer class="auth-author">
+          ~ Ali Hassan &bull; Lead Architect
+        </footer>
+      </div>
+
+      <!-- 36 Dynamic Floating Paths SVG -->
+      <svg class="floating-paths-svg" viewBox="0 0 696 316" preserveAspectRatio="none">
+        <title>Background Floating Paths</title>
+        <% for(let i = 0; i < 36; i++) { 
+           let pos1 = `M-${380 - i * 5} -${189 + i * 6}C-${380 - i * 5} -${189 + i * 6} -${312 - i * 5} ${216 - i * 6} ${152 - i * 5} ${343 - i * 6}C${616 - i * 5} ${470 - i * 6} ${684 - i * 5} ${875 - i * 6} ${684 - i * 5} ${875 - i * 6}`;
+           let pos2 = `M-${380 + i * 5} -${189 + i * 6}C-${380 + i * 5} -${189 + i * 6} -${312 + i * 5} ${216 - i * 6} ${152 + i * 5} ${343 - i * 6}C${616 + i * 5} ${470 - i * 6} ${684 + i * 5} ${875 - i * 6} ${684 + i * 5} ${875 - i * 6}`;
+           let delay = (i * 0.4).toFixed(2);
+           let dur = (16 + (i % 8) * 1.5).toFixed(1);
+        %>
+          <path class="floating-path" d="<%= pos1 %>" stroke-width="<%= (0.5 + i * 0.03).toFixed(2) %>" style="animation-delay: -<%= delay %>s; animation-duration: <%= dur %>s;"></path>
+          <path class="floating-path" d="<%= pos2 %>" stroke-width="<%= (0.5 + i * 0.03).toFixed(2) %>" style="animation-delay: -<%= delay %>s; animation-duration: <%= dur %>s;"></path>
+        <% } %>
+      </svg>
+    </div>
+
+    <!-- Right Pane: Authentication Form -->
+    <div class="auth-right-pane">
+      <div class="auth-ambient-radial"></div>
+
+      <a href="/" class="back-home-btn" aria-label="Back to Home">
+        <i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i>
+        <span>Home</span>
+      </a>
+
+      <div class="auth-card-inner">
+        <!-- Mobile Logo -->
+        <div class="mobile-logo">
+          <img src="/public/assets/logo/logo-dark.png" alt="AROX" style="height: 38px;" onerror="this.src='/assets/logo/logo-dark.png'" />
         </div>
-        <div style="position: relative;">
-          <input type="password" name="password" id="password" class="erp-input" placeholder="••••••••" required autocomplete="current-password" value="student123">
-          <button type="button" id="togglePasswordBtn" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--erp-text-secondary); padding: 4px;" aria-label="Toggle password visibility">
-            <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+
+        <div class="auth-header">
+          <h1 class="auth-title" id="loginTitle">Sign In or Join Now!</h1>
+          <p class="auth-subtitle" id="loginSubtitle">Login or create your AROX account.</p>
+        </div>
+
+        <!-- 3 Role Switcher -->
+        <div class="role-switcher" role="tablist" aria-label="Select Role">
+          <button type="button" class="role-btn active" data-role="student" role="tab" aria-selected="true" onclick="setRole('student')">
+            <i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i>
+            <span>Student</span>
+          </button>
+          <button type="button" class="role-btn" data-role="admin" role="tab" aria-selected="false" onclick="setRole('admin')">
+            <i data-lucide="shield" style="width: 14px; height: 14px;"></i>
+            <span>Admin</span>
+          </button>
+          <button type="button" class="role-btn" data-role="employee" role="tab" aria-selected="false" onclick="setRole('employee')">
+            <i data-lucide="briefcase" style="width: 14px; height: 14px;"></i>
+            <span>Employee</span>
           </button>
         </div>
+
+        <!-- Single Sign-On (SSO) Options -->
+        <div class="sso-group">
+          <button type="button" class="sso-btn" onclick="handleSSO('Google')">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.479,14.265v-3.279h11.049c0.108,0.571,0.164,1.247,0.164,1.979c0,2.46-0.672,5.502-2.84,7.669 C18.744,22.829,16.051,24,12.483,24C5.869,24,0.308,18.613,0.308,12S5.869,0,12.483,0c3.659,0,6.265,1.436,8.223,3.307L18.392,5.62 c-1.404-1.317-3.307-2.341-5.913-2.341C7.65,3.279,3.873,7.171,3.873,12s3.777,8.721,8.606,8.721c3.132,0,4.916-1.258,6.059-2.401 c0.927-0.927,1.537-2.251,1.777-4.059L12.479,14.265z" />
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          <button type="button" class="sso-btn" onclick="handleSSO('Apple')">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.61-.75 1.04-1.8 1.01-2.87-.96.04-2.16.65-2.84 1.44-.56.65-.99 1.69-.94 2.76 1.08.08 2.16-.58 2.77-1.33z"/>
+            </svg>
+            <span>Continue with Apple</span>
+          </button>
+
+          <button type="button" class="sso-btn" onclick="handleSSO('GitHub')">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            <span>Continue with GitHub</span>
+          </button>
+        </div>
+
+        <!-- OR Separator -->
+        <div class="auth-separator">
+          <div class="auth-separator-line"></div>
+          <span class="auth-separator-text">OR</span>
+          <div class="auth-separator-line"></div>
+        </div>
+
+        <!-- Credentials Form -->
+        <form id="loginForm" class="auth-form">
+          <input type="hidden" name="role" id="loginRoleInput" value="student">
+
+          <div class="form-group">
+            <label class="form-label" id="emailLabel">Student Email</label>
+            <div class="input-wrapper">
+              <span class="input-icon-left">
+                <i data-lucide="at-sign" style="width: 16px; height: 16px;"></i>
+              </span>
+              <input type="email" name="email" id="emailInput" class="auth-input" placeholder="student@arox.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label-row">
+              <label class="form-label">Password</label>
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
+            <div class="input-wrapper">
+              <span class="input-icon-left">
+                <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
+              </span>
+              <input type="password" name="password" id="password" class="auth-input" placeholder="••••••••" required autocomplete="current-password">
+              <button type="button" id="togglePasswordBtn" class="input-btn-right" aria-label="Toggle password">
+                <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <label class="remember-row">
+            <input type="checkbox" name="remember" checked>
+            <span>Remember for 30 days</span>
+          </label>
+
+          <div id="loginError" class="auth-error"></div>
+
+          <button type="submit" id="loginBtn" class="auth-submit-btn">
+            <span>Continue with Email</span>
+            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+          </button>
+        </form>
+
+        <div class="auth-switch-link">
+          <span id="footerText">Don't have an account? </span>
+          <a href="/signup" id="footerLink">Sign Up Now</a>
+        </div>
+
+        <p class="auth-footer">
+          By clicking continue, you agree to our 
+          <a href="#">Terms of Service</a> and 
+          <a href="#">Privacy Policy</a>.
+        </p>
       </div>
-
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; margin-bottom: 4px;">
-        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #64748B;">
-          <input type="checkbox" name="remember" style="accent-color: #2563EB; width: 15px; height: 15px; border-radius: 4px;">
-          Remember for 30 days
-        </label>
-      </div>
-
-      <div id="loginError" style="display: none; background: #FEF2F2; border: 1px solid #F87171; color: #DC2626; padding: 10px 14px; border-radius: 8px; font-size: 13px; text-align: center; font-weight: 500;"></div>
-
-      <button type="submit" id="loginBtn" class="erp-btn erp-btn-primary" style="width: 100%; padding: 12px; font-weight: 600; font-size: 14px; border-radius: 8px; margin-top: 4px;">
-        Sign In as Student
-      </button>
-    </form>
-
-    <div style="text-align: center; margin-top: 24px; font-size: 13px; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 18px;">
-      <span id="footerText">Don't have an account? </span>
-      <a href="/apply.html" id="footerLink" style="color: #2563EB; font-weight: 600; text-decoration: none;">Apply for a Course</a>
     </div>
+
   </div>
 
   <script>
     const roleConfig = {
       student: {
-        badgeIcon: 'graduation-cap',
-        badgeText: 'Student Access',
-        title: 'Student Portal',
-        subtitle: 'Enter your credentials to access your student dashboard',
+        title: 'Sign In or Join Now!',
+        subtitle: 'Login or create your AROX student account.',
         emailLabel: 'Student Email',
         emailPlaceholder: 'student@arox.com',
-        defaultEmail: 'student@arox.com',
-        defaultPassword: 'student123',
-        btnText: 'Sign In as Student',
+        btnText: 'Continue as Student',
         footerText: "Don't have an account?",
-        footerLinkText: 'Apply for a Course',
-        footerLinkHref: '/apply.html'
+        footerLinkText: 'Sign Up Now',
+        footerLinkHref: '/signup'
       },
       admin: {
-        badgeIcon: 'shield',
-        badgeText: 'Admin Console',
-        title: 'Administrator Login',
-        subtitle: 'Enter your credentials to access system management',
+        title: 'Administrator Access',
+        subtitle: 'Enter your credentials to manage systems and portals.',
         emailLabel: 'Admin Email',
         emailPlaceholder: 'admin@arox.com',
-        defaultEmail: 'admin@arox.com',
-        defaultPassword: 'admin123',
-        btnText: 'Sign In as Admin',
+        btnText: 'Continue as Admin',
         footerText: 'Protected Gateway • ',
-        footerLinkText: 'AROX ERP Support',
+        footerLinkText: 'AROX Support',
         footerLinkHref: '#'
       },
       employee: {
-        badgeIcon: 'briefcase',
-        badgeText: 'Employee Access',
         title: 'Employee Portal',
-        subtitle: 'Enter your staff or instructor credentials',
+        subtitle: 'Enter your staff or trainer credentials.',
         emailLabel: 'Employee Email',
         emailPlaceholder: 'employee@arox.com',
-        defaultEmail: 'employee@arox.com',
-        defaultPassword: 'employee123',
-        btnText: 'Sign In as Employee',
-        footerText: 'Internal Staff Access • ',
+        btnText: 'Continue as Employee',
+        footerText: 'Internal Access • ',
         footerLinkText: 'Helpdesk',
         footerLinkHref: '#'
       }
@@ -203,33 +730,20 @@
       activeRole = role;
       const cfg = roleConfig[role] || roleConfig.student;
 
-      // Update switcher buttons
       document.querySelectorAll('.role-btn').forEach(btn => {
         const isMatch = btn.dataset.role === role;
         btn.classList.toggle('active', isMatch);
         btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
       });
 
-      // Update badge
-      const badge = document.getElementById('roleBadge');
-      if (badge) {
-        badge.innerHTML = `<i data-lucide="${cfg.badgeIcon}" style="width: 13px; height: 13px;"></i> <span id="roleBadgeText">${cfg.badgeText}</span>`;
-      }
-
-      // Update titles and labels
       document.getElementById('loginTitle').textContent = cfg.title;
       document.getElementById('loginSubtitle').textContent = cfg.subtitle;
       document.getElementById('emailLabel').textContent = cfg.emailLabel;
       
       const emailInput = document.getElementById('emailInput');
       emailInput.placeholder = cfg.emailPlaceholder;
-      emailInput.value = cfg.defaultEmail;
       
-      const passInput = document.getElementById('password');
-      passInput.value = cfg.defaultPassword;
-
       document.getElementById('loginRoleInput').value = role;
-      document.getElementById('loginBtn').textContent = cfg.btnText;
 
       const footerText = document.getElementById('footerText');
       if (footerText) footerText.textContent = cfg.footerText + ' ';
@@ -245,18 +759,28 @@
       lucide.createIcons();
     }
 
+    function handleSSO(provider) {
+      const err = document.getElementById('loginError');
+      err.textContent = provider + ' authentication gateway is connecting...';
+      err.style.display = 'block';
+      err.style.color = '#60a5fa';
+      err.style.borderColor = 'rgba(96, 165, 250, 0.35)';
+      err.style.background = 'rgba(96, 165, 250, 0.1)';
+      setTimeout(() => {
+        err.textContent = provider + ' SSO initialized for AROX platform.';
+      }, 1000);
+    }
+
     lucide.createIcons();
 
     // Toggle Password visibility
     document.getElementById('togglePasswordBtn').addEventListener('click', (e) => {
       const input = document.getElementById('password');
-      if (input.type === 'password') {
-        input.type = 'text';
-        e.currentTarget.innerHTML = '<i data-lucide="eye-off" style="width: 16px; height: 16px;"></i>';
-      } else {
-        input.type = 'password';
-        e.currentTarget.innerHTML = '<i data-lucide="eye" style="width: 16px; height: 16px;"></i>';
-      }
+      const isPassword = input.type === 'password';
+      input.type = isPassword ? 'text' : 'password';
+      e.currentTarget.innerHTML = isPassword 
+        ? '<i data-lucide="eye-off" style="width: 16px; height: 16px;"></i>' 
+        : '<i data-lucide="eye" style="width: 16px; height: 16px;"></i>';
       lucide.createIcons();
     });
 
@@ -269,7 +793,7 @@
 
       errorDiv.style.display = 'none';
       btn.disabled = true;
-      btn.textContent = 'Signing in...';
+      btn.innerHTML = '<span>Signing in...</span>';
 
       try {
         const formData = new FormData(form);
@@ -287,15 +811,18 @@
           throw new Error(result.message || 'Login failed. Please check your credentials.');
         }
 
-        btn.textContent = 'Success ✓';
-        window.location.href = result.redirectUrl || '/';
+        btn.innerHTML = '<span>Success ✓</span>';
+        window.location.href = result.redirectUrl || '/student/dashboard';
 
       } catch (err) {
         errorDiv.textContent = err.message;
         errorDiv.style.display = 'block';
+        errorDiv.style.color = '#f87171';
+        errorDiv.style.borderColor = 'rgba(220, 38, 38, 0.35)';
+        errorDiv.style.background = 'rgba(220, 38, 38, 0.12)';
         btn.disabled = false;
-        const cfg = roleConfig[activeRole] || roleConfig.student;
-        btn.textContent = cfg.btnText;
+        btn.innerHTML = '<span>Continue with Email</span><i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>';
+        lucide.createIcons();
       }
     });
   </script>

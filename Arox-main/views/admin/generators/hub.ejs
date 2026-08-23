@@ -157,6 +157,15 @@
   .history-header { padding: 16px; font-size: var(--erp-fs-sm); font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--erp-text-primary); }
   .history-content { display: none; padding: 0 16px 16px; }
   .history-accordion.open .history-content { display: block; }
+
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .hub-grid { flex-direction: column !important; }
+    .col-1, .col-2, .col-3 { width: 100% !important; }
+    .doc-list-item { padding: 10px; }
+    .panel-title { font-size: 13px; }
+    .sandbox-toolbar { flex-wrap: wrap; gap: 8px; }
+  }
 </style>
 
 <%- include('../../partials/generator-nav', { currentGenerator: 'hub' }) %>
