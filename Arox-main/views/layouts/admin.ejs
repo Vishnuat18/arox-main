@@ -118,6 +118,22 @@
           <i data-lucide="file-box"></i>
           <span>Document Hub</span>
         </a>
+        <a href="/admin/generators/certificate" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/certificate') ? 'active' : '' %>">
+          <i data-lucide="award"></i>
+          <span>Certificates</span>
+        </a>
+        <a href="/admin/generators/offer-letter" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/offer-letter') ? 'active' : '' %>">
+          <i data-lucide="file-text"></i>
+          <span>Offer Letters</span>
+        </a>
+        <a href="/admin/generators/attendance" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/attendance') ? 'active' : '' %>">
+          <i data-lucide="calendar-check"></i>
+          <span>Attendance</span>
+        </a>
+        <a href="/admin/generators/project" class="erp-nav-item <%= currentPath.startsWith('/admin/generators/project') ? 'active' : '' %>">
+          <i data-lucide="briefcase"></i>
+          <span>Projects</span>
+        </a>
 
         <% 
           const adminUser = typeof user !== 'undefined' && user ? user : (typeof locals !== 'undefined' && locals.user ? locals.user : { first_name: 'Admin', last_name: 'User', role: 'admin', email: 'admin@arox.com' });
