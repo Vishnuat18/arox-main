@@ -106,7 +106,7 @@
             </div>
             <div>
               <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Balance Due</div>
-              <div style="font-weight: 700; color: <%= (reg.balance_amount || 0) > 0 ? 'var(--error, #EA4335)' : 'var(--success, #34A853)' %>;">₹<%= (reg.balance_amount || 0).toLocaleString('en-IN') %></div>
+              <div style="font-weight: 700; color: <%= (reg.balance_amount || 0) > 0 ? '#EA4335' : '#34A853' %>;">₹<%= (reg.balance_amount || 0).toLocaleString('en-IN') %></div>
             </div>
           </div>
         </div>
@@ -133,4 +133,82 @@
                     <td style="white-space: nowrap;"><%= new Date(p.created_at || p.paid_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
                     <td style="font-family: monospace; font-size: 0.85rem;"><%= p.transaction_id || p.invoice_number || '—' %></td>
                     <td style="font-weight: 600;">₹<%= (p.amount || 0).toLocaleString('en-IN') %></td>
-                    <td style="text-transform: capitalize;"><%= p.method || p.payment_method || 
+                    <td style="text-transform: capitalize;"><%= p.method || p.payment_method || 'UPI' %></td>
+                    <td>
+                      <span class="status-badge <%= p.status === 'completed' || p.status === 'success' ? 'status-active' : (p.status === 'pending' ? 'status-pending' : 'status-error') %>">
+                        <%= p.status || 'completed' %>
+                      </span>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div style="text-align: center; padding: 24px; color: var(--text-muted);">
+            No payments recorded yet for this registration.
+          </div>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Registration Status & Actions Sidebar -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+      <div class="card" style="padding: 24px;">
+        <h3 style="font-size: 1.1rem; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 20px;">Registration Status</h3>
+        
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Current Status</div>
+          <div>
+            <% if (reg.status === 'completed' || reg.status === 'active') { %>
+              <span class="status-badge status-active">Active</span>
+            <% } else if (reg.status === 'pending_payment' || reg.status === 'pending') { %>
+              <span class="status-badge status-pending">Pending Payment</span>
+            <% } else if (reg.status === 'rejected') { %>
+              <span class="status-badge status-error">Rejected</span>
+            <% } else { %>
+              <span class="status-badge status-inactive"><%= reg.status %></span>
+            <% } %>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">Enrolled Date</div>
+          <div style="font-weight: 500;"><%= new Date(reg.created_at || reg.registration_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) %></div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border); padding-top: 16px;">
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 8px;">Update Status</label>
+          <select id="statusSelect" class="form-control" style="margin-bottom: 12px; width: 100%;">
+            <option value="pending_payment" <%= reg.status === 'pending_payment' ? 'selected' : '' %>>Pending Payment</option>
+            <option value="completed" <%= reg.status === 'completed' || reg.status === 'active' ? 'selected' : '' %>>Completed / Active</option>
+            <option value="cancelled" <%= reg.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+            <option value="rejected" <%= reg.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
+          </select>
+          <button type="button" onclick="updateRegistrationStatus('<%= reg.id %>')" class="btn btn-primary" style="width: 100%;">Update Status</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function updateRegistrationStatus(id) {
+  const status = document.getElementById('statusSelect').value;
+  try {
+    const res = await fetch(`/admin/registrations/${id}/status`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    if (data.success) {
+      location.reload();
+    } else {
+      alert(data.error || 'Failed to update status');
+    }
+  } catch (err) {
+    alert('An error occurred while updating status');
+  }
+}
+</script>

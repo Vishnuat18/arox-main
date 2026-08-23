@@ -556,11 +556,12 @@
         <% for(let i = 0; i < 36; i++) { 
            let pos1 = `M-${380 - i * 5} -${189 + i * 6}C-${380 - i * 5} -${189 + i * 6} -${312 - i * 5} ${216 - i * 6} ${152 - i * 5} ${343 - i * 6}C${616 - i * 5} ${470 - i * 6} ${684 - i * 5} ${875 - i * 6} ${684 - i * 5} ${875 - i * 6}`;
            let pos2 = `M-${380 + i * 5} -${189 + i * 6}C-${380 + i * 5} -${189 + i * 6} -${312 + i * 5} ${216 - i * 6} ${152 + i * 5} ${343 - i * 6}C${616 + i * 5} ${470 - i * 6} ${684 + i * 5} ${875 - i * 6} ${684 + i * 5} ${875 - i * 6}`;
-           let delay = (i * 0.4).toFixed(2);
+           let delay = (-i * 0.4).toFixed(2);
            let dur = (16 + (i % 8) * 1.5).toFixed(1);
+           let sw = (0.5 + i * 0.03).toFixed(2);
         %>
-          <path class="floating-path" d="<%= pos1 %>" stroke-width="<%= (0.5 + i * 0.03).toFixed(2) %>" style="animation-delay: -<%= delay %>s; animation-duration: <%= dur %>s;"></path>
-          <path class="floating-path" d="<%= pos2 %>" stroke-width="<%= (0.5 + i * 0.03).toFixed(2) %>" style="animation-delay: -<%= delay %>s; animation-duration: <%= dur %>s;"></path>
+          <path class="floating-path" d="<%= pos1 %>" stroke-width="<%= sw %>" style="animation-delay: <%= delay %>s; animation-duration: <%= dur %>s;"></path>
+          <path class="floating-path" d="<%= pos2 %>" stroke-width="<%= sw %>" style="animation-delay: <%= delay %>s; animation-duration: <%= dur %>s;"></path>
         <% } %>
       </svg>
     </div>
