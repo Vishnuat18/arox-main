@@ -10,57 +10,13 @@ const authController = {
    */
   async login(req, res) {
     try {
-      const { email, password } = req.body;
+      const email = (req.body.email || '').trim().toLowerCase();
+      const password = req.body.password;
 
       if (!email || !password) {
         return res.status(400).json({
           success: false,
           message: 'Email and password are required.'
-        });
-      }
-      
-      // MOCK LOGINS FOR DESIGN REVIEW & TESTING
-      // These bypass the database for quick testing
-      if (email === 'admin@arox.com' && password === 'admin123') {
-        const token = jwt.sign(
-          { id: 1, email: 'admin@arox.com', role: 'admin' },
-          authConfig.secret || 'secret',
-          { expiresIn: authConfig.expiresIn || '7d' }
-        );
-        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
-        return res.json({
-          success: true,
-          message: 'Admin login successful!',
-          redirectUrl: '/admin/dashboard',
-          data: { token, user: { id: 1, email, role: 'admin', first_name: 'Admin', last_name: 'User' } }
-        });
-      }
-      if (email === 'student@arox.com' && password === 'student123') {
-        const token = jwt.sign(
-          { id: 2, email: 'student@arox.com', role: 'student' },
-          authConfig.secret || 'secret',
-          { expiresIn: authConfig.expiresIn || '7d' }
-        );
-        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
-        return res.json({
-          success: true,
-          message: 'Student login successful!',
-          redirectUrl: '/student/dashboard',
-          data: { token, user: { id: 2, email, role: 'student', first_name: 'Student', last_name: 'User' } }
-        });
-      }
-      if (email === 'employee@arox.com' && password === 'employee123') {
-        const token = jwt.sign(
-          { id: 3, email: 'employee@arox.com', role: 'trainer' },
-          authConfig.secret || 'secret',
-          { expiresIn: authConfig.expiresIn || '7d' }
-        );
-        res.cookie('token', token, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
-        return res.json({
-          success: true,
-          message: 'Employee login successful!',
-          redirectUrl: '/admin/dashboard',
-          data: { token, user: { id: 3, email, role: 'trainer', first_name: 'Staff', last_name: 'Trainer' } }
         });
       }
 
@@ -91,7 +47,7 @@ const authController = {
 
       // Generate JWT
       const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role_name },
+        { id: user.id, email: user.email, role: user.role_name || 'student' },
         authConfig.secret,
         { expiresIn: authConfig.expiresIn }
       );
@@ -125,6 +81,8 @@ const authController = {
             id: user.id,
             email: user.email,
             role: user.role_name,
+            first_name: user.first_name,
+            last_name: user.last_name,
             student
           }
         }
@@ -137,16 +95,27 @@ const authController = {
 
   /**
    * POST /api/auth/register
-   * (Used internally during registration wizard)
+   * (Creates account and authenticates user)
    */
   async register(req, res) {
     try {
-      const { email, password } = req.body;
+      const email = (req.body.email || '').trim().toLowerCase();
+      const password = req.body.password;
+      const rawName = (req.body.name || '').trim();
+      const phone = (req.body.phone || '').trim();
+      const roleStr = (req.body.role || 'student').toLowerCase();
 
       if (!email || !password) {
         return res.status(400).json({
           success: false,
           message: 'Email and password are required.'
+        });
+      }
+
+      if (password.length < 6) {
+        return res.status(400).json({
+          success: false,
+          message: 'Password must be at least 6 characters long.'
         });
       }
 
@@ -158,10 +127,58 @@ const authController = {
         });
       }
 
-      const user = await User.create({ email, password, roleId: 3 });
+      const nameParts = rawName.split(' ');
+      const first_name = nameParts[0] || 'User';
+      const last_name = nameParts.slice(1).join(' ') || '';
+
+      const roleId = ['employee', 'trainer', 'staff'].includes(roleStr) ? 4 : (roleStr === 'admin' ? 2 : 3);
+      const roleName = roleId === 4 ? 'trainer' : (roleId === 2 ? 'admin' : 'student');
+
+      const user = await User.create({
+        email,
+        password,
+        roleId,
+        first_name,
+        last_name,
+        phone,
+        status: 'active'
+      });
+
+      // Create student profile record if registering as student
+      let student = null;
+      if (roleId === 3) {
+        const { generateStudentId } = require('../utils/helpers');
+        const student_id = generateStudentId();
+        try {
+          student = Student.create({
+            user_id: user.id,
+            student_id,
+            photo: null,
+            first_name,
+            last_name,
+            email,
+            phone: phone || 'N/A',
+            gender: 'other',
+            dob: null,
+            address: '',
+            city: '',
+            state: '',
+            pincode: '',
+            college: '',
+            university: '',
+            degree: '',
+            department: '',
+            year_of_study: '',
+            graduation_year: '',
+            roll_number: ''
+          });
+        } catch (sErr) {
+          logger.warn('Student profile auto-creation warning:', sErr.message);
+        }
+      }
 
       const token = jwt.sign(
-        { id: user.id, email: user.email, role: 'student' },
+        { id: user.id, email: user.email, role: roleName },
         authConfig.secret,
         { expiresIn: authConfig.expiresIn }
       );
@@ -172,10 +189,23 @@ const authController = {
         maxAge: 7 * 24 * 60 * 60 * 1000
       });
 
+      const redirectUrl = roleId === 3 ? '/student/dashboard' : '/admin/dashboard';
+
       res.status(201).json({
         success: true,
         message: 'Account created successfully!',
-        data: { token, user: { id: user.id, email: user.email, role: 'student' } }
+        redirectUrl,
+        data: {
+          token,
+          user: {
+            id: user.id,
+            email: user.email,
+            role: roleName,
+            first_name,
+            last_name,
+            student
+          }
+        }
       });
     } catch (error) {
       logger.error('Register error:', error);

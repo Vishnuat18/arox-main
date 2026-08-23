@@ -67,7 +67,7 @@ router.get('/payments', paymentsController.index);
 // Certificate Generator
 router.get('/generators/certificate', (req, res) => {
   res.render('admin/generators/certificate', {
-    layout: 'layouts/admin',
+    layout: 'layouts/generator',
     pageTitle: 'Certificate Generator',
     user: req.user,
     students: loadStudentsList()
@@ -77,7 +77,7 @@ router.get('/generators/certificate', (req, res) => {
 // Offer Letter Generator
 router.get(['/generators/offer-letter', '/generators/offerletter'], (req, res) => {
   res.render('admin/generators/offerletter', {
-    layout: 'layouts/admin',
+    layout: 'layouts/generator',
     pageTitle: 'Offer Letter Generator',
     user: req.user,
     students: loadStudentsList()
@@ -87,7 +87,7 @@ router.get(['/generators/offer-letter', '/generators/offerletter'], (req, res) =
 // Attendance Generator
 router.get('/generators/attendance', (req, res) => {
   res.render('admin/generators/attendance', {
-    layout: 'layouts/admin',
+    layout: 'layouts/generator',
     pageTitle: 'Attendance Generator',
     user: req.user,
     students: loadStudentsList()
@@ -97,7 +97,7 @@ router.get('/generators/attendance', (req, res) => {
 // Project Generator
 router.get('/generators/project', (req, res) => {
   res.render('admin/generators/project', {
-    layout: 'layouts/admin',
+    layout: 'layouts/generator',
     pageTitle: 'Project Generator',
     user: req.user,
     students: loadStudentsList()

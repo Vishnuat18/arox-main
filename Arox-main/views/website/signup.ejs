@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - AROX Tech</title>
+  <title>Create Account - AROX Tech ERP & Portals</title>
   <link rel="icon" type="image/svg+xml" href="/erp-assets/favicon.svg">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="stylesheet" href="/css/style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     :root {
-      --auth-bg: #0b0c11;
-      --auth-card: #12141d;
-      --auth-border: rgba(255, 255, 255, 0.08);
+      --auth-bg: #07090e;
+      --auth-card: #0f121d;
+      --auth-card-border: rgba(255, 255, 255, 0.08);
       --auth-text: #f8fafc;
       --auth-muted: #94a3b8;
       --auth-primary: #2563eb;
       --auth-primary-hover: #1d4ed8;
+      --auth-glow: rgba(37, 99, 235, 0.15);
     }
 
     * {
@@ -45,16 +46,18 @@
 
     @media (min-width: 1024px) {
       .auth-container {
-        grid-template-columns: 1.05fr 1fr;
+        grid-template-columns: 1.1fr 1fr;
       }
     }
 
+    /* Left Brand & Showcase Pane (No animation) */
     .auth-left-pane {
       display: none;
       position: relative;
-      background: rgba(15, 17, 26, 0.7);
-      border-right: 1px solid var(--auth-border);
-      padding: 3.5rem;
+      background: radial-gradient(circle at 10% 20%, rgba(30, 58, 138, 0.25), transparent 50%),
+                  radial-gradient(circle at 90% 80%, rgba(15, 23, 42, 0.8), #07090e);
+      border-right: 1px solid var(--auth-card-border);
+      padding: 4rem 3.5rem;
       flex-direction: column;
       justify-content: space-between;
       overflow: hidden;
@@ -64,15 +67,6 @@
       .auth-left-pane {
         display: flex;
       }
-    }
-
-    .auth-left-glow {
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.15), transparent 60%),
-                  radial-gradient(circle at 80% 80%, rgba(30, 64, 175, 0.12), transparent 60%);
-      pointer-events: none;
-      z-index: 1;
     }
 
     .auth-brand {
@@ -86,82 +80,119 @@
     .auth-brand-logo {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.65rem;
       text-decoration: none;
       color: #ffffff;
     }
 
     .auth-brand-logo img {
-      height: 42px;
+      height: 44px;
       width: auto;
       object-fit: contain;
+    }
+
+    .auth-showcase {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      max-width: 520px;
+    }
+
+    .showcase-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.75rem;
+    }
+
+    .showcase-header p {
+      font-size: 0.975rem;
+      line-height: 1.6;
+      color: var(--auth-muted);
+    }
+
+    .portal-badges {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .portal-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.15rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+
+    .portal-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(37, 99, 235, 0.15);
+      color: #60a5fa;
+      flex-shrink: 0;
+    }
+
+    .portal-info h3 {
+      font-size: 0.95rem;
+      font-weight: 650;
+      color: #ffffff;
+      margin-bottom: 0.2rem;
+    }
+
+    .portal-info p {
+      font-size: 0.825rem;
+      color: var(--auth-muted);
+      line-height: 1.45;
     }
 
     .auth-quote-wrap {
       position: relative;
       z-index: 10;
-      max-width: 480px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1.5rem;
     }
 
     .auth-quote {
-      font-size: 1.25rem;
+      font-size: 0.95rem;
       line-height: 1.6;
-      font-weight: 500;
-      color: #e2e8f0;
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
+      color: #cbd5e1;
+      font-style: italic;
+      margin-bottom: 0.5rem;
     }
 
     .auth-author {
-      font-family: var(--font-mono, monospace);
-      font-size: 0.875rem;
+      font-size: 0.825rem;
       font-weight: 600;
-      color: var(--auth-primary);
+      color: #60a5fa;
     }
 
-    .floating-paths-svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0.75;
-    }
-
-    .floating-path {
-      fill: none;
-      stroke: rgba(147, 197, 253, 0.22);
-      stroke-dasharray: 200 400;
-      animation: floatPath 18s linear infinite;
-    }
-
-    @keyframes floatPath {
-      0% { stroke-dashoffset: 0; opacity: 0.2; }
-      50% { opacity: 0.6; }
-      100% { stroke-dashoffset: -1200; opacity: 0.2; }
-    }
-
+    /* Right Form Pane */
     .auth-right-pane {
       position: relative;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 2.5rem 1.5rem;
+      padding: 3rem 2rem;
       min-height: 100vh;
       overflow-y: auto;
-    }
-
-    .auth-ambient-radial {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
+      background: #0b0d14;
     }
 
     .back-home-btn {
@@ -178,7 +209,7 @@
       text-decoration: none;
       padding: 0.5rem 0.875rem;
       border-radius: 8px;
-      border: 1px solid var(--auth-border);
+      border: 1px solid var(--auth-card-border);
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(8px);
       transition: all 0.2s ease;
@@ -188,33 +219,32 @@
       color: #ffffff;
       background: rgba(255, 255, 255, 0.08);
       border-color: rgba(255, 255, 255, 0.15);
-      transform: translateX(-2px);
     }
 
     .auth-card-inner {
       position: relative;
       z-index: 10;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       margin: auto 0;
-    }
-
-    .auth-header {
-      margin-bottom: 1.5rem;
-      text-align: left;
     }
 
     .mobile-logo {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
     }
 
     @media (min-width: 1024px) {
       .mobile-logo {
         display: none;
       }
+    }
+
+    .auth-header {
+      margin-bottom: 1.5rem;
+      text-align: left;
     }
 
     .auth-title {
@@ -226,77 +256,62 @@
     }
 
     .auth-subtitle {
-      font-size: 0.925rem;
+      font-size: 0.9rem;
       color: var(--auth-muted);
     }
 
-    .sso-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.65rem;
-      margin-bottom: 1.25rem;
+    /* Account Type Switcher */
+    .role-switcher {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--auth-card-border);
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      margin-bottom: 1.5rem;
     }
 
-    .sso-btn {
-      height: 44px;
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid var(--auth-border);
-      background: rgba(255, 255, 255, 0.03);
-      color: #ffffff;
-      font-size: 0.875rem;
-      font-weight: 550;
-      display: inline-flex;
+    .role-btn {
+      display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.65rem;
+      gap: 6px;
+      padding: 9px 8px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-size: 0.8125rem;
+      font-weight: 550;
+      color: var(--auth-muted);
+      background: transparent;
       cursor: pointer;
       transition: all 0.2s ease;
+      user-select: none;
     }
 
-    .sso-btn:hover {
-      background: rgba(255, 255, 255, 0.07);
-      border-color: rgba(255, 255, 255, 0.16);
-      transform: translateY(-1px);
+    .role-btn:hover:not(.active) {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
     }
 
-    .sso-btn svg {
-      width: 17px;
-      height: 17px;
-      flex-shrink: 0;
-    }
-
-    .auth-separator {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1.25rem;
-    }
-
-    .auth-separator-line {
-      flex: 1;
-      height: 1px;
-      background: var(--auth-border);
-    }
-
-    .auth-separator-text {
-      font-size: 0.75rem;
+    .role-btn.active {
+      background: var(--auth-primary);
+      color: #ffffff;
       font-weight: 600;
-      color: var(--auth-muted);
-      padding: 0 0.75rem;
-      letter-spacing: 0.05em;
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
     }
 
+    /* Form Fields */
     .auth-form {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.05rem;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.4rem;
       text-align: left;
     }
 
@@ -323,10 +338,10 @@
 
     .auth-input {
       width: 100%;
-      height: 42px;
+      height: 44px;
       padding: 0 14px 0 40px;
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--auth-border);
+      border: 1px solid var(--auth-card-border);
       border-radius: 10px;
       color: #ffffff;
       font-size: 0.875rem;
@@ -350,56 +365,41 @@
       border-radius: 8px;
       font-size: 0.8125rem;
       font-weight: 500;
-      text-align: center;
     }
 
     .auth-submit-btn {
       height: 46px;
       width: 100%;
       border-radius: 10px;
-      border: 1px solid transparent;
+      border: none;
       background: var(--auth-primary);
       color: #ffffff;
-      font-size: 0.9rem;
+      font-size: 0.925rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      margin-top: 0.25rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      margin-top: 0.5rem;
     }
 
-    .auth-submit-btn:hover {
+    .auth-submit-btn:hover:not(:disabled) {
       background: var(--auth-primary-hover);
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.45);
     }
 
-    .auth-footer {
-      margin-top: 1.75rem;
-      font-size: 0.775rem;
-      line-height: 1.6;
-      color: var(--auth-muted);
-      text-align: center;
-    }
-
-    .auth-footer a {
-      color: #cbd5e1;
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      transition: color 0.2s;
-    }
-
-    .auth-footer a:hover {
-      color: var(--auth-primary);
+    .auth-submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
     }
 
     .auth-switch-link {
-      margin-top: 1.25rem;
-      font-size: 0.85rem;
+      margin-top: 1.5rem;
+      font-size: 0.875rem;
       color: var(--auth-muted);
       text-align: center;
     }
@@ -413,50 +413,70 @@
     .auth-switch-link a:hover {
       text-decoration: underline;
     }
+
+    .auth-footer {
+      margin-top: 2rem;
+      font-size: 0.775rem;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .auth-footer a {
+      color: #94a3b8;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
   </style>
 </head>
 <body>
   <div class="auth-container">
     
-    <!-- Left Pane: Branding & Animated Floating Paths -->
+    <!-- Left Pane: Branding & Showcase (No Animation) -->
     <div class="auth-left-pane">
-      <div class="auth-left-glow"></div>
-      
       <div class="auth-brand">
         <a href="/" class="auth-brand-logo">
           <img src="/public/assets/logo/logo-dark.png" alt="AROX" onerror="this.src='/assets/logo/logo-dark.png'" />
         </a>
       </div>
 
-      <div class="auth-quote-wrap">
-        <blockquote class="auth-quote">
-          &ldquo;This Platform has helped me to save time and serve my clients faster than ever before.&rdquo;
-        </blockquote>
-        <footer class="auth-author">
-          ~ Ali Hassan &bull; Lead Architect
-        </footer>
+      <div class="auth-showcase">
+        <div class="showcase-header">
+          <h2>Create Your AROX Account</h2>
+          <p>Join thousands of students and educators utilizing our state-of-the-art ERP management platform.</p>
+        </div>
+
+        <div class="portal-badges">
+          <div class="portal-card">
+            <div class="portal-icon">
+              <i data-lucide="award" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="portal-info">
+              <h3>Verified Credentials</h3>
+              <p>Receive cryptographically verified certificates and automated offer letters with QR verification.</p>
+            </div>
+          </div>
+
+          <div class="portal-card">
+            <div class="portal-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+              <i data-lucide="layers" style="width: 20px; height: 20px;"></i>
+            </div>
+            <div class="portal-info">
+              <h3>Industry Programs</h3>
+              <p>Hands-on internships, comprehensive training curriculums, and live mentor project reviews.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- 36 Dynamic Floating Paths SVG -->
-      <svg class="floating-paths-svg" viewBox="0 0 696 316" preserveAspectRatio="none">
-        <title>Background Floating Paths</title>
-        <% for(let i = 0; i < 36; i++) { 
-           let pos1 = `M-${380 - i * 5} -${189 + i * 6}C-${380 - i * 5} -${189 + i * 6} -${312 - i * 5} ${216 - i * 6} ${152 - i * 5} ${343 - i * 6}C${616 - i * 5} ${470 - i * 6} ${684 - i * 5} ${875 - i * 6} ${684 - i * 5} ${875 - i * 6}`;
-           let pos2 = `M-${380 + i * 5} -${189 + i * 6}C-${380 + i * 5} -${189 + i * 6} -${312 + i * 5} ${216 - i * 6} ${152 + i * 5} ${343 - i * 6}C${616 + i * 5} ${470 - i * 5} ${684 + i * 5} ${875 - i * 6} ${684 + i * 5} ${875 - i * 6}`;
-           let delay = (-i * 0.4).toFixed(2);
-           let dur = (16 + (i % 8) * 1.5).toFixed(1);
-           let sw = (0.5 + i * 0.03).toFixed(2);
-        %>
-          <path class="floating-path" d="<%= pos1 %>" stroke-width="<%= sw %>" style="animation-delay: <%= delay %>s; animation-duration: <%= dur %>s;"></path>
-          <path class="floating-path" d="<%= pos2 %>" stroke-width="<%= sw %>" style="animation-delay: <%= delay %>s; animation-duration: <%= dur %>s;"></path>
-        <% } %>
-      </svg>
+      <div class="auth-quote-wrap">
+        <p class="auth-quote">&ldquo;Accelerate your career with industry-recognized certifications and real-world project portfolios.&rdquo;</p>
+        <span class="auth-author">AROX Academic Admissions</span>
+      </div>
     </div>
 
     <!-- Right Pane: Registration Form -->
     <div class="auth-right-pane">
-      <div class="auth-ambient-radial"></div>
-
       <a href="/" class="back-home-btn" aria-label="Back to Home">
         <i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i>
         <span>Home</span>
@@ -469,41 +489,32 @@
 
         <div class="auth-header">
           <h1 class="auth-title">Create Account</h1>
-          <p class="auth-subtitle">Join AROX to start your learning journey.</p>
+          <p class="auth-subtitle">Register to access your portal and start learning.</p>
         </div>
 
-        <!-- SSO Options -->
-        <div class="sso-group">
-          <button type="button" class="sso-btn" onclick="handleSSO('Google')">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12.479,14.265v-3.279h11.049c0.108,0.571,0.164,1.247,0.164,1.979c0,2.46-0.672,5.502-2.84,7.669 C18.744,22.829,16.051,24,12.483,24C5.869,24,0.308,18.613,0.308,12S5.869,0,12.483,0c3.659,0,6.265,1.436,8.223,3.307L18.392,5.62 c-1.404-1.317-3.307-2.341-5.913-2.341C7.65,3.279,3.873,7.171,3.873,12s3.777,8.721,8.606,8.721c3.132,0,4.916-1.258,6.059-2.401 c0.927-0.927,1.537-2.251,1.777-4.059L12.479,14.265z" />
-            </svg>
-            <span>Continue with Google</span>
+        <!-- Role Switcher: Student vs Employee -->
+        <div class="role-switcher" role="tablist">
+          <button type="button" class="role-btn active" data-role="student" onclick="setSignupRole('student')">
+            <i data-lucide="graduation-cap" style="width: 14px; height: 14px;"></i>
+            <span>Student</span>
           </button>
-
-          <button type="button" class="sso-btn" onclick="handleSSO('GitHub')">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-            </svg>
-            <span>Continue with GitHub</span>
+          <button type="button" class="role-btn" data-role="employee" onclick="setSignupRole('employee')">
+            <i data-lucide="briefcase" style="width: 14px; height: 14px;"></i>
+            <span>Employee / Staff</span>
           </button>
-        </div>
-
-        <div class="auth-separator">
-          <div class="auth-separator-line"></div>
-          <span class="auth-separator-text">OR</span>
-          <div class="auth-separator-line"></div>
         </div>
 
         <!-- Registration Form -->
         <form id="signupForm" class="auth-form">
+          <input type="hidden" name="role" id="signupRoleInput" value="student">
+
           <div class="form-group">
             <label class="form-label">Full Name</label>
             <div class="input-wrapper">
               <span class="input-icon-left">
                 <i data-lucide="user" style="width: 16px; height: 16px;"></i>
               </span>
-              <input type="text" name="name" id="nameInput" class="auth-input" placeholder="Alex Morgan" required autocomplete="name">
+              <input type="text" name="name" id="nameInput" class="auth-input" placeholder="e.g. Alex Morgan" required autocomplete="name">
             </div>
           </div>
 
@@ -518,19 +529,29 @@
           </div>
 
           <div class="form-group">
+            <label class="form-label">Phone / WhatsApp Number</label>
+            <div class="input-wrapper">
+              <span class="input-icon-left">
+                <i data-lucide="phone" style="width: 16px; height: 16px;"></i>
+              </span>
+              <input type="tel" name="phone" id="phoneInput" class="auth-input" placeholder="+91 98765 43210" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="form-group">
             <label class="form-label">Password</label>
             <div class="input-wrapper">
               <span class="input-icon-left">
                 <i data-lucide="lock" style="width: 16px; height: 16px;"></i>
               </span>
-              <input type="password" name="password" id="password" class="auth-input" placeholder="Create a strong password" required autocomplete="new-password">
+              <input type="password" name="password" id="password" class="auth-input" placeholder="Minimum 6 characters" required minlength="6" autocomplete="new-password">
             </div>
           </div>
 
           <div id="signupError" class="auth-error"></div>
 
           <button type="submit" id="signupBtn" class="auth-submit-btn">
-            <span>Create Free Account</span>
+            <span id="signupBtnText">Create Student Account</span>
             <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
           </button>
         </form>
@@ -551,18 +572,21 @@
   </div>
 
   <script>
-    lucide.createIcons();
+    let activeSignupRole = 'student';
 
-    function handleSSO(provider) {
+    function setSignupRole(role) {
+      activeSignupRole = role;
+      document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.role === role);
+      });
+      document.getElementById('signupRoleInput').value = role;
+      const btnText = document.getElementById('signupBtnText');
+      if (btnText) {
+        btnText.textContent = role === 'employee' ? 'Create Employee Account' : 'Create Student Account';
+      }
       const err = document.getElementById('signupError');
-      err.textContent = provider + ' authentication gateway is connecting...';
-      err.style.display = 'block';
-      err.style.color = '#60a5fa';
-      err.style.borderColor = 'rgba(96, 165, 250, 0.35)';
-      err.style.background = 'rgba(96, 165, 250, 0.1)';
-      setTimeout(() => {
-        err.textContent = provider + ' SSO initialized for AROX platform.';
-      }, 1000);
+      if (err) err.style.display = 'none';
+      lucide.createIcons();
     }
 
     document.getElementById('signupForm').addEventListener('submit', async (e) => {
@@ -597,13 +621,20 @@
       } catch (err) {
         errorDiv.textContent = err.message;
         errorDiv.style.display = 'block';
-        errorDiv.style.color = '#f87171';
-        errorDiv.style.borderColor = 'rgba(220, 38, 38, 0.35)';
-        errorDiv.style.background = 'rgba(220, 38, 38, 0.12)';
         btn.disabled = false;
-        btn.innerHTML = '<span>Create Free Account</span><i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>';
+        const btnText = activeSignupRole === 'employee' ? 'Create Employee Account' : 'Create Student Account';
+        btn.innerHTML = `<span>${btnText}</span><i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>`;
         lucide.createIcons();
       }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const roleParam = urlParams.get('role');
+      if (roleParam && ['student', 'employee'].includes(roleParam)) {
+        setSignupRole(roleParam);
+      }
+      lucide.createIcons();
     });
   </script>
 </body>
