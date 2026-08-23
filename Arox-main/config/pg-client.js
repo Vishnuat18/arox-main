@@ -20,38 +20,37 @@ async function main() {
     process.exit(1);
   }
 
-  let client = new Client({
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT) || 5432,
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'Semester6!',
-    database: process.env.DB_NAME || 'Arox_database',
-  });
+  const isConnectionString = !!(process.env.DATABASE_URL || process.env.POSTGRES_URL);
+  const getClientConfig = (dbOverride) => {
+    if (isConnectionString) {
+      return {
+        connectionString: process.env.DATABASE_URL || process.env.POSTGRES_URL,
+        ssl: { rejectUnauthorized: false }
+      };
+    }
+    return {
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT) || 5432,
+      user: process.env.DB_USER || 'postgres',
+      password: process.env.DB_PASSWORD || 'Semester6!',
+      database: dbOverride || process.env.DB_NAME || 'Arox_database',
+    };
+  };
+
+  let client = new Client(getClientConfig());
 
   try {
     try {
       await client.connect();
     } catch (err) {
-      if (err.code === '3D000') {
-        const adminClient = new Client({
-          host: process.env.DB_HOST || 'localhost',
-          port: parseInt(process.env.DB_PORT) || 5432,
-          user: process.env.DB_USER || 'postgres',
-          password: process.env.DB_PASSWORD || 'Semester6!',
-          database: 'postgres',
-        });
+      if (err.code === '3D000' && !isConnectionString) {
+        const adminClient = new Client(getClientConfig('postgres'));
         await adminClient.connect();
         const dbName = process.env.DB_NAME || 'Arox_database';
         await adminClient.query(`CREATE DATABASE "${dbName}"`);
         await adminClient.end();
         
-        client = new Client({
-          host: process.env.DB_HOST || 'localhost',
-          port: parseInt(process.env.DB_PORT) || 5432,
-          user: process.env.DB_USER || 'postgres',
-          password: process.env.DB_PASSWORD || 'Semester6!',
-          database: process.env.DB_NAME || 'Arox_database',
-        });
+        client = new Client(getClientConfig());
         await client.connect();
       } else {
         throw err;
