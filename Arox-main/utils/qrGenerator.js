@@ -21,9 +21,18 @@ async function generateQRDataURL(text, options = {}) {
  * Generate QR code and save as file
  */
 async function generateQRFile(text, filename, options = {}) {
-  const uploadDir = path.join(__dirname, '..', 'public', 'uploads', 'qr');
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+  let uploadDir = path.join(__dirname, '..', 'public', 'uploads', 'qr');
+  try {
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+  } catch (e) {
+    uploadDir = path.join(require('os').tmpdir(), 'uploads', 'qr');
+    try {
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+    } catch (err) {}
   }
 
   const filePath = path.join(uploadDir, filename);

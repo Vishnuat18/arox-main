@@ -1,15 +1,31 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const { sanitizeFilename } = require('../utils/helpers');
 const appConfig = require('../config/app');
 
-// Ensure upload directories exist
+// Determine upload root: on Vercel/serverless use /tmp/uploads, locally use public/uploads
+const isServerless = !!(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const baseUploadDir = isServerless 
+  ? path.join(os.tmpdir(), 'uploads')
+  : path.join(__dirname, '..', 'public', 'uploads');
+
+// Ensure upload directories exist safely
 const dirs = ['photos', 'documents', 'submissions', 'certificates', 'qr', 'receipts'];
 dirs.forEach(dir => {
-  const dirPath = path.join(__dirname, '..', 'public', 'uploads', dir);
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+  try {
+    const dirPath = path.join(baseUploadDir, dir);
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
+  } catch (err) {
+    try {
+      const fallback = path.join(os.tmpdir(), 'uploads', dir);
+      if (!fs.existsSync(fallback)) {
+        fs.mkdirSync(fallback, { recursive: true });
+      }
+    } catch (e) {}
   }
 });
 
@@ -22,7 +38,19 @@ const storage = multer.diskStorage({
     else if (file.fieldname === 'certificate') folder = 'certificates';
     else if (file.fieldname === 'receipt' || file.fieldname === 'payment_proof' || file.fieldname === 'screenshot') folder = 'receipts';
 
-    const uploadPath = path.join(__dirname, '..', 'public', 'uploads', folder);
+    let uploadPath = path.join(baseUploadDir, folder);
+    try {
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+    } catch (e) {
+      uploadPath = path.join(os.tmpdir(), 'uploads', folder);
+      try {
+        if (!fs.existsSync(uploadPath)) {
+          fs.mkdirSync(uploadPath, { recursive: true });
+        }
+      } catch (err) {}
+    }
     cb(null, uploadPath);
   },
   filename: (req, file, cb) => {

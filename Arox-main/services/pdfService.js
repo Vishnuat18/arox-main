@@ -12,8 +12,15 @@ class PDFService {
   async generateOfferLetter(student, registration, course) {
     return new Promise(async (resolve, reject) => {
       try {
-        const dir = path.join(__dirname, '..', 'public', 'uploads', 'documents');
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        let dir = path.join(__dirname, '..', 'public', 'uploads', 'documents');
+        try {
+          if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        } catch (e) {
+          dir = path.join(require('os').tmpdir(), 'uploads', 'documents');
+          try {
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+          } catch (err) {}
+        }
 
         const filename = `offer-letter-${registration.registration_id}.pdf`;
         const filePath = path.join(dir, filename);
@@ -146,8 +153,15 @@ class PDFService {
   async generateInvoice(payment, student, registration, course) {
     return new Promise((resolve, reject) => {
       try {
-        const dir = path.join(__dirname, '..', 'public', 'uploads', 'documents');
-        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        let dir = path.join(__dirname, '..', 'public', 'uploads', 'documents');
+        try {
+          if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        } catch (e) {
+          dir = path.join(require('os').tmpdir(), 'uploads', 'documents');
+          try {
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+          } catch (err) {}
+        }
 
         const filename = `invoice-${payment.invoice_number}.pdf`;
         const filePath = path.join(dir, filename);
