@@ -454,9 +454,9 @@
       },
       {
         title: 'Internships',
-        desc: 'Real-world experience to kickstart your career.',
+        desc: 'Real-world experience to kickstart your career with hands-on projects and industry mentors.',
         label: 'Career',
-        isWide: false,
+        isWide: true,
         icon: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>'
       }
     ];
@@ -674,12 +674,16 @@
 
   function getStyle(index) {
     const n = cards.length;
+    const isMobile = window.innerWidth <= 768;
+    const xOffset = isMobile ? 24 : 60;
+    const yOffset = isMobile ? 8 : 12;
+    const rotOffset = isMobile ? -8 : -15;
     return {
       zIndex: n - index,
       scale: 1 - index * 0.05,
-      x: n > 1 ? (index / (n - 1)) * 60 : 0,
-      y: -(index * 12),
-      rotate: n > 1 ? (index / (n - 1)) * -15 : 0,
+      x: n > 1 ? (index / (n - 1)) * xOffset : 0,
+      y: -(index * yOffset),
+      rotate: n > 1 ? (index / (n - 1)) * rotOffset : 0,
       opacity: 1 - index * 0.15
     };
   }

@@ -4,22 +4,24 @@
    ───────────────────────────────────────────────────────────────── */
 
 /* Design Tokens & Theme Colors */
+/* Design Tokens & Theme Colors */
 :root {
   --cf-bg: #FFFFFF;
-  --cf-card-bg: #FFFFFF;
-  --cf-border: 1px solid #E5E7EB;
-  --cf-border-hover: 1px solid #A3A3A3;
-  --cf-shadow: 0 20px 60px rgba(0,0,0,0.06), 0 0 1px rgba(0,0,0,0.1);
-  --cf-heading: #111111;
-  --cf-body: #525252;
-  --cf-chip-border: 1px solid #E5E7EB;
-  --cf-chip-text: #737373;
+  --cf-card-bg: linear-gradient(180deg, #eef5ff 0%, #f7faff 50%, #ffffff 100%);
+  --cf-border: 1px solid #dce7f8;
+  --cf-border-hover: 1px solid #1264ff;
+  --cf-shadow: 0 20px 60px rgba(18, 100, 255, 0.08), 0 0 1px rgba(0, 0, 0, 0.06);
+  --cf-heading: #10213f;
+  --cf-body: #657692;
+  --cf-chip-border: 1px solid #dce7f8;
+  --cf-chip-bg: #eaf2ff;
+  --cf-chip-text: #1264ff;
   --cf-nav-btn-bg: transparent;
-  --cf-nav-btn-border: 1px solid #E5E7EB;
-  --cf-nav-btn-color: #111111;
-  --cf-dot-bg: #E5E7EB;
-  --cf-dot-active: #111111;
-  --svg-bg: #f4f8ff;
+  --cf-nav-btn-border: 1px solid #dce7f8;
+  --cf-nav-btn-color: #10213f;
+  --cf-dot-bg: #dce7f8;
+  --cf-dot-active: #1264ff;
+  --svg-bg: #eef5ff;
   --svg-surface: #ffffff;
   --svg-soft: #f7faff;
   --svg-muted: #8194b0;
@@ -27,20 +29,21 @@
 }
 
 .theme-dark, .theme-navy, html[data-theme="dark"] {
-  --cf-bg: #050505;
-  --cf-card-bg: #111111;
-  --cf-border: 1px solid rgba(255, 255, 255, 0.08);
-  --cf-border-hover: 1px solid rgba(255, 255, 255, 0.25);
-  --cf-shadow: 0 20px 60px rgba(0,0,0,0.45);
-  --cf-heading: #FFFFFF;
-  --cf-body: rgba(255, 255, 255, 0.75);
-  --cf-chip-border: 1px solid rgba(255, 255, 255, 0.12);
-  --cf-chip-text: #A3A3A3;
+  --cf-bg: #06101f;
+  --cf-card-bg: linear-gradient(180deg, #0c1a2e 0%, #081424 50%, #050d18 100%);
+  --cf-border: 1px solid rgba(112, 158, 228, 0.18);
+  --cf-border-hover: 1px solid rgba(91, 150, 255, 0.4);
+  --cf-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --cf-heading: #f4f7ff;
+  --cf-body: #9bb0cd;
+  --cf-chip-border: 1px solid rgba(112, 158, 228, 0.22);
+  --cf-chip-bg: rgba(91, 150, 255, 0.12);
+  --cf-chip-text: #5b96ff;
   --cf-nav-btn-bg: transparent;
-  --cf-nav-btn-border: 1px solid rgba(255, 255, 255, 0.12);
-  --cf-nav-btn-color: #FFFFFF;
-  --cf-dot-bg: rgba(255, 255, 255, 0.2);
-  --cf-dot-active: #FFFFFF;
+  --cf-nav-btn-border: 1px solid rgba(112, 158, 228, 0.22);
+  --cf-nav-btn-color: #f4f7ff;
+  --cf-dot-bg: rgba(112, 158, 228, 0.25);
+  --cf-dot-active: #5b96ff;
   --svg-bg: #0a1729;
   --svg-surface: #0f2036;
   --svg-soft: #12263f;
@@ -161,7 +164,7 @@
   top: 50%;
   width: 350px;
   height: 490px;
-  background-color: var(--cf-card-bg);
+  background: var(--cf-card-bg);
   border: var(--cf-border);
   border-radius: 28px;
   box-shadow: var(--cf-shadow);
@@ -172,7 +175,7 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
-  transition: border 0.3s ease, background-color 0.4s ease, box-shadow 0.3s ease;
+  transition: border 0.3s ease, background 0.4s ease, box-shadow 0.3s ease;
 }
 
 /* Top 52% Image Area */
@@ -330,7 +333,7 @@ html[data-theme="dark"] .coverflow-card-media svg stop[stop-color="#ffffff"] {
   justify-content: space-between;
   position: relative;
   z-index: 10;
-  background: var(--cf-card-bg);
+  background: transparent;
 }
 
 .coverflow-project-tag {
@@ -388,6 +391,7 @@ html[data-theme="dark"] .coverflow-card-media svg stop[stop-color="#ffffff"] {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--cf-chip-text);
+  background: var(--cf-chip-bg, rgba(18, 100, 255, 0.06));
   border: var(--cf-chip-border);
   padding: 3px 9px;
   border-radius: 6px;
