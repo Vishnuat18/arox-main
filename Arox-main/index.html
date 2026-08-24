@@ -54,11 +54,13 @@
   <header id="site-header">
     <div class="nav-inner">
       <div class="nav-left">
-        <a href="#" class="nav-logo">
+        <a href="index.html" class="nav-logo">
           <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
             onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
           <span id="nav-logo-text"
             style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
+          <span class="mobile-breadcrumb-sep">/</span>
+          <span class="mobile-breadcrumb-current">Home</span>
         </a>
         <div class="nav-divider">/</div>
         <nav class="nav-links" aria-label="Main navigation">
@@ -88,8 +90,12 @@
           </span>
         </label>
         <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
-          <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+          <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
+            <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
+            <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
         </button>
       </div>
     </div>
@@ -202,14 +208,69 @@
           </div>
         </div>
       </div>
+      <!-- Mobile Static We Deliver (2 Rows: 3 cols & 2 cols, neat non-bg stroke icons) -->
+      <div class="wcu-mobile-view">
+        <div class="wcu-mobile-header">
+          <span class="section-eyebrow">WHAT WE BUILD</span>
+          <h2 class="text-h2 section-title">We Deliver</h2>
+        </div>
+        <div class="wcu-mobile-grid-row1">
+          <div class="wcu-mobile-item">
+            <svg class="wcu-mobile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+            <span class="wcu-mobile-name">Custom Software</span>
+          </div>
+          <div class="wcu-mobile-item">
+            <svg class="wcu-mobile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+              <path d="M2 2l7.586 7.586"></path>
+              <circle cx="11" cy="11" r="2"></circle>
+            </svg>
+            <span class="wcu-mobile-name">UI/UX Design</span>
+          </div>
+          <div class="wcu-mobile-item">
+            <svg class="wcu-mobile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M12 2a4 4 0 0 0-4 4c0 2 2 3 2 5a2 2 0 0 0 4 0c0-2 2-3 2-5a4 4 0 0 0-4-4z"></path>
+              <path d="M10 17h4"></path>
+              <path d="M11 21h2"></path>
+            </svg>
+            <span class="wcu-mobile-name">AI Innovation</span>
+          </div>
+        </div>
+        <div class="wcu-mobile-grid-row2">
+          <div class="wcu-mobile-item">
+            <svg class="wcu-mobile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+            </svg>
+            <span class="wcu-mobile-name">Cloud Systems</span>
+          </div>
+          <div class="wcu-mobile-item">
+            <svg class="wcu-mobile-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+            <span class="wcu-mobile-name">Agile Process</span>
+          </div>
+        </div>
+      </div>
     </div>
     <section id="services-section">
       <div style="max-width:1400px;margin:0 auto;">
-        <div class="services-header"><span class="section-eyebrow">Core Capabilities</span>
-          <h2 class="text-h2 section-title">Our Service Ecosystem</h2>
+        <div class="services-header">
+          <span class="section-eyebrow"><span class="eyebrow-dot"></span>Core Capabilities</span>
+          <h2 class="text-h2 section-title">Our Service <span class="text-primary-gradient">Ecosystem</span></h2>
+          <p class="services-subtitle">End-to-end solutions designed to accelerate your digital growth.</p>
         </div>
         <div style="width:100%;margin-top:3rem;position:relative;z-index:20;">
           <div class="card-grid bento-section" id="bento-grid"></div>
+        </div>
+        <div class="services-view-all-wrap">
+          <a href="services.html" class="btn-services-view-all">
+            <span>View All Services</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
         </div>
       </div>
     </section>
@@ -218,7 +279,7 @@
         <div class="projects-header">
           <div class="projects-badge">OUR WORK</div>
           <h2 class="projects-title">Featured Projects</h2>
-          <p class="projects-subtitle">Building Digital Experiences that solve real-world business problems.</p>
+          <p class="projects-subtitle">Building digital experiences that solve real-world business problems.</p>
         </div>
         <div id="coverflow-wrapper" class="coverflow-wrapper"></div>
       </div>
@@ -227,6 +288,7 @@
       <div style="max-width:1400px;margin:0 auto;">
         <div class="testimonials-header"><span class="section-eyebrow">Proven Excellence</span>
           <h2 class="text-h2 section-title">Client Testimonials</h2>
+          <div class="testimonials-title-pill"></div>
         </div>
         <div class="testimonials-inner">
           <div class="testimonial-stack-col">
@@ -265,12 +327,12 @@
             <div class="testimonial-quote-card">
               <!-- Top Quotes -->
               <div class="quote-icon quote-icon-left">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M11.192 11.957C11.192 15.545 9.23 18 6.002 18c-2.485 0-4.002-1.472-4.002-3.484 0-2.48 2.05-4.225 4.002-4.225.232 0 .546.035.728.068a.747.747 0 0 0 .864-.523c.319-1.042.843-2.186 1.708-3.08A5.952 5.952 0 0 1 6.002 5c-.718 0-1.282-.582-1.282-1.3C4.72 2.925 5.568 2 6.802 2c3.558 0 4.39 6.85 4.39 9.957Zm10.8 0C21.992 15.545 20.03 18 16.802 18c-2.484 0-4.002-1.472-4.002-3.484 0-2.48 2.05-4.225 4.002-4.225.232 0 .546.035.728.068a.748.748 0 0 0 .864-.523c.32-1.042.843-2.186 1.708-3.08A5.95 5.95 0 0 1 16.802 5c-.718 0-1.282-.582-1.282-1.3 0-.775.848-1.7 2.082-1.7 3.559 0 4.39 6.85 4.39 9.957Z"/>
                 </svg>
               </div>
               <div class="quote-icon quote-icon-right">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="38" height="38" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12.808 12.043C12.808 8.455 14.77 6 17.998 6c2.485 0 4.002 1.472 4.002 3.484 0 2.48-2.05 4.225-4.002 4.225-.232 0-.546-.035-.728-.068a.747.747 0 0 0-.864.523c-.319 1.042-.843 2.186-1.708 3.08a5.952 5.952 0 0 1 3.298 1.756c.718 0 1.282.582 1.282 1.3 0 .775-.848 1.7-2.082 1.7-3.558 0-4.39-6.85-4.39-9.957Zm-10.8 0C2.008 8.455 3.97 6 7.198 6c2.484 0 4.002 1.472 4.002 3.484 0 2.48-2.05 4.225-4.002 4.225-.232 0-.546-.035-.728-.068a.748.748 0 0 0-.864.523c-.32 1.042-.843 2.186-1.708 3.08a5.95 5.95 0 0 1 3.298 1.756c.718 0 1.282.582 1.282 1.3 0 .775-.848 1.7-2.082 1.7-3.559 0-4.39-6.85-4.39-9.957Z"/>
                 </svg>
               </div>
@@ -282,7 +344,7 @@
     </section>
   </main>
   
-      <!-- PRE-FOOTER CTA SECTION -->
+  <!-- PRE-FOOTER CTA SECTION -->
   <section class="cta-section" id="cta">
     <div class="cta-card reveal">
       <div class="cta-content">
@@ -304,12 +366,12 @@
 
   <footer>
     <div class="footer-inner">
-      <!-- Background Watermark -->
+      <!-- Background Watermark Touching Bottom Edge -->
       <div class="footer-watermark">Arox Tech</div>
 
       <!-- Main Footer Grid / Mobile Accordions -->
       <div class="footer-grid">
-        <!-- Brand Section (Top on mobile, Col 1 on desktop) -->
+        <!-- Brand Section -->
         <div class="footer-brand">
           <a href="index.html" class="footer-brand-logo">
             <img id="footer-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech" onerror="this.src='assets/logo/logo-dark.png'" />
@@ -317,7 +379,7 @@
           <p class="footer-tagline">
             We build scalable software architectures, robust digital platforms, and high-impact AI solutions for modern businesses.
           </p>
-          <!-- 4 Social Icons in a Single Row: Instagram, WhatsApp, Facebook, LinkedIn -->
+          <!-- 4 Social Icons in a Single Row -->
           <div class="footer-socials">
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="footer-social-btn" aria-label="Instagram">
               <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -337,7 +399,7 @@
         </div>
 
         <!-- Row 1 / Col 2: Company -->
-        <details class="footer-col footer-col-company" open>
+        <details class="footer-col footer-col-company">
           <summary class="footer-col-header">
             <div class="footer-col-header-left">
               <div class="footer-col-icon">
@@ -365,7 +427,7 @@
         </details>
 
         <!-- Row 1 / Col 3: Services -->
-        <details class="footer-col footer-col-services" open>
+        <details class="footer-col footer-col-services">
           <summary class="footer-col-header">
             <div class="footer-col-header-left">
               <div class="footer-col-icon">
@@ -393,7 +455,7 @@
         </details>
 
         <!-- Row 1 / Col 4: Training -->
-        <details class="footer-col footer-col-training" open>
+        <details class="footer-col footer-col-training">
           <summary class="footer-col-header">
             <div class="footer-col-header-left">
               <div class="footer-col-icon">
@@ -421,7 +483,7 @@
         </details>
 
         <!-- Row 2 / Col 2: Internships -->
-        <details class="footer-col footer-col-internships" open>
+        <details class="footer-col footer-col-internships">
           <summary class="footer-col-header">
             <div class="footer-col-header-left">
               <div class="footer-col-icon">
@@ -449,7 +511,7 @@
         </details>
 
         <!-- Row 2 / Col 3: Contact -->
-        <details class="footer-col footer-col-contact" open>
+        <details class="footer-col footer-col-contact">
           <summary class="footer-col-header">
             <div class="footer-col-header-left">
               <div class="footer-col-icon">
@@ -487,7 +549,7 @@
         </details>
 
         <!-- Row 2 / Col 4: Stay Updated (Newsletter) -->
-        <details class="footer-col footer-col-newsletter" open>
+        <details class="footer-col footer-col-newsletter">
           <summary class="footer-col-header">
             <div class="footer-col-header-left">
               <div class="footer-col-icon">
@@ -519,19 +581,6 @@
       <!-- Mobile Copyright (Visible only on mobile) -->
       <div class="footer-mobile-copyright">
         &copy; <span>AROX Tech 2026</span> &bull; All Rights Reserved
-      </div>
-    </div>
-
-    <!-- Bottom Tagline & Dots Bar -->
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <span class="footer-bottom-dot">&#x25CF;</span>
-        <span class="footer-bottom-text">Building Digital Products</span>
-        <span class="footer-bottom-dot">&#x25CF;</span>
-        <span class="footer-bottom-text">Solving Real-World Problems</span>
-        <span class="footer-bottom-dot">&#x25CF;</span>
-        <span class="footer-bottom-text">All Rights Reserved @2026</span>
-        <span class="footer-bottom-dot">&#x25CF;</span>
       </div>
     </div>
   </footer>

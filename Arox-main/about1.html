@@ -50,11 +50,13 @@
   <header id="site-header">
     <div class="nav-inner">
       <div class="nav-left">
-        <a href="#" class="nav-logo">
+        <a href="index.html" class="nav-logo">
           <img id="nav-logo-img" src="public/assets/logo/logo-dark.png" alt="Arox Tech Logo"
             onerror="this.style.display='none';document.getElementById('nav-logo-text').style.display='block'" />
           <span id="nav-logo-text"
             style="display:none;font-family:var(--font-display);font-weight:800;font-size:1.25rem;color:var(--heading);letter-spacing:-.03em;">AROX</span>
+          <span class="mobile-breadcrumb-sep">/</span>
+          <span class="mobile-breadcrumb-current">About</span>
         </a>
         <div class="nav-divider">/</div>
         <nav class="nav-links" aria-label="Main navigation">
@@ -84,8 +86,12 @@
           </span>
         </label>
         <button id="hamburger-btn" class="nav-hamburger" aria-label="Toggle mobile menu">
-          <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+          <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line class="line-1" x1="4" y1="6" x2="20" y2="6"></line>
+            <line class="line-2" x1="4" y1="12" x2="20" y2="12"></line>
+            <line class="line-3" x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
         </button>
       </div>
     </div>
@@ -608,19 +614,6 @@
       <!-- Mobile Copyright (Visible only on mobile) -->
       <div class="footer-mobile-copyright">
         &copy; <span>AROX Tech 2026</span> &bull; All Rights Reserved
-      </div>
-    </div>
-
-    <!-- Bottom Tagline & Dots Bar -->
-    <div class="footer-bottom">
-      <div class="footer-bottom-content">
-        <span class="footer-bottom-dot">&#x25CF;</span>
-        <span class="footer-bottom-text">Building Digital Products</span>
-        <span class="footer-bottom-dot">&#x25CF;</span>
-        <span class="footer-bottom-text">Solving Real-World Problems</span>
-        <span class="footer-bottom-dot">&#x25CF;</span>
-        <span class="footer-bottom-text">All Rights Reserved @2026</span>
-        <span class="footer-bottom-dot">&#x25CF;</span>
       </div>
     </div>
   </footer>
