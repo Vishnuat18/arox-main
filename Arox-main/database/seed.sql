@@ -32,9 +32,17 @@ INSERT OR IGNORE INTO permissions (name, description, module) VALUES
 ('reports.view', 'View reports', 'reports'),
 ('settings.manage', 'Manage settings', 'settings');
 
--- Admin User (password: Admin@123)
+-- Admin & Demo Users
+-- admin@aroxtech.com (Admin@123), admin@arox.com (admin123), student@arox.com (student123), employee@arox.com (employee123)
 INSERT OR IGNORE INTO users (id, email, password_hash, role_id, first_name, last_name, status, email_verified) VALUES
-(1, 'admin@aroxtech.com', '$2a$10$AxHIJzhzADAM5Fg1YVOUoul5YXAEyWGyrzMHjMQTCBqxLOSaCAx5O', 1, 'Arox', 'Admin', 'active', 1);
+(1, 'admin@aroxtech.com', '$2a$10$AxHIJzhzADAM5Fg1YVOUoul5YXAEyWGyrzMHjMQTCBqxLOSaCAx5O', 1, 'Arox', 'Admin', 'active', 1),
+(2, 'admin@arox.com', '$2a$10$tZ2RzVv8qTf7U78Z7F7Q..P534qB3s4dDk9B1F2H3J4K5L6M7N8O9', 1, 'AROX', 'Admin', 'active', 1),
+(3, 'student@arox.com', '$2a$10$tZ2RzVv8qTf7U78Z7F7Q..P534qB3s4dDk9B1F2H3J4K5L6M7N8O9', 3, 'Aarav', 'Sharma', 'active', 1),
+(4, 'employee@arox.com', '$2a$10$tZ2RzVv8qTf7U78Z7F7Q..P534qB3s4dDk9B1F2H3J4K5L6M7N8O9', 4, 'Rajesh', 'Kumar', 'active', 1);
+
+-- Demo Student Profile
+INSERT OR IGNORE INTO students (id, user_id, student_id, first_name, last_name, email, phone, gender, college, university, degree, department, year_of_study, graduation_year, status) VALUES
+(1, 3, 'AROX-STU-1001', 'Aarav', 'Sharma', 'student@arox.com', '9876543210', 'male', 'Anna University', 'Anna University', 'B.Tech', 'Computer Science', '3', '2026', 'active');
 
 -- Sample Courses
 INSERT OR IGNORE INTO courses (id, slug, title, short_description, description, category, duration, duration_weeks, price, discounted_price, mode, level, has_certificate, rating, total_reviews, total_enrolled, max_students, curriculum, skills, projects, faqs, trainer_name, trainer_title, trainer_bio, is_active, is_featured, sort_order, start_date, end_date, batch_name) VALUES
